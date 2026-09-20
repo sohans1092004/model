@@ -1,0 +1,363 @@
+"""
+UDK matching + the Section 6 decision contract: audio-derived signals in,
+exactly one of TRIGGER_ALL / TRIGGER_VERIFY / NO_ACTION out.
+
+Matching has three layers (Section 4):
+  1. exact    - normalized substring/equality match
+  2. fuzzy    - rapidfuzz, catches ASR noise/typos/word-order
+  3. semantic - a real pretrained multilingual sentence-embedding model
+                (semantic.py's SentenceTransformerSemanticMatcher,
+                Section 17: no training needed, just inference) for
+                paraphrase cases like "he's going to hurt me" matching
+                "someone is threatening me" -- optional, passed in as
+                match_transcript's/UDKEngine's semantic_matcher param.
+                Falls back to rapidfuzz's token_set_ratio as a lighter
+                stand-in when none is given, same as before this was
+                built -- good enough to prove the pipeline shape, not a
+                claim of real semantic accuracy on its own.
+
+Thresholds are the Section 6 starting points, explicitly meant to be
+tuned against the real test corpus later, not treated as final:
+  confidence >= 0.85              -> TRIGGER_ALL
+  0.6 <= confidence < 0.85        -> TRIGGER_VERIFY
+  confidence < 0.6                -> NO_ACTION
+Repetition of the same/related UDK within REPEAT_WINDOW_S can lift a
+TRIGGER_VERIFY straight to TRIGGER_ALL, per Section 6/7's reasoning that
+repetition is a confidence booster, never a requirement to fire at all.
+
+Section 4's Approach E (KWS running in parallel with STT, revisited after
+v1's deferral -- see kws.py and README.md for how): decide() takes an
+optional kws_match alongside the transcript. The two branches are fused,
+not just compared -- if they independently agree on the same UDK, that's
+cross-validation from two unrelated detection mechanisms (an ASR+text
+matcher vs. an audio-embedding+DTW matcher), treated the same way
+repetition already is: strong enough evidence to justify TRIGGER_ALL on
+its own, including overriding a verify-by-default phrase. If STT fails
+outright (empty transcript, an outage per Section 3) but KWS still
+matches, KWS alone can still produce a decision -- this is the actual
+single-point-of-failure removal Section 4 was about, not just an accuracy
+bump.
+"""
+
+from __future__ import annotations
+
+import re
+import time
+import unicodedata
+from dataclasses import dataclass, field
+from typing import Literal
+
+from rapidfuzz import fuzz
+
+from kws import KWSMatch
+from semantic import SemanticBackend
+from udks import UDK
+
+Decision = Literal["TRIGGER_ALL", "TRIGGER_VERIFY", "NO_ACTION"]
+
+TRIGGER_ALL_THRESHOLD = 0.85
+TRIGGER_VERIFY_THRESHOLD = 0.60
+REPEAT_WINDOW_S = 15.0
+# Multiple DIFFERENT UDKs firing within the window, not just the same one
+# repeating -- e.g. "get away from me" then "call the police" -- is
+# arguably a stronger signal than repetition: harder to explain away as
+# one ambiguous phrase match. 2 is the "on top of the first" count, same
+# shape as repetition's "this one plus at least one earlier."
+DISTINCT_UDK_ESCALATION_COUNT = 2
+# Starting point, not calibrated against Section 12's real corpus -- kws.py's
+# spot() already thresholds distance into a binary match/no-match, so this
+# is a fixed confidence for "KWS matched," landing in TRIGGER_VERIFY range
+# on its own (independent-branch agreement is what pushes it to TRIGGER_ALL).
+KWS_MATCH_CONFIDENCE = 0.65
+
+# Real bug found and fixed: a SHORT transcript that's merely a substring
+# of a longer UDK phrase was previously always scored confidence=1.0 (the
+# exact layer's substring check has no length/uniqueness guard, and the
+# fuzzy layer's partial_ratio independently scores a literal substring
+# alignment as ~100% regardless of how short it is -- same vulnerability,
+# different layer). Found via real degraded-audio testing: heavy
+# pitch/tempo distortion sometimes makes a fine-tuned STT model collapse
+# to a single bare, generic word instead of a full (if garbled) sentence
+# -- e.g. Hindi "मुझे" ("me"), a literal substring of 11 of the 20 Hindi
+# UDK phrases. That fragment carries no real distinguishing signal, but
+# was firing an UNCONFIRMED TRIGGER_ALL (bypassing verify_by_default
+# entirely) on whichever UDK happened to be first in iteration order --
+# not a fluke: the same structural ambiguity exists in EVERY language's
+# corpus, including English ("me" is a substring of 10/20 English UDKs,
+# "help" of 5) -- it just hadn't manifested there yet because English's
+# STT hasn't been observed collapsing this far under distortion. Fixed by
+# checking whether the fragment is a substring of MORE THAN ONE UDK's
+# phrase (ambiguous -- real evidence of genericness, not guesswork about
+# which specific words are "filler") and capping confidence at this same
+# KWS_MATCH_CONFIDENCE value if so: still registers as SOMETHING (this
+# project's stated bias toward false positives over silent misses), but
+# needs corroboration/repetition to escalate to TRIGGER_ALL, same as any
+# other moderate-confidence signal -- instead of an unconditional full
+# alarm on a coin-flip UDK. A fragment that's a substring of exactly ONE
+# UDK is real, unambiguous evidence and keeps full confidence.
+GENERIC_FRAGMENT_CONFIDENCE = KWS_MATCH_CONFIDENCE
+
+# Real bug found and fixed: kws.py's spot() already collapses its DTW
+# distance into a binary match/no-match at DEFAULT_MATCH_THRESHOLD=0.18,
+# discarding HOW confidently it matched. A borderline distance right at
+# that edge (0.167-0.172, measured on real audio) combined with a
+# borderline STT confidence (0.755) to spuriously corroborate an ordinary
+# sentence into an unconfirmed TRIGGER_ALL -- made worse by real
+# wav2vec2/CPU inference nondeterminism occasionally flipping that exact
+# distance across 0.18 on IDENTICAL audio between runs (the same
+# phenomenon documented in README.md's "muffled" 19-vs-18 split).
+# Corroboration specifically (not KWS-alone detection, which stays at the
+# calibrated 0.18 -- that's the STT-outage safety net and should stay
+# permissive) needs a stricter margin, calibrated against the same real
+# corpus calibrate_kws_threshold.py already measured: at 0.15, recall
+# drops from 93.9% to 81.8% but false-positive rate is CUT IN HALF (10.0%
+# -> 5.0%). That asymmetry is exactly right for corroboration's specific
+# role: missing a corroboration boost only means the detection stays at
+# the still-safe, still-alerting TRIGGER_VERIFY tier (STT's own match
+# stands on its own); a WRONG boost skips confirmation entirely. Being
+# conservative here costs little and buys a lot.
+KWS_CORROBORATION_MAX_DISTANCE = 0.15
+
+
+def _normalize(text: str) -> str:
+    """Real bug found and fixed: the previous `[^\\w\\s]` regex relied on
+    Python's `\\w`, which does NOT include Unicode combining marks
+    (category Mn/Mc) -- the vowel signs (matras) that carry essential
+    meaning in Devanagari/Telugu/Kannada/Tamil and other Brahmic scripts.
+    That regex silently turned "मुझे" (Hindi "mujhe", = "me") into "मझ"
+    (garbled, a different/meaningless string) by stripping its two vowel
+    signs, which would have corrupted every non-Latin-script UDK phrase
+    and transcript alike. Fixed by stripping actual punctuation/symbol
+    Unicode categories (P*/S*) instead of relying on \\w's incomplete
+    letter/mark distinction -- verified to strip English punctuation
+    identically to the old regex while preserving Indic combining marks."""
+    text = text.lower().strip()
+    text = "".join(ch for ch in text if not unicodedata.category(ch).startswith(("P", "S")))
+    text = re.sub(r"\s+", " ", text)
+    return text
+
+
+@dataclass
+class MatchResult:
+    udk: UDK
+    layer: Literal["exact", "fuzzy", "semantic", "kws", "none"]
+    confidence: float  # 0.0-1.0
+
+
+@dataclass
+class DecisionEvent:
+    decision: Decision
+    udk: UDK | None
+    confidence: float
+    transcript: str
+    layer: str
+    repeated: bool
+    reason: str
+
+
+def match_transcript(transcript: str, udks: list[UDK], semantic_matcher: SemanticBackend | None = None) -> MatchResult:
+    """Best match across all UDKs for one transcript, highest layer wins."""
+    norm_transcript = _normalize(transcript)
+    if not norm_transcript:
+        return MatchResult(udk=None, layer="none", confidence=0.0)  # type: ignore[arg-type]
+
+    norm_phrases = [_normalize(udk.phrase) for udk in udks]
+    # See GENERIC_FRAGMENT_CONFIDENCE's comment: a transcript that's a
+    # substring of more than one UDK's phrase is ambiguous, real evidence
+    # of genericness rather than a specific match.
+    fragment_is_ambiguous = sum(1 for p in norm_phrases if norm_transcript and norm_transcript in p) > 1
+
+    best: MatchResult | None = None
+
+    for udk, norm_phrase in zip(udks, norm_phrases):
+        # Layer 1: exact (substring either direction, catches short
+        # utterances like "help" matching inside a fuller phrase). Only
+        # the "transcript is the short side, found inside a longer
+        # phrase" direction is at risk of the generic-fragment problem --
+        # true equality or the transcript containing the WHOLE phrase are
+        # both unambiguous regardless of what else is in the corpus.
+        if norm_phrase == norm_transcript or norm_phrase in norm_transcript:
+            candidate = MatchResult(udk=udk, layer="exact", confidence=1.0)
+            if best is None or candidate.confidence > best.confidence:
+                best = candidate
+            continue
+        if norm_transcript in norm_phrase:
+            confidence = GENERIC_FRAGMENT_CONFIDENCE if fragment_is_ambiguous else 1.0
+            candidate = MatchResult(udk=udk, layer="exact", confidence=confidence)
+            if best is None or candidate.confidence > best.confidence:
+                best = candidate
+            continue
+
+        # Layer 2: fuzzy (ASR noise, word-order, minor transcription diffs).
+        # Discounted 0.9x, same treatment as the semantic stub below --
+        # found via evaluate_pipeline_corpus.py's real negative corpus:
+        # partial_ratio's substring-alignment scoring inflates on short
+        # UDK phrases against ordinary sentences that merely share a few
+        # common words ("Call me later" hit 0.67 against no real UDK
+        # relationship), 9/20 real negatives false-positived through this
+        # layer specifically (0 through exact/semantic/KWS). The discount
+        # still preserves the legitimate ASR-noise case ("call the plice
+        # right now" -> 0.97 raw, 0.873 discounted, still clears
+        # TRIGGER_ALL_THRESHOLD) while pushing most of the measured false
+        # positives (clustered at 0.60-0.67) back below TRIGGER_VERIFY_THRESHOLD.
+        # The raw gate is per-matcher (semantic.py's `fuzzy_threshold`,
+        # default 0.55 -- same as English's calibrated value) because real
+        # per-language testing found 0.55 far too permissive for Hindi/
+        # Telugu/Kannada/Tamil specifically: false positives (0.65-0.81 raw)
+        # and genuine matches (0.70-1.0 raw) overlap badly at 0.55 but
+        # cleanly separate by 0.80 -- see semantic.py's module docstring.
+        fuzzy_threshold = getattr(semantic_matcher, "fuzzy_threshold", 0.55) if semantic_matcher is not None else 0.55
+        fuzzy_score = fuzz.partial_ratio(norm_phrase, norm_transcript) / 100.0
+        if fuzzy_score >= fuzzy_threshold:
+            # partial_ratio scores a literal substring alignment as ~1.0
+            # regardless of length -- same generic-fragment risk as the
+            # exact layer above (see GENERIC_FRAGMENT_CONFIDENCE), so the
+            # same ambiguity cap applies here too, not just there.
+            raw_confidence = fuzzy_score * 0.9
+            confidence = min(raw_confidence, GENERIC_FRAGMENT_CONFIDENCE) if fragment_is_ambiguous else raw_confidence
+            candidate = MatchResult(udk=udk, layer="fuzzy", confidence=confidence)
+            if best is None or candidate.confidence > best.confidence:
+                best = candidate
+
+        # Layer 3: semantic -- a real embedding model if one was given,
+        # else the lighter token-overlap stand-in (see module docstring).
+        # The gating threshold comes from the matcher itself (default
+        # 0.55 for anything that doesn't declare one, e.g. FakeSemantic
+        # test doubles) -- semantic.py's real backends use different
+        # models with different real-calibrated cutoffs per language
+        # (0.55 for English, 0.80 for LaBSE/the other four languages;
+        # see semantic.py's module docstring for why they can't share one).
+        if semantic_matcher is not None:
+            semantic_score = semantic_matcher.similarity(norm_phrase, norm_transcript)
+            semantic_threshold = getattr(semantic_matcher, "threshold", 0.55)
+            if semantic_score >= semantic_threshold:
+                candidate = MatchResult(udk=udk, layer="semantic", confidence=semantic_score)
+                if best is None or candidate.confidence > best.confidence:
+                    best = candidate
+        else:
+            semantic_score = fuzz.token_set_ratio(norm_phrase, norm_transcript) / 100.0
+            if semantic_score >= 0.55:
+                # Discounted vs. real fuzzy/exact confidence, since it's a
+                # weaker signal than a real embedding model gives.
+                candidate = MatchResult(udk=udk, layer="semantic", confidence=semantic_score * 0.9)
+                if best is None or candidate.confidence > best.confidence:
+                    best = candidate
+
+    return best or MatchResult(udk=None, layer="none", confidence=0.0)  # type: ignore[arg-type]
+
+
+def _kws_match_to_result(kws_match: KWSMatch | None, udks: list[UDK]) -> MatchResult:
+    if kws_match is None:
+        return MatchResult(udk=None, layer="none", confidence=0.0)  # type: ignore[arg-type]
+    udk = next((u for u in udks if u.udk_id == kws_match.phrase_id), None)
+    if udk is None:  # KWS matched a phrase_id this engine doesn't know about -- ignore, don't guess
+        return MatchResult(udk=None, layer="none", confidence=0.0)  # type: ignore[arg-type]
+    return MatchResult(udk=udk, layer="kws", confidence=KWS_MATCH_CONFIDENCE)
+
+
+def _fuse(stt: MatchResult, kws: MatchResult, kws_match: KWSMatch | None) -> tuple[MatchResult, bool]:
+    """Best of the two independent branches, plus whether they agree.
+    Agreement (both branches independently landing on the same UDK) is
+    cross-validation, not just "two votes" -- treated like repetition
+    already is: strong enough on its own to justify TRIGGER_ALL. Requires
+    the raw KWS distance (not just the fixed-confidence MatchResult) to
+    be within KWS_CORROBORATION_MAX_DISTANCE -- see that constant's
+    comment for why a merely-borderline KWS match isn't trusted enough to
+    justify skipping confirmation on its own."""
+    agree = (
+        stt.udk is not None
+        and kws.udk is not None
+        and stt.udk.udk_id == kws.udk.udk_id
+        and kws_match is not None
+        and kws_match.distance <= KWS_CORROBORATION_MAX_DISTANCE
+    )
+    best = stt if stt.confidence >= kws.confidence else kws
+    return best, agree
+
+
+class UDKEngine:
+    """Stateful across a journey so it can apply the repetition booster
+    (Section 6/7): tracks recent detections per udk_id within the last
+    REPEAT_WINDOW_S seconds of journey time."""
+
+    def __init__(self, udks: list[UDK], semantic_matcher: SemanticBackend | None = None):
+        self.udks = udks
+        self.semantic_matcher = semantic_matcher
+        self._recent: dict[str, list[float]] = {}
+        self._recent_distinct: list[tuple[float, str]] = []
+
+    def _record_and_check_repeat(self, udk_id: str, now_s: float) -> bool:
+        history = self._recent.setdefault(udk_id, [])
+        history.append(now_s)
+        # prune anything outside the window
+        cutoff = now_s - REPEAT_WINDOW_S
+        while history and history[0] < cutoff:
+            history.pop(0)
+        return len(history) >= 2  # this one plus at least one earlier
+
+    def _record_and_check_distinct(self, udk_id: str, now_s: float) -> bool:
+        """Tracks every UDK match across the whole engine (not per-udk_id
+        like repetition does), so N different phrases firing within the
+        window escalate even though no single one repeated."""
+        self._recent_distinct.append((now_s, udk_id))
+        cutoff = now_s - REPEAT_WINDOW_S
+        self._recent_distinct = [(t, u) for t, u in self._recent_distinct if t >= cutoff]
+        return len({u for _, u in self._recent_distinct}) >= DISTINCT_UDK_ESCALATION_COUNT
+
+    def decide(self, transcript: str, now_s: float | None = None, kws_match: KWSMatch | None = None) -> DecisionEvent:
+        now_s = now_s if now_s is not None else time.monotonic()
+        stt_result = match_transcript(transcript, self.udks, semantic_matcher=self.semantic_matcher)
+        kws_result = _kws_match_to_result(kws_match, self.udks)
+        match, corroborated = _fuse(stt_result, kws_result, kws_match)
+
+        if match.udk is None or match.confidence < TRIGGER_VERIFY_THRESHOLD:
+            return DecisionEvent(
+                decision="NO_ACTION",
+                udk=match.udk,
+                confidence=match.confidence,
+                transcript=transcript,
+                layer=match.layer,
+                repeated=False,
+                reason="below TRIGGER_VERIFY threshold",
+            )
+
+        repeated = self._record_and_check_repeat(match.udk.udk_id, now_s)
+        distinct_escalation = self._record_and_check_distinct(match.udk.udk_id, now_s)
+
+        if match.udk.verify_by_default and not repeated and not corroborated and not distinct_escalation:
+            return DecisionEvent(
+                decision="TRIGGER_VERIFY",
+                udk=match.udk,
+                confidence=match.confidence,
+                transcript=transcript,
+                layer=match.layer,
+                repeated=repeated,
+                reason="phrase is common-in-ordinary-conversation, verify by default (Section 16)",
+            )
+
+        if match.confidence >= TRIGGER_ALL_THRESHOLD or repeated or corroborated or distinct_escalation:
+            reason = (
+                "independent STT+KWS agreement"
+                if corroborated
+                else "multiple distinct UDKs triggered within window" if distinct_escalation
+                else "repeated within window" if repeated else "confidence >= TRIGGER_ALL threshold"
+            )
+            return DecisionEvent(
+                decision="TRIGGER_ALL",
+                udk=match.udk,
+                confidence=match.confidence,
+                transcript=transcript,
+                layer=match.layer,
+                repeated=repeated,
+                reason=reason,
+            )
+
+        return DecisionEvent(
+            decision="TRIGGER_VERIFY",
+            udk=match.udk,
+            confidence=match.confidence,
+            transcript=transcript,
+            layer=match.layer,
+            repeated=repeated,
+            reason="confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds",
+        )
