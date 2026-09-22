@@ -18,3 +18,10 @@ tfhub_modules/
 
 # Local runtime state, not project code.
 .claude/
+
+# Third-party repo clones fetched for the WeSep evaluation (real model
+# code/weights, not this project's own code) -- reproducible by cloning
+# wenet-e2e/wesep and wenet-e2e/wespeaker again, not vendored here.
+wesep_src/
+wesep_legacy_src/
+wespeaker_src/
