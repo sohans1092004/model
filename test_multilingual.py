@@ -62,36 +62,168 @@ for lang in SUPPORTED_LANGUAGES:
 
 print(f"\n{passed}/{passed + failed} checks passed so far.\n")
 
-print("=== Live API: language selection wiring ===")
+print("=== Live API: no client-declared language -- journeys start pending detection ===")
 
 client = TestClient(api.app, headers={"X-Service-Token": api.DEV_SERVICE_TOKEN})
 
-resp = client.post("/v1/journeys/start", json={"user_id": "U_multilingual_test", "language": "hi"})
-check("Hindi journey starts successfully (200)", resp.status_code == 200, str(resp.text))
+resp = client.post("/v1/journeys/start", json={"user_id": "U_multilingual_test"})
+check("a journey starts successfully with no language field at all (200)", resp.status_code == 200, str(resp.text))
 if resp.status_code == 200:
     journey = api._store.get(resp.json()["journey_id"])
-    check("journey.language is 'hi'", journey.language == "hi", journey.language)
     check(
-        "journey's engine is enrolled with Hindi UDKs, not English",
-        all(u.language == "hi" for u in journey.engine.udks if u.udk_type == "GENERAL"),
+        "journey.language is None (pending real detection, not client-declared)",
+        journey.language is None,
+        journey.language,
+    )
+    check(
+        "journey runs on English defaults until detection resolves it",
+        all(u.language == "en" for u in journey.engine.udks if u.udk_type == "GENERAL"),
         str({u.udk_id: u.language for u in journey.engine.udks}),
     )
-    hindi_udk08 = _UDK_TABLE["hi"]["UDK_08"][0]
-    decision = journey.engine.decide(hindi_udk08, now_s=0.0)
-    check(
-        "a real Hindi UDK phrase (UDK_08 equivalent) triggers correctly",
-        decision.udk is not None and decision.udk.udk_id == "UDK_08" and decision.decision != "NO_ACTION",
-        str(decision),
+
+print(f"\n{passed}/{passed + failed} checks passed so far.\n")
+
+print("=== Automatic language detection (language_id.py), fake detectors -- no real model load ===")
+
+
+class FakeLanguageDetector:
+    """Test double: returns a fixed (language, probability) regardless
+    of the audio given, so the routing/hysteresis logic can be tested
+    without loading faster-whisper or VoxLingua107."""
+
+    def __init__(self, language: str, prob: float = 0.9):
+        self.language = language
+        self.prob = prob
+
+    def detect(self, pcm: bytes) -> tuple[str, float]:
+        return self.language, self.prob
+
+
+def _fake_journey(**overrides) -> "api.JourneyState":
+    from udks import SAMPLE_PERSONAL_UDK
+
+    stt_by_language = {"hi": FakeSTT(), "te": FakeSTT()}
+    kws_by_language = {}
+    defaults = dict(
+        journey_id="J_lid_test",
+        user_id="U_lid_test",
+        session_token="tok",
+        engine=api.UDKEngine(api.all_udks(SAMPLE_PERSONAL_UDK, language="en")),
+        stt=FakeSTT(),
+        personal_udk=SAMPLE_PERSONAL_UDK,
+        language=None,
+        stt_by_language=stt_by_language,
+        kws_by_language=kws_by_language,
     )
+    defaults.update(overrides)
+    return api.JourneyState(**defaults)
 
-resp_bad = client.post("/v1/journeys/start", json={"user_id": "U_bad_lang_test", "language": "fr"})
-check("an unsupported language is rejected with 400, not silently defaulted", resp_bad.status_code == 400, str(resp_bad.text))
 
-resp_default = client.post("/v1/journeys/start", json={"user_id": "U_default_lang_test"})
-check("omitting language still works and defaults to English (backward compat)", resp_default.status_code == 200, str(resp_default.text))
-if resp_default.status_code == 200:
-    default_journey = api._store.get(resp_default.json()["journey_id"])
-    check("default journey.language is 'en'", default_journey.language == "en", default_journey.language)
+class FakeSTT:
+    model_version = "fake-stt"
+
+    def transcribe(self, pcm: bytes):
+        from stt import Transcript
+
+        return Transcript(text="", model_version=self.model_version)
+
+
+six_seconds_silence = b"\x00\x00" * (6 * 16_000 + 1000)  # real byte-length math, no real audio needed -- total_ms() just counts bytes
+short_silence = b"\x00\x00" * 8_000  # ~0.5s
+
+journey = _fake_journey(language_detector=FakeLanguageDetector("te"))
+journey.audio_buffer.extend(short_silence)
+api._maybe_update_language(journey)
+check(
+    "fast detector resolves a brand-new (pending) journey's language on the first available audio",
+    journey.language == "te" and journey.stt is journey.stt_by_language["te"],
+    journey.language,
+)
+check(
+    "resolving the language also rebuilds the engine with that language's UDKs",
+    all(u.language == "te" for u in journey.engine.udks if u.udk_type == "GENERAL"),
+    str({u.udk_id: u.language for u in journey.engine.udks}),
+)
+
+hindi_journey = _fake_journey(language_detector=FakeLanguageDetector("hi"))
+hindi_journey.audio_buffer.extend(short_silence)
+api._maybe_update_language(hindi_journey)
+hindi_udk08 = _UDK_TABLE["hi"]["UDK_08"][0]
+decision = hindi_journey.engine.decide(hindi_udk08, now_s=0.0)
+check(
+    "after real audio-based detection resolves Hindi, a real Hindi UDK phrase (UDK_08 equivalent) still triggers correctly",
+    decision.udk is not None and decision.udk.udk_id == "UDK_08" and decision.decision != "NO_ACTION",
+    str(decision),
+)
+
+journey_no_detector = _fake_journey(language_detector=None)
+journey_no_detector.audio_buffer.extend(short_silence)
+api._maybe_update_language(journey_no_detector)
+check(
+    "with no detector configured (feature not enabled), a pending journey falls back to English rather than staying undetected forever",
+    journey_no_detector.language == "en",
+    journey_no_detector.language,
+)
+
+print(f"\n{passed}/{passed + failed} checks passed so far.\n")
+
+print(f"=== Periodic recheck: {api.LID_SWITCH_CONFIRMATIONS} consecutive agreeing detections required before switching ===")
+print("(real-world audio testing found 2 wasn't enough -- see LID_SWITCH_CONFIRMATIONS's docstring in api.py:")
+print(" real background music/noise made VoxLingua107 confidently wrong for 2 consecutive real 6s windows,")
+print(" which used to wrongly flip a real all-English clip's journey onto the Kannada STT backend mid-stream)")
+
+journey2 = _fake_journey(language="en", language_recheck_detector=FakeLanguageDetector("hi"))
+journey2.audio_buffer.extend(six_seconds_silence)
+api._maybe_update_language(journey2)
+check(
+    "a single disagreeing recheck does NOT switch the language yet (avoids flip-flopping on one noisy signal)",
+    journey2.language == "en",
+    journey2.language,
+)
+check("the disagreement is recorded as a pending candidate", journey2._lid_pending_candidate == "hi", journey2._lid_pending_candidate)
+
+journey2.audio_buffer.extend(six_seconds_silence)
+api._maybe_update_language(journey2)
+check(
+    "a SECOND consecutive agreeing recheck alone no longer switches -- this is the real bug fix (was: switched here)",
+    journey2.language == "en" and journey2._lid_pending_streak == 2,
+    (journey2.language, journey2._lid_pending_streak),
+)
+
+journey2.audio_buffer.extend(six_seconds_silence)
+api._maybe_update_language(journey2)
+check(
+    f"a THIRD consecutive agreeing recheck DOES switch (real signal sustained across {api.LID_SWITCH_CONFIRMATIONS} independent windows, not a 2-window noise burst)",
+    journey2.language == "hi" and journey2.stt is journey2.stt_by_language["hi"],
+    journey2.language,
+)
+check("the pending candidate/streak reset after a confirmed switch", journey2._lid_pending_candidate is None and journey2._lid_pending_streak == 0)
+
+journey3 = _fake_journey(language="en", language_recheck_detector=FakeLanguageDetector("hi"))
+journey3.audio_buffer.extend(six_seconds_silence)
+api._maybe_update_language(journey3)
+journey3.language_recheck_detector = FakeLanguageDetector("en")  # back to agreeing with the active language
+journey3.audio_buffer.extend(six_seconds_silence)
+api._maybe_update_language(journey3)
+check(
+    "a disagreement NOT confirmed by the next recheck resets cleanly, no spurious switch",
+    journey3.language == "en" and journey3._lid_pending_candidate is None and journey3._lid_pending_streak == 0,
+    (journey3.language, journey3._lid_pending_candidate, journey3._lid_pending_streak),
+)
+
+journey4 = _fake_journey(language="en", language_recheck_detector=FakeLanguageDetector("kn"))
+journey4.audio_buffer.extend(six_seconds_silence)
+api._maybe_update_language(journey4)  # kn, streak=1
+journey4.audio_buffer.extend(six_seconds_silence)
+api._maybe_update_language(journey4)  # kn, streak=2 -- this is exactly where the real bug used to fire
+journey4.language_recheck_detector = FakeLanguageDetector("en")  # real content resumes agreeing with English
+journey4.audio_buffer.extend(six_seconds_silence)
+api._maybe_update_language(journey4)
+check(
+    "real-world regression: 2 consecutive wrong agreements followed by a correct one never switches at all (matches the real negatives_6 clip's actual score sequence)",
+    journey4.language == "en" and journey4._lid_pending_candidate is None and journey4._lid_pending_streak == 0,
+    (journey4.language, journey4._lid_pending_candidate, journey4._lid_pending_streak),
+)
 
 print(f"\n{passed}/{passed + failed} checks passed so far.\n")
 

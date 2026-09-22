@@ -37,6 +37,39 @@ outright (empty transcript, an outage per Section 3) but KWS still
 matches, KWS alone can still produce a decision -- this is the actual
 single-point-of-failure removal Section 4 was about, not just an accuracy
 bump.
+
+A third, optional signal (beats_distress_detector.py): a real trained
+AudioSet classifier (Microsoft's BEATs, fine-tuned), scoring the max
+probability across a curated set of vocal-distress classes (Screaming,
+Yell, Shout, Crying/sobbing, etc). Superseded scream_detector.py's
+pure-DSP heuristic (envelope roughness/pitch elevation/energy) after real
+measurement found it a clear improvement: on this project's own real
+corpus, the one confirmed real scream peaks at 0.454 vocal score in its
+actual scream window vs. the DSP detector's 0.320 on the same clip, while
+6 real negative clips maxed at 0.018 (vs. the DSP detector's 9.0% FPR).
+Still corroboration-only, same as before -- unlike KWS it is NEVER
+treated as an independent detection branch -- decide() only even looks at
+scream_score after STT/KWS has already produced a TRIGGER_VERIFY-or-better
+match on its own, where it can then add corroboration the same way
+STT+KWS agreement already does. It can never turn a NO_ACTION into
+anything else. scream_detector.py is left in place, standalone and still
+independently testable, but is no longer wired into api.py.
+
+Two more corroborating signals (stt_confidence_gate.py, dual_asr_guard.py),
+added after a real investigation into overlapping-speech/degraded-audio
+failures found free STT transcription can produce fully fabricated,
+fluent text with no visible sign anything is wrong. Unlike scream_score,
+these only ever DISCOUNT a text match's confidence, never add to it --
+the "no single signal fires alone" principle applied in the other
+direction. stt_suspect (free -- reuses faster-whisper's own decoding
+metadata) catches genuinely-hallucinating output (the decoder's own
+temperature fallback fired). dual_asr_disagreement (a second model's
+independent transcript, run selectively -- see api.py's wiring) catches
+"confidently wrong" output stt_suspect structurally cannot: a transcript
+the decoder itself shows no sign of doubting, that is nevertheless not
+what was actually said. Both are skipped when KWS independently
+corroborates the match, since KWS never depends on the STT transcript's
+text quality at all.
 """
 
 from __future__ import annotations
@@ -49,6 +82,7 @@ from typing import Literal
 
 from rapidfuzz import fuzz
 
+from beats_distress_detector import DISTRESS_SCORE_THRESHOLD as SCREAM_SCORE_THRESHOLD
 from kws import KWSMatch
 from semantic import SemanticBackend
 from udks import UDK
@@ -117,6 +151,21 @@ GENERIC_FRAGMENT_CONFIDENCE = KWS_MATCH_CONFIDENCE
 # stands on its own); a WRONG boost skips confirmation entirely. Being
 # conservative here costs little and buys a lot.
 KWS_CORROBORATION_MAX_DISTANCE = 0.15
+
+# A THIRD independent signal, on top of STT text and KWS audio-embedding
+# matching: scream_detector.py's pure-signal-processing acoustic
+# distress score (roughness/pitch/energy -- no trained model). Real
+# calibration there found only 57.8% recall / 9.0% FPR on its own
+# (RAVDESS fear/angry speech vs. real negatives) -- nowhere near good
+# enough to be a standalone trigger, which is exactly why it is wired
+# the same way KWS corroboration already is: it can only ADD confidence
+# to a segment where STT/KWS already independently produced a
+# TRIGGER_VERIFY-or-better match (see decide()'s gate below, which runs
+# BEFORE this is even consulted) -- never fire, or even get evaluated,
+# on its own. A below-average detector that only ever corroborates an
+# existing signal is still a net improvement; the same detector allowed
+# to trigger alone would mean missing real distress speech more often
+# than it catches it.
 
 
 def _normalize(text: str) -> str:
@@ -208,7 +257,24 @@ def match_transcript(transcript: str, udks: list[UDK], semantic_matcher: Semanti
         # cleanly separate by 0.80 -- see semantic.py's module docstring.
         fuzzy_threshold = getattr(semantic_matcher, "fuzzy_threshold", 0.55) if semantic_matcher is not None else 0.55
         fuzzy_score = fuzz.partial_ratio(norm_phrase, norm_transcript) / 100.0
-        if fuzzy_score >= fuzzy_threshold:
+        # Real false positive found and fixed this session (real negative
+        # podcast audio, not synthetic): partial_ratio's substring-alignment
+        # scoring can land a short, common-word-heavy UDK phrase like "Let
+        # go of me" at 0.667 raw against long, repetitive filler text
+        # ("...going to go to the next video...") purely from coincidental
+        # short-word alignment ("go"/"of"/"me" scattered nearby), not any
+        # real relationship -- 0.667*0.9=0.600 lands exactly AT
+        # TRIGGER_VERIFY_THRESHOLD instead of below it, the discount's
+        # documented "pushes MOST, not all" gap. token_set_ratio (real
+        # shared-WORD overlap, not character-substring alignment) cleanly
+        # separates these: 0.29-0.34 on the false positives found vs. 0.627
+        # on the documented legitimate ASR-noise case ("call the plice
+        # right now" -> UDK_01, test_pipeline.py) -- same "two independent
+        # signals must agree" principle this project already applies to
+        # KWS+STT fusion and scream_score corroboration, applied here to
+        # partial_ratio's own single-scorer blind spot.
+        fuzzy_word_overlap = fuzz.token_set_ratio(norm_phrase, norm_transcript) / 100.0
+        if fuzzy_score >= fuzzy_threshold and fuzzy_word_overlap >= fuzzy_threshold:
             # partial_ratio scores a literal substring alignment as ~1.0
             # regardless of length -- same generic-fragment risk as the
             # exact layer above (see GENERIC_FRAGMENT_CONFIDENCE), so the
@@ -304,27 +370,66 @@ class UDKEngine:
         self._recent_distinct = [(t, u) for t, u in self._recent_distinct if t >= cutoff]
         return len({u for _, u in self._recent_distinct}) >= DISTINCT_UDK_ESCALATION_COUNT
 
-    def decide(self, transcript: str, now_s: float | None = None, kws_match: KWSMatch | None = None) -> DecisionEvent:
+    def decide(
+        self,
+        transcript: str,
+        now_s: float | None = None,
+        kws_match: KWSMatch | None = None,
+        scream_score: float | None = None,
+        stt_suspect: bool = False,
+        dual_asr_disagreement: bool = False,
+    ) -> DecisionEvent:
         now_s = now_s if now_s is not None else time.monotonic()
         stt_result = match_transcript(transcript, self.udks, semantic_matcher=self.semantic_matcher)
         kws_result = _kws_match_to_result(kws_match, self.udks)
         match, corroborated = _fuse(stt_result, kws_result, kws_match)
 
-        if match.udk is None or match.confidence < TRIGGER_VERIFY_THRESHOLD:
+        # STT-quality veto (stt_confidence_gate.py / dual_asr_guard.py):
+        # discounts the text-match confidence BEFORE the hard floor below,
+        # rather than adding a new independent gate -- same "no single
+        # signal fires alone" shape as everything else here, just applied
+        # in the other direction (subtracting confidence, not adding it).
+        # Skipped when KWS independently agrees (corroborated) or when KWS
+        # alone is winning (match.layer == "kws"): KWS never looks at the
+        # STT transcript at all (it's audio-embedding+DTW), so a signal
+        # about STT's text quality specifically says nothing about
+        # whether KWS's own independent detection should be distrusted.
+        effective_confidence = match.confidence
+        veto_reason = None
+        if (stt_suspect or dual_asr_disagreement) and not corroborated and match.layer != "kws":
+            effective_confidence = min(match.confidence, TRIGGER_VERIFY_THRESHOLD - 0.01)
+            veto_reason = (
+                "text match vetoed by dual-ASR disagreement (independent second model didn't corroborate this transcript)"
+                if dual_asr_disagreement
+                else "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+            )
+
+        # Gate runs BEFORE scream_score is even looked at -- a high
+        # acoustic distress score alone, with no text/KWS match at all,
+        # never reaches TRIGGER_VERIFY, let alone TRIGGER_ALL. See
+        # SCREAM_SCORE_THRESHOLD's comment for why.
+        if match.udk is None or effective_confidence < TRIGGER_VERIFY_THRESHOLD:
             return DecisionEvent(
                 decision="NO_ACTION",
                 udk=match.udk,
-                confidence=match.confidence,
+                confidence=effective_confidence,
                 transcript=transcript,
                 layer=match.layer,
                 repeated=False,
-                reason="below TRIGGER_VERIFY threshold",
+                reason=veto_reason or "below TRIGGER_VERIFY threshold",
             )
 
         repeated = self._record_and_check_repeat(match.udk.udk_id, now_s)
         distinct_escalation = self._record_and_check_distinct(match.udk.udk_id, now_s)
+        scream_corroborated = scream_score is not None and scream_score >= SCREAM_SCORE_THRESHOLD
 
-        if match.udk.verify_by_default and not repeated and not corroborated and not distinct_escalation:
+        if (
+            match.udk.verify_by_default
+            and not repeated
+            and not corroborated
+            and not distinct_escalation
+            and not scream_corroborated
+        ):
             return DecisionEvent(
                 decision="TRIGGER_VERIFY",
                 udk=match.udk,
@@ -335,12 +440,14 @@ class UDKEngine:
                 reason="phrase is common-in-ordinary-conversation, verify by default (Section 16)",
             )
 
-        if match.confidence >= TRIGGER_ALL_THRESHOLD or repeated or corroborated or distinct_escalation:
+        if match.confidence >= TRIGGER_ALL_THRESHOLD or repeated or corroborated or distinct_escalation or scream_corroborated:
             reason = (
                 "independent STT+KWS agreement"
                 if corroborated
                 else "multiple distinct UDKs triggered within window" if distinct_escalation
-                else "repeated within window" if repeated else "confidence >= TRIGGER_ALL threshold"
+                else "repeated within window" if repeated
+                else "acoustic distress signal corroborated the match" if scream_corroborated
+                else "confidence >= TRIGGER_ALL threshold"
             )
             return DecisionEvent(
                 decision="TRIGGER_ALL",

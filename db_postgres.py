@@ -80,7 +80,8 @@ class PostgresJourneyDB:
                    ON CONFLICT (journey_id) DO UPDATE SET
                      status = excluded.status,
                      last_heartbeat_at = excluded.last_heartbeat_at,
-                     had_trigger = excluded.had_trigger""",
+                     had_trigger = excluded.had_trigger,
+                     language = excluded.language""",
                 (
                     journey.journey_id,
                     journey.user_id,
@@ -92,7 +93,9 @@ class PostgresJourneyDB:
                     self._enc(udk.phrase),
                     udk.verify_by_default,
                     journey.had_trigger,
-                    getattr(journey, "language", "en"),
+                    # "" (not NULL -- the column is NOT NULL) means "still
+                    # pending real detection" -- see db.py's save_journey.
+                    getattr(journey, "language", None) or "",
                 ),
             )
 
@@ -106,11 +109,14 @@ class PostgresJourneyDB:
         return row
 
     def save_event(self, event: dict) -> None:
+        """Same field-level transcript encryption as db.py -- see that
+        module's save_event docstring for the real bug this fixes."""
+        payload = event if self._key_manager is None else {**event, "transcript": self._enc(event["transcript"])}
         with self._lock:
             self._conn.execute(
                 """INSERT INTO events (event_id, journey_id, timestamp, decision, payload)
                    VALUES (%s, %s, %s, %s, %s) ON CONFLICT (event_id) DO NOTHING""",
-                (event["event_id"], event["journey_id"], event["timestamp"], event["decision"], json.dumps(event)),
+                (event["event_id"], event["journey_id"], event["timestamp"], event["decision"], json.dumps(payload)),
             )
 
     def load_events(self, journey_id: str) -> list[dict]:
@@ -118,7 +124,11 @@ class PostgresJourneyDB:
             rows = self._conn.execute(
                 "SELECT payload FROM events WHERE journey_id = %s ORDER BY timestamp", (journey_id,)
             ).fetchall()
-        return [json.loads(r["payload"]) for r in rows]
+        events = [json.loads(r["payload"]) for r in rows]
+        if self._key_manager is not None:
+            for e in events:
+                e["transcript"] = self._dec(e["transcript"])
+        return events
 
     def list_journeys(self) -> list[dict]:
         with self._lock:

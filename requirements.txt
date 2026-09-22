@@ -66,3 +66,24 @@ speechbrain
 # Vakyansh project's per-language ASR-fine-tuned wav2vec2 models instead
 # -- run enroll_indic_kws_references.py once to generate
 # kws_references_{te,kn,hi,ta}.npz before enabling this flag.
+#
+# Automatic language detection (language_id.py, UDK_ENABLE_LANGUAGE_ID=1
+# in api.py) also needs no new package -- faster-whisper (already listed
+# above) covers the fast initial detector, and speechbrain (already
+# listed below for separation.py) covers VoxLingua107, the accurate
+# periodic-recheck detector. See README.md's "Automatic language
+# detection" section for why both are used together, not just one.
+#
+# The acoustic distress-cue signal (UDK_ENABLE_SCREAM_DETECTION=1 in
+# api.py) was scream_detector.py, pure numpy/scipy signal processing, no
+# trained model, no download -- left in place, standalone, still
+# independently testable. Superseded in api.py by
+# beats_distress_detector.py (Microsoft's BEATs, a real trained AudioSet
+# classifier) after real measurement found it a clear improvement on this
+# project's own real audio (see that module's DISTRESS_SCORE_THRESHOLD
+# comment). Also needs no new package -- torch/torchaudio (already
+# installed, transitive deps of speechbrain above) run the vendored
+# beats_vendor/ model code, and huggingface_hub (already installed,
+# transitive dep of transformers/datasets) downloads the ~360MB
+# fine-tuned checkpoint on first use, cached in beats_cache/. See
+# README.md's "A third detection signal" section.

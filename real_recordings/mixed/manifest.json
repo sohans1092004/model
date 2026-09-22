@@ -1,0 +1,182 @@
+[
+  {
+    "file": "clip_01_clean.wav",
+    "phrase": "Get away from me",
+    "category": "threat/confrontation",
+    "condition": "clean"
+  },
+  {
+    "file": "clip_02_noisy.wav",
+    "phrase": "Someone is following me",
+    "category": "stalking",
+    "condition": "noisy"
+  },
+  {
+    "file": "clip_03_muffled.wav",
+    "phrase": "I need help right now",
+    "category": "general distress",
+    "condition": "muffled"
+  },
+  {
+    "file": "clip_04_overlapping.wav",
+    "phrase": "Don't touch me",
+    "category": "physical threat",
+    "condition": "overlapping"
+  },
+  {
+    "file": "clip_05_clean.wav",
+    "phrase": "I'm being followed",
+    "category": "stalking",
+    "condition": "clean"
+  },
+  {
+    "file": "clip_06_noisy.wav",
+    "phrase": "Help me, please",
+    "category": "general distress",
+    "condition": "noisy"
+  },
+  {
+    "file": "clip_07_muffled.wav",
+    "phrase": "I'm scared, stay back",
+    "category": "threat/confrontation",
+    "condition": "muffled"
+  },
+  {
+    "file": "clip_08_overlapping.wav",
+    "phrase": "Let go of me",
+    "category": "physical threat",
+    "condition": "overlapping"
+  },
+  {
+    "file": "clip_09_clean.wav",
+    "phrase": "I need the police here",
+    "category": "emergency/police",
+    "condition": "clean"
+  },
+  {
+    "file": "clip_10_noisy.wav",
+    "phrase": "Someone is trying to hurt me",
+    "category": "threat/confrontation",
+    "condition": "noisy"
+  },
+  {
+    "file": "clip_11_muffled.wav",
+    "phrase": "Please don't hurt me",
+    "category": "threat/confrontation",
+    "condition": "muffled"
+  },
+  {
+    "file": "clip_12_noisy.wav",
+    "phrase": "I don't feel safe here",
+    "category": "general distress",
+    "condition": "noisy"
+  },
+  {
+    "file": "clip_13_clean.wav",
+    "phrase": "Stay away from me",
+    "category": "threat/confrontation",
+    "condition": "clean"
+  },
+  {
+    "file": "clip_14_noisy.wav",
+    "phrase": "I'm in danger",
+    "category": "general distress",
+    "condition": "noisy"
+  },
+  {
+    "file": "clip_15_muffled.wav",
+    "phrase": "Somebody help me now",
+    "category": "general distress",
+    "condition": "muffled"
+  },
+  {
+    "file": "clip_16_overlapping.wav",
+    "phrase": "I want to go home now",
+    "category": "distress/escape",
+    "condition": "overlapping"
+  },
+  {
+    "file": "clip_17_muffled.wav",
+    "phrase": "Please call for help",
+    "category": "emergency/police",
+    "condition": "muffled"
+  },
+  {
+    "file": "clip_18_noisy.wav",
+    "phrase": "I need to get out of here",
+    "category": "distress/escape",
+    "condition": "noisy"
+  },
+  {
+    "file": "clip_19_muffled.wav",
+    "phrase": "Please leave me alone",
+    "category": "threat/confrontation",
+    "condition": "muffled"
+  },
+  {
+    "file": "clip_20_muffled.wav",
+    "phrase": "I think I'm being watched",
+    "category": "stalking",
+    "condition": "muffled"
+  },
+  {
+    "file": "clip_21_clean.wav",
+    "phrase": "Call the police now",
+    "category": "emergency/police",
+    "condition": "clean"
+  },
+  {
+    "file": "clip_22_clean.wav",
+    "phrase": "This isn't safe",
+    "category": "general distress",
+    "condition": "clean"
+  },
+  {
+    "file": "clip_23_muffled.wav",
+    "phrase": "I need someone to come get me",
+    "category": "distress/escape",
+    "condition": "muffled"
+  },
+  {
+    "file": "clip_24_overlapping.wav",
+    "phrase": "He/she won't leave me alone",
+    "category": "stalking",
+    "condition": "overlapping"
+  },
+  {
+    "file": "clip_25_clean.wav",
+    "phrase": "I'm being threatened",
+    "category": "threat/confrontation",
+    "condition": "clean"
+  },
+  {
+    "file": "clip_26_clean.wav",
+    "phrase": "Can you stay on the line with me",
+    "category": "emergency/police",
+    "condition": "clean"
+  },
+  {
+    "file": "clip_27_muffled.wav",
+    "phrase": "I'm not safe walking alone",
+    "category": "stalking",
+    "condition": "muffled"
+  },
+  {
+    "file": "clip_28_overlapping.wav",
+    "phrase": "Someone grabbed me",
+    "category": "physical threat",
+    "condition": "overlapping"
+  },
+  {
+    "file": "clip_29_clean.wav",
+    "phrase": "I'm locked out and scared",
+    "category": "distress/escape",
+    "condition": "clean"
+  },
+  {
+    "file": "clip_30_noisy.wav",
+    "phrase": "Please send help immediately",
+    "category": "emergency/police",
+    "condition": "noisy"
+  }
+]

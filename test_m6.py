@@ -107,6 +107,38 @@ check("personal UDK phrase is not stored in plaintext", raw_row["personal_udk_ph
 decrypted_via_api = api._db.load_journey(jid)
 check("JourneyDB.load_journey still returns the real values (round-trips correctly)", decrypted_via_api["session_token"] == token and decrypted_via_api["personal_udk_phrase"] == "kangaroo paints a fence blue")
 
+# Real bug found and fixed in a 2026-09-21 audit: an event's transcript
+# (the actual spoken words of a detected distress phrase) used to be
+# stored in the events table's payload blob as plain JSON, even though
+# session_token/personal_udk_phrase above were already encrypted for the
+# same "credential-shaped" reason. Verified the same way, by reading the
+# RAW stored bytes directly, not just trusting the round-trip.
+secret_transcript = "help me please someone is chasing me down the street"
+fake_event = {
+    "event_id": "evt_transcript_encryption_test",
+    "journey_id": jid,
+    "user_id": "U1",
+    "decision": "TRIGGER_VERIFY",
+    "udk_id": "UDK_08",
+    "udk_type": "GENERAL",
+    "confidence": 0.7,
+    "timestamp": time.time(),
+    "server_received_ts": time.time(),
+    "transcript": secret_transcript,
+    "audio_segment_id": f"{jid}:0-1000",
+    "location": None,
+    "processing_version": "test",
+    "model_version": {},
+}
+api._db.save_event(fake_event)
+raw_payload = api._db._conn.execute(
+    "SELECT payload FROM events WHERE event_id = ?", (fake_event["event_id"],)
+).fetchone()["payload"]
+check("event transcript is not stored in plaintext", secret_transcript not in raw_payload)
+loaded_events = api._db.load_events(jid)
+loaded_fake = next(e for e in loaded_events if e["event_id"] == fake_event["event_id"])
+check("JourneyDB.load_events decrypts the transcript back correctly", loaded_fake["transcript"] == secret_transcript)
+
 journey = api._store.get(jid)
 journey.vad = SingleFixedSegmentVAD(close_at_bytes=16)
 plaintext_pcm = b"K" * 16
@@ -124,11 +156,24 @@ print("=== Threat: access another user's stored audio ===")
 
 api._ingest_frame(journey, 1, b"\x00" * 4, api._audio_store)  # close out the segment so audio exists to fetch
 
-resp_wrong_owner = client.get(f"/v1/journeys/{jid}/audio-url", params={"user_id": "SOMEONE_ELSE"})
-check("a non-owner is denied a signed URL", resp_wrong_owner.status_code == 403)
+resp_wrong_owner = client.get(f"/v1/journeys/{jid}/audio-url", params={"user_id": "SOMEONE_ELSE", "session_token": "not-the-real-session-token"})
+check("a non-owner (wrong session_token) is denied a signed URL", resp_wrong_owner.status_code == 403)
 
-resp_owner = client.get(f"/v1/journeys/{jid}/audio-url", params={"user_id": "U1"})
-check("the owner is granted a signed URL", resp_owner.status_code == 200)
+resp_guessed_session = client.get(f"/v1/journeys/{jid}/audio-url", params={"user_id": "U1", "session_token": "guessed-or-wrong-token"})
+check(
+    "a caller who merely knows/guesses user_id but not the real session_token is still denied (real bug found and fixed: this used to trust user_id alone)",
+    resp_guessed_session.status_code == 403,
+)
+
+resp_no_creds = TestClient(api.app).get(f"/v1/journeys/{jid}/audio-url", params={"user_id": "U1", "session_token": token})
+check(
+    "no service token at all is rejected even with the correct session_token",
+    resp_no_creds.status_code in (401, 422),
+    str(resp_no_creds.status_code),
+)
+
+resp_owner = client.get(f"/v1/journeys/{jid}/audio-url", params={"user_id": "U1", "session_token": token})
+check("the real owner, with the correct session_token, is granted a signed URL", resp_owner.status_code == 200)
 audio_url = resp_owner.json()["url"]
 
 resp_audio = client.get(audio_url)
@@ -148,9 +193,41 @@ check("audit entries never contain the audio content itself", all("K" * 16 not i
 
 print(f"\n{passed}/{passed + failed} checks passed so far.\n")
 
+print("=== Threat: unauthenticated access to journey status/events/stop/metrics (real bug found and fixed) ===")
+# A 2026-09-21 audit found these four routes -- unlike /start and now
+# /audio-url above -- had NO auth dependency at all: any caller who knew
+# or guessed a journey_id could read its full event/transcript history
+# with zero credentials. Fixed by adding the same require_service_token
+# dependency /start already had. These checks are the regression the
+# audit itself flagged as missing -- test_m6.py's own `client` fixture
+# always sent the service-token header, which is exactly why the gap
+# went unnoticed by this file's own threat-model coverage until now.
+
+unauth_client = TestClient(api.app)  # no X-Service-Token header at all
+
+resp_status_unauth = unauth_client.get(f"/v1/journeys/{jid}")
+check("journey status is rejected with no service token", resp_status_unauth.status_code in (401, 422), str(resp_status_unauth.status_code))
+resp_status_auth = client.get(f"/v1/journeys/{jid}")
+check("journey status succeeds with the real service token", resp_status_auth.status_code == 200)
+
+resp_events_unauth = unauth_client.get(f"/v1/journeys/{jid}/events")
+check("journey events is rejected with no service token", resp_events_unauth.status_code in (401, 422), str(resp_events_unauth.status_code))
+resp_events_auth = client.get(f"/v1/journeys/{jid}/events")
+check("journey events succeeds with the real service token", resp_events_auth.status_code == 200)
+
+resp_metrics_unauth = unauth_client.get("/metrics")
+check("metrics is rejected with no service token", resp_metrics_unauth.status_code in (401, 422), str(resp_metrics_unauth.status_code))
+resp_metrics_auth = client.get("/metrics")
+check("metrics succeeds with the real service token", resp_metrics_auth.status_code == 200)
+
+resp_stop_unauth = unauth_client.post(f"/v1/journeys/{jid}/stop", json={})
+check("stop is rejected with no service token", resp_stop_unauth.status_code in (401, 422), str(resp_stop_unauth.status_code))
+
+print(f"\n{passed}/{passed + failed} checks passed so far.\n")
+
 print("=== Threat: generate fake UDK events / access nonexistent journey ===")
 
-resp_no_such_journey = client.get("/v1/journeys/does-not-exist/audio-url", params={"user_id": "U1"})
+resp_no_such_journey = client.get("/v1/journeys/does-not-exist/audio-url", params={"user_id": "U1", "session_token": "irrelevant"})
 check("requesting audio for a nonexistent journey 404s, not a silent empty grant", resp_no_such_journey.status_code == 404)
 
 route_paths = {r.path for r in api.app.routes}

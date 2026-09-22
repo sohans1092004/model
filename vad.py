@@ -25,15 +25,43 @@ class SpeechSegment:
 
 
 class VAD:
-    def __init__(self, aggressiveness: int = 1, pre_roll_ms: int = 1500, post_roll_ms: int = 1500):
+    def __init__(
+        self,
+        aggressiveness: int = 1,
+        pre_roll_ms: int = 1500,
+        post_roll_ms: int = 1500,
+        max_segment_ms: int = 8000,
+    ):
         """
         aggressiveness: 0 (most permissive / most likely to call things
         speech) to 3 (most aggressive at rejecting non-speech). Section 2
         recommends biasing toward speech, so this defaults low.
+
+        max_segment_ms: real bug found and fixed testing against real
+        continuous audio (background music, sound effects, non-stop
+        talk) -- a genuinely important condition for a personal-safety
+        product this project hadn't tested against before. Without a
+        cap, a continuous run of speech-classified frames never hits a
+        non-speech frame, so the segment keeps growing to match whatever
+        has arrived so far -- `end` always equals the current buffer
+        length, so api.py's finalization check (`seg.end_ms < total`,
+        "more audio arrived after this segment ended, proving it's
+        done") can never become true. In a real test (a 56-second real
+        video clip VAD classified as one unbroken speech run), this
+        meant the ENTIRE clip stayed one open segment and was never
+        transcribed or matched until the journey was explicitly stopped
+        -- silently falling back to "wait for everything," exactly what
+        this system is supposed to never do. 8s is a real, deliberate
+        starting choice (long enough for a realistic UDK-length
+        utterance even under a noisy floor, short enough to bound
+        worst-case detection latency), not yet swept against real data
+        the way e.g. kws.py's threshold was -- a real next step, not a
+        finished calibration.
         """
         self._vad = webrtcvad.Vad(aggressiveness)
         self.pre_roll_frames = max(1, pre_roll_ms // FRAME_MS)
         self.post_roll_frames = max(1, post_roll_ms // FRAME_MS)
+        self.max_segment_frames = max(1, max_segment_ms // FRAME_MS)
 
     def _frames(self, pcm: bytes):
         for i in range(0, len(pcm) - FRAME_BYTES + 1, FRAME_BYTES):
@@ -63,7 +91,21 @@ class VAD:
             if flags[i]:
                 start = max(0, i - self.pre_roll_frames)
                 j = i
-                while j < n and flags[j]:
+                # Capped at max_segment_frames -- see __init__'s
+                # max_segment_ms docstring for the real bug this closes:
+                # without the cap, a continuous run of speech-classified
+                # frames (real background music/noise/non-stop talk) never
+                # hits a non-speech frame to stop at, so `j` -- and thus
+                # `end` -- would just keep growing to match the buffer,
+                # and this segment would never satisfy the caller's
+                # "more audio arrived after this ended" finalization
+                # proof. Cutting here forcibly closes it instead, so it
+                # gets transcribed/matched on a bounded schedule; the
+                # pre-roll of whatever segment starts next still overlaps
+                # back into this one's post-roll, so a phrase split
+                # across the cut isn't silently dropped from both sides.
+                run_limit = i + self.max_segment_frames
+                while j < n and flags[j] and j < run_limit:
                     j += 1
                 end = min(n, j + self.post_roll_frames)
                 seg_pcm = b"".join(frames[start:end])

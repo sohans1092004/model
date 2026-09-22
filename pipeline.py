@@ -37,7 +37,12 @@ def _event_json(event: DecisionEvent, segment: SpeechSegment) -> dict:
 
 
 def run_pipeline(
-    pcm: bytes, stt: STTBackend, engine: UDKEngine, vad: VAD | None = None, kws: KWSBackend | None = None
+    pcm: bytes,
+    stt: STTBackend,
+    engine: UDKEngine,
+    vad: VAD | None = None,
+    kws: KWSBackend | None = None,
+    scream_detector: object | None = None,  # beats_distress_detector.BEATsDistressDetector -- corroboration-only, see udk_engine.py
 ) -> list[dict]:
     vad = vad or VAD()
     segments = vad.segment_speech(pcm)
@@ -51,7 +56,8 @@ def run_pipeline(
         # entire point of running KWS in parallel.
         if not transcript.text and kws_match is None:
             continue
-        decision = engine.decide(transcript.text, now_s=time.monotonic(), kws_match=kws_match)
+        scream_score = scream_detector.score(seg.pcm) if scream_detector is not None else None
+        decision = engine.decide(transcript.text, now_s=time.monotonic(), kws_match=kws_match, scream_score=scream_score)
         event = _event_json(decision, seg)
         events.append(event)
         if decision.decision != "NO_ACTION":

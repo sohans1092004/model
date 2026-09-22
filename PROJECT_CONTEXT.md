@@ -357,6 +357,165 @@ Section 14's roadmap M1-M7 built and tested in this same folder):
   long reference accumulates real cost for the unmatched content -- text
   substring/partial_ratio matching has no equivalent length penalty. See
   kws.py's module docstring and README.md for the full numbers.
+- Automatic language detection (language_id.py) replaces the
+  client-declared language field entirely, on request: "we won't have
+  the customer input: just auto detection only." Real measurement found
+  faster-whisper's built-in LID gets 100% on English/Hindi/Telugu/Tamil
+  even on short clips but only 67% on Kannada; SpeechBrain's
+  VoxLingua107 (purpose-built for LID) gets all four Indic languages
+  100% but needs 6+ seconds of audio to be reliable. Both used together:
+  fast initial detection on any audio, accurate periodic recheck once
+  enough accumulates, two consecutive agreeing rechecks required before
+  switching (avoids flip-flopping on one noisy signal). Verified
+  end-to-end with real models: real Telugu audio, no language field,
+  correctly detected and routed to the real Telugu STT backend, fired a
+  correct detection. Also fixed a real pre-existing DB bug found while
+  wiring this: the journey-save UPSERT never persisted language changes.
+  See README.md's "Automatic language detection" section. Full
+  regression suite: 188/188 checks passing as of this writing.
+- **Real-world audio testing (not synthetic TTS) then found two real
+  bugs that no prior test surfaced, once actual user-provided
+  recordings (English/Hindi/Telugu/Kannada/Tamil, 8-60s, real podcasts/
+  shorts) were streamed through the actual production `_ingest_frame`
+  path instead of a single-shot eval helper.** (1) vad.py's
+  `segment_speech` only closed a segment at a non-speech frame — a real
+  56s clip had no detectable pause anywhere, so the "segment" grew to
+  match the whole buffer forever and could never satisfy api.py's
+  finalization proof (`seg.end_ms < total`), meaning it was never
+  incrementally transcribed at all until the journey was stopped. Fixed
+  with a real `max_segment_ms=8000` forced-cut cap (pre/post-roll
+  overlap preserved at the cut); verified the real clip now produces 6
+  bounded, incrementally-finalizable segments instead of 1 open one.
+  test_vad.py (new, 7 checks) is the first direct unit test
+  `segment_speech` ever had. (2) English never had a real, enablable STT
+  backend in the live API at all — every OTHER backend (KWS/semantic/
+  Indic STT/separation/language-ID) has a real opt-in env-var loader;
+  `_stt_backend` was simply hardcoded to `MockSTT()` forever. Found
+  because a real, correctly-detected English clip produced zero STT
+  calls through the actual `/start` pipeline. Fixed with
+  `_load_stt_backend()` (same opt-in pattern as the rest), gated behind
+  `UDK_ENABLE_STT=1`, defaulting to faster-whisper's tiny.en. With both
+  fixed: the real positive clip fired 3 real events on transcript
+  fragments genuinely resembling distress language (dramatized/acted
+  content, not a clean scripted-UDK ground truth, stated honestly). One
+  real negative produced a genuine false positive (TRIGGER_VERIFY,
+  UDK_16, fuzzy layer, conf=0.60 on "...he is presenting our film in
+  Canada") — confirms the already-documented fuzzy-layer short-phrase-
+  inflation issue is real on genuine human speech, previously invisible
+  only because bug (2) prevented English STT from ever running in this
+  path. Also corrected a mid-investigation assumption: a clip tagged
+  `#kannada` turned out to likely be genuinely English content (hashtag
+  ≠ spoken language); a different clip showed real English/Kannada
+  code-switching — this read turned out to be wrong; see the next bullet.
+- **Bug 3, found chasing what looked like real code-switching on that
+  same negative clip: the periodic language recheck (VoxLingua107)
+  could confidently switch a journey to the WRONG language on real
+  noisy audio.** VoxLingua107's own real calibration (100%/0.99+
+  confidence on all 4 Indic languages) was measured on clean synthetic
+  TTS audio; direct measurement against the real recordings found it
+  landing on the wrong language with HIGH confidence for 2 consecutive
+  real 6s windows (kn@0.88, then kn@0.56, on a clip whose real
+  transcript is plainly English). `_maybe_update_language` only
+  required 2 consecutive agreeing rechecks before switching, so this
+  real noise burst wrongly flipped the whole journey onto the Kannada
+  STT/KWS backends mid-stream, producing garbled Kannada-script
+  "transcripts" for real English speech and losing detection
+  capability for that stretch entirely -- what looked like genuine
+  code-switching earlier was this misdetection, not the audio actually
+  changing language. Fixed by raising required consecutive agreements
+  from 2 to 3 (`api.py`'s new `LID_SWITCH_CONFIRMATIONS`), generalized
+  to a real streak counter instead of a single pending-candidate
+  compare. Verified against the REAL captured VoxLingua score sequences
+  from both real negative clips (wrong switch no longer fires; the
+  already-correct clip unaffected) and live end-to-end (the real clip
+  now stays on English the whole way through, no mid-stream flip).
+  `test_multilingual.py` gained a direct regression test replaying the
+  exact real score sequence (kn, kn, en); grew 28->30 checks. Honest
+  cost: a genuine language change now takes ~18s to confirm instead of
+  ~12s -- accepted, since a wrong switch destroys detection capability
+  while a slower correct one only delays it. Also noticed, explicitly
+  NOT fixed here (separate, pre-existing issue): FasterWhisperSTT's
+  real transcripts weren't byte-identical across repeated runs on the
+  same audio -- real CPU inference nondeterminism, unrelated to
+  language detection.
+  See README.md's "Real-world audio testing" section. Full regression
+  suite: 197/197 checks passing as of this writing.
+- **A third real positive clip (a real movie abduction scene, Tamil,
+  loud action-movie score) found a DEEPER, still-OPEN language-ID
+  limitation, not fixed this session: VoxLingua107 can be confidently
+  and consistently wrong for an entire clip** (0.90-1.00 confidence on
+  `en` for most 6s windows, never once considering `ta`), a different
+  failure mode than Bug 3 (a noisy detector flip-flopping) that
+  `LID_SWITCH_CONFIRMATIONS` can't fix since there's no disagreement to
+  require corroboration on. Forcing the correct Tamil STT didn't recover
+  clean dialogue either -- 3 different model configs each produced a
+  DIFFERENT garbled result rather than converging on the truth, pointing
+  at a real acoustic noise-floor ceiling, not a fixable model-size gap.
+  Two purpose-appropriate mitigations were tried and measured, both
+  real negative results: a stationary-noise speech enhancer
+  (`speechbrain/metricgan-plus-voicebank`, wrong noise shape for a
+  musical score) and Demucs vocal isolation (the actually correct tool
+  category) -- neither improved LID or STT. Neither dependency was added
+  to the project (diagnostic-only). See README.md for the full
+  writeup, including a bonus signal: the Tamil STT hallucinated the
+  identical templated filler phrase on two different audio treatments,
+  evidence of a genuine confidence collapse rather than random noise.
+- **A third detection signal added on request: acoustic scream/distress
+  cues via pure mathematical signal processing, explicitly corroboration-
+  only, never a standalone trigger.** `scream_detector.py` -- no trained
+  model, no download -- built around a real acoustic-literature finding
+  (Arnal et al. 2015: screams are distinguished by "roughness," fast
+  ~30-150Hz amplitude-envelope modulation, not simply high pitch), plus
+  pitch elevation and loudness as secondary features. Real calibration
+  (`calibrate_scream_detector.py`, against RAVDESS real human fear/angry
+  speech + this project's own real recordings + the one genuine real
+  scream in this project's corpus) corrected the design, not just tuned
+  it: roughness barely separated RAVDESS fear/angry from neutral at all
+  (acted line-readings aren't the same acoustic category as an actual
+  scream -- the same class of mistake this project already made once
+  with synthetic pitch-shift as a distress proxy); pitch elevation
+  turned out to be the real discriminating feature; energy was actively
+  counterproductive (recording-loudness-normalization artifact, not
+  genuine signal). Reweighted accordingly; 0.30 threshold measures
+  57.8% recall/9.0% FPR standalone -- far too weak to trigger alone,
+  which is exactly why `udk_engine.py`'s `decide()` only even looks at
+  `scream_score` after STT/KWS already independently produced a
+  TRIGGER_VERIFY-or-better match; a maxed score with zero text/KWS
+  match still returns NO_ACTION unconditionally. Gated behind
+  `UDK_ENABLE_SCREAM_DETECTION=1`. Verified live against real audio: the
+  real Vakeel Saab scream clip's borderline TRIGGER_VERIFY escalated to
+  TRIGGER_ALL via `"acoustic distress signal corroborated the match"`
+  (scream_score=0.320, matching calibration exactly); two unrelated real
+  false TRIGGER_ALLs on negative clips were confirmed to come from a
+  pre-existing escalation mechanism, not this feature (their scream
+  scores were correctly low, 0.02-0.03). `test_scream_detector.py` (new,
+  10 checks: synthetic DSP correctness + corroboration-only wiring).
+  Full regression suite: 207/207 checks passing.
+- **A full failure-point audit (2026-09-21) found and this fixed a real,
+  serious bug: four endpoints had no authentication at all.** Only
+  `/v1/journeys/start` had `require_service_token`; `/stop`, journey
+  status, `GET /events` (full transcript/confidence/UDK match for every
+  detection), and `GET /audio-url` did not -- anyone who knew or guessed
+  a `journey_id` could read a journey's complete detection history with
+  zero credentials, and `/audio-url` trusted a caller-supplied `user_id`
+  as ownership proof, not an authenticated identity. `test_m6.py`'s own
+  `client` fixture sends the service-token header on every call, which
+  is exactly why this went unnoticed by its own threat-model coverage
+  until an independent audit read the route decorators directly.
+  **Fixed**: `require_service_token` added to all four routes plus
+  `GET /metrics`; `/audio-url` now requires the journey's real
+  `session_token` (same secret the WebSocket stream already required)
+  instead of a caller-supplied `user_id`. `test_m6.py` grew 27->36
+  checks. Full regression suite: 216/216 checks passing.
+- **A second real bug from the same audit, fixed the same day: event
+  transcripts were stored unencrypted**, inconsistent with `db.py`'s own
+  stated policy of encrypting `session_token`/`personal_udk_phrase`
+  specifically because a personal UDK "functions like a credential" --
+  the transcript of someone speaking it is at least as sensitive and was
+  the one field left out. Fixed with the same field-level
+  `_enc()`/`_dec()` pattern already used for those two fields (not
+  whole-row encryption), applied to both `db.py` and `db_postgres.py`.
+  `test_m6.py` grew 36->38 checks. Full regression suite: 218/218.
 - README.md has the full per-milestone (and per-post-roadmap) detail,
   including every deliberate scope cut and every bug found while
   building, stated honestly rather than glossed over.

@@ -117,7 +117,7 @@ expected_fields = {
     "processing_version", "model_version",
 }
 check("event has every Section 9 field", expected_fields <= event.keys(), str(sorted(event.keys())))
-check("model_version is tracked per component", set(event["model_version"].keys()) == {"vad", "stt", "kws"}, str(event["model_version"]))
+check("model_version is tracked per component", set(event["model_version"].keys()) == {"vad", "stt", "kws", "scream_detector"}, str(event["model_version"]))
 check("timestamp (audio time) predates or equals server_received_ts", event["timestamp"] <= event["server_received_ts"])
 
 print(f"\n{passed}/{passed + failed} checks passed so far.\n")

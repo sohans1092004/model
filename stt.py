@@ -25,6 +25,15 @@ from typing import Protocol
 class Transcript:
     text: str
     model_version: str
+    # Per-segment confidence metadata faster-whisper already computes on
+    # every transcribe() call -- previously discarded entirely. None for
+    # backends that don't produce it (MockSTT, IndicFineTunedWhisperSTT)
+    # so callers must treat None as "no signal," never as "confident."
+    # See stt_confidence_gate.py for how these feed the decision engine.
+    avg_logprob: float | None = None
+    temperature: float | None = None
+    compression_ratio: float | None = None
+    no_speech_prob: float | None = None
 
 
 class STTBackend(Protocol):
@@ -64,9 +73,26 @@ class FasterWhisperSTT:
         import numpy as np
 
         audio = np.frombuffer(pcm, dtype="<i2").astype("float32") / 32768.0
-        segments, _info = self._model.transcribe(audio, language="en")
+        segments = list(self._model.transcribe(audio, language="en")[0])
         text = " ".join(seg.text.strip() for seg in segments).strip()
-        return Transcript(text=text, model_version=self.model_version)
+        # Aggregated across segments, same reasoning as TieredWhisperSTT's
+        # existing avg_logprob averaging: mean for avg_logprob/no_speech_prob
+        # (an overall confidence read), max for temperature/compression_ratio
+        # (ANY segment falling back to sampling, or looping/repeating, is
+        # itself the signal -- averaging it away with confident segments
+        # would hide exactly the case stt_confidence_gate.py exists to catch).
+        avg_logprob = sum(s.avg_logprob for s in segments) / len(segments) if segments else None
+        temperature = max((s.temperature for s in segments), default=None)
+        compression_ratio = max((s.compression_ratio for s in segments), default=None)
+        no_speech_prob = sum(s.no_speech_prob for s in segments) / len(segments) if segments else None
+        return Transcript(
+            text=text,
+            model_version=self.model_version,
+            avg_logprob=avg_logprob,
+            temperature=temperature,
+            compression_ratio=compression_ratio,
+            no_speech_prob=no_speech_prob,
+        )
 
 
 # Real measured margin (evaluate_pipeline_corpus.py's pitch_tempo_distorted

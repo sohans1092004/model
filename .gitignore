@@ -7,6 +7,14 @@ __pycache__/
 # not worth freezing as part of the code snapshot.
 indic_ct2_models/
 sepformer_cache/
+beats_cache/
+voxlingua_cache/
+ecapa_cache/
+tfhub_modules/
+
+# Scratch validation output -- regenerable by re-running the script that
+# produced it; the script is the source of truth, not its last log.
+*_output.log
 
 # Local runtime state, not project code.
 .claude/

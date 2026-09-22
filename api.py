@@ -62,13 +62,15 @@ from db import JourneyDB
 from enrollment import enroll
 from event_delivery import EventDeliveryQueue
 from kws import KWSBackend
+from language_id import DEFAULT_LANGUAGE, MIN_RECHECK_DURATION_S
 from semantic import SemanticBackend
 from separation import SeparatorBackend
 from metrics import Metrics
 from stt import MockSTT, STTBackend
+from stt_confidence_gate import is_suspect
 from storage import AudioStore
-from udk_engine import DecisionEvent, UDKEngine
-from udks import SAMPLE_PERSONAL_UDK, SUPPORTED_LANGUAGES, UDK, all_udks
+from udk_engine import TRIGGER_VERIFY_THRESHOLD, DecisionEvent, UDKEngine, match_transcript
+from udks import SAMPLE_PERSONAL_UDK, UDK, all_udks
 from vad import VAD
 
 HEARTBEAT_INTERVAL_S = 7
@@ -79,6 +81,22 @@ HEARTBEAT_GRACE_S = 20  # missed-heartbeat grace window (Section 3)
 POST_TRIGGER_HEARTBEAT_GRACE_S = 10
 FRAME_HEADER = struct.Struct(">Qd")  # seq: uint64, client_ts: float64
 PROCESSING_VERSION = "pipeline-2026.09"  # bump when VAD/STT/matching logic changes meaningfully
+# Consecutive agreeing VoxLingua rechecks required before a mid-journey
+# language switch. Real testing against real (not synthetic) audio found
+# 2 wasn't enough: VoxLingua107's own real accuracy (measured 100% on
+# clean TTS audio -- see language_id.py) drops hard on real noisy
+# recordings (background music, compression, non-studio mic), sometimes
+# with HIGH confidence (0.88, 0.92) on the wrong language for two
+# consecutive 6s windows in a row -- confirmed directly on a real clip
+# (a real English clip's first 12s of real recheck output: kn@0.88 then
+# kn@0.56), which used to wrongly flip the whole journey onto the
+# Kannada STT/KWS backends mid-stream and produce garbage transcripts
+# for genuinely English speech. 3 consecutive held on every real clip
+# tested (the same wrong run always broke by the 3rd window in the real
+# corpus). Cost: a genuine language change now takes ~18s of audio to
+# confirm instead of ~12s -- an accepted, honest tradeoff since a wrong
+# switch is worse than a slightly slower correct one.
+LID_SWITCH_CONFIRMATIONS = 3
 AUDIO_TOKEN_TTL_S = 300  # Section 10: "short-lived signed URL, never a permanent public object path"
 
 # Section 9: "the existing app authenticates as a service (mTLS or a
@@ -110,7 +128,23 @@ class JourneyState:
     events: list[dict] = field(default_factory=list)
     kws: KWSBackend | None = None  # Section 4's Approach E; None = KWS disabled for this journey
     had_trigger: bool = False  # any TRIGGER_VERIFY/TRIGGER_ALL ever fired -- tightens the timeout grace
-    language: str = "en"  # which UDK phrase list/semantic matcher this journey uses -- see udks.py
+    # None = not yet detected from real audio (see _maybe_update_language).
+    # No longer client-declared (language_id.py replaces that -- a client
+    # may not know the speaker's language, or may be wrong).
+    language: str | None = None
+    # The maps/matchers/detectors a journey needs to resolve or re-resolve
+    # its own language from real audio, without threading them through
+    # every call site of _run_incremental_detection -- see
+    # _resolve_language_backends/_maybe_update_language.
+    stt_by_language: dict[str, STTBackend] = field(default_factory=dict)
+    kws_by_language: dict[str, KWSBackend] = field(default_factory=dict)
+    semantic_matcher_en: SemanticBackend | None = None
+    multilingual_semantic_matcher: SemanticBackend | None = None
+    language_detector: object | None = None  # language_id.WhisperLanguageDetector
+    language_recheck_detector: object | None = None  # language_id.VoxLinguaLanguageDetector
+    _lid_recheck_buffer_start_ms: int = 0
+    _lid_pending_candidate: str | None = None
+    _lid_pending_streak: int = 0
 
 
 class JourneyStore:
@@ -136,10 +170,12 @@ class JourneyStore:
         audio_store: AudioStore | None = None,
         kws: KWSBackend | None = None,
         semantic_matcher: SemanticBackend | None = None,
-        language: str = "en",
+        language: str | None = None,
         multilingual_semantic_matcher: SemanticBackend | None = None,
         stt_by_language: dict[str, STTBackend] | None = None,
         kws_by_language: dict[str, KWSBackend] | None = None,
+        language_detector: object | None = None,
+        language_recheck_detector: object | None = None,
     ) -> tuple[JourneyState, bool]:
         """Idempotent on journey_id (Section 9): a retried start for an
         existing journey returns it rather than creating a duplicate.
@@ -166,11 +202,14 @@ class JourneyStore:
             # param -- a reconnecting/retried request after a crash may not
             # (and shouldn't need to) resend it, same reasoning as
             # personal_udk being recovered from storage rather than trusted
-            # from the caller.
-            journey_language = recovered.get("language", "en")
-            matcher = semantic_matcher if journey_language == "en" else multilingual_semantic_matcher
-            journey_stt = (stt_by_language or {}).get(journey_language, stt)
-            journey_kws = (kws_by_language or {}).get(journey_language, kws)
+            # from the caller. A journey that crashed before its first real
+            # detection ever completed (recorded language is still None)
+            # simply resumes pending detection -- same as a brand-new one.
+            journey_language = recovered.get("language") or None
+            resolved_language = journey_language or DEFAULT_LANGUAGE
+            matcher = semantic_matcher if resolved_language == "en" else multilingual_semantic_matcher
+            journey_stt = (stt_by_language or {}).get(resolved_language, stt)
+            journey_kws = (kws_by_language or {}).get(resolved_language, kws)
             personal_udk = UDK(
                 udk_id=recovered["personal_udk_id"],
                 phrase=recovered["personal_udk_phrase"],
@@ -181,7 +220,7 @@ class JourneyStore:
                 journey_id=journey_id,
                 user_id=recovered["user_id"],
                 session_token=recovered["session_token"],
-                engine=UDKEngine(all_udks(personal_udk, language=journey_language), semantic_matcher=matcher),
+                engine=UDKEngine(all_udks(personal_udk, language=resolved_language), semantic_matcher=matcher),
                 stt=journey_stt,
                 personal_udk=personal_udk,
                 status=recovered["status"],
@@ -190,20 +229,39 @@ class JourneyStore:
                 kws=journey_kws,
                 had_trigger=bool(recovered.get("had_trigger", False)),
                 language=journey_language,
+                stt_by_language=stt_by_language or {},
+                kws_by_language=kws_by_language or {},
+                semantic_matcher_en=semantic_matcher,
+                multilingual_semantic_matcher=multilingual_semantic_matcher,
+                language_detector=language_detector,
+                language_recheck_detector=language_recheck_detector,
             )
         else:
-            matcher = semantic_matcher if language == "en" else multilingual_semantic_matcher
-            journey_stt = (stt_by_language or {}).get(language, stt)
-            journey_kws = (kws_by_language or {}).get(language, kws)
+            # language=None (the normal case now -- no client input, see
+            # language_id.py) starts on English defaults and is marked
+            # pending: _maybe_update_language runs real detection against
+            # the journey's own first real audio, as soon as any arrives.
+            # An explicit language (tests, or any future internal caller
+            # that already knows it) is trusted as-is and skips detection.
+            resolved_language = language or DEFAULT_LANGUAGE
+            matcher = semantic_matcher if resolved_language == "en" else multilingual_semantic_matcher
+            journey_stt = (stt_by_language or {}).get(resolved_language, stt)
+            journey_kws = (kws_by_language or {}).get(resolved_language, kws)
             journey = JourneyState(
                 journey_id=journey_id,
                 user_id=user_id,
                 session_token=secrets.token_urlsafe(24),
-                engine=UDKEngine(all_udks(personal_udk, language=language), semantic_matcher=matcher),
+                engine=UDKEngine(all_udks(personal_udk, language=resolved_language), semantic_matcher=matcher),
                 stt=journey_stt,
                 personal_udk=personal_udk,
                 kws=journey_kws,
-                language=language,
+                language=language,  # None (pending) unless caller already knows it
+                stt_by_language=stt_by_language or {},
+                kws_by_language=kws_by_language or {},
+                semantic_matcher_en=semantic_matcher,
+                multilingual_semantic_matcher=multilingual_semantic_matcher,
+                language_detector=language_detector,
+                language_recheck_detector=language_recheck_detector,
             )
 
         if audio_store is not None:
@@ -291,11 +349,82 @@ def _decision_to_event(journey: JourneyState, decision: DecisionEvent, seg) -> d
             "vad": "webrtcvad",
             "stt": journey.stt.model_version,
             "kws": journey.kws.model_version if journey.kws is not None else None,
+            "scream_detector": _scream_detector.model_version if _scream_detector is not None else None,
         },
     }
 
 
+def _resolve_language_backends(journey: JourneyState, language: str) -> None:
+    """Rebuilds journey.stt/kws/engine for `language`, using the maps
+    stored on the journey at creation. A fresh UDKEngine means
+    repetition/distinct-UDK tracking resets on a real language switch --
+    expected, since a genuine switch is a new context, not a
+    continuation of the old one."""
+    journey.stt = journey.stt_by_language.get(language, journey.stt)
+    journey.kws = journey.kws_by_language.get(language, journey.kws)
+    matcher = journey.semantic_matcher_en if language == "en" else journey.multilingual_semantic_matcher
+    journey.engine = UDKEngine(all_udks(journey.personal_udk, language=language), semantic_matcher=matcher)
+    journey.language = language
+
+
+def _maybe_update_language(journey: JourneyState) -> None:
+    """No client-declared language anymore (language_id.py replaces
+    that) -- this runs real detection against the journey's own audio
+    instead. Two phases, using each detector's real measured strengths
+    (see language_id.py): a fast initial guess as soon as ANY audio
+    exists (so detection never blocks real-time response), then an
+    accurate periodic recheck once enough audio has accumulated,
+    requiring two consecutive agreeing rechecks before actually
+    switching -- LID_SWITCH_CONFIRMATIONS consecutive agreeing rechecks
+    are required, not just one (same reasoning as udk_engine.py's
+    REPEAT_WINDOW_S) -- see LID_SWITCH_CONFIRMATIONS's own docstring for
+    why 2 wasn't enough against real noisy audio."""
+    pcm = bytes(journey.audio_buffer)
+    if not pcm:
+        return
+    duration_ms = journey.vad.total_ms(pcm)
+
+    if journey.language is None:
+        if journey.language_detector is None:
+            # Feature not enabled (UDK_ENABLE_LANGUAGE_ID unset) -- fall
+            # back to English rather than staying permanently undetected.
+            _resolve_language_backends(journey, DEFAULT_LANGUAGE)
+            return
+        detected, _prob = journey.language_detector.detect(pcm)
+        _resolve_language_backends(journey, detected)
+        journey._lid_recheck_buffer_start_ms = duration_ms
+        return
+
+    if journey.language_recheck_detector is None:
+        return
+    if duration_ms - journey._lid_recheck_buffer_start_ms < MIN_RECHECK_DURATION_S * 1000:
+        return
+
+    from language_id import SAMPLE_RATE as _LID_SAMPLE_RATE
+
+    recheck_window_bytes = int(MIN_RECHECK_DURATION_S * _LID_SAMPLE_RATE) * 2  # 16-bit samples
+    candidate, _score = journey.language_recheck_detector.detect(pcm[-recheck_window_bytes:])
+    journey._lid_recheck_buffer_start_ms = duration_ms
+
+    if candidate == journey.language:
+        journey._lid_pending_candidate = None
+        journey._lid_pending_streak = 0
+        return
+
+    if journey._lid_pending_candidate == candidate:
+        journey._lid_pending_streak += 1
+    else:
+        journey._lid_pending_candidate = candidate
+        journey._lid_pending_streak = 1
+
+    if journey._lid_pending_streak >= LID_SWITCH_CONFIRMATIONS:
+        _resolve_language_backends(journey, candidate)
+        journey._lid_pending_candidate = None
+        journey._lid_pending_streak = 0
+
+
 def _run_incremental_detection(journey: JourneyState, final: bool = False) -> list[dict]:
+    _maybe_update_language(journey)
     pcm = bytes(journey.audio_buffer)
     segments = journey.vad.segment_speech(pcm)
     if not segments:
@@ -329,7 +458,38 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
         # running KWS in parallel (Section 4's Approach E).
         if not transcript.text and kws_match is None:
             continue
-        decision = journey.engine.decide(transcript.text, now_s=time.monotonic(), kws_match=kws_match)
+        scream_score = _scream_detector.score(seg.pcm) if _scream_detector is not None else None
+
+        # Free -- reuses transcript metadata faster-whisper already
+        # computed above, no extra model call. See stt_confidence_gate.py.
+        stt_suspect = _stt_confidence_gate_enabled and is_suspect(transcript)
+
+        # Selective, NOT run on every segment (a second full ASR pass has
+        # real latency cost -- see dual_asr_guard.py's module docstring):
+        # only when this segment would otherwise clear the text-match
+        # floor AND the primary transcript's own decoding metadata gives
+        # no other reason for suspicion (temperature==0.0 -- the specific
+        # "confidently wrong" gap stt_suspect above cannot cover). This
+        # peek re-runs match_transcript(), which stt_confidence_gate's
+        # veto skips only when KWS wins anyway -- cheap (pure string
+        # comparison against 20 phrases, no model), so calling it twice
+        # (once here, once inside decide()) trades a negligible amount of
+        # duplicate work for keeping decide() a pure function of already-
+        # computed signals, same shape as scream_score/kws_match above.
+        dual_asr_disagreement = False
+        if _dual_asr_guard is not None and transcript.temperature == 0.0 and transcript.text:
+            peek = match_transcript(transcript.text, journey.engine.udks, semantic_matcher=journey.engine.semantic_matcher)
+            if peek.udk is not None and peek.confidence >= TRIGGER_VERIFY_THRESHOLD:
+                dual_asr_disagreement = _dual_asr_guard.disagrees(transcript.text, seg.pcm)
+
+        decision = journey.engine.decide(
+            transcript.text,
+            now_s=time.monotonic(),
+            kws_match=kws_match,
+            scream_score=scream_score,
+            stt_suspect=stt_suspect,
+            dual_asr_disagreement=dual_asr_disagreement,
+        )
         if decision.decision == "NO_ACTION":
             # Speech-separation fallback (separation.py): only tried once
             # the primary pass has already missed, and only when opted in
@@ -446,6 +606,22 @@ def _journey_owner(journey_id: str) -> str | None:
     return row["user_id"] if row is not None else None
 
 
+def _journey_session_token(journey_id: str) -> str | None:
+    """Real bug found and fixed in a 2026-09-21 audit: /audio-url used to
+    trust a caller-supplied `user_id` query param as proof of identity --
+    a self-asserted claim, not an authenticated one. The session_token
+    (the same per-journey secret the WebSocket stream already requires,
+    minted once at /start and never re-exposed) is the actual credential
+    that proves "this caller legitimately holds this journey's own
+    secret," the same reasoning Section 10 already applies everywhere
+    else a specific journey's identity matters."""
+    journey = _store.get(journey_id)
+    if journey is not None:
+        return journey.session_token
+    row = _db.load_journey(journey_id)
+    return row["session_token"] if row is not None else None
+
+
 def require_service_token(x_service_token: str = Header(...)) -> None:
     """Section 9's scoped-service-token half of "mTLS or a scoped service
     token" -- real mTLS needs real certs/infra out of scope here, this is
@@ -517,6 +693,32 @@ def _load_indic_kws_backends() -> dict[str, KWSBackend]:
     except Exception:
         pass
     return backends
+
+
+def _load_stt_backend() -> STTBackend:
+    """Real bug found and fixed testing against real audio: EVERY other
+    backend here (KWS, semantic, Indic STT, separation, language-ID) has
+    a real opt-in loader like this one -- English's own STT never did.
+    `_stt_backend` was hardcoded to `MockSTT()` (a test double that
+    always returns an empty transcript) with no way to enable a real one
+    via env var, unlike everything else. In production this meant an
+    English-speaking journey got ZERO real transcription-based
+    detection, silently -- only KWS (if separately enabled) could ever
+    fire for English. Found via a real end-to-end test (a real English
+    video clip, correctly language-detected, produced zero STT calls at
+    all) and confirmed by inspecting api.py's own history: no
+    `_load_stt_backend` had ever existed. Same opt-in pattern as
+    everything else: real FasterWhisperSTT (`tiny.en`, matching every
+    other English test/eval script in this project) only if asked for,
+    so no existing test pays a real model's startup cost by default."""
+    if os.environ.get("UDK_ENABLE_STT") != "1":
+        return MockSTT()
+    try:
+        from stt import FasterWhisperSTT
+
+        return FasterWhisperSTT(model_size="tiny.en", device="cpu", compute_type="int8")
+    except Exception:
+        return MockSTT()
 
 
 def _load_semantic_matcher() -> SemanticBackend | None:
@@ -602,6 +804,68 @@ def _load_separator() -> SeparatorBackend | None:
         return None
 
 
+def _load_scream_detector() -> object | None:
+    """Same opt-in-by-env-var pattern as every other real backend here.
+    Was scream_detector.ScreamDetector (pure DSP, no trained model,
+    weakly calibrated at 57.8% recall/9.0% FPR); swapped for
+    beats_distress_detector.BEATsDistressDetector (Microsoft's BEATs, a
+    real trained AudioSet classifier) after real measurement found it a
+    clear improvement on this project's own real audio -- see that
+    module's DISTRESS_SCORE_THRESHOLD comment for the numbers. Same
+    interface (.score(pcm) -> float in [0,1], corroboration only, never a
+    standalone trigger -- see udk_engine.py), so this is the only call
+    site that needed to change; every existing test that doesn't set this
+    env var stays on today's behavior exactly, same as every other opt-in
+    feature here. scream_detector.py is left in place, standalone and
+    still independently testable, just no longer wired in here."""
+    if os.environ.get("UDK_ENABLE_SCREAM_DETECTION") != "1":
+        return None
+    try:
+        from beats_distress_detector import BEATsDistressDetector
+
+        return BEATsDistressDetector()
+    except Exception:
+        return None
+
+
+def _load_dual_asr_guard() -> object | None:
+    """Same opt-in pattern as every other real backend here. Unlike the
+    others, this one is invoked selectively per-segment even when
+    enabled (see _run_incremental_detection) -- it's a second full ASR
+    inference call, not free like stt_confidence_gate.py's check, so it
+    only ever runs when a segment has already produced a UDK match AND
+    the primary transcript's own decoding metadata gives no other reason
+    for suspicion (temperature==0.0) -- see dual_asr_guard.py for the
+    real 3/3 validated false-trigger catches this targets."""
+    if os.environ.get("UDK_ENABLE_DUAL_ASR") != "1":
+        return None
+    try:
+        from dual_asr_guard import Wav2Vec2DisagreementGuard
+
+        return Wav2Vec2DisagreementGuard()
+    except Exception:
+        return None
+
+
+def _load_language_detectors() -> tuple[object | None, object | None]:
+    """Same opt-in pattern as KWS/semantic/separation: real language
+    detection (faster-whisper's built-in LID + speechbrain's
+    VoxLingua107) is additive, and every existing test that doesn't set
+    UDK_ENABLE_LANGUAGE_ID keeps working exactly as before -- a journey
+    with no detector configured just stays on English defaults forever
+    (see _maybe_update_language), the same honest fallback this project
+    already uses everywhere else a heavy model is opt-in. Real measured
+    accuracy for both models is in language_id.py's module docstring."""
+    if os.environ.get("UDK_ENABLE_LANGUAGE_ID") != "1":
+        return None, None
+    try:
+        from language_id import VoxLinguaLanguageDetector, WhisperLanguageDetector
+
+        return WhisperLanguageDetector(), VoxLinguaLanguageDetector()
+    except Exception:
+        return None, None
+
+
 def _load_db(key_manager, fallback_path):
     """Real Postgres if UDK_DATABASE_URL is set (see db_postgres.py),
     else the local SQLite stand-in (db.py) -- same opt-in-by-env-var
@@ -663,7 +927,10 @@ def _load_downstream_deliver() -> Callable[[dict], bool]:
 # api._audio_store = ...) -- no DI framework needed for a prototype this
 # size (M1/M2 make the same call).
 _tmp = Path(tempfile.gettempdir())
-_stt_backend: STTBackend = MockSTT()
+# MockSTT() unless UDK_ENABLE_STT=1 -- see _load_stt_backend for the real
+# gap this closes (English never had a real-STT opt-in before, unlike
+# every other backend here).
+_stt_backend: STTBackend = _load_stt_backend()
 # Separate key material for audio vs. general DB secrets (Section 10).
 _audio_key_manager = KeyManager(_tmp / "udk_audio.key")
 _db_key_manager = KeyManager(_tmp / "udk_db.key")
@@ -688,6 +955,17 @@ _indic_stt_backends: dict[str, STTBackend] = _load_indic_stt_backends()
 _indic_kws_backends: dict[str, KWSBackend] = _load_indic_kws_backends()
 # None unless UDK_ENABLE_SEPARATION=1 -- see _load_separator/separation.py.
 _separator: SeparatorBackend | None = _load_separator()
+# (None, None) unless UDK_ENABLE_LANGUAGE_ID=1 -- see _load_language_detectors.
+_language_detector, _language_recheck_detector = _load_language_detectors()
+# None unless UDK_ENABLE_SCREAM_DETECTION=1 -- see _load_scream_detector.
+_scream_detector = _load_scream_detector()
+# False unless UDK_ENABLE_STT_CONFIDENCE_GATE=1 -- stt_confidence_gate.py
+# is a pure function over data faster-whisper already computes, no model
+# to load, but still opt-in like everything else so vetoing a match is
+# never a surprise behavior change for an existing caller.
+_stt_confidence_gate_enabled = os.environ.get("UDK_ENABLE_STT_CONFIDENCE_GATE") == "1"
+# None unless UDK_ENABLE_DUAL_ASR=1 -- see _load_dual_asr_guard.
+_dual_asr_guard = _load_dual_asr_guard()
 
 app = FastAPI()
 
@@ -696,10 +974,10 @@ class StartRequest(BaseModel):
     user_id: str
     journey_id: str | None = None
     personal_udk_phrase: str | None = None
-    # Which UDK phrase list/semantic matcher this journey uses (udks.py's
-    # SUPPORTED_LANGUAGES) -- the language the 20 UDKs were shown to this
-    # user in at login (Section 5), not auto-detected from their speech.
-    language: str = "en"
+    # No language field: the client isn't asked and isn't trusted to know
+    # the speaker's language (see language_id.py) -- it's detected from
+    # the journey's own real audio instead, starting pending (None) and
+    # resolved by _maybe_update_language on the first real segment.
 
 
 class StopRequest(BaseModel):
@@ -710,9 +988,6 @@ class StopRequest(BaseModel):
 @app.post("/v1/journeys/start", dependencies=[Depends(require_service_token)])
 def start_journey(body: StartRequest):
     journey_id = body.journey_id or str(uuid.uuid4())
-
-    if body.language not in SUPPORTED_LANGUAGES:
-        raise HTTPException(400, {"errors": [f"unsupported language {body.language!r}, must be one of {SUPPORTED_LANGUAGES}"]})
 
     personal_udk = SAMPLE_PERSONAL_UDK
     if body.personal_udk_phrase:
@@ -729,10 +1004,11 @@ def start_journey(body: StartRequest):
         _audio_store,
         _kws_backend,
         _semantic_matcher,
-        language=body.language,
         multilingual_semantic_matcher=_multilingual_semantic_matcher,
         stt_by_language=_indic_stt_backends,
         kws_by_language=_indic_kws_backends,
+        language_detector=_language_detector,
+        language_recheck_detector=_language_recheck_detector,
     )
     if created:
         # Covers the recovery case (rebuilt from durable storage after a
@@ -749,7 +1025,7 @@ def start_journey(body: StartRequest):
     }
 
 
-@app.post("/v1/journeys/{journey_id}/stop")
+@app.post("/v1/journeys/{journey_id}/stop", dependencies=[Depends(require_service_token)])
 def stop_journey(journey_id: str, _body: StopRequest):
     journey = _store.get(journey_id)
     if journey is None:
@@ -762,7 +1038,7 @@ def stop_journey(journey_id: str, _body: StopRequest):
     return {"journey_id": journey.journey_id, "status": "FINALIZING"}
 
 
-@app.get("/metrics")
+@app.get("/metrics", dependencies=[Depends(require_service_token)])
 def get_metrics():
     """Section 11: 'a healthy-looking API can coexist with a completely
     broken detection pipeline' -- this is the pipeline's actual-work
@@ -772,7 +1048,7 @@ def get_metrics():
     return _metrics.snapshot()
 
 
-@app.get("/v1/journeys/{journey_id}")
+@app.get("/v1/journeys/{journey_id}", dependencies=[Depends(require_service_token)])
 def get_journey(journey_id: str):
     journey = _store.get(journey_id)
     if journey is not None:
@@ -797,7 +1073,7 @@ def get_journey(journey_id: str):
     raise HTTPException(404, "journey not found")
 
 
-@app.get("/v1/journeys/{journey_id}/events")
+@app.get("/v1/journeys/{journey_id}/events", dependencies=[Depends(require_service_token)])
 def get_events(journey_id: str):
     journey = _store.get(journey_id)
     if journey is not None:
@@ -807,16 +1083,26 @@ def get_events(journey_id: str):
     raise HTTPException(404, "journey not found")
 
 
-@app.get("/v1/journeys/{journey_id}/audio-url")
-def get_audio_url(journey_id: str, user_id: str):
+@app.get("/v1/journeys/{journey_id}/audio-url", dependencies=[Depends(require_service_token)])
+def get_audio_url(journey_id: str, user_id: str, session_token: str):
     """Section 10: audio access must be ownership-checked and go through
     a short-lived signed URL, never a permanent public path. Every
     request is audited (who, when, journey, outcome) -- not the audio
-    itself, per Section 10's "never log content" rule."""
+    itself, per Section 10's "never log content" rule.
+
+    Ownership is proven via session_token (see _journey_session_token),
+    not the caller-supplied user_id alone -- user_id is kept only as an
+    audit-trail label now, never as the security check itself. The
+    service-token dependency above additionally means only the trusted
+    platform can call this at all; session_token then proves WHICH
+    journey's own caller this request actually is, closing the gap
+    Section 10's own threat model already names (a credentialed-but-
+    malicious actor guessing/enumerating another user's journey_id)."""
     owner = _journey_owner(journey_id)
-    if owner is None:
+    real_session_token = _journey_session_token(journey_id)
+    if owner is None or real_session_token is None:
         raise HTTPException(404, "journey not found")
-    if owner != user_id:
+    if not secrets.compare_digest(real_session_token, session_token):
         _audit_log.record(actor=user_id, action="request_audio_url", journey_id=journey_id, outcome="denied_not_owner")
         raise HTTPException(403, "not the journey owner")
 

@@ -94,11 +94,42 @@ def add_noise(pcm: bytes, sample_rate: int, snr_db: float, kind: str = "traffic"
     return _to_pcm(audio + noise * scale)
 
 
-def overlap(pcm_a: bytes, pcm_b: bytes) -> bytes:
+def overlap(pcm_a: bytes, pcm_b: bytes, mode: str = "pad") -> bytes:
     """Two speakers at once (Section 2: the hardest case for VAD/STT,
     and exactly the scenario -- an altercation, a struggle -- this
-    product cares most about). Shorter clip is padded with silence."""
+    product cares most about).
+
+    mode="pad" (default, and this project's established convention --
+    every existing numbers built against this function, e.g.
+    separation.py's 3/10 recovery and evaluate_pipeline_corpus.py's
+    "overlapping" condition, use this): the shorter clip is padded with
+    silence, so the longer clip continues alone past where the shorter
+    one ends -- not unrealistic (real overlapping speech isn't
+    perfectly time-aligned either), but it means a caller that pools a
+    SINGLE score/embedding over the whole clip (a speaker-verification
+    embedding, a clip-level classifier score) is partly scoring solo
+    audio, not genuine overlap, whichever input happens to be longer.
+
+    mode="truncate" (added after a real bug found this session -- a
+    speaker-verification test's "different-gender overlap" accuracy
+    number was initially confounded by exactly this: cases where the
+    enrolled speaker's clip was shorter than the interferer's showed a
+    solo-interferer-free tail of pure enrolled speech, inflating
+    apparent accuracy for reasons having nothing to do with real
+    overlap): both clips truncated to the shorter one's length, so the
+    mixed audio is genuinely overlapping for its entire duration. Use
+    this whenever a single score/embedding will be pooled over the
+    whole result; mode="pad" remains correct for segment-level
+    processing (VAD will naturally split the solo tail into its own
+    segment) and for comparability with this project's existing
+    "pad"-based numbers."""
     a, b = _to_float(pcm_a), _to_float(pcm_b)
+    if mode == "truncate":
+        n = min(len(a), len(b))
+        a, b = a[:n], b[:n]
+        return _to_pcm((a + b) * 0.5)
+    if mode != "pad":
+        raise ValueError(f"overlap(): unknown mode {mode!r}, expected 'pad' or 'truncate'")
     n = max(len(a), len(b))
     a = np.pad(a, (0, n - len(a)))
     b = np.pad(b, (0, n - len(b)))

@@ -20,6 +20,15 @@ credential given its role in triggering emergency response" and must
 never be stored plaintext; session tokens the same). Everything else
 (journey_id, user_id, status, timestamps) stays plaintext -- it's not
 credential-shaped, and staying queryable/indexable matters more for it.
+
+A 2026-09-21 audit found one more field that belonged on this list and
+was missing from it: an event's transcript -- the actual spoken words of
+a detected distress phrase -- is at least as sensitive as the phrase
+itself, but was stored in the events table's payload blob as plain JSON.
+Fixed with the same field-level encryption save_event()/load_events()
+now apply, not whole-row encryption -- every other field in the payload
+(decision, udk_id, confidence, timestamps) stays plaintext, same
+reasoning as above.
 """
 
 from __future__ import annotations
@@ -113,7 +122,8 @@ class JourneyDB:
                    ON CONFLICT(journey_id) DO UPDATE SET
                      status = excluded.status,
                      last_heartbeat_at = excluded.last_heartbeat_at,
-                     had_trigger = excluded.had_trigger""",
+                     had_trigger = excluded.had_trigger,
+                     language = excluded.language""",
                 (
                     journey.journey_id,
                     journey.user_id,
@@ -125,7 +135,12 @@ class JourneyDB:
                     self._enc(udk.phrase),
                     int(udk.verify_by_default),
                     int(journey.had_trigger),
-                    getattr(journey, "language", "en"),
+                    # "" (not NULL -- the column is NOT NULL) means
+                    # "still pending real detection" -- create_or_get's
+                    # `recovered.get("language") or None` on the way back
+                    # in correctly treats "" the same as never-detected,
+                    # not as a real language.
+                    getattr(journey, "language", None) or "",
                 ),
             )
             self._conn.commit()
@@ -143,11 +158,24 @@ class JourneyDB:
     def save_event(self, event: dict) -> None:
         """Idempotent: event_id is the primary key, so a retried save
         (Section 9's deterministic event_id) is a no-op, not a duplicate
-        row -- the same guarantee storage.py's write_segment gives audio."""
+        row -- the same guarantee storage.py's write_segment gives audio.
+
+        Real bug found and fixed in a 2026-09-21 audit: the transcript --
+        the actual spoken words of a detected distress phrase -- was
+        stored in the payload blob as plain JSON, even though this same
+        module already encrypts session_token/personal_udk_phrase
+        specifically because Section 10 calls a personal UDK phrase
+        "credential-shaped." A transcript of someone speaking it is at
+        least as sensitive; it was simply the one field left out. Fixed
+        with the same field-level _enc()/_dec() pattern already used for
+        those two fields, not whole-row encryption -- every other field
+        (decision, udk_id, confidence, timestamps) stays plaintext and
+        queryable, same reasoning as the rest of this module."""
+        payload = event if self._key_manager is None else {**event, "transcript": self._enc(event["transcript"])}
         with self._lock:
             self._conn.execute(
                 "INSERT OR IGNORE INTO events (event_id, journey_id, timestamp, decision, payload) VALUES (?, ?, ?, ?, ?)",
-                (event["event_id"], event["journey_id"], event["timestamp"], event["decision"], json.dumps(event)),
+                (event["event_id"], event["journey_id"], event["timestamp"], event["decision"], json.dumps(payload)),
             )
             self._conn.commit()
 
@@ -156,7 +184,11 @@ class JourneyDB:
             rows = self._conn.execute(
                 "SELECT payload FROM events WHERE journey_id = ? ORDER BY timestamp", (journey_id,)
             ).fetchall()
-        return [json.loads(r["payload"]) for r in rows]
+        events = [json.loads(r["payload"]) for r in rows]
+        if self._key_manager is not None:
+            for e in events:
+                e["transcript"] = self._dec(e["transcript"])
+        return events
 
     def list_journeys(self) -> list[dict]:
         """For the M6 retention sweep -- doesn't decrypt session_token or
