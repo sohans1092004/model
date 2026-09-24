@@ -147,7 +147,7 @@ class BEATsDistressDetector:
 
     model_version = "beats-iter3-as2m-cpt1"
 
-    def __init__(self, checkpoint_path: str | None = None):
+    def __init__(self, checkpoint_path: str | None = None, device: str = "cpu"):
         import torch
 
         from BEATs import BEATs, BEATsConfig
@@ -162,7 +162,8 @@ class BEATsDistressDetector:
         cfg = BEATsConfig(checkpoint["cfg"])
         self._model = BEATs(cfg)
         self._model.load_state_dict(checkpoint["model"])
-        self._model.eval()
+        self._device = device
+        self._model.to(device).eval()
         self._torch = torch
 
     def label_probs(self, pcm: bytes, sample_rate: int = SAMPLE_RATE) -> np.ndarray:
@@ -177,11 +178,11 @@ class BEATsDistressDetector:
         if len(audio) < SAMPLE_RATE // 10:  # need >=~100ms, same floor as scream_detector.py
             return np.zeros(527, dtype=np.float32)
         torch = self._torch
-        source = torch.from_numpy(audio).unsqueeze(0)
+        source = torch.from_numpy(audio).unsqueeze(0).to(self._device)
         padding_mask = torch.zeros_like(source, dtype=torch.bool)
         with torch.no_grad():
             probs, _ = self._model.extract_features(source, padding_mask=padding_mask)
-        return probs.squeeze(0).numpy()
+        return probs.squeeze(0).cpu().numpy()
 
     def score(self, pcm: bytes, sample_rate: int = SAMPLE_RATE) -> float:
         """Max probability across the curated vocal-distress classes --

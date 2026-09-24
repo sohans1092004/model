@@ -1,0 +1,7 @@
+# Colab already has torch, torchaudio, numpy, librosa, soundfile, huggingface_hub.
+faster-whisper>=1.1        # Whisper small.en via CTranslate2 (GPU: CUDA 12 + cuDNN 9)
+transformers               # wav2vec2 for KWS
+sentence-transformers      # MiniLM semantic matcher
+rapidfuzz                  # exact/fuzzy matching layers
+webrtcvad-wheels           # VAD (prebuilt wheel of webrtcvad, same `import webrtcvad`)
+setuptools<81              # webrtcvad needs pkg_resources, removed in setuptools 81+

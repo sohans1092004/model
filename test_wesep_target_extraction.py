@@ -117,70 +117,7 @@ ENROLLED_VOICE = "Microsoft Zira Desktop"
 SAME_GENDER_VOICE = "Microsoft Hazel Desktop"
 DIFF_GENDER_VOICE = "Microsoft David Desktop"
 
-WESEP_MODEL_DIR = Path.home() / ".wesep" / "english"
-WESEP_LEGACY_SRC = Path(__file__).parent / "wesep_legacy_src"
-WESPEAKER_SRC = Path(__file__).parent / "wespeaker_src"
-
-
-def _install_import_stubs() -> None:
-    """See module docstring -- bypasses two heavy, unrelated eager-import
-    chains without touching either cloned repo's own source files."""
-    for name, path in [
-        ("wesep", str(WESEP_LEGACY_SRC / "wesep")),
-        ("wespeaker", str(WESPEAKER_SRC / "wespeaker")),
-    ]:
-        if name not in sys.modules:
-            m = types.ModuleType(name)
-            m.__path__ = [path]
-            sys.modules[name] = m
-    if "wespeaker.models.speaker_model" not in sys.modules:
-        import wespeaker.models.ecapa_tdnn as ecapa_tdnn
-
-        stub = types.ModuleType("wespeaker.models.speaker_model")
-        stub.get_speaker_model = lambda name: getattr(ecapa_tdnn, name)
-        sys.modules["wespeaker.models.speaker_model"] = stub
-
-
-class WeSepExtractor:
-    model_version = "wesep-bsrnn-ecapa-vox1"
-
-    def __init__(self):
-        _install_import_stubs()
-        from wesep.models.bsrnn import BSRNN
-
-        with open(WESEP_MODEL_DIR / "config.yaml") as f:
-            cfg = yaml.safe_load(f)
-        margs = dict(cfg["model_args"]["tse_model"])
-        margs["spk_model_init"] = None  # fully overwritten by the checkpoint below anyway
-        self._model = BSRNN(**margs)
-        ckpt = torch.load(WESEP_MODEL_DIR / "avg_model.pt", map_location="cpu", weights_only=False)
-        state_dict = ckpt["models"][0]
-        missing, unexpected = self._model.load_state_dict(state_dict, strict=False)
-        assert not missing and not unexpected, f"weight loading mismatch: missing={missing} unexpected={unexpected}"
-        self._model.eval()
-
-    def _enrollment_fbank(self, pcm: bytes) -> torch.Tensor:
-        audio = np.frombuffer(pcm, dtype="<i2").astype(np.float32) / 32768.0
-        wave = torch.from_numpy(audio).unsqueeze(0) * (1 << 15)
-        import torchaudio
-
-        mat = torchaudio.compliance.kaldi.fbank(
-            wave, num_mel_bins=80, frame_length=25, frame_shift=10, dither=1.0,
-            sample_frequency=SAMPLE_RATE, window_type="hamming", use_energy=False,
-        )
-        mat = mat - mat.mean(dim=0, keepdim=True)
-        return mat.unsqueeze(0)
-
-    def extract(self, mixture_pcm: bytes, enrollment_pcm: bytes) -> bytes:
-        """mixture + enrollment sample -> extracted target-speaker audio,
-        same length/format (16-bit PCM) as the input mixture."""
-        mix_audio = np.frombuffer(mixture_pcm, dtype="<i2").astype(np.float32) / 32768.0
-        mix_t = torch.from_numpy(mix_audio).unsqueeze(0)
-        enroll_fbank = self._enrollment_fbank(enrollment_pcm)
-        with torch.no_grad():
-            out, _ = self._model(mix_t, enroll_fbank)
-        out = out[0].numpy()
-        return np.clip(out * 32767, -32768, 32767).astype(np.int16).tobytes()
+from wesep_extraction import WeSepExtractor  # moved to wesep_extraction.py (now a Model component); re-exported here
 
 
 def si_sdr(estimate: np.ndarray, reference: np.ndarray) -> float:

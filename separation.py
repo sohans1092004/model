@@ -99,6 +99,15 @@ def retry_with_separation(pcm, stt, engine, separator: SeparatorBackend, now_s: 
     single winning candidate to the real engine exactly once -- so
     genuine repeat/distinct tracking across real, separate detections
     over time still works correctly."""
+    best = _best_candidate(pcm, stt, engine, separator, now_s, kws)
+    if best is None:
+        return None
+    return engine.decide(best[0], now_s=now_s, kws_match=best[1])
+
+
+def _best_candidate(pcm, stt, engine, separator, now_s, kws):
+    """(transcript, kws_match, probe_decision) of the strongest separated
+    stream, scored on throwaway engines -- the live engine is untouched."""
     candidates = []
     for stream_pcm in separator.separate(pcm):
         transcript = stt.transcribe(stream_pcm)
@@ -109,9 +118,51 @@ def retry_with_separation(pcm, stt, engine, separator: SeparatorBackend, now_s: 
         probe_decision = probe.decide(transcript.text, now_s=now_s, kws_match=kws_match)
         if probe_decision.decision != "NO_ACTION":
             candidates.append((transcript.text, kws_match, probe_decision))
-
     if not candidates:
         return None
     candidates.sort(key=lambda c: (c[2].decision == "TRIGGER_ALL", c[2].confidence))
-    best_transcript, best_kws_match, _ = candidates[-1]
-    return engine.decide(best_transcript, now_s=now_s, kws_match=best_kws_match)
+    return candidates[-1]
+
+
+def separated_extra_event(pcm, decision, extras, stt, engine, separator, now_s, kws=None):
+    """WeSep when per-sentence matching (UDKEngine.decide_all) already fired
+    extra events in this segment -- previously WeSep was skipped there, which
+    blocked it on the key prepped_data overlap clips (2026-09-23). No
+    restore() here (it would drop the sentence events); instead the
+    separated stream's candidate is ADDED as one more event when:
+      - the whole-segment decision was NO_ACTION (same bar as
+        retry_with_separation), or it was a non-exact match and the
+        candidate is EXACT (same bar as recheck_verify_with_separation), and
+      - its UDK hasn't already fired in this segment, so one spoken phrase
+        heard twice (mixture + separated voice) never counts as a repeat.
+    Returns the new event or None."""
+    if decision.layer == "exact" and decision.decision != "NO_ACTION":
+        return None
+    best = _best_candidate(pcm, stt, engine, separator, now_s, kws)
+    if best is None or best[2].udk is None:
+        return None
+    fired = {e.udk.udk_id for e in [decision, *extras] if e.decision != "NO_ACTION" and e.udk}
+    if best[2].udk.udk_id in fired:
+        return None
+    if decision.decision != "NO_ACTION" and best[2].layer != "exact":
+        return None
+    return engine.decide(best[0], now_s=now_s, kws_match=best[1])
+
+
+def recheck_verify_with_separation(pcm, decision, pre_decision_state, stt, engine, separator, now_s, kws=None):
+    """Second WeSep use (2026-09-23): the overlap eval found 9/10 remaining
+    misses were a TRIGGER_VERIFY on the WRONG UDK -- the other person's
+    ordinary sentence matched weakly (fuzzy/semantic/kws) before the
+    NO_ACTION-only fallback could run. Rule: only a non-exact VERIFY is
+    re-checked, and it is replaced only by an EXACT match on the separated
+    stream for a DIFFERENT UDK -- the user verbatim saying a UDK outranks a
+    weak match. Otherwise the original decision stands (never vetoed).
+    pre_decision_state = engine.snapshot() taken before `decision` was
+    made, restored before re-deciding so one segment counts once."""
+    if decision.decision != "TRIGGER_VERIFY" or decision.layer == "exact":
+        return decision
+    best = _best_candidate(pcm, stt, engine, separator, now_s, kws)
+    if best is None or best[2].layer != "exact" or best[2].udk is None or best[2].udk == decision.udk:
+        return decision
+    engine.restore(pre_decision_state)
+    return engine.decide(best[0], now_s=now_s, kws_match=best[1])

@@ -76,7 +76,12 @@ from __future__ import annotations
 from typing import Protocol
 
 DEFAULT_MODEL = "paraphrase-multilingual-MiniLM-L12-v2"
-DEFAULT_THRESHOLD = 0.55
+# 0.55 -> 0.65 (2026-09-23, trace_semantic_fp.py): below 0.60 a semantic
+# match can't reach TRIGGER_VERIFY anyway, and 0.60 -> 0.65 loses 0/32 real
+# paraphrases while cutting real-negative-segment false alarms 1/156 -> 0,
+# ordinary 4/20 -> 3/20, adversarial 5/20 -> 4/20. 0.70 would cost 5/32
+# paraphrases. See trace_semantic_fp_output.log.
+DEFAULT_THRESHOLD = 0.65
 DEFAULT_FUZZY_THRESHOLD = 0.55
 
 # See module docstring's "CORRECTION" section for the real calibration
@@ -111,16 +116,25 @@ class SentenceTransformerSemanticMatcher:
         model_name: str = DEFAULT_MODEL,
         threshold: float = DEFAULT_THRESHOLD,
         fuzzy_threshold: float = DEFAULT_FUZZY_THRESHOLD,
+        device: str = "cpu",
     ):
         from sentence_transformers import SentenceTransformer
 
-        self._model = SentenceTransformer(model_name)
+        self._model = SentenceTransformer(model_name, device=device)
         self.model_version = f"sentence-transformers-{model_name}"
         self.threshold = threshold
         self.fuzzy_threshold = fuzzy_threshold
+        # match_transcript compares one transcript against every UDK phrase,
+        # and decide_all() does it per sentence too -- without this, the same
+        # 20 phrases and the same transcript were re-encoded on every call.
+        # Bounded so a long-running journey process can't grow it forever.
+        import functools
+
+        self._encode = functools.lru_cache(maxsize=512)(
+            lambda text: self._model.encode(text, convert_to_tensor=True)
+        )
 
     def similarity(self, a: str, b: str) -> float:
         from sentence_transformers import util
 
-        embeddings = self._model.encode([a, b], convert_to_tensor=True)
-        return util.cos_sim(embeddings[0], embeddings[1]).item()
+        return util.cos_sim(self._encode(a), self._encode(b)).item()

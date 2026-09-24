@@ -209,6 +209,34 @@ check(
     str(events_during_outage[0]["model_version"]),
 )
 
+print("=== vectorized DTW == original cell-by-cell DTW (exact) ===")
+
+import numpy as np
+
+from kws import _dtw_distance
+
+
+def _dtw_reference(a, b):
+    """The original O(n*m) Python loop, kept only as the oracle."""
+    n, m = len(a), len(b)
+    cost = 1.0 - a @ b.T
+    dp = np.full((n + 1, m + 1), np.inf)
+    dp[0, 0] = 0.0
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            dp[i, j] = cost[i - 1, j - 1] + min(dp[i - 1, j], dp[i, j - 1], dp[i - 1, j - 1])
+    return dp[n, m] / max(n, m)
+
+
+rng = np.random.default_rng(0)
+shapes = [(1, 1), (1, 7), (7, 1), (5, 5), (13, 40), (104, 250), (250, 104)]
+diffs = []
+for n, m in shapes:
+    a = rng.normal(size=(n, 16)); a /= np.linalg.norm(a, axis=1, keepdims=True)
+    b = rng.normal(size=(m, 16)); b /= np.linalg.norm(b, axis=1, keepdims=True)
+    diffs.append(abs(_dtw_distance(a, b) - _dtw_reference(a, b)))
+check(f"identical on {len(shapes)} shapes incl. 1-frame edges and real sizes (max diff {max(diffs):.1e})", max(diffs) == 0.0)
+
 print(f"\n{'=' * 40}\n{passed}/{passed + failed} TOTAL PASSED" + (" -- ALL PASSED" if failed == 0 else f", {failed} FAILED"))
 
 if failed:

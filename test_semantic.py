@@ -107,6 +107,36 @@ check(
 
 print(f"\n{passed}/{passed + failed} checks passed so far.\n")
 
+print("=== decide_all: every UDK said in one segment is reported, not just the best one ===")
+
+from udk_engine import UDKEngine
+
+two_udks = [UDK("UDK_A", "let go of me", "GENERAL"), UDK("UDK_B", "please don't hurt me", "GENERAL")]
+multi = UDKEngine(two_udks).decide_all("Let go of me! Just calm down! Please don't hurt me!", now_s=0.0)
+check("two different UDKs in separate sentences -> two events", sorted(e.udk.udk_id for e in multi) == ["UDK_A", "UDK_B"], str(multi))
+check("first event is the whole-segment decision (same as decide())",
+      multi[0].udk.udk_id == UDKEngine(two_udks).decide("Let go of me! Just calm down! Please don't hurt me!", now_s=0.0).udk.udk_id)
+single = UDKEngine(two_udks).decide_all("Let go of me!", now_s=0.0)
+check("one sentence -> exactly one event", len(single) == 1, str(single))
+quiet = UDKEngine(two_udks).decide_all("What a lovely day. Shall we walk?", now_s=0.0)
+check("ordinary sentences -> no extra events", len(quiet) == 1 and quiet[0].decision == "NO_ACTION", str(quiet))
+
+short_udks = [UDK("UDK_A", "let go of me", "GENERAL"), UDK("UDK_B", "please don't hurt me", "GENERAL"),
+              UDK("UDK_C", "i'm not safe", "GENERAL")]
+# Whole segment matches UDK_A, so UDK_B can only come from the short sentence on its own.
+shout = UDKEngine(short_udks).decide_all("Let go of me right now. Please don't!", now_s=0.0)
+check("short sentence made of a UDK's whole words ('Please don't!') still counts on its own",
+      shout[0].udk.udk_id == "UDK_A" and any(e.udk and e.udk.udk_id == "UDK_B" for e in shout[1:]), str(shout))
+no_frag = UDKEngine(short_udks).decide_all("We talked about the plan for hours. No.", now_s=0.0)
+check("short sentence matching only INSIDE a word ('No.' in 'not') is ignored",
+      all(e.udk is None or e.udk.udk_id != "UDK_C" for e in no_frag[1:]), str(no_frag))
+go_to = UDKEngine(short_udks).decide_all("We walked to the station together. Go to.", now_s=0.0)
+check("short sentence whose words aren't a run in any UDK ('Go to.') is ignored", len(go_to) == 1, str(go_to))
+long_ok = UDKEngine(short_udks).decide_all("Calm down now. Let go of me.", now_s=0.0)
+check("sentences of 3+ words are matched as before", any(e.udk and e.udk.udk_id == "UDK_A" for e in long_ok), str(long_ok))
+
+print(f"\n{passed}/{passed + failed} checks passed so far.\n")
+
 print("=== a short fragment ambiguous across multiple UDKs is NOT full confidence (real bug found and fixed) ===")
 
 ambiguous_udks = [

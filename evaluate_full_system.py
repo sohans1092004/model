@@ -72,6 +72,17 @@ from vad import VAD, SAMPLE_RATE
 REAL_RECORDINGS = Path(__file__).parent / "real_recordings"
 
 
+def default_device() -> str:
+    """cuda when a GPU is present, else cpu -- so a Colab run uses the GPU
+    even if the env vars below weren't passed (a local CPU box is unchanged)."""
+    try:
+        import torch
+
+        return "cuda" if torch.cuda.is_available() else "cpu"
+    except Exception:
+        return "cpu"
+
+
 def load_real_pcm(path: Path) -> bytes:
     audio, _sr = librosa.load(str(path), sr=SAMPLE_RATE, mono=True)
     return np.clip(audio * 32767, -32768, 32767).astype(np.int16).tobytes()
@@ -93,16 +104,33 @@ def run_file(pcm: bytes, vad: VAD, stt, kws, semantic_matcher, beats, separator=
             continue
         scream_score = beats.score(seg.pcm) if beats is not None else None
         stt_suspect = is_suspect(transcript)
-        decision = engine.decide(
+        pre_state = engine.snapshot()
+        decision, *sentence_extras = engine.decide_all(
             transcript.text, now_s=time.monotonic(), kws_match=kws_match,
             scream_score=scream_score, stt_suspect=stt_suspect,
         )
-        if decision.decision == "NO_ACTION" and separator is not None:
+        if sentence_extras:
+            if separator is not None and getattr(separator, "recheck_verify", False):
+                from separation import separated_extra_event
+
+                extra = separated_extra_event(
+                    seg.pcm, decision, sentence_extras, stt, engine, separator, time.monotonic(), kws=kws
+                )
+                if extra is not None and extra.decision != "NO_ACTION":
+                    extra.layer += "+wesep"
+                    sentence_extras.append(extra)
+        elif decision.decision == "NO_ACTION" and separator is not None:
             from separation import retry_with_separation
 
             recovered = retry_with_separation(seg.pcm, stt, engine, separator, time.monotonic(), kws=kws)
             if recovered is not None:
                 decision = recovered
+        elif separator is not None and getattr(separator, "recheck_verify", False):
+            from separation import recheck_verify_with_separation
+
+            decision = recheck_verify_with_separation(
+                seg.pcm, decision, pre_state, stt, engine, separator, time.monotonic(), kws=kws
+            )
         rows.append({
             "transcript": transcript.text, "decision": decision.decision,
             "udk_id": decision.udk.udk_id if decision.udk else None,
@@ -111,6 +139,15 @@ def run_file(pcm: bytes, vad: VAD, stt, kws, semantic_matcher, beats, separator=
         })
         if decision.decision != "NO_ACTION":
             events.append(decision)
+        for extra in sentence_extras:
+            extra.layer += "/sentence"  # so printed events show it came from the per-sentence pass
+            rows.append({
+                "transcript": extra.transcript, "decision": extra.decision,
+                "udk_id": extra.udk.udk_id if extra.udk else None,
+                "layer": extra.layer, "confidence": extra.confidence,
+                "scream_score": scream_score, "stt_suspect": stt_suspect,
+            })
+            events.append(extra)
     latency = time.monotonic() - t0
     return events, rows, latency
 
@@ -127,15 +164,22 @@ def lat_stats(latencies: list[float]) -> str:
 def main() -> None:
     print("Loading VAD, real FasterWhisperSTT, real Wav2Vec2 KWS, real semantic matcher, real BEATs...")
     vad = VAD()
-    stt = FasterWhisperSTT(model_size="tiny.en", device="cpu", compute_type="int8")
-    kws = Wav2Vec2DTWSpotter()
+    # UDK_EVAL_STT_MODEL: e.g. small.en. UDK_EVAL_DEVICE=cuda puts EVERY model
+    # (Whisper, KWS wav2vec2, semantic MiniLM, BEATs, WeSep) on the GPU;
+    # UDK_EVAL_STT_DEVICE is the older Whisper-only switch, kept as a fallback.
+    device = os.environ.get("UDK_EVAL_DEVICE", os.environ.get("UDK_EVAL_STT_DEVICE", default_device()))
+    stt_model = os.environ.get("UDK_EVAL_STT_MODEL", "tiny.en")
+    print(f"Device for all models: {device}   STT: faster-whisper {stt_model}")
+    stt = FasterWhisperSTT(model_size=stt_model, device=device,
+                           compute_type="float16" if device == "cuda" else "int8")
+    kws = Wav2Vec2DTWSpotter(device=device)
     kws.load_references(Path(__file__).parent / "kws_references.npz")
     from semantic import SentenceTransformerSemanticMatcher
 
-    semantic_matcher = SentenceTransformerSemanticMatcher()
+    semantic_matcher = SentenceTransformerSemanticMatcher(device=device)
     from beats_distress_detector import BEATsDistressDetector
 
-    beats = BEATsDistressDetector()
+    beats = BEATsDistressDetector(device=device)
 
     separator = None
     if os.environ.get("UDK_ENABLE_SEPARATION") == "1":
@@ -144,70 +188,98 @@ def main() -> None:
 
         separator = SepformerSeparator()
 
+    # UDK_EVAL_WESEP=1: WeSep target-speaker fallback + VERIFY re-check on
+    # the SYNTHETIC corpus only, enrolled as each clip's own TTS voice.
+    # Real recordings have no voice sample of their speaker, so they run
+    # without it (unchanged path) -- stated in the output, not hidden.
+    wesep_by_voice = {}
+    if os.environ.get("UDK_EVAL_WESEP") == "1":
+        print("Loading WeSep + ECAPA (UDK_EVAL_WESEP=1; synthetic corpus only)...")
+        from wesep_extraction import EcapaVerifier, WeSepExtractor, WeSepTargetSeparator
+
+        extractor, verifier = WeSepExtractor(device=device), EcapaVerifier(device=device)
+        with tempfile.TemporaryDirectory() as tmp:
+            for v in VOICES:
+                p = Path(tmp) / "enroll.wav"
+                _synthesize_wav(GENERAL_UDKS[0].phrase, v, p)
+                wesep_by_voice[v] = WeSepTargetSeparator(_load_pcm_16k_mono(p), extractor=extractor, verifier=verifier)
+
+    def synthetic_separator(i: int):
+        return wesep_by_voice.get(VOICES[i % len(VOICES)], separator)
+
     all_summaries = {}
 
     # =====================================================================
     # 1. SYNTHETIC CORPUS (evaluate_pipeline_corpus.py's own builder)
     # =====================================================================
-    print(f"\n{'=' * 78}\n1. SYNTHETIC CORPUS (TTS + signal augmentation)\n{'=' * 78}")
-    with tempfile.TemporaryDirectory() as tmp:
-        tmp_path = Path(tmp)
-        print(f"Synthesizing {len(GENERAL_UDKS)} base positive + {len(NEGATIVES)} base negative clips...")
-        base_positive: dict[str, bytes] = {}
-        for i, udk in enumerate(GENERAL_UDKS):
-            wav_path = tmp_path / f"pos_{udk.udk_id}.wav"
-            _synthesize_wav(udk.phrase, VOICES[i % len(VOICES)], wav_path)
-            base_positive[udk.udk_id] = _load_pcm_16k_mono(wav_path)
-        base_negative: list[bytes] = []
-        for i, text in enumerate(NEGATIVES):
-            wav_path = tmp_path / f"neg_{i}.wav"
-            _synthesize_wav(text, VOICES[i % len(VOICES)], wav_path)
-            base_negative.append(_load_pcm_16k_mono(wav_path))
+    # UDK_EVAL_SKIP_SYNTHETIC=1: the synthetic corpus needs Windows SAPI TTS
+    # (PowerShell), so it can't run on Linux/Colab -- real recordings still do.
+    import shutil
 
-        syn_pos_rows, syn_neg_rows = [], []
-        conditions = ["baseline", "pitch_tempo_distorted", "muffled", "noisy", "overlapping"]
-        print("Running positives across all 5 conditions x 20 UDKs...")
-        for i, udk in enumerate(GENERAL_UDKS):
-            base = base_positive[udk.udk_id]
-            clips = {
-                "baseline": base,
-                "pitch_tempo_distorted": time_stretch(pitch_shift(base, SAMPLE_RATE, n_steps=3), rate=1.3),
-                "muffled": muffle(base, SAMPLE_RATE),
-                "noisy": add_noise(base, SAMPLE_RATE, snr_db=10, kind="traffic"),
-                "overlapping": overlap(base, base_negative[i % len(base_negative)]),
-            }
-            for cond, pcm in clips.items():
-                events, rows, latency = run_file(pcm, vad, stt, kws, semantic_matcher, beats, separator)
-                fired_correct = any(e.udk.udk_id == udk.udk_id for e in events)
-                syn_pos_rows.append({"udk_id": udk.udk_id, "condition": cond, "correct": fired_correct, "latency": latency, "n_events": len(events)})
+    if os.environ.get("UDK_EVAL_SKIP_SYNTHETIC") == "1" or shutil.which("powershell") is None:
+        why = "UDK_EVAL_SKIP_SYNTHETIC=1" if os.environ.get("UDK_EVAL_SKIP_SYNTHETIC") == "1" else \
+            "no PowerShell here -- the synthetic corpus needs Windows SAPI TTS"
+        print(f"\n(synthetic corpus skipped: {why})")
+    else:
+        print(f"\n{'=' * 78}\n1. SYNTHETIC CORPUS (TTS + signal augmentation)\n{'=' * 78}")
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            print(f"Synthesizing {len(GENERAL_UDKS)} base positive + {len(NEGATIVES)} base negative clips...")
+            base_positive: dict[str, bytes] = {}
+            for i, udk in enumerate(GENERAL_UDKS):
+                wav_path = tmp_path / f"pos_{udk.udk_id}.wav"
+                _synthesize_wav(udk.phrase, VOICES[i % len(VOICES)], wav_path)
+                base_positive[udk.udk_id] = _load_pcm_16k_mono(wav_path)
+            base_negative: list[bytes] = []
+            for i, text in enumerate(NEGATIVES):
+                wav_path = tmp_path / f"neg_{i}.wav"
+                _synthesize_wav(text, VOICES[i % len(VOICES)], wav_path)
+                base_negative.append(_load_pcm_16k_mono(wav_path))
 
-        print("Running negatives (baseline + degraded)...")
-        for i, text in enumerate(NEGATIVES):
-            base = base_negative[i]
-            degraded = add_noise(muffle(base, SAMPLE_RATE), SAMPLE_RATE, snr_db=10, kind="crowd")
-            for cond, pcm in [("baseline", base), ("degraded", degraded)]:
-                events, rows, latency = run_file(pcm, vad, stt, kws, semantic_matcher, beats, separator)
-                syn_neg_rows.append({"text": text, "condition": cond, "false_positive": len(events) > 0, "latency": latency})
+            syn_pos_rows, syn_neg_rows = [], []
+            conditions = ["baseline", "pitch_tempo_distorted", "muffled", "noisy", "overlapping"]
+            print("Running positives across all 5 conditions x 20 UDKs...")
+            for i, udk in enumerate(GENERAL_UDKS):
+                base = base_positive[udk.udk_id]
+                clips = {
+                    "baseline": base,
+                    "pitch_tempo_distorted": time_stretch(pitch_shift(base, SAMPLE_RATE, n_steps=3), rate=1.3),
+                    "muffled": muffle(base, SAMPLE_RATE),
+                    "noisy": add_noise(base, SAMPLE_RATE, snr_db=10, kind="traffic"),
+                    "overlapping": overlap(base, base_negative[i % len(base_negative)]),
+                }
+                for cond, pcm in clips.items():
+                    events, rows, latency = run_file(pcm, vad, stt, kws, semantic_matcher, beats, synthetic_separator(i))
+                    fired_correct = any(e.udk.udk_id == udk.udk_id for e in events)
+                    syn_pos_rows.append({"udk_id": udk.udk_id, "condition": cond, "correct": fired_correct, "latency": latency, "n_events": len(events)})
 
-    print(f"\n{'condition':<22}{'recall':>10}{'n':>6}{'avg_latency':>14}")
-    for cond in conditions:
-        rows = [r for r in syn_pos_rows if r["condition"] == cond]
-        correct = sum(1 for r in rows if r["correct"])
-        avg_lat = statistics.mean(r["latency"] for r in rows)
-        print(f"{cond:<22}{correct / len(rows):>10.1%}{len(rows):>6}{avg_lat:>14.3f}s")
-    for cond in ["baseline", "degraded"]:
-        rows = [r for r in syn_neg_rows if r["condition"] == cond]
-        fpr = sum(1 for r in rows if r["false_positive"]) / len(rows)
-        avg_lat = statistics.mean(r["latency"] for r in rows)
-        print(f"neg_{cond:<18}{fpr:>10.1%}{len(rows):>6}{avg_lat:>14.3f}s")
+            print("Running negatives (baseline + degraded)...")
+            for i, text in enumerate(NEGATIVES):
+                base = base_negative[i]
+                degraded = add_noise(muffle(base, SAMPLE_RATE), SAMPLE_RATE, snr_db=10, kind="crowd")
+                for cond, pcm in [("baseline", base), ("degraded", degraded)]:
+                    events, rows, latency = run_file(pcm, vad, stt, kws, semantic_matcher, beats, synthetic_separator(i))
+                    syn_neg_rows.append({"text": text, "condition": cond, "false_positive": len(events) > 0, "latency": latency})
 
-    syn_correct = sum(1 for r in syn_pos_rows if r["correct"])
-    syn_fp = sum(1 for r in syn_neg_rows if r["false_positive"])
-    syn_fn = len(syn_pos_rows) - syn_correct
-    syn_lat = [r["latency"] for r in syn_pos_rows] + [r["latency"] for r in syn_neg_rows]
-    all_summaries["synthetic"] = {"n": len(syn_pos_rows) + len(syn_neg_rows), "correct": syn_correct,
-                                   "fp": syn_fp, "fn": syn_fn, "n_pos": len(syn_pos_rows), "n_neg": len(syn_neg_rows),
-                                   "latency": syn_lat}
+        print(f"\n{'condition':<22}{'recall':>10}{'n':>6}{'avg_latency':>14}")
+        for cond in conditions:
+            rows = [r for r in syn_pos_rows if r["condition"] == cond]
+            correct = sum(1 for r in rows if r["correct"])
+            avg_lat = statistics.mean(r["latency"] for r in rows)
+            print(f"{cond:<22}{correct / len(rows):>10.1%}{len(rows):>6}{avg_lat:>14.3f}s")
+        for cond in ["baseline", "degraded"]:
+            rows = [r for r in syn_neg_rows if r["condition"] == cond]
+            fpr = sum(1 for r in rows if r["false_positive"]) / len(rows)
+            avg_lat = statistics.mean(r["latency"] for r in rows)
+            print(f"neg_{cond:<18}{fpr:>10.1%}{len(rows):>6}{avg_lat:>14.3f}s")
+
+        syn_correct = sum(1 for r in syn_pos_rows if r["correct"])
+        syn_fp = sum(1 for r in syn_neg_rows if r["false_positive"])
+        syn_fn = len(syn_pos_rows) - syn_correct
+        syn_lat = [r["latency"] for r in syn_pos_rows] + [r["latency"] for r in syn_neg_rows]
+        all_summaries["synthetic"] = {"n": len(syn_pos_rows) + len(syn_neg_rows), "correct": syn_correct,
+                                       "fp": syn_fp, "fn": syn_fn, "n_pos": len(syn_pos_rows), "n_neg": len(syn_neg_rows),
+                                       "latency": syn_lat}
 
     # =====================================================================
     # 2. real_recordings/mixed (manifest-driven)

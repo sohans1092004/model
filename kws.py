@@ -181,10 +181,16 @@ def _dtw_distance(a: np.ndarray, b: np.ndarray) -> float:
     cost = 1.0 - a @ b.T
     dp = np.full((n + 1, m + 1), np.inf)
     dp[0, 0] = 0.0
-    for i in range(1, n + 1):
-        for j in range(1, m + 1):
-            dp[i, j] = cost[i - 1, j - 1] + min(dp[i - 1, j], dp[i, j - 1], dp[i - 1, j - 1])
+    # Anti-diagonal (wavefront) order: every cell with i + j == k depends only
+    # on diagonals k-1 and k-2, so a whole diagonal is one numpy op -- ~n+m
+    # vector steps instead of n*m Python steps (was ~5 s of a ~7 s clip, times
+    # 60 references). Identical result to the cell-by-cell loop (test_kws.py).
+    for k in range(2, n + m + 1):
+        i = np.arange(max(1, k - m), min(n, k - 1) + 1)
+        j = k - i
+        dp[i, j] = cost[i - 1, j - 1] + np.minimum(np.minimum(dp[i - 1, j], dp[i, j - 1]), dp[i - 1, j - 1])
     return dp[n, m] / max(n, m)
+
 
 
 class Wav2Vec2DTWSpotter:
@@ -194,10 +200,12 @@ class Wav2Vec2DTWSpotter:
     a much heavier dependency than anything else in this project, no
     reason to pay that cost for callers who only need MockKWS."""
 
-    def __init__(self, model_name: str = DEFAULT_MODEL, match_threshold: float = DEFAULT_MATCH_THRESHOLD):
+    def __init__(self, model_name: str = DEFAULT_MODEL, match_threshold: float = DEFAULT_MATCH_THRESHOLD,
+                 device: str = "cpu"):
         from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2Model
 
-        self._model = Wav2Vec2Model.from_pretrained(model_name)
+        self._device = device  # "cuda" moves the wav2vec2 encoder to GPU; DTW stays numpy
+        self._model = Wav2Vec2Model.from_pretrained(model_name).to(device)
         self._model.eval()
         # Wav2Vec2FeatureExtractor (audio preprocessing only), not the
         # full Wav2Vec2Processor (feature extractor + CTC tokenizer) --
@@ -227,9 +235,9 @@ class Wav2Vec2DTWSpotter:
         import torch
 
         audio = np.frombuffer(pcm, dtype="<i2").astype(np.float32) / 32768.0
-        inputs = self._processor(audio, sampling_rate=SAMPLE_RATE, return_tensors="pt")
+        inputs = self._processor(audio, sampling_rate=SAMPLE_RATE, return_tensors="pt").to(self._device)
         with torch.no_grad():
-            hidden = self._model(**inputs).last_hidden_state.squeeze(0).numpy()
+            hidden = self._model(**inputs).last_hidden_state.squeeze(0).cpu().numpy()
         return hidden / np.linalg.norm(hidden, axis=1, keepdims=True)
 
     def enroll(self, phrase_id: str, pcm: bytes) -> None:

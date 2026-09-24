@@ -131,6 +131,10 @@ KWS_MATCH_CONFIDENCE = 0.65
 # UDK is real, unambiguous evidence and keeps full confidence.
 GENERIC_FRAGMENT_CONFIDENCE = KWS_MATCH_CONFIDENCE
 
+# Sentence boundaries in Whisper's punctuated output, for decide_all().
+_SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+")
+
+
 # Real bug found and fixed: kws.py's spot() already collapses its DTW
 # distance into a binary match/no-match at DEFAULT_MATCH_THRESHOLD=0.18,
 # discarding HOW confidently it matched. A borderline distance right at
@@ -351,6 +355,56 @@ class UDKEngine:
         self.semantic_matcher = semantic_matcher
         self._recent: dict[str, list[float]] = {}
         self._recent_distinct: list[tuple[float, str]] = []
+
+    def decide_all(self, transcript: str, now_s: float | None = None, **kwargs) -> list[DecisionEvent]:
+        """decide() on the whole segment, plus one extra event per SENTENCE
+        that matches a different UDK on its own (2026-09-23, prepped_data:
+        "Let go! ... Please let go! You're hurting me!" is one VAD segment,
+        and decide() only ever reports its single best UDK, so UDK_13 was
+        lost behind UDK_10). The first element is always the whole-segment
+        decision, identical to decide(). Extra events go through decide()
+        too, so two DIFFERENT UDKs in one segment hit the existing
+        distinct-UDK escalation, same as two phrases said in a row."""
+        now_s = now_s if now_s is not None else time.monotonic()
+        primary = self.decide(transcript, now_s=now_s, **kwargs)
+        events = [primary]
+        sentences = [s for s in _SENTENCE_SPLIT.split(transcript.strip()) if s]
+        if len(sentences) < 2:
+            return events
+        seen = {primary.udk.udk_id} if primary.decision != "NO_ACTION" and primary.udk else set()
+        sentence_kwargs = {k: v for k, v in kwargs.items() if k != "kws_match"}  # KWS is a whole-segment signal
+        # A sentence shorter than the shortest UDK (3 words for the current 20)
+        # only counts if its words appear WORD FOR WORD, as whole words, in some
+        # UDK. Real shouts pass ("Help!", "Please don't!" -> UDK_13, "Please!");
+        # letter- or meaning-level guesses on fragments don't ("No." only hit
+        # because "no" is inside "not"; "go to."; "Goodbye." via semantic).
+        # 2026-09-23: a plain 3-word minimum cut FPR but dropped the "Help!" /
+        # "Please don't!" triggers in a real distress clip, failing the rule
+        # that no change may lose a successful trigger.
+        norm_udks = [f" {_normalize(u.phrase)} " for u in self.udks]
+        min_words = min(len(p.split()) for p in norm_udks)
+        for sentence in sentences:
+            words = _normalize(sentence).split()
+            if len(words) < min_words and not any(f" {' '.join(words)} " in p for p in norm_udks):
+                continue
+            m = match_transcript(sentence, self.udks, semantic_matcher=self.semantic_matcher)
+            if m.udk is None or m.udk.udk_id in seen or m.confidence < TRIGGER_VERIFY_THRESHOLD:
+                continue
+            event = self.decide(sentence, now_s=now_s, **sentence_kwargs)
+            if event.decision != "NO_ACTION":
+                seen.add(event.udk.udk_id)
+                events.append(event)
+        return events
+
+    def snapshot(self) -> tuple:
+        """Escalation-window state, so a caller can re-decide ONE segment
+        (separation.recheck_verify_with_separation) without the first guess
+        also counting as a second, distinct detection."""
+        return {k: list(v) for k, v in self._recent.items()}, list(self._recent_distinct)
+
+    def restore(self, state: tuple) -> None:
+        recent, distinct = state
+        self._recent, self._recent_distinct = {k: list(v) for k, v in recent.items()}, list(distinct)
 
     def _record_and_check_repeat(self, udk_id: str, now_s: float) -> bool:
         history = self._recent.setdefault(udk_id, [])
