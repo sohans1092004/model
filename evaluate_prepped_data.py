@@ -130,8 +130,11 @@ def main() -> None:
         stts["parakeet"] = ParakeetSTT(device=device)
         print(f"Parakeet running on: {stts['parakeet'].providers[0]}")
     vad = VAD()
-    kws = Wav2Vec2DTWSpotter(device=device)
-    kws.load_references(Path(__file__).parent / "kws_references.npz")
+    kws = None
+    if os.environ.get("PREPPED_KWS", "1") != "0":  # PREPPED_KWS=0: live config with UDK_ENABLE_KWS=0
+        kws = Wav2Vec2DTWSpotter(device=device)
+        kws.load_references(Path(__file__).parent / "kws_references.npz")
+    print(f"keyword spotting: {'on' if kws else 'OFF'}")
     semantic = SentenceTransformerSemanticMatcher(device=device)
     beats = BEATsDistressDetector(device=device)
 
@@ -152,8 +155,9 @@ def main() -> None:
     timed(stt, "transcribe", "Whisper STT")
     if use_parakeet:
         timed(stts["parakeet"], "transcribe", "Parakeet STT")
-    timed(kws, "_frame_embeddings", "KWS wav2vec2")
-    timed(kws, "spot", "KWS total (wav2vec2 + DTW)")
+    if kws is not None:
+        timed(kws, "_frame_embeddings", "KWS wav2vec2")
+        timed(kws, "spot", "KWS total (wav2vec2 + DTW)")
     timed(beats, "score", "BEATs")
     timed(semantic, "similarity", "Semantic MiniLM")
 
