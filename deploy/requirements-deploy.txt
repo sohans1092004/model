@@ -1,0 +1,17 @@
+# Live English service only (api.py). torch comes from the base image.
+# ponytail: unpinned except where a pin is known to matter; after the first image that
+# passes the checks in deploy/README.md, freeze it: pip freeze > requirements-lock.txt
+fastapi
+uvicorn[standard]
+numpy
+rapidfuzz
+webrtcvad-wheels          # same `webrtcvad` module, prebuilt
+setuptools<81             # webrtcvad needs pkg_resources
+cryptography
+faster-whisper            # Whisper small.en
+transformers              # wav2vec2 (KWS)
+sentence-transformers     # MiniLM (semantic)
+huggingface_hub
+onnx-asr[hub]==0.12.0     # Parakeet; the Dockerfile swaps its CPU onnxruntime for onnxruntime-gpu
+psycopg[binary]           # only with UDK_DATABASE_URL (Postgres)
+boto3                     # only with UDK_S3_ENDPOINT (S3 storage)

@@ -106,6 +106,10 @@ AUDIO_TOKEN_TTL_S = 300  # Section 10: "short-lived signed URL, never a permanen
 # it ever ends up live somewhere it shouldn't.
 DEV_SERVICE_TOKEN = "dev-service-token-CHANGE-ME"
 _SERVICE_TOKEN = os.environ.get("UDK_SERVICE_TOKEN", DEV_SERVICE_TOKEN)
+if not _SERVICE_TOKEN:  # an empty token would accept an empty X-Service-Token header
+    raise RuntimeError("UDK_SERVICE_TOKEN is empty")
+if os.environ.get("UDK_DATA_DIR") and _SERVICE_TOKEN == DEV_SERVICE_TOKEN:  # UDK_DATA_DIR = a real deployment
+    raise RuntimeError("set UDK_SERVICE_TOKEN: the dev token is public")
 
 JourneyStatus = Literal["ACTIVE", "FINALIZING", "COMPLETE", "TIMED_OUT", "TIMED_OUT_AFTER_TRIGGER"]
 
@@ -336,6 +340,7 @@ def _decision_to_event(journey: JourneyState, decision: DecisionEvent, seg) -> d
         "decision": decision.decision,
         "udk_id": decision.udk.udk_id if decision.udk else None,
         "udk_type": decision.udk.udk_type if decision.udk else None,
+        "layer": decision.layer,  # exact / fuzzy / semantic / kws / acoustic_scream: why it fired
         "confidence": round(decision.confidence, 3),
         # The audio's actual time (journey start + offset into the
         # stream), not when the server happened to process it -- matters
@@ -1042,6 +1047,11 @@ def _load_downstream_deliver() -> Callable[[dict], bool]:
     are set (see kafka_delivery.py), else the stub -- "the real safety
     platform isn't built here" now has a real half: publishing to a real
     bus is buildable, the platform consuming from it still isn't ours."""
+    webhook = os.environ.get("UDK_WEBHOOK_URL")
+    if webhook:  # misconfiguration raises: silently dropping alerts is worse than failing to start
+        from webhook_delivery import make_webhook_deliver
+
+        return make_webhook_deliver(webhook, os.environ.get("UDK_WEBHOOK_SECRET", ""))
     bootstrap = os.environ.get("UDK_KAFKA_BOOTSTRAP_SERVERS")
     topic = os.environ.get("UDK_KAFKA_TOPIC")
     if bootstrap and topic:
@@ -1057,7 +1067,10 @@ def _load_downstream_deliver() -> Callable[[dict], bool]:
 # Module-level, swapped out wholesale in tests (api._stt_backend = ...,
 # api._audio_store = ...) -- no DI framework needed for a prototype this
 # size (M1/M2 make the same call).
-_tmp = Path(tempfile.gettempdir())
+# UDK_DATA_DIR in deployment: keys, DB, audio and the alert queue must survive a restart
+# (a fresh key would make every stored journey unreadable). Temp dir only for local runs/tests.
+_tmp = Path(os.environ.get("UDK_DATA_DIR") or tempfile.gettempdir())
+_tmp.mkdir(parents=True, exist_ok=True)
 # MockSTT() unless UDK_ENABLE_STT=1 -- see _load_stt_backend for the real
 # gap this closes (English never had a real-STT opt-in before, unlike
 # every other backend here).
@@ -1071,7 +1084,8 @@ _audio_store = _load_audio_store(_audio_key_manager, _tmp / "udk_journey_audio")
 _event_queue = EventDeliveryQueue(_tmp / "udk_event_queue")
 _db = _load_db(_db_key_manager, _tmp / "udk_journeys.sqlite3")
 _audit_log = AuditLog(_tmp / "udk_audit_log.sqlite3")
-_rate_limiter = RateLimiter(max_requests=10, window_s=60)
+# Per service token; the website's one server token covers ALL its users' start/stop/status calls.
+_rate_limiter = RateLimiter(max_requests=int(os.environ.get("UDK_RATE_LIMIT_PER_MIN", "10")), window_s=60)
 _signing_secret = _load_or_create_signing_secret(_tmp / "udk_signing_secret.bin")
 _metrics = Metrics()
 _downstream_deliver: Callable[[dict], bool] = _load_downstream_deliver()
@@ -1294,6 +1308,7 @@ async def stream_audio(websocket: WebSocket, journey_id: str, session_token: str
                 if payload.get("type") == "heartbeat":
                     journey.last_heartbeat_at = time.time()
                     _db.save_journey(journey)
+                    _event_queue.drain(_downstream_deliver)  # retry alerts the receiver missed
                     await websocket.send_json({"type": "heartbeat", "server_ts": time.time()})
     except WebSocketDisconnect:
         pass

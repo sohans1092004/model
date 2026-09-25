@@ -1,0 +1,30 @@
+# Whitelist: the ONLY files that go into the image (build context = the Model folder).
+# deploy/check_package.py reads this list and proves api.py starts from exactly these files.
+*
+!api.py
+!audit.py
+!beats_distress_detector.py
+!crypto.py
+!db.py
+!db_postgres.py
+!enrollment.py
+!event_delivery.py
+!kws.py
+!language_id.py
+!metrics.py
+!scream_trigger.py
+!semantic.py
+!separation.py
+!storage.py
+!storage_s3.py
+!stt.py
+!stt_confidence_gate.py
+!udk_engine.py
+!udks.py
+!vad.py
+!webhook_delivery.py
+!kws_references.npz
+!beats_vendor/
+beats_vendor/**/__pycache__
+!deploy/requirements-deploy.txt
+!deploy/prefetch_models.py
