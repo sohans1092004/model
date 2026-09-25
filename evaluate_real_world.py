@@ -25,7 +25,7 @@ import numpy as np
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 HERE = Path(__file__).parent
 SR = 16000
-AUDIO = {".mp3", ".m4a", ".webm", ".opus", ".wav", ".mp4", ".ogg", ".flac", ".aac"}
+AUDIO = {".mp3", ".mpeg", ".m4a", ".webm", ".opus", ".wav", ".mp4", ".ogg", ".flac", ".aac"}
 REFRACTORY_S = 10.0  # alerts closer than this count as one alert episode
 
 

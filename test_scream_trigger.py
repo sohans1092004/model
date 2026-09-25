@@ -58,6 +58,18 @@ check("does NOT fire below threshold", not ST.check(det, pcm_with([0.05] * 6))[0
 fired, peak, cls = ST.check(det, pcm_with([0.3, 0.4, 0, 0, 0, 0]))
 check("reports peak score and class", fired and abs(peak - 0.4) < 1e-6 and cls == "Screaming", (fired, peak, cls))
 
+
+class FakeWailOnly(FakeBEATs):  # the class that caused 79 of 182 real YouTube false alarms
+    def label_probs(self, pcm):
+        p = np.zeros(527, np.float32)
+        p[431] = 0.9  # "Wail, moan"
+        return p
+
+
+check("a strong Wail/moan-only sound does NOT fire (dropped class)", not ST.check(FakeWailOnly(), pcm_with([0.5] * 6))[0])
+check("live rule = Screaming, Crying, Whimper, Children shouting",
+      set(ST.CLASSES.values()) == {"Screaming", "Crying, sobbing", "Whimper", "Children shouting"}, str(ST.CLASSES))
+
 # ---- live loop: a scream with NO words -> TRIGGER_VERIFY; flag off -> nothing
 seg_pcm = pcm_with([0.5, 0.5, 0.5, 0, 0, 0])
 

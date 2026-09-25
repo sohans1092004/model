@@ -10,8 +10,13 @@ calibration data -- real_recordings + FSD50K eval -- never on prepped_data):
   (all the "Playful" clip). emotion2vec fear was tested as an extra trigger and rejected
   (it reads sirens as fear: 12-14/25 siren clips).
 
-The rule must stay EXACTLY as validated: the 9 classes below, 2 s windows every 0.5 s,
+The rule must stay EXACTLY as validated: the classes below, 2 s windows every 0.5 s,
 max class probability >= 0.10 in 2 consecutive windows.
+
+2026-09-25: narrowed from 9 classes to 4 (distress_detector/scream_classes_ab.py). On 4.6 h
+of real Indian YouTube audio the 9 classes fired 182 times, mostly Battle cry / Wail, moan /
+Groan (Wail alone brought back 79). The 4 below keep 29 of 57 real screams / cries / distress
+media (9 classes: 31) and fire ~10 times on that audio; 0 on speech, traffic, siren, music.
 """
 from __future__ import annotations
 
@@ -23,8 +28,10 @@ THRESHOLD = 0.10
 CONSECUTIVE = 2
 # BEATs_iter3_finetuned_on_AS2M_cpt1 output index -> AudioSet class (resolved from the
 # checkpoint's label_dict, same as distress_detector.config.ZERO_SHOT_CLASSES)
-CLASSES = {34: "Screaming", 498: "Crying, sobbing", 81: "Whimper", 431: "Wail, moan", 410: "Groan",
-           50: "Yell", 344: "Shout", 433: "Children shouting", 334: "Battle cry"}
+ALL_CLASSES = {34: "Screaming", 498: "Crying, sobbing", 81: "Whimper", 431: "Wail, moan", 410: "Groan",
+               50: "Yell", 344: "Shout", 433: "Children shouting", 334: "Battle cry"}  # candidates evaluated
+CLASSES = {i: n for i, n in ALL_CLASSES.items()
+           if n in ("Screaming", "Crying, sobbing", "Whimper", "Children shouting")}  # the live rule
 
 
 def check(detector, pcm: bytes) -> tuple[bool, float, str]:
