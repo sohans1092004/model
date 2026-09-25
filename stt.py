@@ -95,6 +95,59 @@ class FasterWhisperSTT:
         )
 
 
+PARAKEET_DIR = Path(__file__).parent / "parakeet_model"
+
+
+class ParakeetSTT:
+    """NVIDIA Parakeet TDT 0.6B v2 via onnx-asr (ONNX Runtime -- no NeMo, so
+    none of the lightning version conflict dual_asr_guard.py's docstring
+    records for nemo_toolkit). Used as a SECOND transcript alongside
+    FasterWhisperSTT, alerting if EITHER alerts: the two fail differently
+    (Whisper on clipped/loud audio, Parakeet on short phrases under
+    overlapping speech). Measured on prepped_data x 6 audio conditions
+    (2026-09-24): Whisper+Parakeet 82/84 danger clips vs Whisper 78/84,
+    identical false alarms (49/96).
+
+    Gives no decoding metadata, so avg_logprob etc. stay None, which
+    stt_confidence_gate.py reads as "no signal" -- never as suspect.
+
+    ~2.4 GB, downloaded to `model_dir` on first use (UDK_PARAKEET_DIR
+    overrides the default ./parakeet_model). A plain directory on purpose:
+    onnxruntime rejects the HF cache's symlinked blobs on Windows
+    ("External data path escapes model directory")."""
+
+    def __init__(self, model_dir: str | Path | None = None, device: str = "cpu"):
+        import os
+
+        import onnx_asr
+        import onnxruntime as ort
+
+        model_dir = Path(model_dir or os.environ.get("UDK_PARAKEET_DIR", PARAKEET_DIR))
+        if device == "cuda":
+            try:  # onnxruntime-gpu >= 1.21: load CUDA/cuDNN from torch's pip-installed libs
+                ort.preload_dlls()
+            except Exception:
+                pass
+        providers = ["CUDAExecutionProvider", "CPUExecutionProvider"] if device == "cuda" else ["CPUExecutionProvider"]
+        self._model = onnx_asr.load_model("nemo-parakeet-tdt-0.6b-v2", str(model_dir), providers=providers)
+        # What the encoder session really got: onnxruntime silently falls back to
+        # CPU when CUDA libs fail to load (e.g. a CUDA-13 onnxruntime-gpu on a
+        # CUDA-12 machine), so callers can report it instead of assuming.
+        try:
+            self.providers = self._model.asr._encoder.get_providers()  # onnx-asr 0.12 internals
+        except Exception:
+            self.providers = ort.get_available_providers()
+        self.model_version = "parakeet-tdt-0.6b-v2"
+
+    def transcribe(self, pcm: bytes) -> Transcript:
+        import numpy as np
+
+        audio = np.frombuffer(pcm, dtype="<i2").astype(np.float32) / 32768.0
+        if len(audio) < 1600:  # < 0.1 s: nothing to transcribe
+            return Transcript(text="", model_version=self.model_version)
+        return Transcript(text=self._model.recognize(audio, sample_rate=16000).strip(), model_version=self.model_version)
+
+
 # Real measured margin (evaluate_pipeline_corpus.py's pitch_tempo_distorted
 # condition): clean baseline avg_logprob never drops below -0.458 (mean
 # -0.385, n=20); the 12 real failures on that condition ranged -0.51 to

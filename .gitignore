@@ -11,6 +11,7 @@ beats_cache/
 voxlingua_cache/
 ecapa_cache/
 tfhub_modules/
+parakeet_model/
 
 # Scratch validation output -- regenerable by re-running the script that
 # produced it; the script is the source of truth, not its last log.
@@ -25,3 +26,7 @@ tfhub_modules/
 wesep_src/
 wesep_legacy_src/
 wespeaker_src/
+
+# distress_detector: downloads, features, models, reports (regenerable)
+distress_detector/work/
+distress_detector/work_smoke/

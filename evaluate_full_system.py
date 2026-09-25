@@ -132,7 +132,7 @@ def run_file(pcm: bytes, vad: VAD, stt, kws, semantic_matcher, beats, separator=
                 seg.pcm, decision, pre_state, stt, engine, separator, time.monotonic(), kws=kws
             )
         rows.append({
-            "transcript": transcript.text, "decision": decision.decision,
+            "transcript": transcript.text, "decision": decision.decision, "start_ms": seg.start_ms, "end_ms": seg.end_ms,
             "udk_id": decision.udk.udk_id if decision.udk else None,
             "layer": decision.layer, "confidence": decision.confidence,
             "scream_score": scream_score, "stt_suspect": stt_suspect,
@@ -142,7 +142,7 @@ def run_file(pcm: bytes, vad: VAD, stt, kws, semantic_matcher, beats, separator=
         for extra in sentence_extras:
             extra.layer += "/sentence"  # so printed events show it came from the per-sentence pass
             rows.append({
-                "transcript": extra.transcript, "decision": extra.decision,
+                "transcript": extra.transcript, "decision": extra.decision, "start_ms": seg.start_ms, "end_ms": seg.end_ms,
                 "udk_id": extra.udk.udk_id if extra.udk else None,
                 "layer": extra.layer, "confidence": extra.confidence,
                 "scream_score": scream_score, "stt_suspect": stt_suspect,
@@ -150,6 +150,37 @@ def run_file(pcm: bytes, vad: VAD, stt, kws, semantic_matcher, beats, separator=
             events.append(extra)
     latency = time.monotonic() - t0
     return events, rows, latency
+
+
+class _Memo:
+    """obj.method memoised by the audio bytes, for one clip. Lets a second STT
+    path reuse the first path's VAD segments, KWS and BEATs results. Sharing
+    VAD output also matters for correctness: webrtcvad adapts across calls,
+    so segmenting the same clip twice can return different segments."""
+
+    def __init__(self, obj, method: str):
+        self._fn, self._cache = getattr(obj, method), {}
+        setattr(self, method, self)
+        if hasattr(obj, "total_ms"):
+            self.total_ms = obj.total_ms
+
+    def __call__(self, pcm: bytes, *args, **kwargs):
+        if pcm not in self._cache:
+            self._cache[pcm] = self._fn(pcm, *args, **kwargs)
+        return self._cache[pcm]
+
+
+def run_file_either(pcm: bytes, vad: VAD, stts: dict, kws, semantic_matcher, beats, separator=None) -> dict:
+    """run_file() once per STT backend in `stts` ({name: backend}), on the SAME
+    VAD segments, reusing KWS/BEATs results across paths. Each path gets its
+    own engine, exactly like a Whisper-only run. The clip alerts if EITHER
+    path alerts (callers take the stronger tier) -- see stt.ParakeetSTT for
+    the measured recall gain. Returns {name: (events, rows, latency_s)}."""
+    shared_vad = _Memo(vad, "segment_speech")
+    shared_kws = _Memo(kws, "spot") if kws is not None else None
+    shared_beats = _Memo(beats, "score") if beats is not None else None
+    return {name: run_file(pcm, shared_vad, stt, shared_kws, semantic_matcher, shared_beats, separator)
+            for name, stt in stts.items()}
 
 
 def lat_stats(latencies: list[float]) -> str:
@@ -180,6 +211,25 @@ def main() -> None:
     from beats_distress_detector import BEATsDistressDetector
 
     beats = BEATsDistressDetector(device=device)
+
+    # UDK_EVAL_PARAKEET=0: Whisper only (the pre-2026-09-24 config). Default:
+    # Whisper + Parakeet on the same segments, a clip alerts if EITHER alerts
+    # (run_file_either; same as evaluate_prepped_data.py and api.py).
+    stts = {"whisper": stt}
+    if os.environ.get("UDK_EVAL_PARAKEET", "1") != "0":
+        from stt import ParakeetSTT
+
+        stts["parakeet"] = ParakeetSTT(device=device)
+        print(f"+ Parakeet (alert if either), running on: {stts['parakeet'].providers[0]}")
+
+    def detect(pcm: bytes, sep):
+        """(events, rows, latency) pooled over every STT path: the clip's tier is
+        the stronger path's, its UDKs the union. Rows carry start_ms + stt."""
+        t0 = time.monotonic()
+        runs = run_file_either(pcm, vad, stts, kws, semantic_matcher, beats, sep)
+        events = [e for path_events, _, _ in runs.values() for e in path_events]
+        rows = [{**r, "stt": name} for name, (_, path_rows, _) in runs.items() for r in path_rows]
+        return events, rows, time.monotonic() - t0
 
     separator = None
     if os.environ.get("UDK_ENABLE_SEPARATION") == "1":
@@ -249,7 +299,7 @@ def main() -> None:
                     "overlapping": overlap(base, base_negative[i % len(base_negative)]),
                 }
                 for cond, pcm in clips.items():
-                    events, rows, latency = run_file(pcm, vad, stt, kws, semantic_matcher, beats, synthetic_separator(i))
+                    events, rows, latency = detect(pcm, synthetic_separator(i))
                     fired_correct = any(e.udk.udk_id == udk.udk_id for e in events)
                     syn_pos_rows.append({"udk_id": udk.udk_id, "condition": cond, "correct": fired_correct, "latency": latency, "n_events": len(events)})
 
@@ -258,7 +308,7 @@ def main() -> None:
                 base = base_negative[i]
                 degraded = add_noise(muffle(base, SAMPLE_RATE), SAMPLE_RATE, snr_db=10, kind="crowd")
                 for cond, pcm in [("baseline", base), ("degraded", degraded)]:
-                    events, rows, latency = run_file(pcm, vad, stt, kws, semantic_matcher, beats, synthetic_separator(i))
+                    events, rows, latency = detect(pcm, synthetic_separator(i))
                     syn_neg_rows.append({"text": text, "condition": cond, "false_positive": len(events) > 0, "latency": latency})
 
         print(f"\n{'condition':<22}{'recall':>10}{'n':>6}{'avg_latency':>14}")
@@ -306,7 +356,7 @@ def main() -> None:
                 print(f"  [SKIP] {path.name}: failed to load ({exc})")
                 continue
             expected_udk = udk_phrases_lower.get(entry["phrase"].lower())
-            events, rows, latency = run_file(pcm, vad, stt, kws, semantic_matcher, beats, separator)
+            events, rows, latency = detect(pcm, separator)
             detected = len(events) > 0
             exact_ok = expected_udk is not None and any(e.udk.udk_id == expected_udk for e in events)
             correct = exact_ok if expected_udk is not None else detected
@@ -346,7 +396,7 @@ def main() -> None:
         except Exception as exc:
             print(f"  [SKIP] {path.name}: failed to load ({exc})")
             continue
-        events, rows, latency = run_file(pcm, vad, stt, kws, semantic_matcher, beats, separator)
+        events, rows, latency = detect(pcm, separator)
         detected = len(events) > 0
         status = "PASS" if detected else "FAIL (missed)"
         print(f"  [{status}] {path.name[:60]:<60} events={len(events)} latency={latency:.3f}s")
@@ -376,12 +426,14 @@ def main() -> None:
         except Exception as exc:
             print(f"  [SKIP] {path.name}: failed to load ({exc})")
             continue
-        events, rows, latency = run_file(pcm, vad, stt, kws, semantic_matcher, beats, separator)
-        total_segments += len(rows)
-        total_segment_fps += sum(1 for r in rows if r["decision"] != "NO_ACTION")
+        events, rows, latency = detect(pcm, separator)
+        # per SEGMENT (start_ms), counted once across STT paths; a segment is a false
+        # positive if EITHER path fired on it
+        total_segments += len({r["start_ms"] for r in rows})
+        total_segment_fps += len({r["start_ms"] for r in rows if r["decision"] != "NO_ACTION"})
         false_positive = len(events) > 0
         status = "FALSE POSITIVE" if false_positive else "correct (no trigger)"
-        print(f"  [{status}] {path.name[:60]:<60} segments={len(rows)} events={len(events)} latency={latency:.3f}s")
+        print(f"  [{status}] {path.name[:60]:<60} segments={len({r['start_ms'] for r in rows})} events={len(events)} latency={latency:.3f}s")
         for e in events:
             print(f"         -> {e.decision} udk={e.udk.udk_id if e.udk else None} conf={e.confidence:.2f} layer={e.layer} transcript={e.transcript!r}")
         neg_rows.append({"file": path.name, "false_positive": false_positive, "latency": latency, "n_segments": len(rows)})

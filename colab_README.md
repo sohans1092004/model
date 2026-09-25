@@ -5,6 +5,7 @@ This runs the UDK detection pipeline with **every model on the GPU**:
 | Model | Role |
 | --- | --- |
 | Whisper `small.en` | speech-to-text |
+| Parakeet TDT 0.6B v2 (ONNX) | second speech-to-text; `prepped_data` alerts if EITHER Whisper or Parakeet alerts |
 | wav2vec2 | keyword spotting (KWS) encoder |
 | BEATs | scream/distress detector |
 | MiniLM | semantic matching |
@@ -30,7 +31,8 @@ identical results about 4x faster than the old loop.
 | `prepped_data/`, `real_recordings/` | The test audio |
 
 Model weights (Whisper, wav2vec2, MiniLM, BEATs) download from HuggingFace on
-first run, about 1.5 GB, with no token needed. WeSep isn't included: it
+first run, about 1.5 GB, with no token needed. Parakeet adds about 2.4 GB
+(downloaded into `parakeet_model/` on the first `prepped_data` run). WeSep isn't included: it
 changed nothing on `prepped_data`, and it needs extra model sources.
 
 ## Steps
@@ -47,7 +49,18 @@ changed nothing on `prepped_data`, and it needs extra model sources.
 3. Install dependencies (about 1 minute):
    ```
    !pip install -q -r requirements_colab.txt
+   !pip uninstall -y onnxruntime onnxruntime-gpu
+   !rm -rf /usr/local/lib/python3.*/dist-packages/onnxruntime
+   !pip install --no-deps "onnxruntime-gpu>=1.22,<1.27,!=1.24.1,!=1.25.*,!=1.26.0"
+   !python -c "import onnxruntime as o; print(o.__version__, o.get_available_providers())"
    ```
+   Lines 2-4 swap faster-whisper's CPU onnxruntime for the GPU build (same
+   `import onnxruntime`), so Parakeet runs on the GPU. The range = CUDA 12 builds only:
+   onnxruntime-gpu 1.27+ is built for CUDA 13 and Colab has CUDA 12 (a CUDA-13 build fails
+   with `libcublasLt.so.13: cannot open shared object file` and silently falls back to CPU).
+   **The last line must print a version and a list containing `CUDAExecutionProvider`.**
+   pip may warn that faster-whisper wants `onnxruntime`: ignore it, faster-whisper only uses
+   it for its own Silero VAD, which this pipeline doesn't use (it uses webrtcvad).
 
 4. Confirm the GPU is visible. **Stop if this prints `False`**: go back to step 1.
    ```python
@@ -65,8 +78,11 @@ changed nothing on `prepped_data`, and it needs extra model sources.
    ```
    !python evaluate_prepped_data.py 2>&1 | grep -v Warning | tee prepped_gpu_all.log
    ```
-   **Check the first line of output reads `Device for all models: cuda   STT: faster-whisper small.en`.**
-   If it says `cpu` or `tiny.en`, the `%env` cell didn't run.
+   **Check the first lines of output read `Device for all models: cuda   STT: faster-whisper small.en + parakeet (alert if either)`
+   and `Parakeet running on: CUDAExecutionProvider`.**
+   If it says `cpu` or `tiny.en`, the `%env` cell didn't run. If Parakeet says
+   `CPUExecutionProvider`, the onnxruntime-gpu swap in step 3 didn't take: redo it.
+   `%env PREPPED_PARAKEET=0` runs Whisper only (the old configuration) for comparison.
 
    The end of the output shows the **ALERT-LEVEL RESULT** (TRIGGER_ALL /
    TRIGGER_VERIFY / nothing per clip, recall, FPR, accuracy, precision), then
@@ -84,12 +100,33 @@ changed nothing on `prepped_data`, and it needs extra model sources.
    ```
    !python evaluate_full_system.py 2>&1 | grep -v Warning | tee real_gpu_all.log
    ```
-   **Check the output starts with `Device for all models: cuda   STT: faster-whisper small.en`
-   and `(synthetic corpus skipped: no PowerShell here ...)`.** The synthetic
+   **Check the output starts with `Device for all models: cuda   STT: faster-whisper small.en`,
+   `+ Parakeet (alert if either), running on: CUDAExecutionProvider`
+   and `(synthetic corpus skipped: no PowerShell here ...)`.** Whisper + Parakeet is the
+   default here too; `%env UDK_EVAL_PARAKEET=0` = Whisper only, for comparison. The synthetic
    corpus needs Windows TTS, so it's skipped automatically on Colab. Without
    `UDK_EVAL_STT_MODEL`, the default is `tiny.en`, which matches the older local baselines.
    The end of the output has the **CONSOLIDATED REPORT**: correct, false
    positives and false negatives per corpus, plus latency.
+
+6a. **Test 1 on the ENTIRE data: all 6 audio conditions** (30 clips each, incl. the 6
+   real-traffic .mp4s): normal, quiet (-12 dB), loud (+12 dB clipped), crowd noise,
+   pocket muffling, phone band. `PYTHONHASHSEED=0` keeps the crowd noise identical to
+   the earlier local/Colab runs, so numbers stay comparable.
+   ```
+   !for c in normal quiet loud crowd pocket phone; do PYTHONHASHSEED=0 PREPPED_CONDITION=$c python evaluate_prepped_data.py 2>&1 | grep -v Warning > prepped_gpu_$c.log; echo "== $c"; grep -E "Recall|FPR" prepped_gpu_$c.log; done
+   ```
+
+6b. **Test 3: the LIVE path (`api.py`)**, same clips streamed through real journeys in
+   0.5 s frames, with the best configuration's flags (Whisper small.en + Parakeet, KWS,
+   semantic, BEATs, confidence gate, per-sentence matching):
+   ```
+   !python colab_api_check.py 2>&1 | grep -v Warning | tee api_live_check.log
+   ```
+   **Check the top shows `device: cuda` and every backend `OK`** (Parakeet's `providers=`
+   must start with `CUDAExecutionProvider`). If anything says `NOT LOADED`, the script stops
+   on purpose: send me the output. Results should be close to test 1's, not identical (the
+   live path segments a growing buffer frame by frame).
 
 7. *(Optional)* **Same test, everything on Colab's CPU**, for a like-for-like comparison on the same machine:
    ```
@@ -99,7 +136,7 @@ changed nothing on `prepped_data`, and it needs extra model sources.
    !python evaluate_prepped_data.py 2>&1 | grep -v Warning | tee prepped_cpu_all.log
    ```
 
-8. Download `prepped_gpu_all.log` and `real_gpu_all.log` (and `prepped_cpu_all.log` if you ran step 7) from the Files pane and share them back.
+8. Download `prepped_gpu_*.log` (one per condition), `real_gpu_all.log` and `api_live_check.log` (and `prepped_cpu_all.log` if you ran step 7) from the Files pane and share them back.
 
 ## Numbers to compare against
 

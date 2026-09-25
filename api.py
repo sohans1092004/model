@@ -67,6 +67,7 @@ from semantic import SemanticBackend
 from separation import SeparatorBackend
 from metrics import Metrics
 from stt import MockSTT, STTBackend
+import scream_trigger
 from stt_confidence_gate import is_suspect
 from storage import AudioStore
 from udk_engine import TRIGGER_VERIFY_THRESHOLD, DecisionEvent, UDKEngine, match_transcript
@@ -451,14 +452,27 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
         stt_start = time.monotonic()
         transcript = journey.stt.transcribe(seg.pcm)
         _metrics.stt_latency(time.monotonic() - stt_start)
+        # Second English STT (UDK_ENABLE_PARAKEET=1), only while the journey is on
+        # the English backend (Parakeet is English-only). Transcribed BEFORE the
+        # empty-transcript skip below: a segment Whisper heard nothing in is
+        # exactly where the second opinion can rescue a detection.
+        second_text = ""
+        if _parakeet_stt is not None and journey.stt is _stt_backend:
+            second_text = _parakeet_stt.transcribe(seg.pcm).text
         kws_match = journey.kws.spot(seg.pcm) if journey.kws is not None else None
+        # Scream-alone (UDK_ENABLE_SCREAM_TRIGGER=1, scream_trigger.py): checked
+        # BEFORE the empty-transcript skip below -- a scream with no words at all
+        # is exactly the case it exists for.
+        scream_fired = False
+        if _scream_trigger_enabled and _scream_detector is not None:
+            scream_fired, scream_peak, scream_class = scream_trigger.check(_scream_detector, seg.pcm)
         # Deciding even on an empty transcript is what lets KWS fire on
         # its own when STT gets nothing (Section 3's STT-outage row) --
         # skipping early here would silently defeat the entire point of
         # running KWS in parallel (Section 4's Approach E).
-        if not transcript.text and kws_match is None:
+        if not transcript.text and kws_match is None and not second_text and not scream_fired:
             continue
-        scream_score = _scream_detector.score(seg.pcm) if _scream_detector is not None else None
+        scream_score = _scream_detector.score(seg.pcm) if _scream_detector is not None and _scream_corroboration_enabled else None
 
         # Free -- reuses transcript metadata faster-whisper already
         # computed above, no extra model call. See stt_confidence_gate.py.
@@ -482,15 +496,23 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
             if peek.udk is not None and peek.confidence >= TRIGGER_VERIFY_THRESHOLD:
                 dual_asr_disagreement = _dual_asr_guard.disagrees(transcript.text, seg.pcm)
 
-        decision = journey.engine.decide(
+        now_s = time.monotonic()
+        pre_state = journey.engine.snapshot()
+        # decide_all = the whole-segment decision (identical to decide()) plus
+        # one extra event per SENTENCE matching a different UDK -- the
+        # per-sentence matching the evaluated best config uses (run_file), so
+        # e.g. UDK_13 isn't lost behind UDK_10 in "Let go! ... You're hurting me!".
+        decisions = journey.engine.decide_all(
             transcript.text,
-            now_s=time.monotonic(),
+            now_s=now_s,
             kws_match=kws_match,
             scream_score=scream_score,
             stt_suspect=stt_suspect,
             dual_asr_disagreement=dual_asr_disagreement,
         )
-        if decision.decision == "NO_ACTION":
+        decisions = _either_stt_decisions(journey.engine, decisions, pre_state, second_text, now_s, kws_match, scream_score)
+        decision, extras = decisions[0], decisions[1:]
+        if decision.decision == "NO_ACTION" and not extras:
             # Speech-separation fallback (separation.py): only tried once
             # the primary pass has already missed, and only when opted in
             # -- real measured cost (new FP path + ~4-8s CPU latency) means
@@ -504,32 +526,45 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
                 )
                 if recovered is not None:
                     decision = recovered
-            if decision.decision == "NO_ACTION":
-                continue
-        event = _decision_to_event(journey, decision, seg)
-        journey.events.append(event)
-        new_events.append(event)
-        journey.had_trigger = True  # tightens the heartbeat grace from here on (_check_timeout)
-        _metrics.detection(
-            event["decision"], event["confidence"], event["server_received_ts"] - event["timestamp"]
-        )
-
-        # Durable, queryable record (Section 9: "the platform can always
-        # reconcile its state... after any gap") -- survives a restart
-        # even if the in-memory journey.events list doesn't.
-        _db.save_event(event)
-
-        # Durable outbound queue before attempting delivery (Section 6's
-        # Event Engine): a crash between "detected" and "delivered"
-        # doesn't drop the alert, and the deterministic event_id means a
-        # retried delivery downstream doesn't double-alert.
-        _event_queue.enqueue(event)
-        if _downstream_deliver(event):
-            _event_queue.mark_delivered(event["event_id"])
-            _metrics.event_delivered()
-        else:
-            _metrics.event_delivery_failed()
+        # One event per alerting decision. Each sentence extra is a DIFFERENT
+        # UDK (decide_all guarantees it), so the deterministic event_id
+        # (journey, segment start, udk_id) never collides within a segment.
+        alerts = ([decision] if decision.decision != "NO_ACTION" else []) + extras
+        if not alerts and scream_fired:
+            # No UDK alert on this segment, but the audio itself is a sustained
+            # scream/cry: ask "Are you safe?". udk=None -> event_id uses "none".
+            alerts = [DecisionEvent(decision="TRIGGER_VERIFY", udk=None, confidence=round(scream_peak, 3),
+                                    transcript=transcript.text or second_text, layer="acoustic_scream",
+                                    repeated=False, reason=f"sustained {scream_class} (BEATs {scream_peak:.2f}), no UDK words")]
+        for d in alerts:
+            new_events.append(_emit_event(journey, d, seg))
     return new_events
+
+
+def _emit_event(journey: JourneyState, decision: DecisionEvent, seg) -> dict:
+    event = _decision_to_event(journey, decision, seg)
+    journey.events.append(event)
+    journey.had_trigger = True  # tightens the heartbeat grace from here on (_check_timeout)
+    _metrics.detection(
+        event["decision"], event["confidence"], event["server_received_ts"] - event["timestamp"]
+    )
+
+    # Durable, queryable record (Section 9: "the platform can always
+    # reconcile its state... after any gap") -- survives a restart
+    # even if the in-memory journey.events list doesn't.
+    _db.save_event(event)
+
+    # Durable outbound queue before attempting delivery (Section 6's
+    # Event Engine): a crash between "detected" and "delivered"
+    # doesn't drop the alert, and the deterministic event_id means a
+    # retried delivery downstream doesn't double-alert.
+    _event_queue.enqueue(event)
+    if _downstream_deliver(event):
+        _event_queue.mark_delivered(event["event_id"])
+        _metrics.event_delivered()
+    else:
+        _metrics.event_delivery_failed()
+    return event
 
 
 def _ingest_frame(journey: JourneyState, seq: int, pcm: bytes, audio_store: AudioStore) -> list[dict]:
@@ -642,6 +677,31 @@ def _load_or_create_signing_secret(path: Path) -> bytes:
     return secret
 
 
+_DEVICE: str | None = None
+
+
+def _device() -> str:
+    """Where every GPU-capable backend loads: UDK_DEVICE (cuda|cpu), else cuda
+    when torch sees a GPU, else cpu -- same auto-detect as
+    evaluate_full_system.default_device, so a GPU box runs the evaluated best
+    config on the GPU without extra flags. Resolved lazily (torch is only
+    imported once some backend is actually enabled) and once per process.
+    Applies to Whisper, Parakeet, KWS (English + Indic), both semantic
+    matchers and BEATs; Indic STT, separation, the dual-ASR guard and
+    language ID have no device parameter and stay on CPU."""
+    global _DEVICE
+    if _DEVICE is None:
+        _DEVICE = os.environ.get("UDK_DEVICE", "")
+        if _DEVICE not in ("cuda", "cpu"):
+            try:
+                import torch
+
+                _DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+            except Exception:
+                _DEVICE = "cpu"
+    return _DEVICE
+
+
 def _load_kws_backend(references_path: Path) -> KWSBackend | None:
     """KWS stays fully optional and off by default (Section 4's Approach
     E is additive, not required) -- explicit opt-in via UDK_ENABLE_KWS,
@@ -657,7 +717,7 @@ def _load_kws_backend(references_path: Path) -> KWSBackend | None:
     try:
         from kws import Wav2Vec2DTWSpotter
 
-        spotter = Wav2Vec2DTWSpotter()
+        spotter = Wav2Vec2DTWSpotter(device=_device())
         spotter.load_references(references_path)
         return spotter
     except Exception:
@@ -685,7 +745,7 @@ def _load_indic_kws_backends() -> dict[str, KWSBackend]:
             if not references_path.exists():
                 continue
             try:
-                spotter = Wav2Vec2DTWSpotter(model_name=model_name, match_threshold=INDIC_KWS_THRESHOLDS[lang])
+                spotter = Wav2Vec2DTWSpotter(model_name=model_name, match_threshold=INDIC_KWS_THRESHOLDS[lang], device=_device())
                 spotter.load_references(references_path)
                 backends[lang] = spotter
             except Exception:
@@ -708,17 +768,85 @@ def _load_stt_backend() -> STTBackend:
     video clip, correctly language-detected, produced zero STT calls at
     all) and confirmed by inspecting api.py's own history: no
     `_load_stt_backend` had ever existed. Same opt-in pattern as
-    everything else: real FasterWhisperSTT (`tiny.en`, matching every
-    other English test/eval script in this project) only if asked for,
-    so no existing test pays a real model's startup cost by default."""
+    everything else: real FasterWhisperSTT only if asked for, so no
+    existing test pays a real model's startup cost by default.
+
+    Model: `small.en` (2026-09-24, was `tiny.en`), the size the evaluated
+    best configuration uses (evaluate_prepped_data.py's default);
+    UDK_STT_MODEL overrides it, e.g. `tiny.en` for a low-resource box."""
     if os.environ.get("UDK_ENABLE_STT") != "1":
         return MockSTT()
+    model = os.environ.get("UDK_STT_MODEL", "small.en")
     try:
         from stt import FasterWhisperSTT
 
-        return FasterWhisperSTT(model_size="tiny.en", device="cpu", compute_type="int8")
+        if _device() == "cuda":
+            # On GPU, a CUDA/cuDNN mismatch often only fails on the FIRST
+            # transcription, not at load -- i.e. mid-journey, or (below) as a
+            # silent MockSTT = no English transcription at all. Force it now
+            # on 0.5 s of silence, and fall back to CPU, never to MockSTT.
+            try:
+                stt = FasterWhisperSTT(model_size=model, device="cuda", compute_type="float16")
+                stt.transcribe(b"\x00\x00" * 8000)
+                return stt
+            except Exception as e:
+                import warnings
+
+                warnings.warn(f"Whisper on CUDA failed ({e!r}); falling back to CPU")
+        return FasterWhisperSTT(model_size=model, device="cpu", compute_type="int8")
     except Exception:
         return MockSTT()
+
+
+def _load_parakeet_stt() -> STTBackend | None:
+    """Second English STT (stt.ParakeetSTT), run alongside the primary one on
+    every English segment; the stronger of the two decisions wins (see
+    _either_stt_decisions). Same opt-in pattern as everything else here: a
+    ~2.4 GB model no existing test should pay for by default."""
+    if os.environ.get("UDK_ENABLE_PARAKEET") != "1":
+        return None
+    try:
+        from stt import ParakeetSTT
+
+        stt = ParakeetSTT(device=_device())
+        if _device() == "cuda" and "CUDAExecutionProvider" not in stt.providers:
+            import warnings  # onnxruntime already fell back to CPU on its own; say so
+
+            warnings.warn(f"Parakeet asked for CUDA but runs on {stt.providers}; check onnxruntime-gpu matches the CUDA version")
+        return stt
+    except Exception:
+        return None
+
+
+_DECISION_RANK = {"NO_ACTION": 0, "TRIGGER_VERIFY": 1, "TRIGGER_ALL": 2}
+
+
+def _strongest(decisions: list[DecisionEvent]) -> tuple:
+    return max((_DECISION_RANK[d.decision], d.confidence) for d in decisions)
+
+
+def _either_stt_decisions(engine: UDKEngine, primary: list[DecisionEvent], pre_state: tuple, second_text: str,
+                          now_s: float, kws_match, scream_score) -> list[DecisionEvent]:
+    """Alert if EITHER transcript alerts. `primary` (engine.decide_all's list:
+    whole-segment decision + per-sentence extras) was already decided on
+    `engine` from state `pre_state`; this re-decides the same segment from
+    that same state on the second STT's text and keeps whichever list holds
+    the stronger decision (tier, then confidence). The engine is left exactly
+    as if ONLY the kept list had been decided -- two transcripts of one
+    segment are two guesses at one utterance, not two real repeats, so they
+    must never count as a repetition/distinct-UDK escalation (same reasoning
+    as separation.retry_with_separation's throwaway-engine probing).
+    stt_suspect is False for the second text: Parakeet has no decoding
+    metadata, which stt_confidence_gate treats as "no signal"."""
+    if not second_text:
+        return primary
+    after_primary = engine.snapshot()
+    engine.restore(pre_state)
+    second = engine.decide_all(second_text, now_s=now_s, kws_match=kws_match, scream_score=scream_score)
+    if _strongest(second) > _strongest(primary):
+        return second
+    engine.restore(after_primary)
+    return primary
 
 
 def _load_semantic_matcher() -> SemanticBackend | None:
@@ -733,7 +861,7 @@ def _load_semantic_matcher() -> SemanticBackend | None:
     try:
         from semantic import SentenceTransformerSemanticMatcher
 
-        return SentenceTransformerSemanticMatcher()
+        return SentenceTransformerSemanticMatcher(device=_device())
     except Exception:
         return None
 
@@ -757,7 +885,8 @@ def _load_multilingual_semantic_matcher() -> SemanticBackend | None:
         )
 
         return SentenceTransformerSemanticMatcher(
-            model_name=MULTILINGUAL_MODEL, threshold=MULTILINGUAL_THRESHOLD, fuzzy_threshold=MULTILINGUAL_FUZZY_THRESHOLD
+            model_name=MULTILINGUAL_MODEL, threshold=MULTILINGUAL_THRESHOLD, fuzzy_threshold=MULTILINGUAL_FUZZY_THRESHOLD,
+            device=_device(),
         )
     except Exception:
         return None
@@ -818,12 +947,14 @@ def _load_scream_detector() -> object | None:
     env var stays on today's behavior exactly, same as every other opt-in
     feature here. scream_detector.py is left in place, standalone and
     still independently testable, just no longer wired in here."""
-    if os.environ.get("UDK_ENABLE_SCREAM_DETECTION") != "1":
+    # Loaded for either use: corroboration (UDK_ENABLE_SCREAM_DETECTION) or the
+    # scream-alone trigger (UDK_ENABLE_SCREAM_TRIGGER); each use has its own flag below.
+    if os.environ.get("UDK_ENABLE_SCREAM_DETECTION") != "1" and os.environ.get("UDK_ENABLE_SCREAM_TRIGGER") != "1":
         return None
     try:
         from beats_distress_detector import BEATsDistressDetector
 
-        return BEATsDistressDetector()
+        return BEATsDistressDetector(device=_device())
     except Exception:
         return None
 
@@ -931,6 +1062,8 @@ _tmp = Path(tempfile.gettempdir())
 # gap this closes (English never had a real-STT opt-in before, unlike
 # every other backend here).
 _stt_backend: STTBackend = _load_stt_backend()
+# None unless UDK_ENABLE_PARAKEET=1 -- see _load_parakeet_stt / _either_stt_decisions.
+_parakeet_stt: STTBackend | None = _load_parakeet_stt()
 # Separate key material for audio vs. general DB secrets (Section 10).
 _audio_key_manager = KeyManager(_tmp / "udk_audio.key")
 _db_key_manager = KeyManager(_tmp / "udk_db.key")
@@ -959,6 +1092,9 @@ _separator: SeparatorBackend | None = _load_separator()
 _language_detector, _language_recheck_detector = _load_language_detectors()
 # None unless UDK_ENABLE_SCREAM_DETECTION=1 -- see _load_scream_detector.
 _scream_detector = _load_scream_detector()
+_scream_corroboration_enabled = os.environ.get("UDK_ENABLE_SCREAM_DETECTION") == "1"
+# False unless UDK_ENABLE_SCREAM_TRIGGER=1 -- see scream_trigger.py (validated thresholds).
+_scream_trigger_enabled = os.environ.get("UDK_ENABLE_SCREAM_TRIGGER") == "1"
 # False unless UDK_ENABLE_STT_CONFIDENCE_GATE=1 -- stt_confidence_gate.py
 # is a pure function over data faster-whisper already computes, no model
 # to load, but still opt-in like everything else so vetoing a match is

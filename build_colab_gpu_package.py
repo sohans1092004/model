@@ -15,6 +15,10 @@ CODE = [
     "evaluate_pipeline_corpus.py", "evaluate_prepped_data.py", "kws.py", "semantic.py",
     "separation.py", "stt.py", "stt_confidence_gate.py", "udk_engine.py", "udks.py",
     "vad.py", "wesep_extraction.py", "kws_references.npz",
+    # live-path check (colab_api_check.py): api.py and everything it imports
+    "colab_api_check.py", "api.py", "audit.py", "crypto.py", "db.py", "db_postgres.py",
+    "dual_asr_guard.py", "enrollment.py", "event_delivery.py", "kafka_delivery.py",
+    "language_id.py", "metrics.py", "storage.py", "storage_s3.py", "scream_trigger.py", "evaluate_real_world.py",
 ]
 DIRS = ["beats_vendor", "prepped_data", "real_recordings"]
 SKIP_SUFFIXES = {".pyc", ".zip"}  # real_recordings/panic_phrases_synthetic_audio.zip isn't used by any eval
