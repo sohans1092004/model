@@ -174,6 +174,21 @@ engine_no_matcher = UDKEngine(udks)
 decision_no_matcher = engine_no_matcher.decide("someone is threatening me", now_s=0.0)
 check("UDKEngine without a semantic_matcher still runs (falls back to the stub)", decision_no_matcher.decision in ("TRIGGER_VERIFY", "TRIGGER_ALL", "NO_ACTION"))
 
+print("=== fuzzy layer needs the UDK's own words in a long sentence (real YouTube false alarms) ===")
+
+from udks import GENERAL_UDKS  # noqa: E402
+
+no_semantic = FakeSemantic()  # scores 0: isolates the fuzzy layer
+for text in ("But I'm not saying this only because of the MES statement, I'm saying this because",  # was UDK_02
+             "Among the important things that come out of what he says, I want to go to you Richie"):  # was UDK_18
+    r = match_transcript(text, GENERAL_UDKS, semantic_matcher=no_semantic)
+    check(f"long sentence that only starts like a UDK is not a fuzzy match: {text[:40]!r}", r.layer != "fuzzy", str(r))
+for text, udk_id in (("please someone help me he's not letting me leave please help me", "UDK_08"),  # word order differs
+                     ("You do me!", "UDK_10"),  # garbled shout, judged whole (prepped pocket clip)
+                     ("call the plice i need help", "UDK_01")):  # ASR noise
+    r = match_transcript(text, GENERAL_UDKS, semantic_matcher=no_semantic)
+    check(f"real danger still matches {udk_id}: {text[:40]!r}", r.udk is not None and r.udk.udk_id == udk_id and r.confidence >= 0.6, str(r))
+
 print(f"\n{'=' * 40}\n{passed}/{passed + failed} TOTAL PASSED" + (" -- ALL PASSED" if failed == 0 else f", {failed} FAILED"))
 
 if failed:

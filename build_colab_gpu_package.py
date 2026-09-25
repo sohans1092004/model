@@ -5,8 +5,15 @@ from HuggingFace inside Colab, so no model weights are shipped.
 Re-run after changing any of the listed files."""
 from __future__ import annotations
 
+import re
 import zipfile
 from pathlib import Path
+
+
+def kaggle_safe(name: str) -> str:
+    """Kaggle rejects dataset file names with '#', quotes, emoji... (YouTube-titled recordings);
+    renamed inside the zip only -- code finds recordings by folder, never by name."""
+    return re.sub(r"[^\w.\-/ ()]", "_", name)
 
 HERE = Path(__file__).parent
 ROOT = "udk_colab_gpu"
@@ -38,7 +45,7 @@ def main() -> None:
                 # WeSep, which this package doesn't include -- don't ship it.
                 if (p.is_file() and p.suffix.lower() not in SKIP_SUFFIXES
                         and "__pycache__" not in p.parts and "user_audio" not in p.parts):
-                    z.write(p, f"{ROOT}/{p.relative_to(HERE).as_posix()}")
+                    z.write(p, kaggle_safe(f"{ROOT}/{p.relative_to(HERE).as_posix()}"))
                     n += 1
         for arcname, src in EXTRA.items():
             z.write(HERE / src, f"{ROOT}/{arcname}")

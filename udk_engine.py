@@ -131,6 +131,40 @@ KWS_MATCH_CONFIDENCE = 0.65
 # UDK is real, unambiguous evidence and keeps full confidence.
 GENERIC_FRAGMENT_CONFIDENCE = KWS_MATCH_CONFIDENCE
 
+# Fuzzy layer, third check (2026-09-25, 4.6 h of real Indian YouTube audio): 226 of 300
+# speech false alarms were fuzzy matches of a long sentence that merely STARTS like a UDK --
+# "I'm not saying this only because..." -> "I'm not safe" (53x), "Now, I want to start" ->
+# "I want to go home now" (42x). partial_ratio and token_set_ratio both score these high,
+# because the few shared words cover most of a short phrase. This check asks for the UDK's
+# own words, in order, inside a stretch of the transcript about as long as the phrase; each
+# word may be misheard (character similarity >= FUZZY_WORD_SIMILARITY: "plice" ~ "police").
+FUZZY_MIN_WORD_COVERAGE = 0.75  # 3-word phrases need all 3 words, 4-7 words may miss one
+FUZZY_WORD_SIMILARITY = 75
+
+
+def _word_coverage(phrase: str, transcript: str) -> float:
+    """Best fraction of the phrase's words found (fuzzy per word, any order -- "please help
+    me" is "Help me, please") within any window of the transcript one word longer than the
+    phrase. A transcript no longer than the phrase scores 1.0: it is judged whole, as
+    before, since that is what a garbled shout looks like ("You do me!" was "Get away!",
+    prepped_data pocket clip, caught only by the loose fuzzy match)."""
+    p, t = phrase.split(), transcript.split()
+    n = len(p)
+    if len(t) <= n:
+        return 1.0
+    best = 0
+    for start in range(len(t) - n):
+        free = t[start:start + n + 1]
+        hits = 0
+        for a in p:
+            j = next((j for j, b in enumerate(free) if fuzz.ratio(a, b) >= FUZZY_WORD_SIMILARITY), None)
+            if j is not None:
+                hits += 1
+                free.pop(j)
+        best = max(best, hits)
+    return best / n
+
+
 # Sentence boundaries in Whisper's punctuated output, for decide_all().
 _SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+")
 
@@ -278,7 +312,8 @@ def match_transcript(transcript: str, udks: list[UDK], semantic_matcher: Semanti
         # KWS+STT fusion and scream_score corroboration, applied here to
         # partial_ratio's own single-scorer blind spot.
         fuzzy_word_overlap = fuzz.token_set_ratio(norm_phrase, norm_transcript) / 100.0
-        if fuzzy_score >= fuzzy_threshold and fuzzy_word_overlap >= fuzzy_threshold:
+        if (fuzzy_score >= fuzzy_threshold and fuzzy_word_overlap >= fuzzy_threshold
+                and _word_coverage(norm_phrase, norm_transcript) >= FUZZY_MIN_WORD_COVERAGE):
             # partial_ratio scores a literal substring alignment as ~1.0
             # regardless of length -- same generic-fragment risk as the
             # exact layer above (see GENERIC_FRAGMENT_CONFIDENCE), so the
