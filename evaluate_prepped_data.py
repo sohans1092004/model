@@ -193,7 +193,8 @@ def main() -> None:
         for r in rows:
             out = "NO_ACTION" if r["decision"] == "NO_ACTION" else f"{r['decision']} {r['udk_id']} ({r['layer']}, conf {r['confidence']:.2f})"
             by = f" [{r['stt']}]" if len(stts) > 1 else ""
-            print(f"  heard{by}: {r['transcript']!r}\n     -> {out}")
+            k = f"   [kws {r['kws'][0]} d={r['kws'][1]}]" if r.get("kws") else ""
+            print(f"  heard{by}: {r['transcript']!r}\n     -> {out}{k}")
         if not rows:
             print("  heard: (no speech transcribed)")
         if wesep is not None:

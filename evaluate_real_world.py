@@ -115,7 +115,7 @@ def run(root: Path, max_min: float, chunk_min: float) -> None:
             offset = k * chunk_min * 60
             runs = run_file_either(pcm, models["vad"], models["stts"], models["kws"], models["semantic"], models["beats"])
             udk = [{"t": round(offset + r["start_ms"] / 1000, 1), "stt": name, "decision": r["decision"], "udk": r["udk_id"],
-                    "layer": r["layer"], "conf": round(r["confidence"], 3), "text": r["transcript"]}
+                    "layer": r["layer"], "conf": round(r["confidence"], 3), "text": r["transcript"], "kws": r.get("kws")}
                    for name, (_, rows, _) in runs.items() for r in rows if r["decision"] != "NO_ACTION"]
             scream = []
             for seg in models["vad"].segment_speech(pcm):
@@ -165,7 +165,8 @@ def report(root: Path) -> None:
                        + f" | {'yes' if url else 'no'} |")
         for u in udk:
             alerts.append({"category": cat, "file": stem, "time": time.strftime("%H:%M:%S", time.gmtime(u["t"])),
-                           "rule": f"UDK {u['udk']} ({u['layer']} {u['conf']}, {u['stt']})", "tier": u["decision"],
+                           "rule": f"UDK {u['udk']} ({u['layer']} {u['conf']}, {u['stt']})"
+                           + (f" [kws {u['kws'][0]} d={u['kws'][1]}]" if u.get("kws") else ""), "tier": u["decision"],
                            "heard": u["text"], "link": f"{url}&t={int(u['t'])}s" if url else ""})
         for s in scream:
             alerts.append({"category": cat, "file": stem, "time": time.strftime("%H:%M:%S", time.gmtime(s["t"])),

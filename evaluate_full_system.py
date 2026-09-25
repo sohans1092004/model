@@ -136,6 +136,8 @@ def run_file(pcm: bytes, vad: VAD, stt, kws, semantic_matcher, beats, separator=
             "udk_id": decision.udk.udk_id if decision.udk else None,
             "layer": decision.layer, "confidence": decision.confidence,
             "scream_score": scream_score, "stt_suspect": stt_suspect,
+            # raw KWS match even when a text layer decided -- to calibrate KWS-alone on real audio
+            "kws": (kws_match.phrase_id, round(kws_match.distance, 3)) if kws_match is not None else None,
         })
         if decision.decision != "NO_ACTION":
             events.append(decision)
