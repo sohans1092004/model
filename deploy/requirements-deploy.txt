@@ -11,6 +11,7 @@ cryptography
 faster-whisper            # Whisper small.en
 transformers              # wav2vec2 (KWS)
 sentence-transformers     # MiniLM (semantic)
+sentencepiece             # mDeBERTa tokenizer (intent gate, only with UDK_INTENT_GATE)
 huggingface_hub
 onnx-asr[hub]==0.12.0     # Parakeet; the Dockerfile swaps its CPU onnxruntime for onnxruntime-gpu
 psycopg[binary]           # only with UDK_DATABASE_URL (Postgres)
