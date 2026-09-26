@@ -125,6 +125,7 @@ fake_event = {
     "timestamp": time.time(),
     "server_received_ts": time.time(),
     "transcript": secret_transcript,
+    "second_transcript": secret_transcript,
     "audio_segment_id": f"{jid}:0-1000",
     "location": None,
     "processing_version": "test",
@@ -138,6 +139,7 @@ check("event transcript is not stored in plaintext", secret_transcript not in ra
 loaded_events = api._db.load_events(jid)
 loaded_fake = next(e for e in loaded_events if e["event_id"] == fake_event["event_id"])
 check("JourneyDB.load_events decrypts the transcript back correctly", loaded_fake["transcript"] == secret_transcript)
+check("second STT transcript is encrypted too and decrypts back", loaded_fake["second_transcript"] == secret_transcript)
 
 journey = api._store.get(jid)
 journey.vad = SingleFixedSegmentVAD(close_at_bytes=16)

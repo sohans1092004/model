@@ -21,6 +21,10 @@ import psycopg
 from psycopg.rows import dict_row
 
 
+# What someone said -- encrypted per field in the event payload (old rows lack second_transcript).
+_TEXT_FIELDS = ("transcript", "second_transcript")
+
+
 class PostgresJourneyDB:
     def __init__(self, dsn: str, key_manager=None):
         self.dsn = dsn
@@ -111,7 +115,9 @@ class PostgresJourneyDB:
     def save_event(self, event: dict) -> None:
         """Same field-level transcript encryption as db.py -- see that
         module's save_event docstring for the real bug this fixes."""
-        payload = event if self._key_manager is None else {**event, "transcript": self._enc(event["transcript"])}
+        payload = event if self._key_manager is None else {
+            **event, **{k: self._enc(event[k]) for k in _TEXT_FIELDS if k in event}
+        }
         with self._lock:
             self._conn.execute(
                 """INSERT INTO events (event_id, journey_id, timestamp, decision, payload)
@@ -127,7 +133,7 @@ class PostgresJourneyDB:
         events = [json.loads(r["payload"]) for r in rows]
         if self._key_manager is not None:
             for e in events:
-                e["transcript"] = self._dec(e["transcript"])
+                e.update({k: self._dec(e[k]) for k in _TEXT_FIELDS if k in e})
         return events
 
     def list_journeys(self) -> list[dict]:

@@ -36,6 +36,8 @@ class Metrics:
         self.stt_latency_s: list[float] = []
         self.detection_latency_s: list[float] = []  # server_received_ts - timestamp, per event (Section 11)
         self.detections_by_decision: dict[str, int] = {}
+        self.detections_by_layer: dict[str, int] = {}  # exact/fuzzy/semantic/kws/acoustic_scream -- FA source
+        self.vetoed_by_layer: dict[str, int] = {}  # intent gate silenced these (never delivered)
         self.confidence_samples: list[float] = []
         self.events_delivered = 0
         self.events_delivery_failed = 0
@@ -66,11 +68,16 @@ class Metrics:
         with self._lock:
             self.stt_latency_s.append(seconds)
 
-    def detection(self, decision: str, confidence: float, latency_s: float) -> None:
+    def detection(self, decision: str, confidence: float, latency_s: float, layer: str = "unknown") -> None:
         with self._lock:
             self.detections_by_decision[decision] = self.detections_by_decision.get(decision, 0) + 1
+            self.detections_by_layer[layer] = self.detections_by_layer.get(layer, 0) + 1
             self.confidence_samples.append(confidence)
             self.detection_latency_s.append(latency_s)
+
+    def vetoed(self, layer: str) -> None:
+        with self._lock:
+            self.vetoed_by_layer[layer] = self.vetoed_by_layer.get(layer, 0) + 1
 
     def event_delivered(self) -> None:
         with self._lock:
@@ -108,6 +115,8 @@ class Metrics:
                     "worst_case": max(self.detection_latency_s) if self.detection_latency_s else None,
                 },
                 "detections_by_decision": dict(self.detections_by_decision),
+                "detections_by_layer": dict(self.detections_by_layer),
+                "vetoed_by_layer": dict(self.vetoed_by_layer),
                 "confidence_distribution": {
                     "p50": _percentile(self.confidence_samples, 0.50),
                     "p05": _percentile(self.confidence_samples, 0.05),

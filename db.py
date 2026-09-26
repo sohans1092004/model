@@ -39,6 +39,10 @@ import threading
 from pathlib import Path
 
 
+# What someone said -- encrypted per field in the event payload (old rows lack second_transcript).
+_TEXT_FIELDS = ("transcript", "second_transcript")
+
+
 class JourneyDB:
     def __init__(self, path: str | Path, key_manager=None):
         self.path = Path(path)
@@ -171,7 +175,9 @@ class JourneyDB:
         those two fields, not whole-row encryption -- every other field
         (decision, udk_id, confidence, timestamps) stays plaintext and
         queryable, same reasoning as the rest of this module."""
-        payload = event if self._key_manager is None else {**event, "transcript": self._enc(event["transcript"])}
+        payload = event if self._key_manager is None else {
+            **event, **{k: self._enc(event[k]) for k in _TEXT_FIELDS if k in event}
+        }
         with self._lock:
             self._conn.execute(
                 "INSERT OR IGNORE INTO events (event_id, journey_id, timestamp, decision, payload) VALUES (?, ?, ?, ?, ?)",
@@ -187,7 +193,7 @@ class JourneyDB:
         events = [json.loads(r["payload"]) for r in rows]
         if self._key_manager is not None:
             for e in events:
-                e["transcript"] = self._dec(e["transcript"])
+                e.update({k: self._dec(e[k]) for k in _TEXT_FIELDS if k in e})
         return events
 
     def list_journeys(self) -> list[dict]:

@@ -326,7 +326,7 @@ class JourneyStore:
         return to_evict
 
 
-def _decision_to_event(journey: JourneyState, decision: DecisionEvent, seg) -> dict:
+def _decision_to_event(journey: JourneyState, decision: DecisionEvent, seg, second_text: str = "") -> dict:
     """Section 9's full decision-event schema. `location` is honestly
     always null -- this prototype never built a location-ingestion
     mechanism (nobody asked for one, and Section 1 treats it as
@@ -349,6 +349,10 @@ def _decision_to_event(journey: JourneyState, decision: DecisionEvent, seg) -> d
         "timestamp": journey.started_at + seg.start_ms / 1000.0,
         "server_received_ts": time.time(),
         "transcript": decision.transcript,
+        # Why it fired / was vetoed (scream class + BEATs score, veto P(distress), ...)
+        # and what the OTHER STT heard -- the two things FA triage needs.
+        "reason": decision.reason,
+        "second_transcript": second_text,
         "audio_segment_id": f"{journey.journey_id}:{seg.start_ms}-{seg.end_ms}",
         "location": None,
         "processing_version": PROCESSING_VERSION,
@@ -517,8 +521,11 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
             dual_asr_disagreement=dual_asr_disagreement,
         )
         decisions = _either_stt_decisions(journey.engine, primary, pre_state, second_text, now_s, kws_match, scream_score)
+        vetoed: list[DecisionEvent] = []
         if _intent_gate is not None and second_text:
-            decisions = _intent_veto(decisions, second_text if decisions is primary else transcript.text)
+            decisions = _intent_veto(decisions, second_text if decisions is primary else transcript.text, vetoed)
+        for d in vetoed:
+            _record_veto(journey, d, seg, second_text)
         decision, extras = decisions[0], decisions[1:]
         if decision.decision == "NO_ACTION" and not extras:
             # Speech-separation fallback (separation.py): only tried once
@@ -545,17 +552,35 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
                                     transcript=transcript.text or second_text, layer="acoustic_scream",
                                     repeated=False, reason=f"sustained {scream_class} (BEATs {scream_peak:.2f}), no UDK words")]
         for d in alerts:
-            new_events.append(_emit_event(journey, d, seg))
+            new_events.append(_emit_event(journey, d, seg, second_text))
     return new_events
 
 
-def _emit_event(journey: JourneyState, decision: DecisionEvent, seg) -> dict:
-    event = _decision_to_event(journey, decision, seg)
+def _log_decision(event: dict) -> None:
+    """One stdout line per alert/veto (-> `docker logs udk`). No transcript: it's
+    encrypted at rest (db.py), so it doesn't go to plain-text logs either."""
+    print(f"decision {event['decision']} layer={event['layer']} udk={event['udk_id']} "
+          f"conf={event['confidence']} journey={event['journey_id']} reason={event['reason']!r}", flush=True)
+
+
+def _record_veto(journey: JourneyState, decision: DecisionEvent, seg, second_text: str) -> None:
+    """A text alert the intent gate silenced: stored (decision=VETOED) so vetoes can be
+    audited for lost real distress, but never delivered, queued or sent to the client."""
+    event = {**_decision_to_event(journey, decision, seg, second_text), "decision": "VETOED"}
+    event["event_id"] = hashlib.sha256(f"veto:{event['event_id']}".encode()).hexdigest()[:16]
+    _metrics.vetoed(event["layer"])
+    _log_decision(event)
+    _db.save_event(event)
+
+
+def _emit_event(journey: JourneyState, decision: DecisionEvent, seg, second_text: str = "") -> dict:
+    event = _decision_to_event(journey, decision, seg, second_text)
     journey.events.append(event)
     journey.had_trigger = True  # tightens the heartbeat grace from here on (_check_timeout)
     _metrics.detection(
-        event["decision"], event["confidence"], event["server_received_ts"] - event["timestamp"]
+        event["decision"], event["confidence"], event["server_received_ts"] - event["timestamp"], event["layer"]
     )
+    _log_decision(event)
 
     # Durable, queryable record (Section 9: "the platform can always
     # reconcile its state... after any gap") -- survives a restart
@@ -829,18 +854,23 @@ def _load_parakeet_stt() -> STTBackend | None:
 _DECISION_RANK = {"NO_ACTION": 0, "TRIGGER_VERIFY": 1, "TRIGGER_ALL": 2}
 
 
-def _intent_veto(decisions: list[DecisionEvent], other_text: str) -> list[DecisionEvent]:
+def _intent_veto(decisions: list[DecisionEvent], other_text: str, vetoed: list | None = None) -> list[DecisionEvent]:
     """intent_gate veto on one segment's decisions (whole-segment first, then sentence
     extras). `other_text` = what the OTHER STT heard in this segment. A vetoed whole-
     segment decision becomes NO_ACTION (the list keeps its shape); a vetoed extra is dropped.
+    Each vetoed decision (original decision/layer, veto reason) is appended to `vetoed`.
     ponytail: the engine already counted a vetoed alert toward repetition escalation."""
     out = []
     for i, d in enumerate(decisions):
         p = _intent_gate.veto(d, other_text)
         if p is None:
             out.append(d)
-        elif i == 0:
-            out.append(replace(d, decision="NO_ACTION", reason=f"intent veto (P(distress) {p:.3f}, both STTs heard it)"))
+            continue
+        reason = f"intent veto (P(distress) {p:.3f}, both STTs heard it)"
+        if vetoed is not None:
+            vetoed.append(replace(d, reason=reason))
+        if i == 0:
+            out.append(replace(d, decision="NO_ACTION", reason=reason))
     return out
 
 
@@ -1244,12 +1274,15 @@ def get_journey(journey_id: str):
 
 
 @app.get("/v1/journeys/{journey_id}/events", dependencies=[Depends(require_service_token)])
-def get_events(journey_id: str):
+def get_events(journey_id: str, include_vetoed: bool = False):
+    """Alerts only by default. include_vetoed=true reads the durable record, which
+    also holds the intent gate's VETOED decisions (never delivered)."""
     journey = _store.get(journey_id)
-    if journey is not None:
+    if journey is not None and not include_vetoed:
         return {"events": journey.events}
-    if _db.load_journey(journey_id) is not None:
-        return {"events": _db.load_events(journey_id)}
+    if journey is not None or _db.load_journey(journey_id) is not None:
+        events = _db.load_events(journey_id)
+        return {"events": events if include_vetoed else [e for e in events if e["decision"] != "VETOED"]}
     raise HTTPException(404, "journey not found")
 
 

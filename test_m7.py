@@ -85,6 +85,7 @@ check("journeys_started counted", snap["journeys"]["started"] >= 1, str(snap["jo
 check("journeys_completed counted", snap["journeys"]["completed"] >= 1, str(snap["journeys"]))
 check("chunks_received counted", snap["audio"]["chunks_received"] >= 2, str(snap["audio"]))
 check("detection recorded by decision type", sum(snap["detections_by_decision"].values()) >= 1, str(snap["detections_by_decision"]))
+check("detection recorded by layer (FA source)", sum(snap["detections_by_layer"].values()) >= 1 and "unknown" not in snap["detections_by_layer"], str(snap["detections_by_layer"]))
 check("detection latency p50 is a real number", isinstance(snap["detection_latency_s"]["p50"], float))
 check("event delivery success rate is 1.0 (no failures yet)", snap["event_delivery_success_rate"] == 1.0)
 

@@ -46,11 +46,13 @@ def run(base, token, path):
                 elif msg["type"] == "ack" and msg["ack_seq"] >= seq:
                     break
     call(base, token, "POST", f"/v1/journeys/{jid}/stop", {"reason": "smoke_test"})
-    events = call(base, token, "GET", f"/v1/journeys/{jid}/events")["events"]
+    events = call(base, token, "GET", f"/v1/journeys/{jid}/events?include_vetoed=true")["events"]
     print(f"\n{path}  ({len(audio) / 16000:.1f} s audio, processed in {time.time() - t0:.1f} s)")
-    print(f"  {len(live)} alert(s) on the stream, {len(events)} in the session record")
+    print(f"  {len(live)} alert(s) on the stream, {len(events)} in the session record (incl. intent-gate vetoes)")
     for e in events:
         print(f"  {e['decision']:<15} {e['udk_id'] or '(scream)':<9} {e['layer']:<18} conf {e['confidence']:.2f}  {e['transcript'][:70]!r}")
+        if e.get("reason"):
+            print(f"  {'':<15} why: {e['reason']}")
 
 
 if __name__ == "__main__":

@@ -42,5 +42,20 @@ res = api._intent_veto([ev("I don't need help right now"), ev("Help me please")]
 assert res[0].decision == "NO_ACTION" and "intent veto" in res[0].reason and res[1].transcript == "Help me please", res
 res = api._intent_veto([ev("Help me"), ev("I don't need help right now")], "help me i don't need help right now")
 assert [d.transcript for d in res] == ["Help me"], res
+vetoed = []
+api._intent_veto([ev("I don't need help right now"), ev("Help me please")], "i don't need help right now help me please", vetoed)
+assert [(d.decision, d.transcript) for d in vetoed] == [("TRIGGER_ALL", "I don't need help right now")], vetoed  # original decision kept for the audit record
+assert "intent veto" in vetoed[0].reason
+
+# vetoes are stored (VETOED) but hidden from /events unless include_vetoed
+from fastapi.testclient import TestClient  # noqa: E402
+
+client = TestClient(api.app, headers={"X-Service-Token": api.DEV_SERVICE_TOKEN})
+jid = client.post("/v1/journeys/start", json={"user_id": "U_veto"}).json()["journey_id"]
+api._record_veto(api._store.get(jid), vetoed[0], N(start_ms=0, end_ms=1000), "i don't need help right now")
+assert client.get(f"/v1/journeys/{jid}/events").json()["events"] == []
+logged = client.get(f"/v1/journeys/{jid}/events", params={"include_vetoed": True}).json()["events"]
+assert [(e["decision"], e["layer"]) for e in logged] == [("VETOED", "semantic")] and "intent veto" in logged[0]["reason"], logged
+assert client.get("/metrics").json()["vetoed_by_layer"] == {"semantic": 1}
 assert api._intent_veto([ev("I don't need help right now")], "")[0].decision == "TRIGGER_ALL"  # no second STT text
 print("test_intent_gate: all checks passed")
