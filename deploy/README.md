@@ -18,11 +18,16 @@ python deploy/check_package.py
 
 ## Build and run
 ```
-docker build -f deploy/Dockerfile -t udk-api .          # from the Model folder; ~15-25 min, downloads ~3.5 GB of models
+export HF_TOKEN=hf_...                                   # read token for the private intent-model repo
+docker build -f deploy/Dockerfile -t udk-api   --build-arg UDK_INTENT_MODEL_REPO=<hf-user>/udk-intent-mdeberta   --secret id=hf_token,env=HF_TOKEN .                    # from the Model folder; ~15-25 min, downloads ~4.6 GB of models
 cp deploy/.env.example .env                             # fill UDK_SERVICE_TOKEN, UDK_WEBHOOK_URL, UDK_WEBHOOK_SECRET
 docker run -d --name udk --gpus all --restart unless-stopped \
   --env-file .env -p 8000:8000 -v udk-data:/data udk-api
 ```
+
+Without the two intent-model lines the image builds without mDeBERTa and runs with the
+intent gate off (a warning in the logs); everything else is unchanged. The token is a build
+secret: it is not stored in the image. `UDK_INTENT_MODEL_REVISION=<commit>` pins a model version.
 
 ## Check it after starting
 ```
@@ -45,5 +50,5 @@ and confirm the alert arrives at the webhook.
   a non-HTTPS webhook URL, or a webhook without a secret.
 
 ## Not in this image
-Evaluation/test/Colab code, the distress detector and intent model (not validated yet),
+Evaluation/test/Colab code, the distress detector (not validated yet),
 non-English models, SepFormer separation, and `udk_endpoint.py` (clip upload service).

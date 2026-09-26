@@ -16,8 +16,11 @@ RUN pip install --no-cache-dir torchaudio==2.5.1 --index-url https://download.py
  && pip install --no-cache-dir --no-deps "onnxruntime-gpu>=1.22,<1.27,!=1.24.1,!=1.25.*,!=1.26.0"
 
 COPY . .
-# ~3.5 GB of weights baked into the image: no downloads when the service starts
-RUN python deploy/prefetch_models.py
+# ~3.5 GB of weights baked into the image: no downloads when the service starts.
+# Optional fine-tuned intent model (+1.1 GB) from a private HF repo, see deploy/README.md.
+ARG UDK_INTENT_MODEL_REPO=
+ARG UDK_INTENT_MODEL_REVISION=
+RUN --mount=type=secret,id=hf_token,required=false     if [ -f /run/secrets/hf_token ]; then export HF_TOKEN="$(cat /run/secrets/hf_token)"; fi;     python deploy/prefetch_models.py
 
 VOLUME /data
 EXPOSE 8000

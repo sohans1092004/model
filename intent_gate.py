@@ -60,6 +60,12 @@ def from_env(device: str = "cpu") -> IntentGate | None:
     path = os.environ.get("UDK_INTENT_GATE")
     if not path:
         return None
+    if not os.path.isfile(os.path.join(path, "config.json")):
+        # a missing model must not take detection down with it: run without the veto, loudly
+        import warnings
+
+        warnings.warn(f"UDK_INTENT_GATE={path} has no model (image built without UDK_INTENT_MODEL_REPO?) -- intent gate OFF")
+        return None
     gate = IntentGate(path, device=device, threshold=float(os.environ.get("UDK_INTENT_THRESHOLD", THRESHOLD)))
     print(f"intent gate ON: {path} (threshold {gate.threshold}, {device})", flush=True)
     return gate
