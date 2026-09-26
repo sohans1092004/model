@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >-
+  Continuous deployment for the sakhi-udk stack: a release bucket, the GitHub OIDC role
+  .github/workflows/deploy.yml assumes, and the instance's read access to the optional
+  Hugging Face token. A separate stack so CI never updates sakhi-udk itself (an update
+  there re-resolves the AMI parameter and can replace the instance, /data keys included).
+Parameters:
+  SubjectPrefix:
+    Type: String
+    # The repo has GitHub's immutable subject claims on: numeric owner/repo IDs, not names.
+    # Read it with: gh api repos/sohans1092004/model/actions/oidc/customization/sub
+    Default: "repo:sohans1092004@119175471/model@1386914214"
+    AllowedPattern: "^repo:[A-Za-z0-9._@-]+/[A-Za-z0-9._@-]+$"
+  DeployRef:
+    Type: String
+    Default: refs/heads/main
+  OidcProviderArn:
+    Type: String
+    Description: The account's existing token.actions.githubusercontent.com provider (from sakhi-github-oidc)
+  AppStackName:
+    Type: String
+    Default: sakhi-udk
+  InstanceId:
+    Type: AWS::EC2::Instance::Id
+  InstanceRoleName:
+    Type: String
+    Description: The sakhi-udk AppRole's physical name
+  HfTokenParameter:
+    Type: String
+    Default: /sakhi/udk/hf-token
+    AllowedPattern: "^/sakhi/[a-z0-9/-]+$"
+Resources:
+  ReleaseBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration: [{ ServerSideEncryptionByDefault: { SSEAlgorithm: AES256 } }]
+      PublicAccessBlockConfiguration:
+        { BlockPublicAcls: true, BlockPublicPolicy: true, IgnorePublicAcls: true, RestrictPublicBuckets: true }
+      OwnershipControls: { Rules: [{ ObjectOwnership: BucketOwnerEnforced }] }
+      LifecycleConfiguration:
+        Rules: [{ Id: expire-releases, Status: Enabled, Prefix: releases/, ExpirationInDays: 7 }]
+      Tags: [{ Key: Application, Value: Sakhi }]
+  DeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: sakhi-udk-github-deploy
+      MaxSessionDuration: 7200 # a cold build outlasts the default hour
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: { Federated: !Ref OidcProviderArn }
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                "token.actions.githubusercontent.com:aud": sts.amazonaws.com
+                "token.actions.githubusercontent.com:sub": !Sub "${SubjectPrefix}:ref:${DeployRef}"
+      Policies:
+        - PolicyName: SakhiUdkDeploy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: cloudformation:DescribeStacks
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${AppStackName}/*"
+                  - !Sub "arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${AWS::StackName}/*"
+              # PutObject to upload, GetObject so the presigned URL the instance fetches is valid
+              - Effect: Allow
+                Action: [s3:PutObject, s3:GetObject]
+                Resource: !Sub "${ReleaseBucket.Arn}/releases/*"
+              # This one instance only: sakhi-production is also tagged Application=Sakhi
+              - Effect: Allow
+                Action: ssm:SendCommand
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:ec2:${AWS::Region}:${AWS::AccountId}:instance/${InstanceId}"
+                  - !Sub "arn:${AWS::Partition}:ssm:${AWS::Region}::document/AWS-RunShellScript"
+              - Effect: Allow
+                Action: ssm:GetCommandInvocation
+                Resource: "*"
+      Tags: [{ Key: Application, Value: Sakhi }]
+  # Attached to sakhi-udk's role from here, so granting it needs no update of that stack.
+  InstanceHfTokenPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: SakhiUdkHfToken
+      Roles: [!Ref InstanceRoleName]
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: ssm:GetParameter
+            Resource: !Sub "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${HfTokenParameter}"
+          - Effect: Allow
+            Action: kms:Decrypt
+            Resource: !Sub "arn:${AWS::Partition}:kms:${AWS::Region}:${AWS::AccountId}:key/*"
+            Condition:
+              StringEquals:
+                "kms:ViaService": !Sub "ssm.${AWS::Region}.amazonaws.com"
+                "kms:EncryptionContext:PARAMETER_ARN": !Sub "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${HfTokenParameter}"
+Outputs:
+  ReleaseBucket: { Value: !Ref ReleaseBucket }
+  DeployRoleArn: { Value: !GetAtt DeployRole.Arn }

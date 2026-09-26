@@ -1,0 +1,33 @@
+name: Deploy to AWS
+
+# Every push to main redeploys the live UDK service (stack sakhi-udk, deploy/README.md).
+# Releases are named by the content of the image's files, so a push that touches none of
+# them (evals, data, docs) finishes in a minute without restarting anything.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write # GitHub OIDC: no AWS key exists in this repository
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # A cold build on the CPU instance takes 20-40 min.
+    timeout-minutes: 100
+    # Queued, never cancelled: interrupting a half-swapped container is worse than waiting.
+    concurrency:
+      group: deploy-udk
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::494506753059:role/sakhi-udk-github-deploy
+          aws-region: ap-south-1
+          role-duration-seconds: 7200
+
+      - name: Deploy
+        run: python3 deploy/aws_deploy.py

@@ -49,6 +49,32 @@ and confirm the alert arrives at the webhook.
 - **Secrets:** the service refuses to start with an empty token, the public dev token,
   a non-HTTPS webhook URL, or a webhook without a secret.
 
+## The live AWS deployment (Sakhi)
+CloudFormation stack `sakhi-udk` (`sakhi-udk-cpu.yaml`, ap-south-1, CPU) serves
+`https://15.252.103.69.sslip.io`. Every push to `main` redeploys it
+(`.github/workflows/deploy.yml` -> `aws_deploy.py` -> `remote_deploy.sh` on the instance over SSM);
+a push that changes none of the image's files restarts nothing. Run the same thing by hand with
+`python deploy/aws_deploy.py`.
+
+- **Config:** SSM SecureString `/sakhi/udk/config` holds the secrets and `UDK_DEVICE=cpu`. Every
+  other setting comes from `.env.example` in the deployed commit, so detection settings ship with the code.
+- **Intent model:** built in only once its HF read token is in SSM; without it the service runs with
+  the intent gate off. Store it without it touching the terminal history or the repo:
+  `read -rs T && aws ssm put-parameter --region ap-south-1 --name /sakhi/udk/hf-token --type SecureString --value "$T" --overwrite; unset T`
+  then rerun the workflow (Actions -> Deploy to AWS -> Run workflow).
+- **One-time setup:** stack `sakhi-udk-ci` (release bucket, the GitHub OIDC deploy role, the
+  instance's read access to the token), separate so CI never updates `sakhi-udk` itself:
+  ```
+  aws cloudformation create-stack --region ap-south-1 --stack-name sakhi-udk-ci \
+    --template-body file://deploy/sakhi-udk-ci.yaml --capabilities CAPABILITY_NAMED_IAM \
+    --tags Key=Application,Value=Sakhi --parameters \
+    ParameterKey=OidcProviderArn,ParameterValue=arn:aws:iam::494506753059:oidc-provider/token.actions.githubusercontent.com \
+    ParameterKey=InstanceId,ParameterValue=i-09ae1cb17ed1e933b \
+    ParameterKey=InstanceRoleName,ParameterValue=sakhi-udk-AppRole-3JMJUSbDNoEk
+  ```
+- A failed build leaves the running container untouched; a new container that never answers is
+  replaced by the previous one. Live journeys drop during a swap (about a minute) and the website reconnects.
+
 ## Not in this image
 Evaluation/test/Colab code, the distress detector (not validated yet),
 non-English models, SepFormer separation, and `udk_endpoint.py` (clip upload service).
