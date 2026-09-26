@@ -205,6 +205,12 @@ for text in ("I don't", "I want", "I don't know.", "No, I don't know.", "Now, I 
              "He wants to clean.", "F need.", "No need of"):
     r = match_transcript(text, GENERAL_UDKS, semantic_matcher=no_semantic)
     check(f"anchorless fragment isn't a {'/'.join(blocked)} match: {text!r}", r.layer not in blocked, str(r))
+for text in ("From my father.", "Being honest.", "For real."):  # prepositions/aux are not anchors
+    r = match_transcript(text, GENERAL_UDKS, semantic_matcher=no_semantic)
+    check(f"function-word fragment isn't an exact/fuzzy match: {text!r}", r.layer not in blocked, str(r))
+missing = [u.udk_id for u in GENERAL_UDKS
+           if not [w for w in udk_engine._normalize(u.phrase).split() if w not in udk_engine.FUNCTION_WORDS]]
+check("every standard UDK keeps at least one anchor word", not missing, str(missing))
 for text in ("Please don't!", "No, don't!"):
     r = match_transcript(text, GENERAL_UDKS, semantic_matcher=no_semantic)
     check(f"'don't' as a command still matches: {text!r}", r.udk is not None, str(r))

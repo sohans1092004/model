@@ -113,10 +113,18 @@ class VAD:
                 # back into this one's post-roll, so a phrase split
                 # across the cut isn't silently dropped from both sides.
                 run_limit = i + self.max_segment_frames
-                while j < n and flags[j] and j < run_limit:
+                # A pause shorter than the post-roll does not end the segment (2026-09-26):
+                # stopping at the first silent frame split "I don't | want to go home now"
+                # into two segments once the pre-roll no longer overlapped (above), so the
+                # negation and the UDK were matched apart. One utterance = one segment.
+                last = i  # last speech frame of this segment
+                while j < n and j < run_limit and j - last <= self.post_roll_frames:
+                    if flags[j]:
+                        last = j
                     j += 1
-                end = min(n, j + self.post_roll_frames)
-                prev_end, prev_cut = end, (j >= run_limit and j < n and flags[j])  # cut mid-speech by the cap
+                end = min(n, last + 1 + self.post_roll_frames)
+                prev_end = end
+                prev_cut = j >= run_limit and j < n and j - last <= self.post_roll_frames  # cut mid-speech by the cap
                 seg_pcm = b"".join(frames[start:end])
                 segments.append(
                     SpeechSegment(

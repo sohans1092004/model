@@ -134,6 +134,20 @@ check(
     [(s.start_ms, s.end_ms) for s in segments4],
 )
 
+print("=== A pause shorter than the post-roll keeps one utterance in one segment ===")
+
+# "I don't ... want to go home now": split at the first silent frame, the negation and the
+# UDK were matched in separate segments (2026-09-26 negation clips)
+vad5 = VAD()  # post-roll 1500 ms = 50 frames
+flags5 = [True] * 5 + [False] * 20 + [True] * 30 + [False] * 60
+vad5._vad = FakeVadEngine(flags5)
+segments5 = vad5.segment_speech(_make_pcm(len(flags5)))
+check(
+    "two bursts 600 ms apart give ONE segment covering both",
+    len(segments5) == 1 and segments5[0].start_ms == 0 and segments5[0].end_ms == (55 + 50) * FRAME_MS,
+    [(s.start_ms, s.end_ms) for s in segments5],
+)
+
 print(f"\n{'=' * 40}\n{passed}/{passed + failed} TOTAL PASSED" + (" -- ALL PASSED" if failed == 0 else f", {failed} FAILED"))
 
 if failed:

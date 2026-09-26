@@ -188,7 +188,7 @@ NON_DISTINCTIVE_WORDS = frozenset(
 # also drops garbled shouts with no anchor word, e.g. "You do me!" for "Let go of me").
 FUNCTION_WORDS = NON_DISTINCTIVE_WORDS | frozenset(
     "do dont does doesnt did didnt want wants wanted need needs have has be been can cant will wont "
-    "would should not no ill its".split())
+    "would should not no ill its for from being".split())  # for/from/being: "From my father." hit UDK_03
 FRAGMENT_FUZZY = os.environ.get("UDK_FRAGMENT_FUZZY", "1") != "0"
 
 
