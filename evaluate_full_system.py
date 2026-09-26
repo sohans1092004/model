@@ -138,6 +138,7 @@ def run_file(pcm: bytes, vad: VAD, stt, kws, semantic_matcher, beats, separator=
             "scream_score": scream_score, "stt_suspect": stt_suspect,
             # raw KWS match even when a text layer decided -- to calibrate KWS-alone on real audio
             "kws": (kws_match.phrase_id, round(kws_match.distance, 3)) if kws_match is not None else None,
+            "_event": decision,  # for apply_intent_gate
         })
         if decision.decision != "NO_ACTION":
             events.append(decision)
@@ -147,7 +148,7 @@ def run_file(pcm: bytes, vad: VAD, stt, kws, semantic_matcher, beats, separator=
                 "transcript": extra.transcript, "decision": extra.decision, "start_ms": seg.start_ms, "end_ms": seg.end_ms,
                 "udk_id": extra.udk.udk_id if extra.udk else None,
                 "layer": extra.layer, "confidence": extra.confidence,
-                "scream_score": scream_score, "stt_suspect": stt_suspect,
+                "scream_score": scream_score, "stt_suspect": stt_suspect, "_event": extra,
             })
             events.append(extra)
     latency = time.monotonic() - t0
@@ -172,7 +173,7 @@ class _Memo:
         return self._cache[pcm]
 
 
-def run_file_either(pcm: bytes, vad: VAD, stts: dict, kws, semantic_matcher, beats, separator=None) -> dict:
+def run_file_either(pcm: bytes, vad: VAD, stts: dict, kws, semantic_matcher, beats, separator=None, gate=None) -> dict:
     """run_file() once per STT backend in `stts` ({name: backend}), on the SAME
     VAD segments, reusing KWS/BEATs results across paths. Each path gets its
     own engine, exactly like a Whisper-only run. The clip alerts if EITHER
@@ -181,8 +182,33 @@ def run_file_either(pcm: bytes, vad: VAD, stts: dict, kws, semantic_matcher, bea
     shared_vad = _Memo(vad, "segment_speech")
     shared_kws = _Memo(kws, "spot") if kws is not None else None
     shared_beats = _Memo(beats, "score") if beats is not None else None
-    return {name: run_file(pcm, shared_vad, stt, shared_kws, semantic_matcher, shared_beats, separator)
-            for name, stt in stts.items()}
+    out = {name: run_file(pcm, shared_vad, stt, shared_kws, semantic_matcher, shared_beats, separator)
+           for name, stt in stts.items()}
+    if gate is not None and len(out) > 1:
+        apply_intent_gate(out, gate)
+    return out
+
+
+def apply_intent_gate(out: dict, gate) -> None:
+    """intent_gate.IntentGate on run_file_either's result, in place: an alert whose words
+    the OTHER STT also heard (same segment) and the model scores below its threshold is
+    dropped from events; its row turns NO_ACTION and keeps the score as "veto_p".
+    ponytail: the path's engine already counted the vetoed alert toward repetition
+    escalation; replay the engine without it if that ever matters."""
+    heard = {name: {} for name in out}
+    for name, (_, rows, _) in out.items():
+        for r in rows:
+            heard[name].setdefault(r["start_ms"], r["transcript"])  # first row = the whole segment
+    for name, (events, rows, _) in out.items():
+        for r in rows:
+            e = r.get("_event")
+            if e is None or r["decision"] == "NO_ACTION":
+                continue
+            other = " ".join(heard[o].get(r["start_ms"], "") for o in out if o != name)
+            p = gate.veto(e, other)
+            if p is not None:
+                events[:] = [x for x in events if x is not e]
+                r["decision"], r["veto_p"] = "NO_ACTION", round(p, 3)
 
 
 def lat_stats(latencies: list[float]) -> str:
@@ -205,8 +231,11 @@ def main() -> None:
     print(f"Device for all models: {device}   STT: faster-whisper {stt_model}")
     stt = FasterWhisperSTT(model_size=stt_model, device=device,
                            compute_type="float16" if device == "cuda" else "int8")
-    kws = Wav2Vec2DTWSpotter(device=device)
-    kws.load_references(Path(__file__).parent / "kws_references.npz")
+    kws = None
+    if os.environ.get("UDK_ENABLE_KWS", "1") != "0":  # UDK_ENABLE_KWS=0: the deployed config (KWS off)
+        kws = Wav2Vec2DTWSpotter(device=device)
+        kws.load_references(Path(__file__).parent / "kws_references.npz")
+    print(f"keyword spotting: {'on' if kws else 'OFF'}")
     from semantic import SentenceTransformerSemanticMatcher
 
     semantic_matcher = SentenceTransformerSemanticMatcher(device=device)
@@ -223,14 +252,20 @@ def main() -> None:
 
         stts["parakeet"] = ParakeetSTT(device=device)
         print(f"+ Parakeet (alert if either), running on: {stts['parakeet'].providers[0]}")
+    import intent_gate
+
+    gate = intent_gate.from_env(device)  # UDK_INTENT_GATE=<mDeBERTa dir>: veto-agree on text alerts
 
     def detect(pcm: bytes, sep):
         """(events, rows, latency) pooled over every STT path: the clip's tier is
         the stronger path's, its UDKs the union. Rows carry start_ms + stt."""
         t0 = time.monotonic()
-        runs = run_file_either(pcm, vad, stts, kws, semantic_matcher, beats, sep)
+        runs = run_file_either(pcm, vad, stts, kws, semantic_matcher, beats, sep, gate=gate)
         events = [e for path_events, _, _ in runs.values() for e in path_events]
         rows = [{**r, "stt": name} for name, (_, path_rows, _) in runs.items() for r in path_rows]
+        for r in rows:  # printed just above the clip's result line
+            if "veto_p" in r:
+                print(f"      [intent veto {r['udk_id']} {r['layer']} p={r['veto_p']}] {r['stt']}: {r['transcript'][:100]!r}")
         return events, rows, time.monotonic() - t0
 
     separator = None

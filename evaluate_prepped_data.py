@@ -137,6 +137,9 @@ def main() -> None:
     print(f"keyword spotting: {'on' if kws else 'OFF'}")
     semantic = SentenceTransformerSemanticMatcher(device=device)
     beats = BEATsDistressDetector(device=device)
+    import intent_gate
+
+    gate = intent_gate.from_env(device)  # UDK_INTENT_GATE=<mDeBERTa dir>: veto-agree on text alerts
 
     timings = {}  # component -> total seconds, across all clips
 
@@ -180,7 +183,7 @@ def main() -> None:
         separator = wesep if wesep is not None and path.stem not in NO_USER else None
         scores_before = len(wesep.scores) if wesep is not None else 0
         t0 = time.monotonic()
-        runs = run_file_either(alter(load_pcm(path)), vad, stts, kws, semantic, beats, separator)
+        runs = run_file_either(alter(load_pcm(path)), vad, stts, kws, semantic, beats, separator, gate=gate)
         latency = time.monotonic() - t0
         # Either path alerting counts: pooling both paths' events makes the clip's
         # tier the stronger of the two, and its UDKs the union.
@@ -198,7 +201,8 @@ def main() -> None:
             out = "NO_ACTION" if r["decision"] == "NO_ACTION" else f"{r['decision']} {r['udk_id']} ({r['layer']}, conf {r['confidence']:.2f})"
             by = f" [{r['stt']}]" if len(stts) > 1 else ""
             k = f"   [kws {r['kws'][0]} d={r['kws'][1]}]" if r.get("kws") else ""
-            print(f"  heard{by}: {r['transcript']!r}\n     -> {out}{k}")
+            v = f"   [intent veto: {r['udk_id']} {r['layer']}, p={r['veto_p']}]" if "veto_p" in r else ""
+            print(f"  heard{by}: {r['transcript']!r}\n     -> {out}{k}{v}")
         if not rows:
             print("  heard: (no speech transcribed)")
         if wesep is not None:

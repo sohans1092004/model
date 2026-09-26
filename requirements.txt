@@ -14,6 +14,7 @@ cryptography  # at-rest encryption (M6/Section 10) -- audited, not hand-rolled
 #   pip install transformers sentence-transformers
 transformers
 sentence-transformers
+sentencepiece  # mDeBERTa tokenizer for the optional intent gate (intent_gate.py, UDK_INTENT_GATE)
 
 # Real infra swaps (db_postgres.py, storage_s3.py, kafka_delivery.py) --
 # only needed if you actually set UDK_DATABASE_URL / UDK_S3_ENDPOINT /

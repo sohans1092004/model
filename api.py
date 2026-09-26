@@ -49,7 +49,7 @@ import tempfile
 import threading
 import time
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Callable, Literal
 
@@ -67,6 +67,7 @@ from semantic import SemanticBackend
 from separation import SeparatorBackend
 from metrics import Metrics
 from stt import MockSTT, STTBackend
+import intent_gate
 import scream_trigger
 from stt_confidence_gate import is_suspect
 from storage import AudioStore
@@ -507,7 +508,7 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
         # one extra event per SENTENCE matching a different UDK -- the
         # per-sentence matching the evaluated best config uses (run_file), so
         # e.g. UDK_13 isn't lost behind UDK_10 in "Let go! ... You're hurting me!".
-        decisions = journey.engine.decide_all(
+        primary = journey.engine.decide_all(
             transcript.text,
             now_s=now_s,
             kws_match=kws_match,
@@ -515,7 +516,9 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
             stt_suspect=stt_suspect,
             dual_asr_disagreement=dual_asr_disagreement,
         )
-        decisions = _either_stt_decisions(journey.engine, decisions, pre_state, second_text, now_s, kws_match, scream_score)
+        decisions = _either_stt_decisions(journey.engine, primary, pre_state, second_text, now_s, kws_match, scream_score)
+        if _intent_gate is not None and second_text:
+            decisions = _intent_veto(decisions, second_text if decisions is primary else transcript.text)
         decision, extras = decisions[0], decisions[1:]
         if decision.decision == "NO_ACTION" and not extras:
             # Speech-separation fallback (separation.py): only tried once
@@ -826,6 +829,21 @@ def _load_parakeet_stt() -> STTBackend | None:
 _DECISION_RANK = {"NO_ACTION": 0, "TRIGGER_VERIFY": 1, "TRIGGER_ALL": 2}
 
 
+def _intent_veto(decisions: list[DecisionEvent], other_text: str) -> list[DecisionEvent]:
+    """intent_gate veto on one segment's decisions (whole-segment first, then sentence
+    extras). `other_text` = what the OTHER STT heard in this segment. A vetoed whole-
+    segment decision becomes NO_ACTION (the list keeps its shape); a vetoed extra is dropped.
+    ponytail: the engine already counted a vetoed alert toward repetition escalation."""
+    out = []
+    for i, d in enumerate(decisions):
+        p = _intent_gate.veto(d, other_text)
+        if p is None:
+            out.append(d)
+        elif i == 0:
+            out.append(replace(d, decision="NO_ACTION", reason=f"intent veto (P(distress) {p:.3f}, both STTs heard it)"))
+    return out
+
+
 def _strongest(decisions: list[DecisionEvent]) -> tuple:
     return max((_DECISION_RANK[d.decision], d.confidence) for d in decisions)
 
@@ -1116,6 +1134,8 @@ _scream_trigger_enabled = os.environ.get("UDK_ENABLE_SCREAM_TRIGGER") == "1"
 _stt_confidence_gate_enabled = os.environ.get("UDK_ENABLE_STT_CONFIDENCE_GATE") == "1"
 # None unless UDK_ENABLE_DUAL_ASR=1 -- see _load_dual_asr_guard.
 _dual_asr_guard = _load_dual_asr_guard()
+# None unless UDK_INTENT_GATE=<model dir> -- see intent_gate.py (veto-agree on text alerts).
+_intent_gate = intent_gate.from_env(_device())
 
 app = FastAPI()
 

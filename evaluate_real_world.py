@@ -68,13 +68,18 @@ def load_models():
     from stt import FasterWhisperSTT, ParakeetSTT
     from vad import VAD
 
+    import intent_gate
+
     dev = default_device()
-    kws = Wav2Vec2DTWSpotter(device=dev)
-    kws.load_references(HERE / "kws_references.npz")
+    kws = None
+    if os.environ.get("UDK_ENABLE_KWS", "1") != "0":  # UDK_ENABLE_KWS=0: the deployed config (KWS off)
+        kws = Wav2Vec2DTWSpotter(device=dev)
+        kws.load_references(HERE / "kws_references.npz")
     m = {"vad": VAD(), "kws": kws, "semantic": SentenceTransformerSemanticMatcher(device=dev),
          "beats": BEATsDistressDetector(device=dev),
          "stts": {"whisper": FasterWhisperSTT(model_size="small.en", device=dev, compute_type="float16" if dev == "cuda" else "int8"),
-                  "parakeet": ParakeetSTT(device=dev)}}
+                  "parakeet": ParakeetSTT(device=dev)},
+         "gate": intent_gate.from_env(dev)}
     print(f"device: {dev}; Parakeet on {m['stts']['parakeet'].providers[0]}", flush=True)
     return m
 
@@ -113,7 +118,8 @@ def run(root: Path, max_min: float, chunk_min: float) -> None:
             a = audio[int(k * chunk_min * 60 * SR): int((k + 1) * chunk_min * 60 * SR)]
             pcm = (np.clip(a, -1, 1) * 32767).astype("<i2").tobytes()
             offset = k * chunk_min * 60
-            runs = run_file_either(pcm, models["vad"], models["stts"], models["kws"], models["semantic"], models["beats"])
+            runs = run_file_either(pcm, models["vad"], models["stts"], models["kws"], models["semantic"], models["beats"],
+                                   gate=models["gate"])
             udk = [{"t": round(offset + r["start_ms"] / 1000, 1), "stt": name, "decision": r["decision"], "udk": r["udk_id"],
                     "layer": r["layer"], "conf": round(r["confidence"], 3), "text": r["transcript"], "kws": r.get("kws")}
                    for name, (_, rows, _) in runs.items() for r in rows if r["decision"] != "NO_ACTION"]
