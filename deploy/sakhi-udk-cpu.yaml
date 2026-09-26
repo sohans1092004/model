@@ -1,0 +1,112 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >-
+  Sakhi UDK live detection service (api.py) on CPU. Same shape as sakhi-production:
+  Ubuntu EC2 + EIP, SSM administration (no SSH), Caddy HTTPS at <EIP>.sslip.io.
+  Secrets/env live in the SecureString parameter ConfigParameter (docker --env-file format).
+  ponytail: CPU inference (~8x slower than a T4, one worker); move to g4dn.xlarge once the
+  G-instance quota is granted -- same image, UDK_DEVICE=cuda, docker run --gpus all.
+  Boot only prepares Docker and Caddy; the app itself arrives with deploy/aws_deploy.py
+  (run it once after creating this stack and sakhi-udk-ci; CI runs it on every push to main).
+  Do not update this stack casually: the AmiId parameter re-resolves on every update, and a
+  new AMI replaces the instance, and with it the /data volume that holds the encryption keys.
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  SubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Description: Existing public subnet with an Internet Gateway route
+  InstanceType:
+    Type: String
+    Default: c7i.2xlarge
+  AmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id
+  ConfigParameter:
+    Type: String
+    Default: /sakhi/udk/config
+    AllowedPattern: "^/sakhi/[a-z0-9/-]+$"
+Resources:
+  AppRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: { Service: ec2.amazonaws.com }
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
+      Policies:
+        - PolicyName: SakhiUdkRuntime
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: ssm:GetParameter
+                Resource: !Sub "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${ConfigParameter}"
+              - Effect: Allow
+                Action: kms:Decrypt
+                Resource: !Sub "arn:${AWS::Partition}:kms:${AWS::Region}:${AWS::AccountId}:key/*"
+                Condition:
+                  StringEquals:
+                    "kms:ViaService": !Sub "ssm.${AWS::Region}.amazonaws.com"
+                    "kms:EncryptionContext:PARAMETER_ARN": !Sub "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${ConfigParameter}"
+  AppProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties: { Roles: [!Ref AppRole] }
+  WebSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: HTTPS and ACME only; use SSM, no SSH
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - { IpProtocol: tcp, FromPort: 80, ToPort: 80, CidrIp: 0.0.0.0/0 }
+        - { IpProtocol: tcp, FromPort: 443, ToPort: 443, CidrIp: 0.0.0.0/0 }
+      SecurityGroupEgress:
+        - { IpProtocol: tcp, FromPort: 443, ToPort: 443, CidrIp: 0.0.0.0/0, Description: "AWS APIs, GitHub, PyPI, Hugging Face, Docker Hub, ACME" }
+        - { IpProtocol: tcp, FromPort: 80, ToPort: 80, CidrIp: 0.0.0.0/0, Description: "Ubuntu package repositories" }
+      Tags: [{ Key: Application, Value: Sakhi }]
+  Address:
+    Type: AWS::EC2::EIP
+    Properties: { Domain: vpc, Tags: [{ Key: Application, Value: Sakhi }, { Key: Name, Value: sakhi-udk }] }
+  AppInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref AmiId
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: !Ref AppProfile
+      SubnetId: !Ref SubnetId
+      SecurityGroupIds: [!Ref WebSecurityGroup]
+      MetadataOptions:
+        { HttpTokens: required, HttpPutResponseHopLimit: 1, HttpEndpoint: enabled }
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          # ~15 GB image + build layers + /data (holds the encryption keys: snapshot it)
+          Ebs: { VolumeSize: 80, VolumeType: gp3, Encrypted: true, DeleteOnTermination: true }
+      Tags: [{ Key: Name, Value: sakhi-udk }, { Key: Application, Value: Sakhi }]
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -euxo pipefail
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update
+          apt-get install -y docker.io docker-buildx
+          snap install aws-cli --classic
+          systemctl enable --now snap.amazon-ssm-agent.amazon-ssm-agent.service
+          install -d -m 700 /etc/udk
+          /snap/bin/aws ssm get-parameter --region ${AWS::Region} --name ${ConfigParameter} --with-decryption --query Parameter.Value --output text > /etc/udk/udk.env
+          chmod 600 /etc/udk/udk.env
+          printf '%s.sslip.io {\n\treverse_proxy udk:8000\n}\n' '${Address}' > /etc/udk/Caddyfile
+          docker network create udk
+          docker run -d --name caddy --network udk --restart unless-stopped -p 80:80 -p 443:443 \
+            -v caddy-data:/data -v /etc/udk/Caddyfile:/etc/caddy/Caddyfile:ro --log-opt max-size=10m caddy:2
+          touch /etc/udk/bootstrap-complete
+  AddressAssociation:
+    Type: AWS::EC2::EIPAssociation
+    Properties:
+      { AllocationId: !GetAtt Address.AllocationId, InstanceId: !Ref AppInstance }
+Outputs:
+  InstanceId: { Value: !Ref AppInstance }
+  PublicIp: { Value: !Ref Address }
+  Endpoint: { Value: !Sub "https://${Address}.sslip.io" }
