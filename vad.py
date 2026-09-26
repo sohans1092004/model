@@ -87,9 +87,17 @@ class VAD:
         segments: list[SpeechSegment] = []
         i = 0
         n = len(flags)
+        prev_end, prev_cut = 0, False
         while i < n:
             if flags[i]:
                 start = max(0, i - self.pre_roll_frames)
+                # Real bug (2026-09-25, a lone "Please" recording): a second burst within
+                # the 1.5 s pre-roll reached back over the previous segment, so ONE word was
+                # transcribed twice -> counted as a repeated UDK -> escalated to TRIGGER_ALL.
+                # Overlap is kept only after a forced max-length cut (see below), where it
+                # stops a phrase split at the cut from being lost.
+                if not prev_cut:
+                    start = max(start, prev_end)
                 j = i
                 # Capped at max_segment_frames -- see __init__'s
                 # max_segment_ms docstring for the real bug this closes:
@@ -108,6 +116,7 @@ class VAD:
                 while j < n and flags[j] and j < run_limit:
                     j += 1
                 end = min(n, j + self.post_roll_frames)
+                prev_end, prev_cut = end, (j >= run_limit and j < n and flags[j])  # cut mid-speech by the cap
                 seg_pcm = b"".join(frames[start:end])
                 segments.append(
                     SpeechSegment(

@@ -175,7 +175,7 @@ class BEATsDistressDetector:
             import librosa
 
             audio = librosa.resample(audio, orig_sr=sample_rate, target_sr=SAMPLE_RATE)
-        if len(audio) < SAMPLE_RATE // 10:  # need >=~100ms, same floor as scream_detector.py
+        if len(audio) < SAMPLE_RATE // 5:  # BEATs 16x16 patch needs >=16 fbank frames (~170ms); 100ms crashed conv2d on a pocket clip
             return np.zeros(527, dtype=np.float32)
         torch = self._torch
         source = torch.from_numpy(audio).unsqueeze(0).to(self._device)

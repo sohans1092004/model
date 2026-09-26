@@ -115,6 +115,25 @@ check(
     f"seg0 end={segments3[0].end_ms} seg1 start={segments3[1].start_ms}",
 )
 
+print("=== Natural pauses: the next segment must not reach back into the previous one ===")
+
+# the lone "Please" bug: word, short dip, tail -- with default 1.5 s padding the second
+# segment used to start inside the first, so the same word was transcribed twice
+vad4 = VAD()  # defaults: pre/post roll 1500 ms
+flags4 = [True] * 6 + [False] * 55 + [True] * 8 + [False] * 60
+vad4._vad = FakeVadEngine(flags4)
+segments4 = vad4.segment_speech(_make_pcm(len(flags4)))
+check(
+    "two bursts after a natural pause give non-overlapping segments",
+    len(segments4) == 2 and segments4[1].start_ms >= segments4[0].end_ms,
+    [(s.start_ms, s.end_ms) for s in segments4],
+)
+check(
+    "no audio dropped between them (the second starts exactly where the first ended)",
+    len(segments4) == 2 and segments4[1].start_ms == segments4[0].end_ms,
+    [(s.start_ms, s.end_ms) for s in segments4],
+)
+
 print(f"\n{'=' * 40}\n{passed}/{passed + failed} TOTAL PASSED" + (" -- ALL PASSED" if failed == 0 else f", {failed} FAILED"))
 
 if failed:

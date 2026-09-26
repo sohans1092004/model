@@ -74,6 +74,7 @@ text quality at all.
 
 from __future__ import annotations
 
+import os
 import re
 import time
 import unicodedata
@@ -165,6 +166,43 @@ def _word_coverage(phrase: str, transcript: str) -> float:
     return best / n
 
 
+# A transcript made ONLY of these words can't trigger any layer (2026-09-25, user decision):
+# a lone "Please." / "Right?" / "Now" / "I'm" / "The" carries no distress meaning, and such
+# fragments caused one-word false alarms on real YouTube audio. Function words, fillers and
+# politeness only -- command words ("get", "go", "let", "away", "back", "stop", "don't") and
+# content words ("help", "police", "hurt", "scared") stay distinctive, so "Get away!",
+# "Let go!" and "Help!" still alert. Forms are _normalize()d (apostrophes stripped).
+NON_DISTINCTIVE_WORDS = frozenset(
+    "please now right the a an i im me my you your he she it we they this that is am are was "
+    "to of in on at here there and or so oh okay ok yeah yes well just what".split())
+
+
+# Fragment rule (2026-09-26): a transcript no longer than a UDK phrase ("I don't", "I want",
+# "You want to be here.") only matches that UDK if it contains one of the phrase's ANCHOR
+# words -- its words minus function words, auxiliaries and modals. Such fragments matched
+# as exact (a substring of one UDK) or fuzzy (judged whole) and carry no distress meaning;
+# they were most of the real-world text false alarms ("I don't know." -> UDK_14 12x) and
+# the negation clips' alarms. Anchors are compared per word with the fuzzy word similarity,
+# so ASR noise ("plice") still counts. "Help!", "Get away!", "Stay back!" keep their anchor.
+# UDK_FRAGMENT_FUZZY=0 applies it to exact fragments only (eval switch: the fuzzy part
+# also drops garbled shouts with no anchor word, e.g. "You do me!" for "Let go of me").
+FUNCTION_WORDS = NON_DISTINCTIVE_WORDS | frozenset(
+    "do dont does doesnt did didnt want wants wanted need needs have has be been can cant will wont "
+    "would should not no ill its".split())
+FRAGMENT_FUZZY = os.environ.get("UDK_FRAGMENT_FUZZY", "1") != "0"
+
+
+def _has_anchor(phrase: str, transcript: str) -> bool:
+    words = transcript.split()
+    anchors = [w for w in phrase.split() if w not in FUNCTION_WORDS]
+    # "don't" as a COMMAND ("Please don't!", "No, don't!") is itself a UDK word (UDK_06/13);
+    # as a statement ("I don't know") it is a function word
+    lead = next((w for w in words if w not in ("please", "no", "oh", "just")), "")
+    if lead == "dont" and "dont" in phrase.split():
+        return True
+    return any(fuzz.ratio(a, w) >= FUZZY_WORD_SIMILARITY for a in anchors for w in words)
+
+
 # Sentence boundaries in Whisper's punctuated output, for decide_all().
 _SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+")
 
@@ -245,7 +283,7 @@ class DecisionEvent:
 def match_transcript(transcript: str, udks: list[UDK], semantic_matcher: SemanticBackend | None = None) -> MatchResult:
     """Best match across all UDKs for one transcript, highest layer wins."""
     norm_transcript = _normalize(transcript)
-    if not norm_transcript:
+    if not norm_transcript or set(norm_transcript.split()) <= NON_DISTINCTIVE_WORDS:
         return MatchResult(udk=None, layer="none", confidence=0.0)  # type: ignore[arg-type]
 
     norm_phrases = [_normalize(udk.phrase) for udk in udks]
@@ -269,6 +307,8 @@ def match_transcript(transcript: str, udks: list[UDK], semantic_matcher: Semanti
                 best = candidate
             continue
         if norm_transcript in norm_phrase:
+            if not _has_anchor(norm_phrase, norm_transcript):  # see FUNCTION_WORDS: "I don't" inside UDK_14
+                continue
             confidence = GENERIC_FRAGMENT_CONFIDENCE if fragment_is_ambiguous else 1.0
             candidate = MatchResult(udk=udk, layer="exact", confidence=confidence)
             if best is None or candidate.confidence > best.confidence:
@@ -313,7 +353,9 @@ def match_transcript(transcript: str, udks: list[UDK], semantic_matcher: Semanti
         # partial_ratio's own single-scorer blind spot.
         fuzzy_word_overlap = fuzz.token_set_ratio(norm_phrase, norm_transcript) / 100.0
         if (fuzzy_score >= fuzzy_threshold and fuzzy_word_overlap >= fuzzy_threshold
-                and _word_coverage(norm_phrase, norm_transcript) >= FUZZY_MIN_WORD_COVERAGE):
+                and _word_coverage(norm_phrase, norm_transcript) >= FUZZY_MIN_WORD_COVERAGE
+                and not (FRAGMENT_FUZZY and len(norm_transcript.split()) <= len(norm_phrase.split())
+                         and not _has_anchor(norm_phrase, norm_transcript))):
             # partial_ratio scores a literal substring alignment as ~1.0
             # regardless of length -- same generic-fragment risk as the
             # exact layer above (see GENERIC_FRAGMENT_CONFIDENCE), so the

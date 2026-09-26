@@ -144,12 +144,15 @@ ambiguous_udks = [
     UDK("UDK_B", "someone please help me now", "GENERAL"),
 ]
 
-ambiguous_result = match_transcript("please", ambiguous_udks)
+ambiguous_result = match_transcript("help", ambiguous_udks)
 check(
     "a fragment that's a substring of TWO different UDK phrases is capped below full confidence, not an unconfirmed 1.0",
     ambiguous_result.udk is not None and ambiguous_result.layer == "exact" and ambiguous_result.confidence < 1.0,
     str(ambiguous_result),
 )
+for filler in ("please", "Please, please.", "Right?", "I'm", "now"):
+    r = match_transcript(filler, ambiguous_udks)
+    check(f"a transcript of only non-distinctive words never matches: {filler!r}", r.udk is None, str(r))
 
 unique_result = match_transcript("police", ambiguous_udks)
 check(
@@ -184,10 +187,30 @@ for text in ("But I'm not saying this only because of the MES statement, I'm say
     r = match_transcript(text, GENERAL_UDKS, semantic_matcher=no_semantic)
     check(f"long sentence that only starts like a UDK is not a fuzzy match: {text[:40]!r}", r.layer != "fuzzy", str(r))
 for text, udk_id in (("please someone help me he's not letting me leave please help me", "UDK_08"),  # word order differs
-                     ("You do me!", "UDK_10"),  # garbled shout, judged whole (prepped pocket clip)
                      ("call the plice i need help", "UDK_01")):  # ASR noise
     r = match_transcript(text, GENERAL_UDKS, semantic_matcher=no_semantic)
     check(f"real danger still matches {udk_id}: {text[:40]!r}", r.udk is not None and r.udk.udk_id == udk_id and r.confidence >= 0.6, str(r))
+
+print("=== fragment rule: a short transcript needs one of the UDK's anchor words ===")
+
+import udk_engine  # noqa: E402
+
+for text in ("Help!", "Police!", "Get away!", "Let go!", "Stay back!", "I'm scared", "Don't hurt me", "Help me",
+             "Someone's following me", "call the plice"):
+    r = match_transcript(text, GENERAL_UDKS, semantic_matcher=no_semantic)
+    check(f"short real cry still matches: {text!r}", r.udk is not None and r.confidence >= 0.6, str(r))
+# known limit: "Come on now." still matches UDK_18 ("come" is one letter from the anchor "home")
+blocked = ("exact", "fuzzy") if udk_engine.FRAGMENT_FUZZY else ("exact",)
+for text in ("I don't", "I want", "I don't know.", "No, I don't know.", "Now, I want to", "You want to be here.",
+             "He wants to clean.", "F need.", "No need of"):
+    r = match_transcript(text, GENERAL_UDKS, semantic_matcher=no_semantic)
+    check(f"anchorless fragment isn't a {'/'.join(blocked)} match: {text!r}", r.layer not in blocked, str(r))
+for text in ("Please don't!", "No, don't!"):
+    r = match_transcript(text, GENERAL_UDKS, semantic_matcher=no_semantic)
+    check(f"'don't' as a command still matches: {text!r}", r.udk is not None, str(r))
+r = match_transcript("You do me!", GENERAL_UDKS, semantic_matcher=no_semantic)  # garbled "Let go of me", prepped pocket clip
+check(f"'You do me!' (no anchor) matches only with UDK_FRAGMENT_FUZZY=0 (now {int(udk_engine.FRAGMENT_FUZZY)})",
+      (r.udk is not None) != udk_engine.FRAGMENT_FUZZY, str(r))
 
 print(f"\n{'=' * 40}\n{passed}/{passed + failed} TOTAL PASSED" + (" -- ALL PASSED" if failed == 0 else f", {failed} FAILED"))
 
