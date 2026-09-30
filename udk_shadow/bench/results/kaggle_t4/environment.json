@@ -1,0 +1,7 @@
+{
+ "python": "3.12.13",
+ "torch": "2.10.0+cu128",
+ "cuda": true,
+ "gpu": "Tesla T4",
+ "cpu_count": 4
+}

@@ -1,0 +1,3807 @@
+{
+ "version": 2,
+ "components": {
+  "whisper": "FasterWhisperSTT",
+  "whisper_model": "faster-whisper-small.en",
+  "whisper_device": "cuda",
+  "parakeet": "ParakeetSTT",
+  "parakeet_providers": [
+   "CUDAExecutionProvider",
+   "CPUExecutionProvider"
+  ],
+  "semantic": "SentenceTransformerSemanticMatcher",
+  "stt_confidence_gate": true,
+  "beats": "BEATsDistressDetector",
+  "scream_trigger": true,
+  "scream_corroboration": true,
+  "intent_gate": "IntentGate",
+  "intent_threshold": 0.02,
+  "kws": "off",
+  "dual_asr": "off",
+  "separation": "off",
+  "language_id": "off",
+  "device": "cuda",
+  "processing_version": "pipeline-2026.09"
+ },
+ "notes": {
+  "from_env_example": {
+   "UDK_ENABLE_STT": "1",
+   "UDK_STT_MODEL": "small.en",
+   "UDK_ENABLE_PARAKEET": "1",
+   "UDK_ENABLE_KWS": "0",
+   "UDK_ENABLE_SEMANTIC": "1",
+   "UDK_ENABLE_STT_CONFIDENCE_GATE": "1",
+   "UDK_ENABLE_SCREAM_DETECTION": "1",
+   "UDK_ENABLE_SCREAM_TRIGGER": "1",
+   "UDK_DEVICE": "cuda",
+   "UDK_INTENT_GATE": "/app/models/intent_mdeberta",
+   "UDK_INTENT_THRESHOLD": "0.02"
+  }
+ },
+ "repeats": 5,
+ "cases": {
+  "pos_02": {
+   "exact": {
+    "off": {
+     "window": [
+      26940,
+      37920
+     ],
+     "repeats": [
+      {
+       "window": [
+        26940,
+        37920
+       ],
+       "audio_digest": "6a1becc840c06639",
+       "skipped": false,
+       "whisper": {
+        "text": "Help! Help! Help! Help! I can't believe it! I can't believe it! Please! Please! I can't believe it!",
+        "temperature": 0.0,
+        "avg_logprob": -0.7271,
+        "compression_ratio": 2.1522
+       },
+       "stt_suspect": false,
+       "parakeet": "",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "below TRIGGER_VERIFY threshold"
+        },
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_01",
+         "confidence": 0.65,
+         "layer": "exact",
+         "repeated": false,
+         "reason": "acoustic distress signal corroborated the match"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "below TRIGGER_VERIFY threshold"
+        },
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_01",
+         "confidence": 0.65,
+         "layer": "exact",
+         "repeated": false,
+         "reason": "acoustic distress signal corroborated the match"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": true,
+        "peak": 0.2375,
+        "class": "Whimper"
+       },
+       "scream_score": 0.36,
+       "final": {
+        "decision": "NO_ACTION",
+        "udk_id": null,
+        "confidence": 0.0,
+        "layer": "none",
+        "repeated": false,
+        "reason": "below TRIGGER_VERIFY threshold"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_01",
+         "confidence": 0.65,
+         "layer": "exact",
+         "repeated": false,
+         "reason": "acoustic distress signal corroborated the match"
+        }
+       ]
+      },
+      {
+       "window": [
+        26940,
+        37920
+       ],
+       "audio_digest": "6a1becc840c06639",
+       "skipped": false,
+       "whisper": {
+        "text": "Help! Help! Help! Help! I can't believe it! I can't believe it! Please! Please! I can't believe it!",
+        "temperature": 0.0,
+        "avg_logprob": -0.7271,
+        "compression_ratio": 2.1522
+       },
+       "stt_suspect": false,
+       "parakeet": "",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "below TRIGGER_VERIFY threshold"
+        },
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_01",
+         "confidence": 0.65,
+         "layer": "exact",
+         "repeated": false,
+         "reason": "acoustic distress signal corroborated the match"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "below TRIGGER_VERIFY threshold"
+        },
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_01",
+         "confidence": 0.65,
+         "layer": "exact",
+         "repeated": false,
+         "reason": "acoustic distress signal corroborated the match"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": true,
+        "peak": 0.2375,
+        "class": "Whimper"
+       },
+       "scream_score": 0.36,
+       "final": {
+        "decision": "NO_ACTION",
+        "udk_id": null,
+        "confidence": 0.0,
+        "layer": "none",
+        "repeated": false,
+        "reason": "below TRIGGER_VERIFY threshold"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_01",
+         "confidence": 0.65,
+         "layer": "exact",
+         "repeated": false,
+         "reason": "acoustic distress signal corroborated the match"
+        }
+       ]
+      },
+      {
+       "window": [
+        26940,
+        37920
+       ],
+       "audio_digest": "6a1becc840c06639",
+       "skipped": false,
+       "whisper": {
+        "text": "Help! Help! Help! Help! I can't believe it! I can't believe it! Please! Please! I can't believe it!",
+        "temperature": 0.0,
+        "avg_logprob": -0.7271,
+        "compression_ratio": 2.1522
+       },
+       "stt_suspect": false,
+       "parakeet": "",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "below TRIGGER_VERIFY threshold"
+        },
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_01",
+         "confidence": 0.65,
+         "layer": "exact",
+         "repeated": false,
+         "reason": "acoustic distress signal corroborated the match"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "below TRIGGER_VERIFY threshold"
+        },
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_01",
+         "confidence": 0.65,
+         "layer": "exact",
+         "repeated": false,
+         "reason": "acoustic distress signal corroborated the match"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": true,
+        "peak": 0.2375,
+        "class": "Whimper"
+       },
+       "scream_score": 0.36,
+       "final": {
+        "decision": "NO_ACTION",
+        "udk_id": null,
+        "confidence": 0.0,
+        "layer": "none",
+        "repeated": false,
+        "reason": "below TRIGGER_VERIFY threshold"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_01",
+         "confidence": 0.65,
+         "layer": "exact",
+         "repeated": false,
+         "reason": "acoustic distress signal corroborated the match"
+        }
+       ]
+      },
+      {
+       "window": [
+        26940,
+        37920
+       ],
+       "audio_digest": "6a1becc840c06639",
+       "skipped": false,
+       "whisper": {
+        "text": "Help! Help! Help! Help! I can't believe it! I can't believe it! Please! Please! I can't believe it!",
+        "temperature": 0.0,
+        "avg_logprob": -0.7271,
+        "compression_ratio": 2.1522
+       },
+       "stt_suspect": false,
+       "parakeet": "",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "below TRIGGER_VERIFY threshold"
+        },
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_01",
+         "confidence": 0.65,
+         "layer": "exact",
+         "repeated": false,
+         "reason": "acoustic distress signal corroborated the match"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "below TRIGGER_VERIFY threshold"
+        },
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_01",
+         "confidence": 0.65,
+         "layer": "exact",
+         "repeated": false,
+         "reason": "acoustic distress signal corroborated the match"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": true,
+        "peak": 0.2375,
+        "class": "Whimper"
+       },
+       "scream_score": 0.36,
+       "final": {
+        "decision": "NO_ACTION",
+        "udk_id": null,
+        "confidence": 0.0,
+        "layer": "none",
+        "repeated": false,
+        "reason": "below TRIGGER_VERIFY threshold"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_01",
+         "confidence": 0.65,
+         "layer": "exact",
+         "repeated": false,
+         "reason": "acoustic distress signal corroborated the match"
+        }
+       ]
+      },
+      {
+       "window": [
+        26940,
+        37920
+       ],
+       "audio_digest": "6a1becc840c06639",
+       "skipped": false,
+       "whisper": {
+        "text": "Help! Help! Help! Help! I can't believe it! I can't believe it! Please! Please! I can't believe it!",
+        "temperature": 0.0,
+        "avg_logprob": -0.7271,
+        "compression_ratio": 2.1522
+       },
+       "stt_suspect": false,
+       "parakeet": "",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "below TRIGGER_VERIFY threshold"
+        },
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_01",
+         "confidence": 0.65,
+         "layer": "exact",
+         "repeated": false,
+         "reason": "acoustic distress signal corroborated the match"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "below TRIGGER_VERIFY threshold"
+        },
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_01",
+         "confidence": 0.65,
+         "layer": "exact",
+         "repeated": false,
+         "reason": "acoustic distress signal corroborated the match"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": true,
+        "peak": 0.2375,
+        "class": "Whimper"
+       },
+       "scream_score": 0.36,
+       "final": {
+        "decision": "NO_ACTION",
+        "udk_id": null,
+        "confidence": 0.0,
+        "layer": "none",
+        "repeated": false,
+        "reason": "below TRIGGER_VERIFY threshold"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_01",
+         "confidence": 0.65,
+         "layer": "exact",
+         "repeated": false,
+         "reason": "acoustic distress signal corroborated the match"
+        }
+       ]
+      }
+     ],
+     "same_audio_every_repeat": true,
+     "whisper_identical": true,
+     "parakeet_identical": true,
+     "suspect_flags": [
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "alerts_identical": true
+    },
+    "on": {
+     "window": [
+      27060,
+      38040
+     ],
+     "repeats": [
+      {
+       "window": [
+        27060,
+        38040
+       ],
+       "audio_digest": "7abd15c4243ed524",
+       "skipped": false,
+       "whisper": {
+        "text": "Help! Help! I'm so sorry! I'm sorry! I'm sorry! I'm sorry! I'm sorry! I'm sorry! Please, please stand up! I'm sorry!",
+        "temperature": 1.0,
+        "avg_logprob": -1.1837,
+        "compression_ratio": 2.2308
+       },
+       "stt_suspect": true,
+       "parakeet": "",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": true,
+        "peak": 0.2916,
+        "class": "Whimper"
+       },
+       "scream_score": 0.3992,
+       "final": {
+        "decision": "NO_ACTION",
+        "udk_id": null,
+        "confidence": 0.0,
+        "layer": "none",
+        "repeated": false,
+        "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": null,
+         "confidence": 0.292,
+         "layer": "acoustic_scream",
+         "repeated": false,
+         "reason": "sustained Whimper (BEATs 0.29), no UDK words"
+        }
+       ]
+      },
+      {
+       "window": [
+        27060,
+        38040
+       ],
+       "audio_digest": "7abd15c4243ed524",
+       "skipped": false,
+       "whisper": {
+        "text": "AHHH! Help! Help! I'm going to be the one who is the best at this. I'm going to be the only one who is the best at this. I'm going to be the only one who is the best at this. Please! Please! Please stand on the other side of the door.",
+        "temperature": 1.0,
+        "avg_logprob": -1.216,
+        "compression_ratio": 2.2941
+       },
+       "stt_suspect": true,
+       "parakeet": "",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": true,
+        "peak": 0.2916,
+        "class": "Whimper"
+       },
+       "scream_score": 0.3992,
+       "final": {
+        "decision": "NO_ACTION",
+        "udk_id": null,
+        "confidence": 0.0,
+        "layer": "none",
+        "repeated": false,
+        "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": null,
+         "confidence": 0.292,
+         "layer": "acoustic_scream",
+         "repeated": false,
+         "reason": "sustained Whimper (BEATs 0.29), no UDK words"
+        }
+       ]
+      },
+      {
+       "window": [
+        27060,
+        38040
+       ],
+       "audio_digest": "7abd15c4243ed524",
+       "skipped": false,
+       "whisper": {
+        "text": "Help! Help! Please stand out, you will be betrayed! Please stand out. You will be betrayed.",
+        "temperature": 1.0,
+        "avg_logprob": -1.6709,
+        "compression_ratio": 1.4918
+       },
+       "stt_suspect": true,
+       "parakeet": "",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": true,
+        "peak": 0.2916,
+        "class": "Whimper"
+       },
+       "scream_score": 0.3992,
+       "final": {
+        "decision": "NO_ACTION",
+        "udk_id": null,
+        "confidence": 0.0,
+        "layer": "none",
+        "repeated": false,
+        "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": null,
+         "confidence": 0.292,
+         "layer": "acoustic_scream",
+         "repeated": false,
+         "reason": "sustained Whimper (BEATs 0.29), no UDK words"
+        }
+       ]
+      },
+      {
+       "window": [
+        27060,
+        38040
+       ],
+       "audio_digest": "7abd15c4243ed524",
+       "skipped": false,
+       "whisper": {
+        "text": "Help! Help! I can't believe it! I can't believe it! Please! Please stand down! I can't believe it!",
+        "temperature": 0.2,
+        "avg_logprob": -0.8473,
+        "compression_ratio": 1.7193
+       },
+       "stt_suspect": true,
+       "parakeet": "",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": true,
+        "peak": 0.2916,
+        "class": "Whimper"
+       },
+       "scream_score": 0.3992,
+       "final": {
+        "decision": "NO_ACTION",
+        "udk_id": null,
+        "confidence": 0.0,
+        "layer": "none",
+        "repeated": false,
+        "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": null,
+         "confidence": 0.292,
+         "layer": "acoustic_scream",
+         "repeated": false,
+         "reason": "sustained Whimper (BEATs 0.29), no UDK words"
+        }
+       ]
+      },
+      {
+       "window": [
+        27060,
+        38040
+       ],
+       "audio_digest": "7abd15c4243ed524",
+       "skipped": false,
+       "whisper": {
+        "text": "Help! Help! I am not going to be able to do this. I am not going to be able to do this. Please, please stand up. I am not going to be able to do this.",
+        "temperature": 0.2,
+        "avg_logprob": -0.8367,
+        "compression_ratio": 2.0
+       },
+       "stt_suspect": true,
+       "parakeet": "",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": true,
+        "peak": 0.2916,
+        "class": "Whimper"
+       },
+       "scream_score": 0.3992,
+       "final": {
+        "decision": "NO_ACTION",
+        "udk_id": null,
+        "confidence": 0.0,
+        "layer": "none",
+        "repeated": false,
+        "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": null,
+         "confidence": 0.292,
+         "layer": "acoustic_scream",
+         "repeated": false,
+         "reason": "sustained Whimper (BEATs 0.29), no UDK words"
+        }
+       ]
+      }
+     ],
+     "same_audio_every_repeat": true,
+     "whisper_identical": false,
+     "parakeet_identical": true,
+     "suspect_flags": [
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "alerts_identical": true
+    }
+   },
+   "sequence": {},
+   "sweep": [
+    {
+     "kind": "both",
+     "window": [
+      26880,
+      37860
+     ],
+     "runs": [
+      {
+       "suspect": true,
+       "temperature": 0.4,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 0.4,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      }
+     ]
+    },
+    {
+     "kind": "both",
+     "window": [
+      26910,
+      37890
+     ],
+     "runs": [
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "both",
+     "window": [
+      26940,
+      37920
+     ],
+     "runs": [
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "both",
+     "window": [
+      26970,
+      37950
+     ],
+     "runs": [
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 0.4,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      }
+     ]
+    },
+    {
+     "kind": "both",
+     "window": [
+      27000,
+      37980
+     ],
+     "runs": [
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "both",
+     "window": [
+      27030,
+      38010
+     ],
+     "runs": [
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_10",
+         "fuzzy"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "both",
+     "window": [
+      27060,
+      38040
+     ],
+     "runs": [
+      {
+       "suspect": true,
+       "temperature": 0.4,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 0.2,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 0.2,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      }
+     ]
+    },
+    {
+     "kind": "both",
+     "window": [
+      27090,
+      38070
+     ],
+     "runs": [
+      {
+       "suspect": true,
+       "temperature": 0.4,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      }
+     ]
+    },
+    {
+     "kind": "both",
+     "window": [
+      27120,
+      38100
+     ],
+     "runs": [
+      {
+       "suspect": true,
+       "temperature": 0.2,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 0.2,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 0.2,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      }
+     ]
+    },
+    {
+     "kind": "start_only",
+     "window": [
+      26940,
+      37920
+     ],
+     "runs": [
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "start_only",
+     "window": [
+      26970,
+      37920
+     ],
+     "runs": [
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      }
+     ]
+    },
+    {
+     "kind": "start_only",
+     "window": [
+      27000,
+      37920
+     ],
+     "runs": [
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "start_only",
+     "window": [
+      27030,
+      37920
+     ],
+     "runs": [
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      }
+     ]
+    },
+    {
+     "kind": "start_only",
+     "window": [
+      27060,
+      37920
+     ],
+     "runs": [
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": []
+      },
+      {
+       "suspect": true,
+       "temperature": 0.2,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         null,
+         "acoustic_scream"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_20",
+         "semantic"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "end_only",
+     "window": [
+      26940,
+      37920
+     ],
+     "runs": [
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "end_only",
+     "window": [
+      26940,
+      37950
+     ],
+     "runs": [
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "end_only",
+     "window": [
+      26940,
+      37980
+     ],
+     "runs": [
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "end_only",
+     "window": [
+      26940,
+      38010
+     ],
+     "runs": [
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "end_only",
+     "window": [
+      26940,
+      38040
+     ],
+     "runs": [
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_ALL",
+         "UDK_01",
+         "exact"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_01",
+         "exact"
+        ]
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "pos_01": {
+   "exact": {
+    "off": {
+     "window": [
+      17460,
+      28440
+     ],
+     "repeats": [
+      {
+       "window": [
+        17460,
+        28440
+       ],
+       "audio_digest": "9f9ef62aeff2f1d6",
+       "skipped": false,
+       "whisper": {
+        "text": "I'll see you again soon. Bye bye.",
+        "temperature": 1.0,
+        "avg_logprob": -1.5386,
+        "compression_ratio": 0.8049
+       },
+       "stt_suspect": true,
+       "parakeet": "To my hard hook and I hard. I can get out of it.",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_20",
+         "confidence": 0.6706,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "phrase is common-in-ordinary-conversation, verify by default (Section 16)"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0129,
+        "class": "Screaming"
+       },
+       "scream_score": 0.0128,
+       "final": {
+        "decision": "TRIGGER_VERIFY",
+        "udk_id": "UDK_20",
+        "confidence": 0.6706,
+        "layer": "semantic",
+        "repeated": false,
+        "reason": "phrase is common-in-ordinary-conversation, verify by default (Section 16)"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_20",
+         "confidence": 0.6706,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "phrase is common-in-ordinary-conversation, verify by default (Section 16)"
+        }
+       ]
+      },
+      {
+       "window": [
+        17460,
+        28440
+       ],
+       "audio_digest": "9f9ef62aeff2f1d6",
+       "skipped": false,
+       "whisper": {
+        "text": "my heart who can I add",
+        "temperature": 1.0,
+        "avg_logprob": -1.5288,
+        "compression_ratio": 0.7333
+       },
+       "stt_suspect": true,
+       "parakeet": "To my hard hook and I hard. I can get out of it.",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_20",
+         "confidence": 0.6706,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "phrase is common-in-ordinary-conversation, verify by default (Section 16)"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0129,
+        "class": "Screaming"
+       },
+       "scream_score": 0.0128,
+       "final": {
+        "decision": "TRIGGER_VERIFY",
+        "udk_id": "UDK_20",
+        "confidence": 0.6706,
+        "layer": "semantic",
+        "repeated": false,
+        "reason": "phrase is common-in-ordinary-conversation, verify by default (Section 16)"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_20",
+         "confidence": 0.6706,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "phrase is common-in-ordinary-conversation, verify by default (Section 16)"
+        }
+       ]
+      },
+      {
+       "window": [
+        17460,
+        28440
+       ],
+       "audio_digest": "9f9ef62aeff2f1d6",
+       "skipped": false,
+       "whisper": {
+        "text": "I'm going to die. I'm going to die. I'm going to die. You're going to die? I'm going to die!",
+        "temperature": 0.4,
+        "avg_logprob": -0.8309,
+        "compression_ratio": 2.2439
+       },
+       "stt_suspect": true,
+       "parakeet": "To my hard hook and I hard. I can get out of it.",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_20",
+         "confidence": 0.6706,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "phrase is common-in-ordinary-conversation, verify by default (Section 16)"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0129,
+        "class": "Screaming"
+       },
+       "scream_score": 0.0128,
+       "final": {
+        "decision": "TRIGGER_VERIFY",
+        "udk_id": "UDK_20",
+        "confidence": 0.6706,
+        "layer": "semantic",
+        "repeated": false,
+        "reason": "phrase is common-in-ordinary-conversation, verify by default (Section 16)"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_20",
+         "confidence": 0.6706,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "phrase is common-in-ordinary-conversation, verify by default (Section 16)"
+        }
+       ]
+      },
+      {
+       "window": [
+        17460,
+        28440
+       ],
+       "audio_digest": "9f9ef62aeff2f1d6",
+       "skipped": false,
+       "whisper": {
+        "text": "clouds to me heart who can I out",
+        "temperature": 1.0,
+        "avg_logprob": -2.8845,
+        "compression_ratio": 0.8
+       },
+       "stt_suspect": true,
+       "parakeet": "To my hard hook and I hard. I can get out of it.",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_20",
+         "confidence": 0.6706,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "phrase is common-in-ordinary-conversation, verify by default (Section 16)"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0129,
+        "class": "Screaming"
+       },
+       "scream_score": 0.0128,
+       "final": {
+        "decision": "TRIGGER_VERIFY",
+        "udk_id": "UDK_20",
+        "confidence": 0.6706,
+        "layer": "semantic",
+        "repeated": false,
+        "reason": "phrase is common-in-ordinary-conversation, verify by default (Section 16)"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_20",
+         "confidence": 0.6706,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "phrase is common-in-ordinary-conversation, verify by default (Section 16)"
+        }
+       ]
+      },
+      {
+       "window": [
+        17460,
+        28440
+       ],
+       "audio_digest": "9f9ef62aeff2f1d6",
+       "skipped": false,
+       "whisper": {
+        "text": "I don't know what you're doing. I'm going to be okay. I'm gonna get you. You're not gonna be okay. I'm gonna get you. My bad!",
+        "temperature": 1.0,
+        "avg_logprob": -1.3122,
+        "compression_ratio": 1.4706
+       },
+       "stt_suspect": true,
+       "parakeet": "To my hard hook and I hard. I can get out of it.",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_20",
+         "confidence": 0.6706,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "phrase is common-in-ordinary-conversation, verify by default (Section 16)"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0129,
+        "class": "Screaming"
+       },
+       "scream_score": 0.0128,
+       "final": {
+        "decision": "TRIGGER_VERIFY",
+        "udk_id": "UDK_20",
+        "confidence": 0.6706,
+        "layer": "semantic",
+        "repeated": false,
+        "reason": "phrase is common-in-ordinary-conversation, verify by default (Section 16)"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_20",
+         "confidence": 0.6706,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "phrase is common-in-ordinary-conversation, verify by default (Section 16)"
+        }
+       ]
+      }
+     ],
+     "same_audio_every_repeat": true,
+     "whisper_identical": false,
+     "parakeet_identical": true,
+     "suspect_flags": [
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "alerts_identical": true
+    },
+    "on": {
+     "window": [
+      17490,
+      28470
+     ],
+     "repeats": [
+      {
+       "window": [
+        17490,
+        28470
+       ],
+       "audio_digest": "ffa6a67f33bc27e0",
+       "skipped": false,
+       "whisper": {
+        "text": "You're not alone. What's wrong? There are no others. I'm not alone. I'm not alone. No!",
+        "temperature": 1.0,
+        "avg_logprob": -1.2611,
+        "compression_ratio": 1.3231
+       },
+       "stt_suspect": true,
+       "parakeet": "To my yard, who can I hard? I can let out with it.",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "below TRIGGER_VERIFY threshold"
+        },
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_10",
+         "confidence": 0.7443,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0102,
+        "class": "Screaming"
+       },
+       "scream_score": 0.0154,
+       "final": {
+        "decision": "NO_ACTION",
+        "udk_id": null,
+        "confidence": 0.0,
+        "layer": "none",
+        "repeated": false,
+        "reason": "below TRIGGER_VERIFY threshold"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_10",
+         "confidence": 0.7443,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ]
+      },
+      {
+       "window": [
+        17490,
+        28470
+       ],
+       "audio_digest": "ffa6a67f33bc27e0",
+       "skipped": false,
+       "whisper": {
+        "text": "Don't be afraid. You don't have to be afraid. That's it. Don't be afraid. Don't be afraid. Don't be afraid. Don't be afraid.",
+        "temperature": 0.6,
+        "avg_logprob": -0.9864,
+        "compression_ratio": 2.1754
+       },
+       "stt_suspect": true,
+       "parakeet": "To my yard, who can I hard? I can let out with it.",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "below TRIGGER_VERIFY threshold"
+        },
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_10",
+         "confidence": 0.7443,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0102,
+        "class": "Screaming"
+       },
+       "scream_score": 0.0154,
+       "final": {
+        "decision": "NO_ACTION",
+        "udk_id": null,
+        "confidence": 0.0,
+        "layer": "none",
+        "repeated": false,
+        "reason": "below TRIGGER_VERIFY threshold"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_10",
+         "confidence": 0.7443,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ]
+      },
+      {
+       "window": [
+        17490,
+        28470
+       ],
+       "audio_digest": "ffa6a67f33bc27e0",
+       "skipped": false,
+       "whisper": {
+        "text": "A A A A A A",
+        "temperature": 1.0,
+        "avg_logprob": -1.0449,
+        "compression_ratio": 0.9167
+       },
+       "stt_suspect": true,
+       "parakeet": "To my yard, who can I hard? I can let out with it.",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "below TRIGGER_VERIFY threshold"
+        },
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_10",
+         "confidence": 0.7443,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0102,
+        "class": "Screaming"
+       },
+       "scream_score": 0.0154,
+       "final": {
+        "decision": "NO_ACTION",
+        "udk_id": null,
+        "confidence": 0.0,
+        "layer": "none",
+        "repeated": false,
+        "reason": "below TRIGGER_VERIFY threshold"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_10",
+         "confidence": 0.7443,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ]
+      },
+      {
+       "window": [
+        17490,
+        28470
+       ],
+       "audio_digest": "ffa6a67f33bc27e0",
+       "skipped": false,
+       "whisper": {
+        "text": "It's like you've been through a long time and you've made a difference. You're in my eye, I'm in my eye! I'm not going to be able to be like you, you're not going to be able to be like you!",
+        "temperature": 1.0,
+        "avg_logprob": -1.7584,
+        "compression_ratio": 1.6293
+       },
+       "stt_suspect": true,
+       "parakeet": "To my yard, who can I hard? I can let out with it.",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "below TRIGGER_VERIFY threshold"
+        },
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_10",
+         "confidence": 0.7443,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0102,
+        "class": "Screaming"
+       },
+       "scream_score": 0.0154,
+       "final": {
+        "decision": "NO_ACTION",
+        "udk_id": null,
+        "confidence": 0.0,
+        "layer": "none",
+        "repeated": false,
+        "reason": "below TRIGGER_VERIFY threshold"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_10",
+         "confidence": 0.7443,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ]
+      },
+      {
+       "window": [
+        17490,
+        28470
+       ],
+       "audio_digest": "ffa6a67f33bc27e0",
+       "skipped": false,
+       "whisper": {
+        "text": "you Don't we art woken I art",
+        "temperature": 1.0,
+        "avg_logprob": -1.7851,
+        "compression_ratio": 0.875
+       },
+       "stt_suspect": true,
+       "parakeet": "To my yard, who can I hard? I can let out with it.",
+       "whisper_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "text match vetoed by STT-confidence guardrail (decoder didn't trust its own output)"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "NO_ACTION",
+         "udk_id": null,
+         "confidence": 0.0,
+         "layer": "none",
+         "repeated": false,
+         "reason": "below TRIGGER_VERIFY threshold"
+        },
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_10",
+         "confidence": 0.7443,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "intent": [],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0102,
+        "class": "Screaming"
+       },
+       "scream_score": 0.0154,
+       "final": {
+        "decision": "NO_ACTION",
+        "udk_id": null,
+        "confidence": 0.0,
+        "layer": "none",
+        "repeated": false,
+        "reason": "below TRIGGER_VERIFY threshold"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_10",
+         "confidence": 0.7443,
+         "layer": "semantic",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ]
+      }
+     ],
+     "same_audio_every_repeat": true,
+     "whisper_identical": false,
+     "parakeet_identical": true,
+     "suspect_flags": [
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "alerts_identical": true
+    }
+   },
+   "sequence": {},
+   "sweep": [
+    {
+     "kind": "both",
+     "window": [
+      17400,
+      28380
+     ],
+     "runs": [
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_20",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_20",
+         "semantic"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_20",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_20",
+         "semantic"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_20",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_20",
+         "semantic"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "both",
+     "window": [
+      17430,
+      28410
+     ],
+     "runs": [
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_20",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_20",
+         "semantic"
+        ]
+       ]
+      },
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_20",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_20",
+         "semantic"
+        ]
+       ]
+      },
+      {
+       "suspect": true,
+       "temperature": 0.4,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_20",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_20",
+         "semantic"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "both",
+     "window": [
+      17460,
+      28440
+     ],
+     "runs": [
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_20",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_20",
+         "semantic"
+        ]
+       ]
+      },
+      {
+       "suspect": true,
+       "temperature": 0.4,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_20",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_20",
+         "semantic"
+        ]
+       ]
+      },
+      {
+       "suspect": true,
+       "temperature": 0.4,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_20",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_20",
+         "semantic"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "both",
+     "window": [
+      17490,
+      28470
+     ],
+     "runs": [
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_10",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_10",
+         "semantic"
+        ]
+       ]
+      },
+      {
+       "suspect": true,
+       "temperature": 0.4,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_10",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_10",
+         "semantic"
+        ]
+       ]
+      },
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_10",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_10",
+         "semantic"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "both",
+     "window": [
+      17520,
+      28500
+     ],
+     "runs": [
+      {
+       "suspect": true,
+       "temperature": 0.8,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_20",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_20",
+         "semantic"
+        ]
+       ]
+      },
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_20",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_20",
+         "semantic"
+        ]
+       ]
+      },
+      {
+       "suspect": true,
+       "temperature": 1.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_20",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_20",
+         "semantic"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "both",
+     "window": [
+      17550,
+      28530
+     ],
+     "runs": [
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_20",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_20",
+         "semantic"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_20",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_20",
+         "semantic"
+        ]
+       ]
+      },
+      {
+       "suspect": false,
+       "temperature": 0.0,
+       "alerts": [
+        [
+         "TRIGGER_VERIFY",
+         "UDK_20",
+         "semantic"
+        ]
+       ],
+       "text_udks": [
+        [
+         "UDK_20",
+         "semantic"
+        ]
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "neg_10": {
+   "exact": {
+    "off": {
+     "window": [
+      0,
+      9480
+     ],
+     "repeats": [
+      {
+       "window": [
+        0,
+        9480
+       ],
+       "audio_digest": "00b28d6f6b598cdc",
+       "skipped": false,
+       "whisper": {
+        "text": "People don't have discipline, and the minute you use the word discipline, they feel, oh, okay, something is going to be taken away from me. So I don't know why there's this whole misconception.",
+        "temperature": 0.0,
+        "avg_logprob": -0.3919,
+        "compression_ratio": 1.3592
+       },
+       "stt_suspect": false,
+       "parakeet": "People don't have discipline. Yeah. And the minute you use the word discipline, they feel oh, okay. Negative. Something is going to be taken away from me. So I don't know why there's this whole misconception.",
+       "whisper_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "intent": [
+        {
+         "text": "c4d2d5f975d301f9",
+         "p": 0.84224
+        }
+       ],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0147,
+        "class": "Whimper"
+       },
+       "scream_score": 0.004,
+       "final": {
+        "decision": "TRIGGER_VERIFY",
+        "udk_id": "UDK_03",
+        "confidence": 0.7875,
+        "layer": "fuzzy",
+        "repeated": false,
+        "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ]
+      },
+      {
+       "window": [
+        0,
+        9480
+       ],
+       "audio_digest": "00b28d6f6b598cdc",
+       "skipped": false,
+       "whisper": {
+        "text": "People don't have discipline, and the minute you use the word discipline, they feel, oh, okay, something is going to be taken away from me. So I don't know why there's this whole misconception.",
+        "temperature": 0.0,
+        "avg_logprob": -0.3919,
+        "compression_ratio": 1.3592
+       },
+       "stt_suspect": false,
+       "parakeet": "People don't have discipline. Yeah. And the minute you use the word discipline, they feel oh, okay. Negative. Something is going to be taken away from me. So I don't know why there's this whole misconception.",
+       "whisper_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "intent": [
+        {
+         "text": "c4d2d5f975d301f9",
+         "p": 0.84224
+        }
+       ],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0147,
+        "class": "Whimper"
+       },
+       "scream_score": 0.004,
+       "final": {
+        "decision": "TRIGGER_VERIFY",
+        "udk_id": "UDK_03",
+        "confidence": 0.7875,
+        "layer": "fuzzy",
+        "repeated": false,
+        "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ]
+      },
+      {
+       "window": [
+        0,
+        9480
+       ],
+       "audio_digest": "00b28d6f6b598cdc",
+       "skipped": false,
+       "whisper": {
+        "text": "People don't have discipline, and the minute you use the word discipline, they feel, oh, okay, something is going to be taken away from me. So I don't know why there's this whole misconception.",
+        "temperature": 0.0,
+        "avg_logprob": -0.3919,
+        "compression_ratio": 1.3592
+       },
+       "stt_suspect": false,
+       "parakeet": "People don't have discipline. Yeah. And the minute you use the word discipline, they feel oh, okay. Negative. Something is going to be taken away from me. So I don't know why there's this whole misconception.",
+       "whisper_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "intent": [
+        {
+         "text": "c4d2d5f975d301f9",
+         "p": 0.84224
+        }
+       ],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0147,
+        "class": "Whimper"
+       },
+       "scream_score": 0.004,
+       "final": {
+        "decision": "TRIGGER_VERIFY",
+        "udk_id": "UDK_03",
+        "confidence": 0.7875,
+        "layer": "fuzzy",
+        "repeated": false,
+        "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ]
+      },
+      {
+       "window": [
+        0,
+        9480
+       ],
+       "audio_digest": "00b28d6f6b598cdc",
+       "skipped": false,
+       "whisper": {
+        "text": "People don't have discipline, and the minute you use the word discipline, they feel, oh, okay, something is going to be taken away from me. So I don't know why there's this whole misconception.",
+        "temperature": 0.0,
+        "avg_logprob": -0.3919,
+        "compression_ratio": 1.3592
+       },
+       "stt_suspect": false,
+       "parakeet": "People don't have discipline. Yeah. And the minute you use the word discipline, they feel oh, okay. Negative. Something is going to be taken away from me. So I don't know why there's this whole misconception.",
+       "whisper_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "intent": [
+        {
+         "text": "c4d2d5f975d301f9",
+         "p": 0.84224
+        }
+       ],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0147,
+        "class": "Whimper"
+       },
+       "scream_score": 0.004,
+       "final": {
+        "decision": "TRIGGER_VERIFY",
+        "udk_id": "UDK_03",
+        "confidence": 0.7875,
+        "layer": "fuzzy",
+        "repeated": false,
+        "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ]
+      },
+      {
+       "window": [
+        0,
+        9480
+       ],
+       "audio_digest": "00b28d6f6b598cdc",
+       "skipped": false,
+       "whisper": {
+        "text": "People don't have discipline, and the minute you use the word discipline, they feel, oh, okay, something is going to be taken away from me. So I don't know why there's this whole misconception.",
+        "temperature": 0.0,
+        "avg_logprob": -0.3919,
+        "compression_ratio": 1.3592
+       },
+       "stt_suspect": false,
+       "parakeet": "People don't have discipline. Yeah. And the minute you use the word discipline, they feel oh, okay. Negative. Something is going to be taken away from me. So I don't know why there's this whole misconception.",
+       "whisper_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "intent": [
+        {
+         "text": "c4d2d5f975d301f9",
+         "p": 0.84224
+        }
+       ],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0147,
+        "class": "Whimper"
+       },
+       "scream_score": 0.004,
+       "final": {
+        "decision": "TRIGGER_VERIFY",
+        "udk_id": "UDK_03",
+        "confidence": 0.7875,
+        "layer": "fuzzy",
+        "repeated": false,
+        "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ]
+      }
+     ],
+     "same_audio_every_repeat": true,
+     "whisper_identical": true,
+     "parakeet_identical": true,
+     "suspect_flags": [
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "alerts_identical": true
+    },
+    "on": {
+     "window": [
+      0,
+      9510
+     ],
+     "repeats": [
+      {
+       "window": [
+        0,
+        9510
+       ],
+       "audio_digest": "72e99052dc66438e",
+       "skipped": false,
+       "whisper": {
+        "text": "People don't have discipline, and the minute you use the word discipline, they feel, oh, okay, something is going to be taken away from me. So I don't know why there's this whole misconception.",
+        "temperature": 0.0,
+        "avg_logprob": -0.3903,
+        "compression_ratio": 1.3592
+       },
+       "stt_suspect": false,
+       "parakeet": "People don't have discipline. Yeah. And the minute you use the word discipline, they feel oh, okay. Negative. Something is going to be taken away from me. So I don't know why there's this whole misconception.",
+       "whisper_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "intent": [
+        {
+         "text": "c4d2d5f975d301f9",
+         "p": 0.84224
+        }
+       ],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0147,
+        "class": "Whimper"
+       },
+       "scream_score": 0.004,
+       "final": {
+        "decision": "TRIGGER_VERIFY",
+        "udk_id": "UDK_03",
+        "confidence": 0.7875,
+        "layer": "fuzzy",
+        "repeated": false,
+        "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ]
+      },
+      {
+       "window": [
+        0,
+        9510
+       ],
+       "audio_digest": "72e99052dc66438e",
+       "skipped": false,
+       "whisper": {
+        "text": "People don't have discipline, and the minute you use the word discipline, they feel, oh, okay, something is going to be taken away from me. So I don't know why there's this whole misconception.",
+        "temperature": 0.0,
+        "avg_logprob": -0.3903,
+        "compression_ratio": 1.3592
+       },
+       "stt_suspect": false,
+       "parakeet": "People don't have discipline. Yeah. And the minute you use the word discipline, they feel oh, okay. Negative. Something is going to be taken away from me. So I don't know why there's this whole misconception.",
+       "whisper_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "intent": [
+        {
+         "text": "c4d2d5f975d301f9",
+         "p": 0.84224
+        }
+       ],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0147,
+        "class": "Whimper"
+       },
+       "scream_score": 0.004,
+       "final": {
+        "decision": "TRIGGER_VERIFY",
+        "udk_id": "UDK_03",
+        "confidence": 0.7875,
+        "layer": "fuzzy",
+        "repeated": false,
+        "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ]
+      },
+      {
+       "window": [
+        0,
+        9510
+       ],
+       "audio_digest": "72e99052dc66438e",
+       "skipped": false,
+       "whisper": {
+        "text": "People don't have discipline, and the minute you use the word discipline, they feel, oh, okay, something is going to be taken away from me. So I don't know why there's this whole misconception.",
+        "temperature": 0.0,
+        "avg_logprob": -0.3903,
+        "compression_ratio": 1.3592
+       },
+       "stt_suspect": false,
+       "parakeet": "People don't have discipline. Yeah. And the minute you use the word discipline, they feel oh, okay. Negative. Something is going to be taken away from me. So I don't know why there's this whole misconception.",
+       "whisper_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "intent": [
+        {
+         "text": "c4d2d5f975d301f9",
+         "p": 0.84224
+        }
+       ],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0147,
+        "class": "Whimper"
+       },
+       "scream_score": 0.004,
+       "final": {
+        "decision": "TRIGGER_VERIFY",
+        "udk_id": "UDK_03",
+        "confidence": 0.7875,
+        "layer": "fuzzy",
+        "repeated": false,
+        "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ]
+      },
+      {
+       "window": [
+        0,
+        9510
+       ],
+       "audio_digest": "72e99052dc66438e",
+       "skipped": false,
+       "whisper": {
+        "text": "People don't have discipline, and the minute you use the word discipline, they feel, oh, okay, something is going to be taken away from me. So I don't know why there's this whole misconception.",
+        "temperature": 0.0,
+        "avg_logprob": -0.3903,
+        "compression_ratio": 1.3592
+       },
+       "stt_suspect": false,
+       "parakeet": "People don't have discipline. Yeah. And the minute you use the word discipline, they feel oh, okay. Negative. Something is going to be taken away from me. So I don't know why there's this whole misconception.",
+       "whisper_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "intent": [
+        {
+         "text": "c4d2d5f975d301f9",
+         "p": 0.84224
+        }
+       ],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0147,
+        "class": "Whimper"
+       },
+       "scream_score": 0.004,
+       "final": {
+        "decision": "TRIGGER_VERIFY",
+        "udk_id": "UDK_03",
+        "confidence": 0.7875,
+        "layer": "fuzzy",
+        "repeated": false,
+        "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ]
+      },
+      {
+       "window": [
+        0,
+        9510
+       ],
+       "audio_digest": "72e99052dc66438e",
+       "skipped": false,
+       "whisper": {
+        "text": "People don't have discipline, and the minute you use the word discipline, they feel, oh, okay, something is going to be taken away from me. So I don't know why there's this whole misconception.",
+        "temperature": 0.0,
+        "avg_logprob": -0.3903,
+        "compression_ratio": 1.3592
+       },
+       "stt_suspect": false,
+       "parakeet": "People don't have discipline. Yeah. And the minute you use the word discipline, they feel oh, okay. Negative. Something is going to be taken away from me. So I don't know why there's this whole misconception.",
+       "whisper_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "intent": [
+        {
+         "text": "c4d2d5f975d301f9",
+         "p": 0.84224
+        }
+       ],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0147,
+        "class": "Whimper"
+       },
+       "scream_score": 0.004,
+       "final": {
+        "decision": "TRIGGER_VERIFY",
+        "udk_id": "UDK_03",
+        "confidence": 0.7875,
+        "layer": "fuzzy",
+        "repeated": false,
+        "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ]
+      }
+     ],
+     "same_audio_every_repeat": true,
+     "whisper_identical": true,
+     "parakeet_identical": true,
+     "suspect_flags": [
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "alerts_identical": true
+    }
+   },
+   "sequence": {
+    "off": {
+     "schedule": [
+      [
+       [
+        0,
+        9480
+       ],
+       9.6
+      ],
+      [
+       [
+        0,
+        9510
+       ],
+       14.7
+      ]
+     ],
+     "segments": [
+      {
+       "window": [
+        0,
+        9480
+       ],
+       "audio_digest": "00b28d6f6b598cdc",
+       "skipped": false,
+       "whisper": {
+        "text": "People don't have discipline, and the minute you use the word discipline, they feel, oh, okay, something is going to be taken away from me. So I don't know why there's this whole misconception.",
+        "temperature": 0.0,
+        "avg_logprob": -0.3919,
+        "compression_ratio": 1.3592
+       },
+       "stt_suspect": false,
+       "parakeet": "People don't have discipline. Yeah. And the minute you use the word discipline, they feel oh, okay. Negative. Something is going to be taken away from me. So I don't know why there's this whole misconception.",
+       "whisper_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "intent": [
+        {
+         "text": "c4d2d5f975d301f9",
+         "p": 0.84224
+        }
+       ],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0147,
+        "class": "Whimper"
+       },
+       "scream_score": 0.004,
+       "final": {
+        "decision": "TRIGGER_VERIFY",
+        "udk_id": "UDK_03",
+        "confidence": 0.7875,
+        "layer": "fuzzy",
+        "repeated": false,
+        "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ]
+      },
+      {
+       "window": [
+        0,
+        9510
+       ],
+       "audio_digest": "72e99052dc66438e",
+       "skipped": false,
+       "whisper": {
+        "text": "People don't have discipline, and the minute you use the word discipline, they feel, oh, okay, something is going to be taken away from me. So I don't know why there's this whole misconception.",
+        "temperature": 0.0,
+        "avg_logprob": -0.3903,
+        "compression_ratio": 1.3592
+       },
+       "stt_suspect": false,
+       "parakeet": "People don't have discipline. Yeah. And the minute you use the word discipline, they feel oh, okay. Negative. Something is going to be taken away from me. So I don't know why there's this whole misconception.",
+       "whisper_decisions": [
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": true,
+         "reason": "repeated within window"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": true,
+         "reason": "repeated within window"
+        }
+       ],
+       "intent": [
+        {
+         "text": "c4d2d5f975d301f9",
+         "p": 0.84224
+        }
+       ],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0147,
+        "class": "Whimper"
+       },
+       "scream_score": 0.004,
+       "final": {
+        "decision": "TRIGGER_ALL",
+        "udk_id": "UDK_03",
+        "confidence": 0.7875,
+        "layer": "fuzzy",
+        "repeated": true,
+        "reason": "repeated within window"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_ALL",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": true,
+         "reason": "repeated within window"
+        }
+       ]
+      }
+     ],
+     "events": [
+      {
+       "decision": "TRIGGER_VERIFY",
+       "udk_id": "UDK_03",
+       "layer": "fuzzy",
+       "confidence": 0.787
+      },
+      {
+       "decision": "TRIGGER_ALL",
+       "udk_id": "UDK_03",
+       "layer": "fuzzy",
+       "confidence": 0.787
+      }
+     ]
+    },
+    "on": {
+     "schedule": [
+      [
+       [
+        0,
+        9510
+       ],
+       9.6
+      ]
+     ],
+     "segments": [
+      {
+       "window": [
+        0,
+        9510
+       ],
+       "audio_digest": "72e99052dc66438e",
+       "skipped": false,
+       "whisper": {
+        "text": "People don't have discipline, and the minute you use the word discipline, they feel, oh, okay, something is going to be taken away from me. So I don't know why there's this whole misconception.",
+        "temperature": 0.0,
+        "avg_logprob": -0.3903,
+        "compression_ratio": 1.3592
+       },
+       "stt_suspect": false,
+       "parakeet": "People don't have discipline. Yeah. And the minute you use the word discipline, they feel oh, okay. Negative. Something is going to be taken away from me. So I don't know why there's this whole misconception.",
+       "whisper_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "either_stt_decisions": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ],
+       "intent": [
+        {
+         "text": "c4d2d5f975d301f9",
+         "p": 0.84224
+        }
+       ],
+       "scream_trigger": {
+        "fired": false,
+        "peak": 0.0147,
+        "class": "Whimper"
+       },
+       "scream_score": 0.004,
+       "final": {
+        "decision": "TRIGGER_VERIFY",
+        "udk_id": "UDK_03",
+        "confidence": 0.7875,
+        "layer": "fuzzy",
+        "repeated": false,
+        "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+       },
+       "alerts": [
+        {
+         "decision": "TRIGGER_VERIFY",
+         "udk_id": "UDK_03",
+         "confidence": 0.7875,
+         "layer": "fuzzy",
+         "repeated": false,
+         "reason": "confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds"
+        }
+       ]
+      }
+     ],
+     "events": [
+      {
+       "decision": "TRIGGER_VERIFY",
+       "udk_id": "UDK_03",
+       "layer": "fuzzy",
+       "confidence": 0.787
+      }
+     ]
+    }
+   },
+   "sweep": []
+  }
+ }
+}

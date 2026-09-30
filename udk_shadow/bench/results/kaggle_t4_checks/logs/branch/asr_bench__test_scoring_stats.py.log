@@ -1,0 +1,48 @@
+[PASS] normalise: lower-case, punctuation removed
+[PASS] normalise: apostrophe removed, English digits -> words
+[PASS] normalise: Indic digits left as digits and counted (Q9)
+[PASS] normalise: NFC (decomposed == composed)
+[PASS] number words
+[PASS] word_script
+[PASS] alignment C S C I
+[PASS] alignment is deterministic
+[PASS] alignment of empty sides
+[PASS] WER = (S+D+I)/N: 5 deletions of 8
+[PASS] deletion rate separate from insertion rate
+[PASS] CER on characters
+[PASS] language-switch: Devanagari Hindi output as Latin words -> 5 of 8 changed
+[PASS] English-word preservation inside Hindi: help/me/attack kept
+[PASS] code-switched integrity fails when a language's words are lost
+[PASS] perfect mixed-script output: no switches, integrity ok
+[PASS] romanised Hindi reference: language undetermined by script, not counted as a switch (Q8)
+[PASS] English words dropped: preservation 0/3, integrity fails
+[PASS] tokens not matching the reference: tags unavailable, never guessed
+[PASS] negator dropped: preservation 0/1 and a polarity flip
+[PASS] negator inserted: polarity flip counted separately
+[PASS] negation kept: no flip
+[PASS] flip rate over utterances with negation on either side
+[PASS] keyword recall: 'call' found, 'police' missed
+[PASS] keyword recall per safety tag
+[PASS] false keyword insertion on harmless audio: 1 in 0.01 h = 100/h
+[PASS] keywords already in the reference are not false insertions
+[PASS] false-insertion list defaults to the manifest's keyword spans (config null)
+[PASS] words on no-speech audio per hour: 3 words in 0.01 h
+[PASS] insertion run >= 3 words on speech counted
+[PASS] failure list names each problem
+[PASS] invalid benchmark config rejected: romaniser set (Q6 not implemented)
+[PASS] invalid benchmark config rejected: unknown token-language method
+[PASS] invalid benchmark config rejected: bootstrap ci not 0.95
+[PASS] invalid benchmark config rejected: bad slice_by
+[PASS] benchmark config has no defaults (missing key rejected)
+[PASS] bootstrap deterministic for a seed
+[PASS] bootstrap CI brackets the point estimate
+[PASS] bootstrap counts speakers (not utterances)
+[PASS] another seed also brackets the estimate
+[PASS] single speaker: no interval claimed
+[PASS] null speakers become single-utterance clusters and are reported
+[PASS] metric with zero denominator reports None
+[PASS] paired difference B - A is positive when B is worse, CI excludes 0
+[PASS] paired comparison uses only shared utterances
+
+========================================
+45/45 TOTAL PASSED -- ALL PASSED

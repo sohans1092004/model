@@ -1,0 +1,20 @@
+{
+ "format": "asr_bench.benchmark_config/1",
+ "provisional": true,
+ "open_decisions": ["Q4 input unit", "Q5 candidates", "Q6 romaniser (romanised metrics unavailable)", "Q7 negator/stop-word/keyword lists",
+                    "Q8 output-token language method", "Q9 Indic number words", "N-7 slice definitions", "M-1 robustness-subset mapping"],
+ "token_language": {"method": "script", "script_language": {"Latn": "en", "Deva": "hi", "Telu": "te", "Beng": "bn"}},
+ "negators": {"en": ["not", "don't"], "hi": ["nahi", "mat"], "te": ["ledu", "vaddu"]},
+ "stopwords": {},
+ "false_insertion_keywords": null,
+ "romaniser": null,
+ "slice_by": ["language_primary", "is_code_switched"],
+ "bootstrap": {"resamples": 1000, "seed": 20260929, "ci": 0.95},
+ "slice_minimums": {
+  "hindi": {"match": {"language_primary": "hi", "is_code_switched": false}, "min_speakers": 50, "min_hours": 3},
+  "telugu": {"match": {"language_primary": "te", "is_code_switched": false}, "min_speakers": 50, "min_hours": 3},
+  "english_indian": {"match": {"language_primary": "en-IN"}, "min_speakers": 50},
+  "hinglish": {"match": {"language_primary": "hi", "is_code_switched": true}, "min_speakers": 50, "min_hours": 2},
+  "telugu_english": {"match": {"language_primary": "te", "is_code_switched": true}, "min_speakers": 50, "min_hours": 2}
+ }
+}

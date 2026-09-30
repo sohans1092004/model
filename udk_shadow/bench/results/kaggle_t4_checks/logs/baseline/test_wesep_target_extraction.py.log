@@ -1,0 +1,12 @@
+Loading WeSep target-speaker extractor (BSRNN+ECAPA, VoxCeleb1)...
+Traceback (most recent call last):
+  File "/kaggle/working/udk_checks/baseline/test_wesep_target_extraction.py", line 261, in <module>
+    main()
+  File "/kaggle/working/udk_checks/baseline/test_wesep_target_extraction.py", line 140, in main
+    extractor = WeSepExtractor()
+                ^^^^^^^^^^^^^^^^
+  File "/kaggle/working/udk_checks/baseline/wesep_extraction.py", line 72, in __init__
+    _install_import_stubs()
+  File "/kaggle/working/udk_checks/baseline/wesep_extraction.py", line 51, in _install_import_stubs
+    import wespeaker.models.ecapa_tdnn as ecapa_tdnn
+ModuleNotFoundError: No module named 'wespeaker.models'

@@ -1,0 +1,20 @@
+=== _either_stt_decisions ===
+[PASS] primary NO_ACTION + second hears the UDK -> the second's alert is kept 
+[PASS] engine state == as if ONLY the kept decisions were made 
+[PASS] primary alert + second hears nothing useful -> primary kept 
+[PASS] engine state restored to the primary's (the second guess left no trace) 
+[PASS] both paths hearing the same phrase counts ONCE, not as a repeat 
+[PASS] empty second transcript -> primary returned untouched 
+[PASS] the second transcript's per-sentence extras come along with it 
+
+=== live loop (_ingest_frame) ===
+[PASS] Whisper-only: a segment Whisper heard nothing in raises no alert 
+[PASS] Whisper + Parakeet: the same segment now alerts (Parakeet heard the UDK) 
+[PASS] second STT is NOT used when the journey isn't on the English backend 
+
+=== per-sentence matching in the live loop (decide_all) ===
+[PASS] one segment with two different UDK sentences -> an event for EACH 
+[PASS] their event_ids are distinct (no dedup collision) 
+
+========================================
+12/12 TOTAL PASSED -- ALL PASSED

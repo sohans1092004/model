@@ -1,0 +1,11 @@
+{
+ "format": "asr_bench.kathbath_layout/1",
+ "_note": "Fill EVERY null from the real Kathbath package after the access gate is accepted; the adapter refuses nulls. Nothing here was inspected yet (huggingface.co is not reachable from the benchmark-building environment).",
+ "source_version": null,
+ "inspected_from": null,
+ "audio_glob": null,
+ "language_path_index": null,
+ "language_map": null,
+ "speaker_regex": null,
+ "transcripts": {"glob": null, "format": null, "key": null, "id_field": null, "text_field": null}
+}

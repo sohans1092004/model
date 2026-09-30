@@ -1,0 +1,25 @@
+=== Enrollment: distinctiveness/intelligibility validation ===
+[PASS] distinctive phrase, no sample audio -> succeeds
+[PASS] too-short phrase -> rejected
+[PASS] phrase matching ordinary conversation -> rejected
+[PASS] sample audio matches phrase -> succeeds
+[PASS] sample audio doesn't match phrase -> rejected
+
+5/5 enrollment checks passed so far.
+
+=== M2 acceptance: personal UDK detected across varied phrasing ===
+[PASS] enrollment for acceptance test succeeds
+[PASS] variant "purple elephants dance at midnight" -> detected as personal UDK
+[PASS] variant "purple elefants dance at midnite" -> detected as personal UDK
+[PASS] variant "um, purple elephants dance at midnight I think" -> detected as personal UDK
+
+9/9 checks passed so far.
+
+=== Audio storage: chunking, checksums, gap detection ===
+[PASS] manifest has 4 of 5 segments
+[PASS] gap detection flags the missing seq
+[PASS] read_full_audio concatenates present segments in order
+[PASS] checksum mismatch is detected
+
+========================================
+13/13 TOTAL PASSED -- ALL PASSED

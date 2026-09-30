@@ -1,0 +1,1764 @@
+{
+ "components": {
+  "whisper": "FasterWhisperSTT",
+  "whisper_model": "faster-whisper-small.en",
+  "whisper_device": "cuda",
+  "parakeet": "ParakeetSTT",
+  "parakeet_providers": [
+   "CUDAExecutionProvider",
+   "CPUExecutionProvider"
+  ],
+  "semantic": "SentenceTransformerSemanticMatcher",
+  "stt_confidence_gate": true,
+  "beats": "BEATsDistressDetector",
+  "scream_trigger": true,
+  "scream_corroboration": true,
+  "intent_gate": "IntentGate",
+  "intent_threshold": 0.02,
+  "kws": "off",
+  "dual_asr": "off",
+  "separation": "off",
+  "language_id": "off",
+  "device": "cuda",
+  "processing_version": "pipeline-2026.09"
+ },
+ "notes": {
+  "from_env_example": {
+   "UDK_ENABLE_STT": "1",
+   "UDK_STT_MODEL": "small.en",
+   "UDK_ENABLE_PARAKEET": "1",
+   "UDK_ENABLE_KWS": "0",
+   "UDK_ENABLE_SEMANTIC": "1",
+   "UDK_ENABLE_STT_CONFIDENCE_GATE": "1",
+   "UDK_ENABLE_SCREAM_DETECTION": "1",
+   "UDK_ENABLE_SCREAM_TRIGGER": "1",
+   "UDK_DEVICE": "cuda",
+   "UDK_INTENT_GATE": "/app/models/intent_mdeberta",
+   "UDK_INTENT_THRESHOLD": "0.02"
+  }
+ },
+ "repeats": 5,
+ "cases": [
+  {
+   "id": "pos_02",
+   "label": "OFF TRIGGER_ALL UDK_01 exact vs ON acoustic VERIFY",
+   "windows": [
+    {
+     "mode": "off",
+     "window": [
+      26940,
+      37920
+     ],
+     "whisper": [
+      {
+       "text": "Help! Help! Help! Help! I can't believe it! I can't believe it! Please! Please! I can't believe it!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 0.0,
+       "avg_logprob": -0.727,
+       "suspect": false
+      },
+      {
+       "text": "Help! Help! Help! Help! I can't believe it! I can't believe it! Please! Please! I can't believe it!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 0.0,
+       "avg_logprob": -0.727,
+       "suspect": false
+      },
+      {
+       "text": "Help! Help! Help! Help! I can't believe it! I can't believe it! Please! Please! I can't believe it!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 0.0,
+       "avg_logprob": -0.727,
+       "suspect": false
+      },
+      {
+       "text": "Help! Help! Help! Help! I can't believe it! I can't believe it! Please! Please! I can't believe it!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 0.0,
+       "avg_logprob": -0.727,
+       "suspect": false
+      },
+      {
+       "text": "Help! Help! Help! Help! I can't believe it! I can't believe it! Please! Please! I can't believe it!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 0.0,
+       "avg_logprob": -0.727,
+       "suspect": false
+      }
+     ],
+     "parakeet": [
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      }
+     ],
+     "beats": {
+      "fired": true,
+      "peak": 0.2375,
+      "class": "Whimper",
+      "score": 0.36
+     }
+    },
+    {
+     "mode": "on",
+     "window": [
+      27060,
+      38040
+     ],
+     "whisper": [
+      {
+       "text": "Ahhh! Help! Help! Please, don't be afraid. Don't be afraid. Don't be afraid. Please, please, please, please, please.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.071,
+       "suspect": true
+      },
+      {
+       "text": "Help! Help! You are not going to be able to see me. I am not going to be able to see you. Please, please stand down. I am not going to be able to see you.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 0.2,
+       "avg_logprob": -0.897,
+       "suspect": true
+      },
+      {
+       "text": "Help! Help! I'm going to kill you! I'm going to kill you! Please! Please! I'm going to kill you!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 0.4,
+       "avg_logprob": -0.914,
+       "suspect": true
+      },
+      {
+       "text": "Help! Help! I'm not going to do anything with this lady! I'm not going to do anything! I'm not going to do anything! Please! Please stand up!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.118,
+       "suspect": true
+      },
+      {
+       "text": "Help! Help! I'm so sorry! I'm so sorry! I'm so sorry! I'm so sorry! Please! Please stand up! I'm so sorry!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 0.2,
+       "avg_logprob": -0.844,
+       "suspect": true
+      }
+     ],
+     "parakeet": [
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      }
+     ],
+     "beats": {
+      "fired": true,
+      "peak": 0.2916,
+      "class": "Whimper",
+      "score": 0.3992
+     }
+    },
+    {
+     "mode": "off",
+     "window": [
+      17460,
+      28440
+     ],
+     "whisper": [
+      {
+       "text": "He is going crazy, he is going crazy, he is going crazy. The last time I saw him I was gonna do my best to him, but it was not Casty's fault. What's on his face ? Tyzzzzz, Tyzzzzz...",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -2.586,
+       "suspect": true
+      },
+      {
+       "text": "I'm going to find out where I'm going to put the iron. I'm going to put the iron in there. I'll be in there and I'll be in there. There it is! Whoo!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.472,
+       "suspect": true
+      },
+      {
+       "text": "I hate you, but I can't believe it. I can't believe it! I can't believe it! I can't believe it! I can't believe it!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 0.6,
+       "avg_logprob": -0.952,
+       "suspect": true
+      },
+      {
+       "text": "I don't wanna be in the whole world. I think I'm gonna be in the world again. I don't want to be in the world again. I'm the only one! I'm the only one!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.635,
+       "suspect": true
+      },
+      {
+       "text": "You'll be fine in the morning. You're a jerk! You're a jerk! You're a jerk!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.554,
+       "suspect": true
+      }
+     ],
+     "parakeet": [
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      }
+     ],
+     "beats": {
+      "fired": false,
+      "peak": 0.0383,
+      "class": "Whimper",
+      "score": 0.0914
+     }
+    },
+    {
+     "mode": "off",
+     "window": [
+      17490,
+      28470
+     ],
+     "whisper": [
+      {
+       "text": "I'm the only one who wants to see the world. I'm the only one who's gonna get a lot of attention. I'm the only one who wants to see the world. We are going to kill them. We are going to kill them.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.273,
+       "suspect": true
+      },
+      {
+       "text": "I think I'll come back to the point where the iron's going to be. It's not the only thing I have to do. I will be fine, I will be fine. Go to the point where the iron's going to be.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.556,
+       "suspect": true
+      },
+      {
+       "text": "Please don't touch me! No, I will never touch you! I will never touch you, will you? Don't touch me! Don't touch me! Don't touch me!",
+       "match": {
+        "udk": "UDK_06",
+        "layer": "exact",
+        "confidence": 1.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.369,
+       "suspect": true
+      },
+      {
+       "text": "And I don't want to put my phone back on the phone. We will leave. Go get him, before he goes to the hospital. Come on, before he goes to the hospital. Come on, before you go.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -2.168,
+       "suspect": true
+      },
+      {
+       "text": "I'm not going to be able to find it. No, I can't. I don't want to. I don't want to. I can't. I can't. I can't. I can't.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 0.6,
+       "avg_logprob": -0.916,
+       "suspect": true
+      }
+     ],
+     "parakeet": [
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      }
+     ],
+     "beats": {
+      "fired": false,
+      "peak": 0.0412,
+      "class": "Whimper",
+      "score": 0.0948
+     }
+    },
+    {
+     "mode": "on",
+     "window": [
+      17580,
+      28560
+     ],
+     "whisper": [
+      {
+       "text": "I don't know why but how come he was crying? He was sitting on his foot. I know we are big and he doesn't want to Fantasy. I don't know why, but I don't know why.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -2.221,
+       "suspect": true
+      },
+      {
+       "text": "I'm an idiot, I can't do this! I'm an idiot, I can't do this! I'm an idiot! I'm an idiot!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 0.6,
+       "avg_logprob": -0.992,
+       "suspect": true
+      },
+      {
+       "text": "It's not all I needed to tell him to do. It's not the only one who can do it. Just give me this. Look! Take this, please!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.986,
+       "suspect": true
+      },
+      {
+       "text": "They are not over there, they are going nuts. They killed the guy. Hey, they are we going to get lost once. They are not going to get lost. What are you doing? You are going to get lost.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -2.27,
+       "suspect": true
+      },
+      {
+       "text": "I will take care of you. You are not alone. My mother is not alone. I will take care of you.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.348,
+       "suspect": true
+      }
+     ],
+     "parakeet": [
+      {
+       "text": "Don't touch the energy. Need for anybody.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      },
+      {
+       "text": "Don't touch the energy. Need for anybody.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      },
+      {
+       "text": "Don't touch the energy. Need for anybody.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      },
+      {
+       "text": "Don't touch the energy. Need for anybody.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      },
+      {
+       "text": "Don't touch the energy. Need for anybody.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      }
+     ],
+     "beats": {
+      "fired": false,
+      "peak": 0.0307,
+      "class": "Whimper",
+      "score": 0.0932
+     }
+    }
+   ],
+   "sweep": [
+    {
+     "start_ms": 26700,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 26730,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 26760,
+     "whisper_udk": [
+      null,
+      "UDK_01"
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "semantic"
+     ]
+    },
+    {
+     "start_ms": 26790,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 26820,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 26850,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 26880,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 26910,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 26940,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 26970,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 27000,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 27030,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 27060,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 27090,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 27120,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 27150,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 27180,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 27210,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      "UDK_08",
+      "UDK_08"
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 27240,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 27270,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 27300,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      "UDK_08",
+      "UDK_08"
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "pos_01",
+   "label": "OFF VERIFY UDK_20 vs ON VERIFY UDK_10 (30 ms shift)",
+   "windows": [
+    {
+     "mode": "off",
+     "window": [
+      17460,
+      28440
+     ],
+     "whisper": [
+      {
+       "text": "No! No! You're a noob! You're a noob! I'm a noob! No!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.076,
+       "suspect": true
+      },
+      {
+       "text": "that means a lot to me What is going on here? It's not for my family It's for me",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -2.261,
+       "suspect": true
+      },
+      {
+       "text": "I think this is the beginning. This This is the beginning. This is the beginning.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.999,
+       "suspect": true
+      },
+      {
+       "text": "I'm sorry. What's going on? I'm sorry. I'm sorry. I didn't mean to. My bad. you",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.292,
+       "suspect": true
+      },
+      {
+       "text": "for to to me, I'd hook and I had story what",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -2.599,
+       "suspect": true
+      }
+     ],
+     "parakeet": [
+      {
+       "text": "To my hard hook and I hard. I can get out of it.",
+       "match": {
+        "udk": "UDK_20",
+        "layer": "semantic",
+        "confidence": 0.671
+       }
+      },
+      {
+       "text": "To my hard hook and I hard. I can get out of it.",
+       "match": {
+        "udk": "UDK_20",
+        "layer": "semantic",
+        "confidence": 0.671
+       }
+      },
+      {
+       "text": "To my hard hook and I hard. I can get out of it.",
+       "match": {
+        "udk": "UDK_20",
+        "layer": "semantic",
+        "confidence": 0.671
+       }
+      },
+      {
+       "text": "To my hard hook and I hard. I can get out of it.",
+       "match": {
+        "udk": "UDK_20",
+        "layer": "semantic",
+        "confidence": 0.671
+       }
+      },
+      {
+       "text": "To my hard hook and I hard. I can get out of it.",
+       "match": {
+        "udk": "UDK_20",
+        "layer": "semantic",
+        "confidence": 0.671
+       }
+      }
+     ],
+     "beats": {
+      "fired": false,
+      "peak": 0.0129,
+      "class": "Screaming",
+      "score": 0.0128
+     }
+    },
+    {
+     "mode": "on",
+     "window": [
+      17490,
+      28470
+     ],
+     "whisper": [
+      {
+       "text": "Not really.. You're in my heart. I'm in my heart! You're in my heart! You're in my heart!! Ahh!!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -2.086,
+       "suspect": true
+      },
+      {
+       "text": "I'm sorry. I'm sorry. I'm sorry. I'm sorry.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.051,
+       "suspect": true
+      },
+      {
+       "text": "Thank you for watching!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.48,
+       "suspect": true
+      },
+      {
+       "text": "I'm going to die. I'm not going to die. I'm going to die. I'm going to die! I'm going to die!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 0.4,
+       "avg_logprob": -0.785,
+       "suspect": true
+      },
+      {
+       "text": "Who can I hide? He's still there! He's still there! He's still there! Don't talk! He's still there! He's still there! It's a",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.108,
+       "suspect": true
+      }
+     ],
+     "parakeet": [
+      {
+       "text": "To my yard, who can I hard? I can let out with it.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      },
+      {
+       "text": "To my yard, who can I hard? I can let out with it.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      },
+      {
+       "text": "To my yard, who can I hard? I can let out with it.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      },
+      {
+       "text": "To my yard, who can I hard? I can let out with it.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      },
+      {
+       "text": "To my yard, who can I hard? I can let out with it.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      }
+     ],
+     "beats": {
+      "fired": false,
+      "peak": 0.0102,
+      "class": "Screaming",
+      "score": 0.0154
+     }
+    },
+    {
+     "mode": "off",
+     "window": [
+      7980,
+      18960
+     ],
+     "whisper": [
+      {
+       "text": "We have met a meager heart.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.215,
+       "suspect": true
+      },
+      {
+       "text": "We have met a meager heart.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.215,
+       "suspect": true
+      },
+      {
+       "text": "We have met a meager heart.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.215,
+       "suspect": true
+      },
+      {
+       "text": "We have met a meager heart.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.215,
+       "suspect": true
+      },
+      {
+       "text": "BAM! BAM! BAM! BAM! BAM! BAM!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 0.6,
+       "avg_logprob": -0.564,
+       "suspect": true
+      }
+     ],
+     "parakeet": [
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      }
+     ],
+     "beats": {
+      "fired": false,
+      "peak": 0.0017,
+      "class": "Whimper",
+      "score": 0.0007
+     }
+    },
+    {
+     "mode": "on",
+     "window": [
+      8010,
+      18990
+     ],
+     "whisper": [
+      {
+       "text": "We have met a meager heart.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.227,
+       "suspect": true
+      },
+      {
+       "text": "We have met a meager heart.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.227,
+       "suspect": true
+      },
+      {
+       "text": "We have met a meager heart.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.227,
+       "suspect": true
+      },
+      {
+       "text": "We have met a meager heart.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.227,
+       "suspect": true
+      },
+      {
+       "text": "We have met a meager heart.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.227,
+       "suspect": true
+      }
+     ],
+     "parakeet": [
+      {
+       "text": "We have met to make it hard.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      },
+      {
+       "text": "We have met to make it hard.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      },
+      {
+       "text": "We have met to make it hard.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      },
+      {
+       "text": "We have met to make it hard.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      },
+      {
+       "text": "We have met to make it hard.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      }
+     ],
+     "beats": {
+      "fired": false,
+      "peak": 0.0021,
+      "class": "Whimper",
+      "score": 0.0009
+     }
+    }
+   ],
+   "sweep": [
+    {
+     "start_ms": 17325,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 17355,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 17385,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 17415,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 17445,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 17475,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 17505,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 17535,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 17565,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 17595,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    },
+    {
+     "start_ms": 17625,
+     "whisper_udk": [
+      null,
+      null
+     ],
+     "parakeet_udk": [
+      null,
+      null
+     ],
+     "whisper_layers": [
+      "none",
+      "none"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "pos_04",
+   "label": "same window, Whisper differs",
+   "windows": [
+    {
+     "mode": "both",
+     "window": [
+      17580,
+      28560
+     ],
+     "whisper": [
+      {
+       "text": "I am not sure what is happening here. Next, I will show you a new album called Jyothika. If you want to see the actress Jyothika, I will show you.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.2,
+       "suspect": true
+      },
+      {
+       "text": "This is the last time we have seen this. Next, we are going to show you how to make an airplane. If you want to make an airplane, let us know in the comments below.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.203,
+       "suspect": true
+      },
+      {
+       "text": "This is the last time we have seen this. Next, we are going to show you how to make an airplane. If you want to make an airplane, let us know in the comments below.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.203,
+       "suspect": true
+      },
+      {
+       "text": "This is the last time we have seen this. Next, we will talk about the next role in the role of Jyoti Ka. We will talk about the actor's role in the role of Jyoti Ka.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.105,
+       "suspect": true
+      },
+      {
+       "text": "This is the last time we have seen this. Next, we are going to show you how to make an airplane. If you want to make an airplane, let us know in the comments below.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.203,
+       "suspect": true
+      }
+     ],
+     "parakeet": [
+      {
+       "text": "Next, we have to do this.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      },
+      {
+       "text": "Next, we have to do this.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      },
+      {
+       "text": "Next, we have to do this.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      },
+      {
+       "text": "Next, we have to do this.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      },
+      {
+       "text": "Next, we have to do this.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       }
+      }
+     ],
+     "beats": {
+      "fired": false,
+      "peak": 0.0017,
+      "class": "Whimper",
+      "score": 0.0022
+     }
+    }
+   ],
+   "sweep": []
+  },
+  {
+   "id": "neg_03",
+   "label": "same window, Whisper differs",
+   "windows": [
+    {
+     "mode": "both",
+     "window": [
+      36450,
+      47430
+     ],
+     "whisper": [
+      {
+       "text": "and they are selling, they don't even make money They are going to buy you a runner, they are going to be famous and they are going to be good",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.776,
+       "suspect": true
+      },
+      {
+       "text": "The owner of the car was a seller. He was a man who was like a guy who was a guy who was a guy who was a famous guy. He was a good guy.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.733,
+       "suspect": true
+      },
+      {
+       "text": "I think that's why we are selling it. We are not selling it. We are going to buy a new car. We are going to buy a new car. We are going to buy a new car.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.137,
+       "suspect": true
+      },
+      {
+       "text": "And I think that's the way to sell your product. You have to buy a product that you can sell for a good amount of money. And if you want to buy a new product, then you can sell it to a famous company. That's the way to sell your product.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.438,
+       "suspect": true
+      },
+      {
+       "text": "I'm not going to sell this stuff, but I'm going to buy it. I'm going to buy this guy, and he'll be famous. It's a good job.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.651,
+       "suspect": true
+      }
+     ],
+     "parakeet": [
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      }
+     ],
+     "beats": {
+      "fired": false,
+      "peak": 0.002,
+      "class": "Whimper",
+      "score": 0.0009
+     }
+    }
+   ],
+   "sweep": []
+  },
+  {
+   "id": "neg_05",
+   "label": "same window, Whisper differs",
+   "windows": [
+    {
+     "mode": "both",
+     "window": [
+      26940,
+      37920
+     ],
+     "whisper": [
+      {
+       "text": "I'm not gonna do that!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.668,
+       "suspect": true
+      },
+      {
+       "text": "Oh my god! What the fuck?",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.362,
+       "suspect": true
+      },
+      {
+       "text": "Don't forget to like and subscribe!",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.44,
+       "suspect": true
+      },
+      {
+       "text": "I'm sorry, I'm sorry. I'm sorry, I'm sorry.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.226,
+       "suspect": true
+      },
+      {
+       "text": "I'm sorry, I'm sorry.",
+       "match": {
+        "udk": null,
+        "layer": "none",
+        "confidence": 0.0
+       },
+       "temperature": 1.0,
+       "avg_logprob": -1.489,
+       "suspect": true
+      }
+     ],
+     "parakeet": [
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      },
+      {
+       "text": "",
+       "match": null
+      }
+     ],
+     "beats": {
+      "fired": false,
+      "peak": 0.0114,
+      "class": "Screaming",
+      "score": 0.0075
+     }
+    }
+   ],
+   "sweep": []
+  }
+ ]
+}

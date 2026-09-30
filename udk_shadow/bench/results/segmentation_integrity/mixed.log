@@ -1,0 +1,262 @@
+real_recordings/mixed/clip_01_clean.mp3                      chunk=   20ms processed=  4 ref=  1 overlap=  3210ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_01_clean.mp3                      chunk=  100ms processed=  4 ref=  1 overlap=  3210ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_01_clean.mp3                      chunk=  250ms processed=  3 ref=  1 overlap=  4350ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=2 oneshot=1 escalated=False
+real_recordings/mixed/clip_01_clean.mp3                      chunk=  500ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_01_clean.mp3                      chunk= 1000ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_02_noisy.mp3                      chunk=   20ms processed=  7 ref=  5 overlap=  6120ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=5 | alerts stream=7 oneshot=5 escalated=False
+real_recordings/mixed/clip_02_noisy.mp3                      chunk=  100ms processed=  7 ref=  5 overlap=  6180ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=5 | alerts stream=7 oneshot=5 escalated=False
+real_recordings/mixed/clip_02_noisy.mp3                      chunk=  250ms processed=  5 ref=  5 overlap=  2520ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=5 oneshot=5 escalated=False
+real_recordings/mixed/clip_02_noisy.mp3                      chunk=  500ms processed=  5 ref=  5 overlap=  2520ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=5 oneshot=5 escalated=False
+real_recordings/mixed/clip_02_noisy.mp3                      chunk= 1000ms processed=  5 ref=  5 overlap=  2520ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=5 oneshot=5 escalated=False
+real_recordings/mixed/clip_03_muffled.mp3                    chunk=   20ms processed=  5 ref=  1 overlap=  4890ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=4 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_03_muffled.mp3                    chunk=  100ms processed=  4 ref=  1 overlap=  3210ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_03_muffled.mp3                    chunk=  250ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_03_muffled.mp3                    chunk=  500ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_03_muffled.mp3                    chunk= 1000ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_04_overlapping.mp3                chunk=   20ms processed=  3 ref=  1 overlap=  9510ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=3 oneshot=1 escalated=False
+real_recordings/mixed/clip_04_overlapping.mp3                chunk=  100ms processed=  3 ref=  1 overlap=  9510ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=3 oneshot=1 escalated=False
+real_recordings/mixed/clip_04_overlapping.mp3                chunk=  250ms processed=  2 ref=  1 overlap=  4710ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=2 oneshot=1 escalated=False
+real_recordings/mixed/clip_04_overlapping.mp3                chunk=  500ms processed=  2 ref=  1 overlap=  4710ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=2 oneshot=1 escalated=False
+real_recordings/mixed/clip_04_overlapping.mp3                chunk= 1000ms processed=  1 ref=  1 overlap=     0ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_05_clean.mp3                      chunk=   20ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_05_clean.mp3                      chunk=  100ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_05_clean.mp3                      chunk=  250ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_05_clean.mp3                      chunk=  500ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_05_clean.mp3                      chunk= 1000ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_06_noisy.mp3                      chunk=   20ms processed=  7 ref=  3 overlap=  9420ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=5 | alerts stream=7 oneshot=3 escalated=False
+real_recordings/mixed/clip_06_noisy.mp3                      chunk=  100ms processed=  5 ref=  3 overlap=  6180ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=5 oneshot=3 escalated=False
+real_recordings/mixed/clip_06_noisy.mp3                      chunk=  250ms processed=  4 ref=  3 overlap=  4560ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=4 oneshot=3 escalated=False
+real_recordings/mixed/clip_06_noisy.mp3                      chunk=  500ms processed=  4 ref=  3 overlap=  4560ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=4 oneshot=3 escalated=False
+real_recordings/mixed/clip_06_noisy.mp3                      chunk= 1000ms processed=  4 ref=  3 overlap=  4560ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=4 oneshot=3 escalated=False
+real_recordings/mixed/clip_07_muffled.mp3                    chunk=   20ms processed=  6 ref=  1 overlap= 13140ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=6 | alerts stream=3 oneshot=1 escalated=False
+real_recordings/mixed/clip_07_muffled.mp3                    chunk=  100ms processed=  6 ref=  1 overlap= 13110ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=6 | alerts stream=3 oneshot=1 escalated=False
+real_recordings/mixed/clip_07_muffled.mp3                    chunk=  250ms processed=  3 ref=  1 overlap=  4890ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=2 oneshot=1 escalated=False
+real_recordings/mixed/clip_07_muffled.mp3                    chunk=  500ms processed=  3 ref=  1 overlap=  4860ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=2 oneshot=1 escalated=False
+real_recordings/mixed/clip_07_muffled.mp3                    chunk= 1000ms processed=  3 ref=  1 overlap=  4860ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=2 oneshot=1 escalated=False
+real_recordings/mixed/clip_08_overlapping.mp3                chunk=   20ms processed=  5 ref=  1 overlap=  7110ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=5 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_08_overlapping.mp3                chunk=  100ms processed=  3 ref=  1 overlap=  2250ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_08_overlapping.mp3                chunk=  250ms processed=  3 ref=  1 overlap=  2220ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_08_overlapping.mp3                chunk=  500ms processed=  2 ref=  1 overlap=   630ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_08_overlapping.mp3                chunk= 1000ms processed=  2 ref=  1 overlap=   630ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_09_clean.mp3                      chunk=   20ms processed=  4 ref=  1 overlap=  3210ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_09_clean.mp3                      chunk=  100ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_09_clean.mp3                      chunk=  250ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_09_clean.mp3                      chunk=  500ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_09_clean.mp3                      chunk= 1000ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_10_noisy.mp3                      chunk=   20ms processed=  5 ref=  3 overlap=  3270ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=5 oneshot=3 escalated=False
+real_recordings/mixed/clip_10_noisy.mp3                      chunk=  100ms processed=  4 ref=  3 overlap=  1590ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=4 oneshot=3 escalated=False
+real_recordings/mixed/clip_10_noisy.mp3                      chunk=  250ms processed=  3 ref=  3 overlap=     0ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=3 oneshot=3 escalated=False
+real_recordings/mixed/clip_10_noisy.mp3                      chunk=  500ms processed=  4 ref=  3 overlap=  1590ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=4 oneshot=3 escalated=False
+real_recordings/mixed/clip_10_noisy.mp3                      chunk= 1000ms processed=  3 ref=  3 overlap=     0ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=1 | alerts stream=3 oneshot=3 escalated=False
+real_recordings/mixed/clip_11_muffled.mp3                    chunk=   20ms processed=  6 ref=  1 overlap=  8760ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=5 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_11_muffled.mp3                    chunk=  100ms processed=  5 ref=  1 overlap=  4890ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=4 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_11_muffled.mp3                    chunk=  250ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_11_muffled.mp3                    chunk=  500ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_11_muffled.mp3                    chunk= 1000ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_12_noisy.mp3                      chunk=   20ms processed=  5 ref=  3 overlap=  3210ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=5 oneshot=3 escalated=False
+real_recordings/mixed/clip_12_noisy.mp3                      chunk=  100ms processed=  5 ref=  3 overlap=  3210ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=5 oneshot=3 escalated=False
+real_recordings/mixed/clip_12_noisy.mp3                      chunk=  250ms processed=  4 ref=  3 overlap=  1590ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=4 oneshot=3 escalated=False
+real_recordings/mixed/clip_12_noisy.mp3                      chunk=  500ms processed=  3 ref=  3 overlap=     0ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=3 oneshot=3 escalated=False
+real_recordings/mixed/clip_12_noisy.mp3                      chunk= 1000ms processed=  3 ref=  3 overlap=     0ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=3 oneshot=3 escalated=False
+real_recordings/mixed/clip_13_clean.mp3                      chunk=   20ms processed=  4 ref=  1 overlap=  3210ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_13_clean.mp3                      chunk=  100ms processed=  3 ref=  1 overlap=  1530ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_13_clean.mp3                      chunk=  250ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_13_clean.mp3                      chunk=  500ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_13_clean.mp3                      chunk= 1000ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_14_noisy.mp3                      chunk=   20ms processed=  5 ref=  4 overlap=  3120ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=5 oneshot=4 escalated=False
+real_recordings/mixed/clip_14_noisy.mp3                      chunk=  100ms processed=  5 ref=  4 overlap=  3120ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=5 oneshot=4 escalated=False
+real_recordings/mixed/clip_14_noisy.mp3                      chunk=  250ms processed=  4 ref=  4 overlap=  1500ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=4 oneshot=4 escalated=False
+real_recordings/mixed/clip_14_noisy.mp3                      chunk=  500ms processed=  4 ref=  4 overlap=  1500ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=4 oneshot=4 escalated=False
+real_recordings/mixed/clip_14_noisy.mp3                      chunk= 1000ms processed=  5 ref=  4 overlap= 12000ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=4 | alerts stream=5 oneshot=4 escalated=False
+real_recordings/mixed/clip_15_muffled.mp3                    chunk=   20ms processed=  5 ref=  1 overlap=  4890ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=5 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_15_muffled.mp3                    chunk=  100ms processed=  4 ref=  1 overlap=  3300ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=4 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_15_muffled.mp3                    chunk=  250ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_15_muffled.mp3                    chunk=  500ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_15_muffled.mp3                    chunk= 1000ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_16_overlapping.mp3                chunk=   20ms processed=  5 ref=  1 overlap=  4890ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=4 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_16_overlapping.mp3                chunk=  100ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_16_overlapping.mp3                chunk=  250ms processed=  3 ref=  1 overlap=  1590ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_16_overlapping.mp3                chunk=  500ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_16_overlapping.mp3                chunk= 1000ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_17_muffled.mp3                    chunk=   20ms processed=  5 ref=  1 overlap=  6150ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=5 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_17_muffled.mp3                    chunk=  100ms processed=  5 ref=  1 overlap=  5850ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=5 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_17_muffled.mp3                    chunk=  250ms processed=  4 ref=  1 overlap=  6690ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=2 oneshot=1 escalated=False
+real_recordings/mixed/clip_17_muffled.mp3                    chunk=  500ms processed=  3 ref=  1 overlap=  4920ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=2 oneshot=1 escalated=False
+real_recordings/mixed/clip_17_muffled.mp3                    chunk= 1000ms processed=  3 ref=  1 overlap=  4920ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=2 oneshot=1 escalated=False
+real_recordings/mixed/clip_18_noisy.mp3                      chunk=   20ms processed=  6 ref=  4 overlap=  4530ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=4 | alerts stream=6 oneshot=4 escalated=False
+real_recordings/mixed/clip_18_noisy.mp3                      chunk=  100ms processed=  6 ref=  4 overlap=  4530ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=4 | alerts stream=6 oneshot=4 escalated=False
+real_recordings/mixed/clip_18_noisy.mp3                      chunk=  250ms processed=  6 ref=  4 overlap=  4560ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=5 | alerts stream=6 oneshot=4 escalated=False
+real_recordings/mixed/clip_18_noisy.mp3                      chunk=  500ms processed=  6 ref=  4 overlap=  4500ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=5 | alerts stream=6 oneshot=4 escalated=False
+real_recordings/mixed/clip_18_noisy.mp3                      chunk= 1000ms processed=  6 ref=  4 overlap=  4500ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=5 | alerts stream=6 oneshot=4 escalated=False
+real_recordings/mixed/clip_19_muffled.mp3                    chunk=   20ms processed=  4 ref=  1 overlap=  3300ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=4 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_19_muffled.mp3                    chunk=  100ms processed=  5 ref=  1 overlap=  7710ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=5 | alerts stream=2 oneshot=1 escalated=True
+real_recordings/mixed/clip_19_muffled.mp3                    chunk=  250ms processed=  4 ref=  1 overlap=  6090ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=4 | alerts stream=2 oneshot=1 escalated=True
+real_recordings/mixed/clip_19_muffled.mp3                    chunk=  500ms processed=  4 ref=  1 overlap=  6030ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=4 | alerts stream=2 oneshot=1 escalated=True
+real_recordings/mixed/clip_19_muffled.mp3                    chunk= 1000ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=    60ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_20_muffled.mp3                    chunk=   20ms processed=  6 ref=  1 overlap=  9090ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=6 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_20_muffled.mp3                    chunk=  100ms processed=  4 ref=  1 overlap=  3300ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=4 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_20_muffled.mp3                    chunk=  250ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_20_muffled.mp3                    chunk=  500ms processed=  3 ref=  1 overlap=  1650ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_20_muffled.mp3                    chunk= 1000ms processed=  3 ref=  1 overlap=  1650ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_21_clean.mp3                      chunk=   20ms processed=  5 ref=  1 overlap=  7890ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=5 | alerts stream=2 oneshot=1 escalated=True
+real_recordings/mixed/clip_21_clean.mp3                      chunk=  100ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_21_clean.mp3                      chunk=  250ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_21_clean.mp3                      chunk=  500ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_21_clean.mp3                      chunk= 1000ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_22_clean.mp3                      chunk=   20ms processed=  4 ref=  1 overlap=  3210ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=4 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_22_clean.mp3                      chunk=  100ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_22_clean.mp3                      chunk=  250ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_22_clean.mp3                      chunk=  500ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_22_clean.mp3                      chunk= 1000ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_23_muffled.mp3                    chunk=   20ms processed=  8 ref=  1 overlap= 19950ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=8 | alerts stream=3 oneshot=1 escalated=True
+real_recordings/mixed/clip_23_muffled.mp3                    chunk=  100ms processed=  5 ref=  1 overlap=  4890ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=5 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_23_muffled.mp3                    chunk=  250ms processed=  3 ref=  1 overlap=  1680ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_23_muffled.mp3                    chunk=  500ms processed=  3 ref=  1 overlap=  1680ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_23_muffled.mp3                    chunk= 1000ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_24_overlapping.mp3                chunk=   20ms processed=  7 ref=  1 overlap= 16830ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=6 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_24_overlapping.mp3                chunk=  100ms processed=  6 ref=  1 overlap= 19530ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=5 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_24_overlapping.mp3                chunk=  250ms processed=  3 ref=  1 overlap=  5940ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_24_overlapping.mp3                chunk=  500ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_24_overlapping.mp3                chunk= 1000ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_25_clean.mp3                      chunk=   20ms processed=  4 ref=  1 overlap=  3210ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=3 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_25_clean.mp3                      chunk=  100ms processed=  5 ref=  1 overlap=  4860ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=4 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_25_clean.mp3                      chunk=  250ms processed=  3 ref=  1 overlap=  1650ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_25_clean.mp3                      chunk=  500ms processed=  3 ref=  1 overlap=  1650ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_25_clean.mp3                      chunk= 1000ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_26_clean.mp3                      chunk=   20ms processed=  4 ref=  1 overlap=  3210ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=4 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_26_clean.mp3                      chunk=  100ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_26_clean.mp3                      chunk=  250ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_26_clean.mp3                      chunk=  500ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_26_clean.mp3                      chunk= 1000ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=0 oneshot=0 escalated=False
+real_recordings/mixed/clip_27_muffled.mp3                    chunk=   20ms processed=  6 ref=  1 overlap=  8190ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=6 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_27_muffled.mp3                    chunk=  100ms processed=  5 ref=  1 overlap=  4890ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=5 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_27_muffled.mp3                    chunk=  250ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_27_muffled.mp3                    chunk=  500ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_27_muffled.mp3                    chunk= 1000ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_28_overlapping.mp3                chunk=   20ms processed=  8 ref=  1 overlap= 19200ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=8 | alerts stream=3 oneshot=1 escalated=True
+real_recordings/mixed/clip_28_overlapping.mp3                chunk=  100ms processed=  6 ref=  1 overlap= 14490ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=6 | alerts stream=3 oneshot=1 escalated=True
+real_recordings/mixed/clip_28_overlapping.mp3                chunk=  250ms processed=  4 ref=  1 overlap=  7170ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=4 | alerts stream=2 oneshot=1 escalated=True
+real_recordings/mixed/clip_28_overlapping.mp3                chunk=  500ms processed=  4 ref=  1 overlap= 11190ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=4 | alerts stream=3 oneshot=1 escalated=True
+real_recordings/mixed/clip_28_overlapping.mp3                chunk= 1000ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_29_clean.mp3                      chunk=   20ms processed=  5 ref=  1 overlap=  8220ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=5 | alerts stream=2 oneshot=1 escalated=True
+real_recordings/mixed/clip_29_clean.mp3                      chunk=  100ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_29_clean.mp3                      chunk=  250ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_29_clean.mp3                      chunk=  500ms processed=  3 ref=  1 overlap=  1620ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=3 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_29_clean.mp3                      chunk= 1000ms processed=  2 ref=  1 overlap=     0ms dup=0 missed_ref=    30ms missed_speech=     0ms mismatch=2 | alerts stream=1 oneshot=1 escalated=False
+real_recordings/mixed/clip_30_noisy.mp3                      chunk=   20ms processed=  8 ref=  5 overlap=  8280ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=5 | alerts stream=8 oneshot=5 escalated=False
+real_recordings/mixed/clip_30_noisy.mp3                      chunk=  100ms processed=  7 ref=  5 overlap=  6600ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=4 | alerts stream=7 oneshot=5 escalated=False
+real_recordings/mixed/clip_30_noisy.mp3                      chunk=  250ms processed=  8 ref=  5 overlap=  8280ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=5 | alerts stream=8 oneshot=5 escalated=False
+real_recordings/mixed/clip_30_noisy.mp3                      chunk=  500ms processed=  6 ref=  5 overlap=  5040ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=2 | alerts stream=6 oneshot=5 escalated=False
+real_recordings/mixed/clip_30_noisy.mp3                      chunk= 1000ms processed=  5 ref=  5 overlap=  3390ms dup=0 missed_ref=     0ms missed_speech=     0ms mismatch=1 | alerts stream=5 oneshot=5 escalated=False
+{
+ "20": {
+  "recordings": 30,
+  "audio_ms": 900000,
+  "speech_ms": 100740,
+  "overlap_ms": 210840,
+  "recordings_with_overlap": 30,
+  "duplicate_segments": 0,
+  "reprocessed_segments": 80,
+  "missed_ref_ms": 240,
+  "recordings_with_missed_ref": 8,
+  "missed_speech_ms": 0,
+  "recordings_with_missed_speech": 0,
+  "boundary_mismatch": 136,
+  "processed": 159,
+  "reference_segments": 50,
+  "worst_call_s": 0.0239,
+  "with_phrase": 30,
+  "extra_alert_events": 26,
+  "recordings_with_extra_alerts": 13,
+  "recordings_escalated_by_streaming": 4,
+  "recordings_fewer_alerts_than_oneshot": 0
+ },
+ "100": {
+  "recordings": 30,
+  "audio_ms": 900000,
+  "speech_ms": 100740,
+  "overlap_ms": 149280,
+  "recordings_with_overlap": 30,
+  "duplicate_segments": 0,
+  "reprocessed_segments": 57,
+  "missed_ref_ms": 270,
+  "recordings_with_missed_ref": 9,
+  "missed_speech_ms": 0,
+  "recordings_with_missed_speech": 0,
+  "boundary_mismatch": 109,
+  "processed": 133,
+  "reference_segments": 50,
+  "worst_call_s": 0.0831,
+  "with_phrase": 30,
+  "extra_alert_events": 19,
+  "recordings_with_extra_alerts": 11,
+  "recordings_escalated_by_streaming": 2,
+  "recordings_fewer_alerts_than_oneshot": 0
+ },
+ "250": {
+  "recordings": 30,
+  "audio_ms": 900000,
+  "speech_ms": 100740,
+  "overlap_ms": 86190,
+  "recordings_with_overlap": 27,
+  "duplicate_segments": 0,
+  "reprocessed_segments": 32,
+  "missed_ref_ms": 270,
+  "recordings_with_missed_ref": 9,
+  "missed_speech_ms": 0,
+  "recordings_with_missed_speech": 0,
+  "boundary_mismatch": 80,
+  "processed": 103,
+  "reference_segments": 50,
+  "worst_call_s": 0.0093,
+  "with_phrase": 30,
+  "extra_alert_events": 13,
+  "recordings_with_extra_alerts": 10,
+  "recordings_escalated_by_streaming": 2,
+  "recordings_fewer_alerts_than_oneshot": 0
+ },
+ "500": {
+  "recordings": 30,
+  "audio_ms": 900000,
+  "speech_ms": 100740,
+  "overlap_ms": 71610,
+  "recordings_with_overlap": 24,
+  "duplicate_segments": 0,
+  "reprocessed_segments": 25,
+  "missed_ref_ms": 300,
+  "recordings_with_missed_ref": 10,
+  "missed_speech_ms": 0,
+  "recordings_with_missed_speech": 0,
+  "boundary_mismatch": 70,
+  "processed": 96,
+  "reference_segments": 50,
+  "worst_call_s": 0.0082,
+  "with_phrase": 30,
+  "extra_alert_events": 11,
+  "recordings_with_extra_alerts": 9,
+  "recordings_escalated_by_streaming": 2,
+  "recordings_fewer_alerts_than_oneshot": 0
+ },
+ "1000": {
+  "recordings": 30,
+  "audio_ms": 900000,
+  "speech_ms": 100740,
+  "overlap_ms": 43890,
+  "recordings_with_overlap": 12,
+  "duplicate_segments": 0,
+  "reprocessed_segments": 11,
+  "missed_ref_ms": 360,
+  "recordings_with_missed_ref": 11,
+  "missed_speech_ms": 0,
+  "recordings_with_missed_speech": 0,
+  "boundary_mismatch": 56,
+  "processed": 82,
+  "reference_segments": 50,
+  "worst_call_s": 0.0095,
+  "with_phrase": 30,
+  "extra_alert_events": 6,
+  "recordings_with_extra_alerts": 5,
+  "recordings_escalated_by_streaming": 0,
+  "recordings_fewer_alerts_than_oneshot": 0
+ }
+}

@@ -1,0 +1,8 @@
+{
+ "format": "asr_bench.split_config/1",
+ "salt": "udk-phase2a-v1",
+ "sources": {
+  "toy": {"policy": "hash", "ratios": {"train": 0.70, "dev": 0.10, "test": 0.10, "final_test": 0.10}},
+  "toyheld": {"policy": "fixed", "split": "test"}
+ }
+}

@@ -1,0 +1,94 @@
+-- live-path isolation (real api._run_incremental_detection)
+[PASS] [mixed] sync shadow: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [mixed] async shadow: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [mixed] observe() raises: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [mixed] every shadow stage raises: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [mixed] queue of 1, slow worker: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [stt_flip] sync shadow: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [stt_flip] async shadow: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [stt_flip] observe() raises: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [stt_flip] every shadow stage raises: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [stt_flip] queue of 1, slow worker: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [repeat] sync shadow: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [repeat] async shadow: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [repeat] observe() raises: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [repeat] every shadow stage raises: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [repeat] queue of 1, slow worker: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [personal] sync shadow: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [personal] async shadow: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [personal] observe() raises: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [personal] every shadow stage raises: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] [personal] queue of 1, slow worker: live events, engine window, journey events and progress identical to shadow OFF
+[PASS] live path under test really alerts: scream-only VERIFY, corroborated ALL, vetoed alert absent
+-- shadow records
+[PASS] one record per finalized segment (6), schema/version present
+[PASS] multiple UDK events in one segment: replay has >= 2 events, Phase 5 has one decision per event
+[PASS] multiple events: shadow Phase 5 == live (production-equivalent policy)
+[PASS] scream-only segment: live scream-alone, replay NO_ACTION, Phase 5 segment-level acoustic-alone VERIFY (R6)
+[PASS] no-text segment: recorded as skipped_live_no_text, no shadow decision, treatment recorded (exclude)
+[PASS] scream corroboration: live ALL; replay (scream_score=None) VERIFY; Phase 3 VERIFY; Phase 5 ALL via R5
+[PASS] replay keeps the live window state (recording precedes corroboration)
+[PASS] intent veto: live NO alert; Phase 3 vetoed:sentence (live gate, heard by both); Phase 5 NO_ALERT
+[PASS] veto other_text recorded exactly as live used it
+[PASS] missing speaker/overlap evidence stays UNAVAILABLE (never NEGATIVE) and carries segment_id / clock
+[PASS] unavailable evidence listed as ignored with reasons in the Phase 5 provenance
+[PASS] context buffer: later segments see earlier turns (unattributed, attribution incomplete)
+[PASS] records carry shadow config, runtime snapshot, policy / context-config hashes and S-4 status
+[PASS] no raw audio anywhere in the records (the fake pcm labels never appear)
+[PASS] missing scream score: None preserved (not 0), 9-class evidence UNAVAILABLE with reason, live stays VERIFY
+[PASS] STT choice changed by scream: live kept Whisper (UDK_14), replay keeps Parakeet (UDK_05)
+[PASS] ... and the replay window state differs from live there (recorded, not hidden)
+[PASS] STT-flip labelled: replay.semantics says counterfactual (not live-with-BEATs-disabled); stt_choice_differs_from_live True
+[PASS] records carry EFFECTIVE settings: shadow mode, both scream flags (env + effective), sentence veto (live/shadow/Phase 5 guard), S-4
+[PASS] records carry queue wait time
+[PASS] repetition window reproduced from live pre_state: second segment ALL 'repeated' in live and replay
+[PASS] no second STT: heard_by_both None (veto cannot run), not False/True
+[PASS] custom UDK flows through as PERSONAL; never vetoed (Phase 3 H1); shadow == live
+-- failure isolation inside shadow
+[PASS] replay throws: every processed record 'failed' with stage=replay, no shadow decision
+[PASS] Phase 3 throws: 'partial', Phase 3 and Phase 5 decisions None, Phase 4 evidence still recorded
+[PASS] Phase 4 throws: 'partial', Phase 5 still runs with NO signals (missing never negative); linguistic kept
+[PASS] Phase 5 throws: 'partial', Phase 3 decision kept, Phase 5 None
+[PASS] malformed evidence: dropped and recorded (phase4_validation), never read as negative; Phase 5 still decides
+[PASS] capture error (malformed live locals) is swallowed and counted
+-- restart / bounds / sink / config
+[PASS] server restart / empty shadow state: first segment cold_start, possible_restart flagged, no context invented
+[PASS] no-text treatment configurable: include_empty keeps the skipped segment as an empty context turn
+[PASS] ... default exclude does not
+[PASS] records bounded: records_max=2 keeps 2, evictions counted
+[PASS] queue bounded: full queue drops NEW observations and counts them (live never waits)
+[PASS] journey buffers bounded (LRU): 3 journeys with max 2 -> 1 eviction; evicted journey returns as cold 'evicted_from_buffer'
+[PASS] JSONL sink redacts transcripts by default (no plaintext phrase on disk)
+[PASS] sink size-capped: rotation to .1 happened and the live file stays under the cap
+[PASS] config: OFF by default (no env) -> load() returns None
+[PASS] config: sample rate outside [0,1] refused
+[PASS] config: invalid env with shadow requested -> load() returns None (service unaffected)
+[PASS] runtime snapshot records the ACTUAL flags (unset -> None, never a guessed default)
+[PASS] api._load_shadow: OFF without UDK_SHADOW_MODE -> None, nothing imported
+[PASS] sampling 0.0: records 'not_sampled' (context still updated), no shadow decisions
+-- Phase 4 evidence equivalence (BEATs values reused, not re-run)
+[PASS] shadow BEATs evidence == Phase 4 BeatsScreamSignal (p4=0.5, p9=0.5)
+[PASS] shadow BEATs evidence == Phase 4 BeatsScreamSignal (p4=0.05, p9=0.1)
+[PASS] shadow BEATs evidence == Phase 4 BeatsScreamSignal (p4=0.2, p9=0.29)
+-- start-up self-check (fail closed)
+[PASS] self-check passes through every stage on the real engine
+shadow mode ON (udk_shadow, self-check ok): sample=1.0 queue=256 records=1000 sink=off
+[PASS] load(): shadow ON + self-check ok -> runner
+shadow mode requested but the start-up self-check failed (failed: [{'stage': 'phase5', 'type': 'ImportError'}]) -- shadow OFF, live unaffected
+[PASS] load(): self-check failing (e.g. a module missing from the image) -> None (shadow OFF, fail closed)
+-- semantic isolation
+[PASS] isolated semantic view never touches the live encode cache
+[PASS] a matcher without an uncached encoder is refused (replay then fails, recorded) rather than touching live state
+-- comparison report (synthetic, operational only)
+[PASS] report banner says not a performance measurement
+[PASS] report labels the replay as counterfactual and counts STT-choice flips
+[PASS] report counts statuses incl. skipped/no-data
+[PASS] report: live vs Phase 5 on the synthetic 'mixed' journey all match; STT-flip segment shows a UDK-set difference
+[PASS] report attributes the STT-flip difference to the scream (stt_selection_changed_by_scream, scream_correlated)
+[PASS] report: live vs Phase 3 shows Phase 3 lower where only the scream lifted live (s4)
+[PASS] report counts failed shadows by stage
+
+========================================
+79/79 TOTAL PASSED -- ALL PASSED
+/kaggle/working/udk_bench/udk_shadow/runner.py:158: UserWarning: shadow mode requested but failed to start (ShadowConfigError: queue_max must be >= 1 (shadow state is always bounded)) -- shadow OFF, live unaffected
+  warnings.warn(f"shadow mode requested but failed to start ({type(e).__name__}: {e}) -- shadow OFF, live unaffected")

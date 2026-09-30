@@ -1,0 +1,8 @@
+{
+ "format": "udk_fusion.config/1",
+ "_note": "Mirrors the LIVE 96ea038 acoustic behaviour (S-4 option C, as deployed; NOT endorsed): 4-class scream trigger may raise TRIGGER_VERIFY with no alert left; 9-class >= 0.30 may lift a UDK-path TRIGGER_VERIFY to TRIGGER_ALL. The live sentence veto is unchanged (guard off). Source ids are the Phase 4 BEATs wrapper's (udk_signals/acoustic.py). S-4 stays open.",
+ "s4_status": "open",
+ "acoustic_alone": {"enabled": true, "sources": ["beats_4class_scream_trigger"]},
+ "corroboration": {"enabled": true, "sources": ["beats_9class_corroboration"]},
+ "veto_guard": {"sentence_veto_requires_clean_overlap": false}
+}

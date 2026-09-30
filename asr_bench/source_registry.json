@@ -1,0 +1,390 @@
+{
+ "format": "asr_bench.source_registry/1",
+ "registry_version": 2,
+ "provenance_note": "Values copied from UDK Phase 2A §2/§4/§8 and Phase 1 §3-§11, §20, §23 (2026-09-29). NOT VERIFIED / unresolved statuses are kept as written; nothing is inferred. use_restriction follows the Phase 2A readiness column (R-2). acquisition_authorised is set only by the project owner.",
+ "sources": {
+  "ami": {
+   "name": "AMI",
+   "family": "ami",
+   "family_note": "Use the official site; the OpenSLR mirror lists an older NC licence (Phase 1 §4)",
+   "intended_use": "Train + Eval (overlap)",
+   "acquisition_status": "Not started",
+   "licence": "Conditions (CC BY 4.0, official site)",
+   "licence_class": "B",
+   "gate_status": "none documented; official source only",
+   "use_restriction": "train_ok",
+   "acquisition_authorised": false,
+   "speaker_metadata": "Yes",
+   "english_word_script": null,
+   "known_limitations": "Office English",
+   "blockers": [
+    "overlap_spans format (P-S1-3)",
+    "large session groups (O-S3-5)",
+    "attribution conditions not yet recorded (N-9)"
+   ]
+  },
+  "berst": {
+   "name": "BERSt",
+   "family": "berst",
+   "family_note": null,
+   "intended_use": "Eval (shout, distance, pocket-like)",
+   "acquisition_status": "Not started",
+   "licence": "Conditions (CC BY 4.0)",
+   "licence_class": "B",
+   "gate_status": "none documented",
+   "use_restriction": "eval_only",
+   "acquisition_authorised": false,
+   "speaker_metadata": "Yes",
+   "english_word_script": null,
+   "known_limitations": "Acted, nonsense phrases",
+   "blockers": [
+    "provenance/device mapping undecided",
+    "attribution conditions not yet recorded (N-9)"
+   ]
+  },
+  "collected_overlap": {
+   "name": "Collected overlap/pocket (D_overlap)",
+   "family": "collected",
+   "family_note": null,
+   "intended_use": "Collect",
+   "acquisition_status": "Not collected",
+   "licence": "Own",
+   "licence_class": null,
+   "gate_status": "consent forms under legal review (as collected_safety)",
+   "use_restriction": "blocked",
+   "acquisition_authorised": false,
+   "speaker_metadata": "Will have",
+   "english_word_script": null,
+   "known_limitations": "Pilot not run",
+   "blockers": [
+    "Phase 2A §8.5: real pocket/bag, crowd and overlap audio not collected",
+    "overlap_spans format (P-S1-3)"
+   ]
+  },
+  "collected_safety": {
+   "name": "Collected safety speech (En, Hi, Te, Hinglish, Te-En)",
+   "family": "collected",
+   "family_note": null,
+   "intended_use": "Collect",
+   "acquisition_status": "Not collected",
+   "licence": "Own, consent forms under legal review",
+   "licence_class": null,
+   "gate_status": "consent forms under legal review (DPDP Act)",
+   "use_restriction": "blocked",
+   "acquisition_authorised": false,
+   "speaker_metadata": "Will have",
+   "english_word_script": null,
+   "known_limitations": "Pilot not run",
+   "blockers": [
+    "Phase 2A §8.4: not recorded; consent forms under legal review",
+    "context schema extension (N-10)",
+    "D-PROV-1"
+   ]
+  },
+  "fsd50k": {
+   "name": "FSD50K (CC0/CC-BY clips)",
+   "family": "fsd50k",
+   "family_note": null,
+   "intended_use": "Train + Eval (noise mixes only)",
+   "acquisition_status": "Not started",
+   "licence": "Conditions (per clip)",
+   "licence_class": "B",
+   "gate_status": "per-clip licence filter required",
+   "use_restriction": "train_ok",
+   "acquisition_authorised": false,
+   "speaker_metadata": "N/A",
+   "english_word_script": null,
+   "known_limitations": "Not Indian",
+   "blockers": [
+    "per-clip licence and use_restriction are mandatory on every clip (per_item_restriction_required); CC-BY-NC and Sampling+ clips must be eval_only (Phase 1 §20)",
+    "'noise mixes only' scope (Phase 2A §2) is not representable in use_restriction (R-6)",
+    "attribution conditions not yet recorded (N-9, R-3)"
+   ],
+   "per_item_restriction_required": true
+  },
+  "gram_vaani": {
+   "name": "Gram Vaani",
+   "family": "gram_vaani",
+   "family_note": null,
+   "intended_use": "Eval-only unless permission",
+   "acquisition_status": "Not started",
+   "licence": "Requires permission",
+   "licence_class": "C",
+   "gate_status": "academic use only; commercial use needs written permission",
+   "use_restriction": "eval_only",
+   "acquisition_authorised": false,
+   "speaker_metadata": "NOT VERIFIED",
+   "english_word_script": null,
+   "known_limitations": "Transcript accuracy variable",
+   "blockers": [
+    "written permission for commercial use",
+    "mp3 -> 16 kHz: which file is source audio (N-1)",
+    "speaker IDs NOT VERIFIED (O-S3-1 risk)"
+   ]
+  },
+  "indicvoices": {
+   "name": "IndicVoices (Hi, Te, mixed)",
+   "family": "indicvoices",
+   "family_note": "IndicVoices-R shares audio with IndicVoices; test portions of the family stay out of all training (Phase 1 §19)",
+   "intended_use": "Blocked until gate terms reviewed -> then Train + Eval",
+   "acquisition_status": "Not started; gated",
+   "licence": "Conditions (CC BY 4.0; gate terms unread)",
+   "licence_class": "B",
+   "gate_status": "gated; gate terms unread",
+   "use_restriction": "blocked",
+   "acquisition_authorised": false,
+   "speaker_metadata": "Speaker IDs",
+   "english_word_script": "NOT VERIFIED",
+   "known_limitations": "No safety content",
+   "blockers": [
+    "Phase 2A §8.1: gate terms unreviewed (legal review)",
+    "Phase 2A §8.2: English-word script unknown",
+    "Phase 2A §8.6: not downloaded"
+   ]
+  },
+  "indicvoices_te_en": {
+   "name": "IndicVoices Te-En slice (CoSTA-style)",
+   "family": "indicvoices",
+   "family_note": "Selected from IndicVoices by Code-Mixing Index",
+   "intended_use": "Blocked with IndicVoices -> Eval",
+   "acquisition_status": "Not started",
+   "licence": "As IndicVoices",
+   "licence_class": "B",
+   "gate_status": "gated; gate terms unread (as IndicVoices)",
+   "use_restriction": "blocked",
+   "acquisition_authorised": false,
+   "speaker_metadata": "Yes",
+   "english_word_script": "NOT VERIFIED",
+   "known_limitations": "~2.3 h, no tags today",
+   "blockers": [
+    "Phase 2A §8.1: gate terms unreviewed",
+    "Phase 2A §8.3: no Telugu-English word-level tags",
+    "Phase 2A §8.6: not downloaded"
+   ]
+  },
+  "kathbath": {
+   "name": "Kathbath",
+   "family": "kathbath",
+   "family_note": null,
+   "intended_use": "Train + Eval",
+   "acquisition_status": "Not started; gated",
+   "licence": "Verified usable (CC0 packaging)",
+   "licence_class": "A",
+   "gate_status": "gated (access); licence verified usable",
+   "use_restriction": "train_ok",
+   "acquisition_authorised": false,
+   "speaker_metadata": "In file names",
+   "english_word_script": null,
+   "known_limitations": "Read speech; underlying text from web crawl (Phase 1 §20)",
+   "blockers": [
+    "m4a -> wav: which file is source audio (N-1), P-S2-1, P-S2-4",
+    "Telugu speaker count vs >= 50 unknown (N-5)",
+    "source-provided splits (P-S2-7)"
+   ]
+  },
+  "lahaja": {
+   "name": "Lahaja",
+   "family": "lahaja",
+   "family_note": null,
+   "intended_use": "Eval",
+   "acquisition_status": "Not started",
+   "licence": "Conditions (CC BY 4.0)",
+   "licence_class": "B",
+   "gate_status": "none documented",
+   "use_restriction": "eval_only",
+   "acquisition_authorised": false,
+   "speaker_metadata": "Yes",
+   "english_word_script": null,
+   "known_limitations": "12.5 h",
+   "blockers": [
+    "attribution conditions not yet recorded (N-9)"
+   ]
+  },
+  "mucs2021_bnen": {
+   "name": "MUCS 2021 Bn-En (test + blind)",
+   "family": "mucs2021",
+   "family_note": null,
+   "intended_use": "Usable for eval now (report if available)",
+   "acquisition_status": "Not started",
+   "licence": "Conditions (CC BY-SA 4.0; share-alike under review)",
+   "licence_class": "B",
+   "gate_status": "open download; share-alike reach under legal review",
+   "use_restriction": "eval_only",
+   "acquisition_authorised": false,
+   "speaker_metadata": "NOT VERIFIED",
+   "english_word_script": "Two scripts",
+   "known_limitations": "Lecture domain",
+   "blockers": [
+    "speaker IDs NOT VERIFIED (O-S3-1 risk)",
+    "source-provided splits (P-S2-7)"
+   ]
+  },
+  "mucs2021_hien": {
+   "name": "MUCS 2021 Hi-En",
+   "family": "mucs2021",
+   "family_note": null,
+   "intended_use": "Eval now; Train after legal review",
+   "acquisition_status": "Not started; open download",
+   "licence": "Conditions (CC BY-SA 4.0; share-alike under review)",
+   "licence_class": "B",
+   "gate_status": "open download; share-alike reach under legal review",
+   "use_restriction": "eval_only",
+   "acquisition_authorised": false,
+   "speaker_metadata": "NOT VERIFIED",
+   "english_word_script": "Two scripts",
+   "known_limitations": "Lecture domain",
+   "blockers": [
+    "share-alike reach on derived data: LEGAL REVIEW before training (Phase 1 §20)",
+    "speaker IDs NOT VERIFIED (O-S3-1 risk)",
+    "source-provided splits (P-S2-7)"
+   ]
+  },
+  "notsofar1": {
+   "name": "NOTSOFAR-1",
+   "family": "notsofar1",
+   "family_note": null,
+   "intended_use": "Eval-only",
+   "acquisition_status": "Not started",
+   "licence": "Unresolved",
+   "licence_class": "D",
+   "gate_status": "licence unresolved; eval only until checked",
+   "use_restriction": "eval_only",
+   "acquisition_authorised": false,
+   "speaker_metadata": "Yes",
+   "english_word_script": null,
+   "known_limitations": "Licence unresolved",
+   "blockers": [
+    "licence unresolved",
+    "35 speakers across 315 meetings: likely one group (O-S3-5)"
+   ]
+  },
+  "phase0_prepped": {
+   "family": "phase0",
+   "family_note": "Never used to train (Phase 1 §18)",
+   "intended_use": "Eval-only (regression)",
+   "acquisition_status": "Held",
+   "licence_class": null,
+   "use_restriction": "eval_only",
+   "acquisition_authorised": false,
+   "english_word_script": null,
+   "name": "Phase 0 prepped_data (41 labelled files x 6 conditions)",
+   "licence": "Own / eval",
+   "gate_status": "own",
+   "speaker_metadata": "A handful; exact count NOT VERIFIED",
+   "known_limitations": "Tuned on (Phase 0 §13); one scripted recording + 5 synthetic conditions per file; held in the temp repo only",
+   "blockers": [
+    "no reference transcripts, labels in file names only; crowd-condition seed not reproducible (N-4)"
+   ]
+  },
+  "phase0_real_recordings": {
+   "family": "phase0",
+   "family_note": "Never used to train (Phase 1 §18)",
+   "intended_use": "Eval-only (regression)",
+   "acquisition_status": "Held",
+   "licence_class": null,
+   "use_restriction": "eval_only",
+   "acquisition_authorised": false,
+   "english_word_script": null,
+   "name": "Phase 0 real_recordings (mixed 30, positives 7, negatives 23)",
+   "licence": "Own / eval; positives and negatives are third-party film/podcast/media clips, licence not documented",
+   "gate_status": "own (mixed: TTS + noise); third-party media licences not documented",
+   "speaker_metadata": "TTS voices (mixed); actors / many (positives, negatives)",
+   "known_limitations": "Tuned on (Phase 0 §13); mixed is synthetic (TTS + noise)",
+   "blockers": [
+    "media clip licences not documented: tighten per row (P-S2-3)"
+   ]
+  },
+  "phase0_telugu_own": {
+   "family": "phase0",
+   "family_note": "Never used to train (Phase 1 §18)",
+   "intended_use": "Eval-only (regression)",
+   "acquisition_status": "Held",
+   "licence_class": null,
+   "use_restriction": "eval_only",
+   "acquisition_authorised": false,
+   "english_word_script": null,
+   "name": "Phase 0 Telugu own recordings (1.2 h, 4 files)",
+   "licence": "Own / eval",
+   "gate_status": "own",
+   "speaker_metadata": "Few (NOT VERIFIED)",
+   "known_limitations": "Tuned on (Phase 0 §13); harmless by selection",
+   "blockers": []
+  },
+  "phase0_youtube_dev": {
+   "family": "phase0",
+   "family_note": "Never used to train (Phase 1 §18)",
+   "intended_use": "Eval-only (regression)",
+   "acquisition_status": "Held",
+   "licence_class": null,
+   "use_restriction": "eval_only",
+   "acquisition_authorised": false,
+   "english_word_script": null,
+   "name": "Phase 0 YouTube real_world dev (4.6 h, 7 files)",
+   "licence": "Own / eval; individual video licences unknown (Phase 1 §10)",
+   "gate_status": "evaluation only; never training (Phase 1 §10)",
+   "speaker_metadata": "Many",
+   "known_limitations": "Tuned on (Phase 0 §13); harmless by selection; the sealed YouTube half is not registered and stays sealed",
+   "blockers": [
+    "individual video licences unknown (Phase 1 §10)"
+   ]
+  },
+  "svarah": {
+   "name": "Svarah",
+   "family": "svarah",
+   "family_note": null,
+   "intended_use": "Eval-only",
+   "acquisition_status": "Not started",
+   "licence": "Unresolved",
+   "licence_class": "D",
+   "gate_status": "licence unresolved; evaluation/reference only (Phase 1 §20)",
+   "use_restriction": "eval_only",
+   "acquisition_authorised": false,
+   "speaker_metadata": "Metadata CSV",
+   "english_word_script": null,
+   "known_limitations": "Licence unresolved",
+   "blockers": [
+    "licence unresolved"
+   ]
+  },
+  "vaani": {
+   "name": "Vaani (transcribed)",
+   "family": "vaani",
+   "family_note": "Vaani benchmark derives from Vaani; test portions stay out of all training (Phase 1 §19)",
+   "intended_use": "Blocked until gate terms reviewed -> then Train + Eval",
+   "acquisition_status": "Not started; gated",
+   "licence": "Conditions (CC BY 4.0; gate terms unread)",
+   "licence_class": "B",
+   "gate_status": "gated; gate terms unread",
+   "use_restriction": "blocked",
+   "acquisition_authorised": false,
+   "speaker_metadata": "Speaker metadata",
+   "english_word_script": "NOT VERIFIED",
+   "known_limitations": "~10% of audio transcribed; image-description speech",
+   "blockers": [
+    "Phase 2A §8.1: gate terms unreviewed",
+    "Phase 2A §8.2: English-word script unknown",
+    "Phase 2A §8.6: not downloaded"
+   ]
+  },
+  "vaani_noise_event": {
+   "name": "Vaani Noise Event",
+   "family": "vaani_noise_event",
+   "family_note": "Relationship to the Vaani family not documented (R-5)",
+   "intended_use": "Blocked until gate terms reviewed -> then Train + Eval",
+   "acquisition_status": "Not started; gated",
+   "licence": "Conditions (CC BY 4.0; gate terms unread)",
+   "licence_class": "B",
+   "gate_status": "gated; gate terms unread",
+   "use_restriction": "blocked",
+   "acquisition_authorised": false,
+   "speaker_metadata": "NOT VERIFIED",
+   "english_word_script": null,
+   "known_limitations": "Authors hold back 10 h eval",
+   "blockers": [
+    "Phase 2A §8.1: gate terms unreviewed",
+    "Phase 2A §8.6: not downloaded",
+    "speaker IDs NOT VERIFIED (O-S3-1 risk)"
+   ]
+  }
+ }
+}

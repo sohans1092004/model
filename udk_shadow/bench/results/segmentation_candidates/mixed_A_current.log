@@ -1,0 +1,267 @@
+A_current  real_recordings/mixed/clip_01_clean.mp3       20ms proc=  4/  1 excess=  3210 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=5.82ms err=None
+A_current  real_recordings/mixed/clip_01_clean.mp3      100ms proc=  4/  1 excess=  3210 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.19ms err=None
+A_current  real_recordings/mixed/clip_01_clean.mp3      250ms proc=  3/  1 excess=  4350 missed=0 eq_ref=False extra_ev=1 rep_ALL=1 p95=4.80ms err=None
+A_current  real_recordings/mixed/clip_01_clean.mp3      500ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.50ms err=None
+A_current  real_recordings/mixed/clip_01_clean.mp3     1000ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.66ms err=None
+A_current  real_recordings/mixed/clip_02_noisy.mp3       20ms proc=  7/  5 excess=  3600 missed=0 eq_ref=False extra_ev=2 rep_ALL=0 p95=6.46ms err=None
+A_current  real_recordings/mixed/clip_02_noisy.mp3      100ms proc=  7/  5 excess=  3660 missed=0 eq_ref=False extra_ev=2 rep_ALL=0 p95=4.74ms err=None
+A_current  real_recordings/mixed/clip_02_noisy.mp3      250ms proc=  5/  5 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.40ms err=None
+A_current  real_recordings/mixed/clip_02_noisy.mp3      500ms proc=  5/  5 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.69ms err=None
+A_current  real_recordings/mixed/clip_02_noisy.mp3     1000ms proc=  5/  5 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.20ms err=None
+A_current  real_recordings/mixed/clip_03_muffled.mp3     20ms proc=  5/  1 excess=  4890 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=5.93ms err=None
+A_current  real_recordings/mixed/clip_03_muffled.mp3    100ms proc=  4/  1 excess=  3210 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.50ms err=None
+A_current  real_recordings/mixed/clip_03_muffled.mp3    250ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=5.00ms err=None
+A_current  real_recordings/mixed/clip_03_muffled.mp3    500ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.66ms err=None
+A_current  real_recordings/mixed/clip_03_muffled.mp3   1000ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.15ms err=None
+A_current  l_recordings/mixed/clip_04_overlapping.mp3    20ms proc=  3/  1 excess=  9510 missed=0 eq_ref=False extra_ev=2 rep_ALL=2 p95=3.54ms err=None
+A_current  l_recordings/mixed/clip_04_overlapping.mp3   100ms proc=  3/  1 excess=  9510 missed=0 eq_ref=False extra_ev=2 rep_ALL=2 p95=3.75ms err=None
+A_current  l_recordings/mixed/clip_04_overlapping.mp3   250ms proc=  2/  1 excess=  4710 missed=0 eq_ref=False extra_ev=1 rep_ALL=1 p95=3.92ms err=None
+A_current  l_recordings/mixed/clip_04_overlapping.mp3   500ms proc=  2/  1 excess=  4710 missed=0 eq_ref=False extra_ev=1 rep_ALL=1 p95=4.61ms err=None
+A_current  l_recordings/mixed/clip_04_overlapping.mp3  1000ms proc=  1/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.61ms err=None
+A_current  real_recordings/mixed/clip_05_clean.mp3       20ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=5.19ms err=None
+A_current  real_recordings/mixed/clip_05_clean.mp3      100ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.43ms err=None
+A_current  real_recordings/mixed/clip_05_clean.mp3      250ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.31ms err=None
+A_current  real_recordings/mixed/clip_05_clean.mp3      500ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=7.83ms err=None
+A_current  real_recordings/mixed/clip_05_clean.mp3     1000ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=7.91ms err=None
+A_current  real_recordings/mixed/clip_06_noisy.mp3       20ms proc=  7/  3 excess=  9420 missed=0 eq_ref=False extra_ev=4 rep_ALL=0 p95=7.71ms err=None
+A_current  real_recordings/mixed/clip_06_noisy.mp3      100ms proc=  5/  3 excess=  6180 missed=0 eq_ref=False extra_ev=2 rep_ALL=0 p95=9.14ms err=None
+A_current  real_recordings/mixed/clip_06_noisy.mp3      250ms proc=  4/  3 excess=  4560 missed=0 eq_ref=False extra_ev=1 rep_ALL=0 p95=11.96ms err=None
+A_current  real_recordings/mixed/clip_06_noisy.mp3      500ms proc=  4/  3 excess=  4560 missed=0 eq_ref=False extra_ev=1 rep_ALL=0 p95=6.49ms err=None
+A_current  real_recordings/mixed/clip_06_noisy.mp3     1000ms proc=  4/  3 excess=  4560 missed=0 eq_ref=False extra_ev=1 rep_ALL=0 p95=5.05ms err=None
+A_current  real_recordings/mixed/clip_07_muffled.mp3     20ms proc=  6/  1 excess= 13140 missed=0 eq_ref=False extra_ev=2 rep_ALL=2 p95=4.96ms err=None
+A_current  real_recordings/mixed/clip_07_muffled.mp3    100ms proc=  6/  1 excess= 13110 missed=0 eq_ref=False extra_ev=2 rep_ALL=2 p95=3.73ms err=None
+A_current  real_recordings/mixed/clip_07_muffled.mp3    250ms proc=  3/  1 excess=  4890 missed=0 eq_ref=False extra_ev=1 rep_ALL=1 p95=5.61ms err=None
+A_current  real_recordings/mixed/clip_07_muffled.mp3    500ms proc=  3/  1 excess=  4860 missed=0 eq_ref=False extra_ev=1 rep_ALL=1 p95=5.69ms err=None
+A_current  real_recordings/mixed/clip_07_muffled.mp3   1000ms proc=  3/  1 excess=  4860 missed=0 eq_ref=False extra_ev=1 rep_ALL=1 p95=6.20ms err=None
+A_current  l_recordings/mixed/clip_08_overlapping.mp3    20ms proc=  5/  1 excess=  7110 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=5.10ms err=None
+A_current  l_recordings/mixed/clip_08_overlapping.mp3   100ms proc=  3/  1 excess=  2250 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=6.21ms err=None
+A_current  l_recordings/mixed/clip_08_overlapping.mp3   250ms proc=  3/  1 excess=  2220 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.90ms err=None
+A_current  l_recordings/mixed/clip_08_overlapping.mp3   500ms proc=  2/  1 excess=   630 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=5.23ms err=None
+A_current  l_recordings/mixed/clip_08_overlapping.mp3  1000ms proc=  2/  1 excess=   630 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=5.78ms err=None
+A_current  real_recordings/mixed/clip_09_clean.mp3       20ms proc=  4/  1 excess=  3210 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.77ms err=None
+A_current  real_recordings/mixed/clip_09_clean.mp3      100ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.59ms err=None
+A_current  real_recordings/mixed/clip_09_clean.mp3      250ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.07ms err=None
+A_current  real_recordings/mixed/clip_09_clean.mp3      500ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.14ms err=None
+A_current  real_recordings/mixed/clip_09_clean.mp3     1000ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.76ms err=None
+A_current  real_recordings/mixed/clip_10_noisy.mp3       20ms proc=  5/  3 excess=  3270 missed=0 eq_ref=False extra_ev=2 rep_ALL=0 p95=4.85ms err=None
+A_current  real_recordings/mixed/clip_10_noisy.mp3      100ms proc=  4/  3 excess=  1590 missed=0 eq_ref=False extra_ev=1 rep_ALL=0 p95=4.00ms err=None
+A_current  real_recordings/mixed/clip_10_noisy.mp3      250ms proc=  3/  3 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=6.62ms err=None
+A_current  real_recordings/mixed/clip_10_noisy.mp3      500ms proc=  4/  3 excess=  1590 missed=0 eq_ref=False extra_ev=1 rep_ALL=0 p95=6.41ms err=None
+A_current  real_recordings/mixed/clip_10_noisy.mp3     1000ms proc=  3/  3 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=5.84ms err=None
+A_current  real_recordings/mixed/clip_11_muffled.mp3     20ms proc=  6/  1 excess=  8760 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.30ms err=None
+A_current  real_recordings/mixed/clip_11_muffled.mp3    100ms proc=  5/  1 excess=  4890 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.83ms err=None
+A_current  real_recordings/mixed/clip_11_muffled.mp3    250ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.42ms err=None
+A_current  real_recordings/mixed/clip_11_muffled.mp3    500ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=5.78ms err=None
+A_current  real_recordings/mixed/clip_11_muffled.mp3   1000ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=6.08ms err=None
+A_current  real_recordings/mixed/clip_12_noisy.mp3       20ms proc=  5/  3 excess=  3210 missed=0 eq_ref=False extra_ev=2 rep_ALL=0 p95=6.53ms err=None
+A_current  real_recordings/mixed/clip_12_noisy.mp3      100ms proc=  5/  3 excess=  3210 missed=0 eq_ref=False extra_ev=2 rep_ALL=0 p95=4.19ms err=None
+A_current  real_recordings/mixed/clip_12_noisy.mp3      250ms proc=  4/  3 excess=  1590 missed=0 eq_ref=False extra_ev=1 rep_ALL=0 p95=3.73ms err=None
+A_current  real_recordings/mixed/clip_12_noisy.mp3      500ms proc=  3/  3 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.82ms err=None
+A_current  real_recordings/mixed/clip_12_noisy.mp3     1000ms proc=  3/  3 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.99ms err=None
+A_current  real_recordings/mixed/clip_13_clean.mp3       20ms proc=  4/  1 excess=  3210 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=5.12ms err=None
+A_current  real_recordings/mixed/clip_13_clean.mp3      100ms proc=  3/  1 excess=  1530 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=5.55ms err=None
+A_current  real_recordings/mixed/clip_13_clean.mp3      250ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.53ms err=None
+A_current  real_recordings/mixed/clip_13_clean.mp3      500ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.72ms err=None
+A_current  real_recordings/mixed/clip_13_clean.mp3     1000ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.56ms err=None
+A_current  real_recordings/mixed/clip_14_noisy.mp3       20ms proc=  5/  4 excess=  1710 missed=0 eq_ref=False extra_ev=1 rep_ALL=0 p95=4.11ms err=None
+A_current  real_recordings/mixed/clip_14_noisy.mp3      100ms proc=  5/  4 excess=  1710 missed=0 eq_ref=False extra_ev=1 rep_ALL=0 p95=4.65ms err=None
+A_current  real_recordings/mixed/clip_14_noisy.mp3      250ms proc=  4/  4 excess=    90 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.69ms err=None
+A_current  real_recordings/mixed/clip_14_noisy.mp3      500ms proc=  4/  4 excess=    90 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.13ms err=None
+A_current  real_recordings/mixed/clip_14_noisy.mp3     1000ms proc=  5/  4 excess= 10590 missed=0 eq_ref=False extra_ev=1 rep_ALL=0 p95=4.25ms err=None
+A_current  real_recordings/mixed/clip_15_muffled.mp3     20ms proc=  5/  1 excess=  4890 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.26ms err=None
+A_current  real_recordings/mixed/clip_15_muffled.mp3    100ms proc=  4/  1 excess=  3300 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.78ms err=None
+A_current  real_recordings/mixed/clip_15_muffled.mp3    250ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.73ms err=None
+A_current  real_recordings/mixed/clip_15_muffled.mp3    500ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=6.36ms err=None
+A_current  real_recordings/mixed/clip_15_muffled.mp3   1000ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.73ms err=None
+A_current  l_recordings/mixed/clip_16_overlapping.mp3    20ms proc=  5/  1 excess=  4890 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.94ms err=None
+A_current  l_recordings/mixed/clip_16_overlapping.mp3   100ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.89ms err=None
+A_current  l_recordings/mixed/clip_16_overlapping.mp3   250ms proc=  3/  1 excess=  1590 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=6.10ms err=None
+A_current  l_recordings/mixed/clip_16_overlapping.mp3   500ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.56ms err=None
+A_current  l_recordings/mixed/clip_16_overlapping.mp3  1000ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=5.78ms err=None
+A_current  real_recordings/mixed/clip_17_muffled.mp3     20ms proc=  5/  1 excess=  6150 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=5.93ms err=None
+A_current  real_recordings/mixed/clip_17_muffled.mp3    100ms proc=  5/  1 excess=  5850 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.84ms err=None
+A_current  real_recordings/mixed/clip_17_muffled.mp3    250ms proc=  4/  1 excess=  6690 missed=0 eq_ref=False extra_ev=1 rep_ALL=1 p95=3.56ms err=None
+A_current  real_recordings/mixed/clip_17_muffled.mp3    500ms proc=  3/  1 excess=  4920 missed=0 eq_ref=False extra_ev=1 rep_ALL=1 p95=3.72ms err=None
+A_current  real_recordings/mixed/clip_17_muffled.mp3   1000ms proc=  3/  1 excess=  4920 missed=0 eq_ref=False extra_ev=1 rep_ALL=1 p95=3.73ms err=None
+A_current  real_recordings/mixed/clip_18_noisy.mp3       20ms proc=  6/  4 excess=  3030 missed=0 eq_ref=False extra_ev=2 rep_ALL=0 p95=5.38ms err=None
+A_current  real_recordings/mixed/clip_18_noisy.mp3      100ms proc=  6/  4 excess=  3030 missed=0 eq_ref=False extra_ev=2 rep_ALL=0 p95=4.92ms err=None
+A_current  real_recordings/mixed/clip_18_noisy.mp3      250ms proc=  6/  4 excess=  3060 missed=0 eq_ref=False extra_ev=2 rep_ALL=0 p95=4.23ms err=None
+A_current  real_recordings/mixed/clip_18_noisy.mp3      500ms proc=  6/  4 excess=  3000 missed=0 eq_ref=False extra_ev=2 rep_ALL=0 p95=4.79ms err=None
+A_current  real_recordings/mixed/clip_18_noisy.mp3     1000ms proc=  6/  4 excess=  3000 missed=0 eq_ref=False extra_ev=2 rep_ALL=0 p95=4.58ms err=None
+A_current  real_recordings/mixed/clip_19_muffled.mp3     20ms proc=  4/  1 excess=  3300 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.09ms err=None
+A_current  real_recordings/mixed/clip_19_muffled.mp3    100ms proc=  5/  1 excess=  7710 missed=0 eq_ref=False extra_ev=1 rep_ALL=1 p95=3.55ms err=None
+A_current  real_recordings/mixed/clip_19_muffled.mp3    250ms proc=  4/  1 excess=  6090 missed=0 eq_ref=False extra_ev=1 rep_ALL=1 p95=2.90ms err=None
+A_current  real_recordings/mixed/clip_19_muffled.mp3    500ms proc=  4/  1 excess=  6030 missed=0 eq_ref=False extra_ev=1 rep_ALL=1 p95=3.04ms err=None
+A_current  real_recordings/mixed/clip_19_muffled.mp3   1000ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.56ms err=None
+A_current  real_recordings/mixed/clip_20_muffled.mp3     20ms proc=  6/  1 excess=  9090 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.31ms err=None
+A_current  real_recordings/mixed/clip_20_muffled.mp3    100ms proc=  4/  1 excess=  3300 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.58ms err=None
+A_current  real_recordings/mixed/clip_20_muffled.mp3    250ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=2.94ms err=None
+A_current  real_recordings/mixed/clip_20_muffled.mp3    500ms proc=  3/  1 excess=  1650 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.97ms err=None
+A_current  real_recordings/mixed/clip_20_muffled.mp3   1000ms proc=  3/  1 excess=  1650 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.23ms err=None
+A_current  real_recordings/mixed/clip_21_clean.mp3       20ms proc=  5/  1 excess=  7890 missed=0 eq_ref=False extra_ev=1 rep_ALL=1 p95=5.03ms err=None
+A_current  real_recordings/mixed/clip_21_clean.mp3      100ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.54ms err=None
+A_current  real_recordings/mixed/clip_21_clean.mp3      250ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.64ms err=None
+A_current  real_recordings/mixed/clip_21_clean.mp3      500ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.09ms err=None
+A_current  real_recordings/mixed/clip_21_clean.mp3     1000ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.64ms err=None
+A_current  real_recordings/mixed/clip_22_clean.mp3       20ms proc=  4/  1 excess=  3210 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.96ms err=None
+A_current  real_recordings/mixed/clip_22_clean.mp3      100ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.88ms err=None
+A_current  real_recordings/mixed/clip_22_clean.mp3      250ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.66ms err=None
+A_current  real_recordings/mixed/clip_22_clean.mp3      500ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.55ms err=None
+A_current  real_recordings/mixed/clip_22_clean.mp3     1000ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.65ms err=None
+A_current  real_recordings/mixed/clip_23_muffled.mp3     20ms proc=  8/  1 excess= 19950 missed=0 eq_ref=False extra_ev=2 rep_ALL=2 p95=3.79ms err=None
+A_current  real_recordings/mixed/clip_23_muffled.mp3    100ms proc=  5/  1 excess=  4890 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.04ms err=None
+A_current  real_recordings/mixed/clip_23_muffled.mp3    250ms proc=  3/  1 excess=  1680 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.68ms err=None
+A_current  real_recordings/mixed/clip_23_muffled.mp3    500ms proc=  3/  1 excess=  1680 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=5.89ms err=None
+A_current  real_recordings/mixed/clip_23_muffled.mp3   1000ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=5.59ms err=None
+A_current  l_recordings/mixed/clip_24_overlapping.mp3    20ms proc=  7/  1 excess= 16830 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=5.02ms err=None
+A_current  l_recordings/mixed/clip_24_overlapping.mp3   100ms proc=  6/  1 excess= 19530 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.79ms err=None
+A_current  l_recordings/mixed/clip_24_overlapping.mp3   250ms proc=  3/  1 excess=  5940 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.98ms err=None
+A_current  l_recordings/mixed/clip_24_overlapping.mp3   500ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.80ms err=None
+A_current  l_recordings/mixed/clip_24_overlapping.mp3  1000ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.68ms err=None
+A_current  real_recordings/mixed/clip_25_clean.mp3       20ms proc=  4/  1 excess=  3210 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.69ms err=None
+A_current  real_recordings/mixed/clip_25_clean.mp3      100ms proc=  5/  1 excess=  4860 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.75ms err=None
+A_current  real_recordings/mixed/clip_25_clean.mp3      250ms proc=  3/  1 excess=  1650 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.61ms err=None
+A_current  real_recordings/mixed/clip_25_clean.mp3      500ms proc=  3/  1 excess=  1650 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.60ms err=None
+A_current  real_recordings/mixed/clip_25_clean.mp3     1000ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.69ms err=None
+A_current  real_recordings/mixed/clip_26_clean.mp3       20ms proc=  4/  1 excess=  3210 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.58ms err=None
+A_current  real_recordings/mixed/clip_26_clean.mp3      100ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.80ms err=None
+A_current  real_recordings/mixed/clip_26_clean.mp3      250ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.53ms err=None
+A_current  real_recordings/mixed/clip_26_clean.mp3      500ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.54ms err=None
+A_current  real_recordings/mixed/clip_26_clean.mp3     1000ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.51ms err=None
+A_current  real_recordings/mixed/clip_27_muffled.mp3     20ms proc=  6/  1 excess=  8190 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.71ms err=None
+A_current  real_recordings/mixed/clip_27_muffled.mp3    100ms proc=  5/  1 excess=  4890 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.86ms err=None
+A_current  real_recordings/mixed/clip_27_muffled.mp3    250ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.66ms err=None
+A_current  real_recordings/mixed/clip_27_muffled.mp3    500ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=6.20ms err=None
+A_current  real_recordings/mixed/clip_27_muffled.mp3   1000ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.91ms err=None
+A_current  l_recordings/mixed/clip_28_overlapping.mp3    20ms proc=  8/  1 excess= 19200 missed=0 eq_ref=False extra_ev=2 rep_ALL=2 p95=3.75ms err=None
+A_current  l_recordings/mixed/clip_28_overlapping.mp3   100ms proc=  6/  1 excess= 14490 missed=0 eq_ref=False extra_ev=2 rep_ALL=2 p95=3.59ms err=None
+A_current  l_recordings/mixed/clip_28_overlapping.mp3   250ms proc=  4/  1 excess=  7170 missed=0 eq_ref=False extra_ev=1 rep_ALL=1 p95=4.98ms err=None
+A_current  l_recordings/mixed/clip_28_overlapping.mp3   500ms proc=  4/  1 excess= 11190 missed=0 eq_ref=False extra_ev=2 rep_ALL=2 p95=3.76ms err=None
+A_current  l_recordings/mixed/clip_28_overlapping.mp3  1000ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.75ms err=None
+A_current  real_recordings/mixed/clip_29_clean.mp3       20ms proc=  5/  1 excess=  8220 missed=0 eq_ref=False extra_ev=1 rep_ALL=1 p95=4.27ms err=None
+A_current  real_recordings/mixed/clip_29_clean.mp3      100ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.65ms err=None
+A_current  real_recordings/mixed/clip_29_clean.mp3      250ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.86ms err=None
+A_current  real_recordings/mixed/clip_29_clean.mp3      500ms proc=  3/  1 excess=  1620 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=7.15ms err=None
+A_current  real_recordings/mixed/clip_29_clean.mp3     1000ms proc=  2/  1 excess=     0 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=3.80ms err=None
+A_current  real_recordings/mixed/clip_30_noisy.mp3       20ms proc=  8/  5 excess=  5460 missed=0 eq_ref=False extra_ev=3 rep_ALL=0 p95=5.37ms err=None
+A_current  real_recordings/mixed/clip_30_noisy.mp3      100ms proc=  7/  5 excess=  3780 missed=0 eq_ref=False extra_ev=2 rep_ALL=0 p95=5.04ms err=None
+A_current  real_recordings/mixed/clip_30_noisy.mp3      250ms proc=  8/  5 excess=  5460 missed=0 eq_ref=False extra_ev=3 rep_ALL=0 p95=5.77ms err=None
+A_current  real_recordings/mixed/clip_30_noisy.mp3      500ms proc=  6/  5 excess=  2220 missed=0 eq_ref=False extra_ev=1 rep_ALL=0 p95=7.89ms err=None
+A_current  real_recordings/mixed/clip_30_noisy.mp3     1000ms proc=  5/  5 excess=   570 missed=0 eq_ref=False extra_ev=0 rep_ALL=0 p95=4.24ms err=None
+{
+ "A_current|20": {
+  "recordings": 30,
+  "processed": 159,
+  "reference_segments": 50,
+  "excess_overlap_ms": 202590,
+  "recordings_with_excess": 30,
+  "duplicate_segments": 0,
+  "reprocessed_segments": 80,
+  "missed_speech_ms": 0,
+  "recordings_missed_speech": 0,
+  "boundary_mismatch": 136,
+  "recordings_not_equal_reference": 30,
+  "extra_events": 26,
+  "recordings_extra_events": 13,
+  "escalated": 4,
+  "repeat_induced_trigger_all": 10,
+  "errors": 0,
+  "nondeterministic": 0,
+  "p50_call_ms": 2.022,
+  "p95_call_ms": 4.905,
+  "max_call_ms": 47.74,
+  "total_s": 98.33
+ },
+ "A_current|100": {
+  "recordings": 30,
+  "processed": 133,
+  "reference_segments": 50,
+  "excess_overlap_ms": 141030,
+  "recordings_with_excess": 30,
+  "duplicate_segments": 0,
+  "reprocessed_segments": 57,
+  "missed_speech_ms": 0,
+  "recordings_missed_speech": 0,
+  "boundary_mismatch": 109,
+  "recordings_not_equal_reference": 30,
+  "extra_events": 19,
+  "recordings_extra_events": 11,
+  "escalated": 2,
+  "repeat_induced_trigger_all": 7,
+  "errors": 0,
+  "nondeterministic": 0,
+  "p50_call_ms": 1.945,
+  "p95_call_ms": 3.872,
+  "max_call_ms": 13.59,
+  "total_s": 18.64
+ },
+ "A_current|250": {
+  "recordings": 30,
+  "processed": 103,
+  "reference_segments": 50,
+  "excess_overlap_ms": 77940,
+  "recordings_with_excess": 26,
+  "duplicate_segments": 0,
+  "reprocessed_segments": 32,
+  "missed_speech_ms": 0,
+  "recordings_missed_speech": 0,
+  "boundary_mismatch": 80,
+  "recordings_not_equal_reference": 30,
+  "extra_events": 13,
+  "recordings_extra_events": 10,
+  "escalated": 2,
+  "repeat_induced_trigger_all": 6,
+  "errors": 0,
+  "nondeterministic": 0,
+  "p50_call_ms": 1.956,
+  "p95_call_ms": 4.153,
+  "max_call_ms": 17.32,
+  "total_s": 8.08
+ },
+ "A_current|500": {
+  "recordings": 30,
+  "processed": 96,
+  "reference_segments": 50,
+  "excess_overlap_ms": 63360,
+  "recordings_with_excess": 23,
+  "duplicate_segments": 0,
+  "reprocessed_segments": 25,
+  "missed_speech_ms": 0,
+  "recordings_missed_speech": 0,
+  "boundary_mismatch": 70,
+  "recordings_not_equal_reference": 30,
+  "extra_events": 11,
+  "recordings_extra_events": 9,
+  "escalated": 2,
+  "repeat_induced_trigger_all": 6,
+  "errors": 0,
+  "nondeterministic": 0,
+  "p50_call_ms": 1.978,
+  "p95_call_ms": 4.579,
+  "max_call_ms": 11.86,
+  "total_s": 4.11
+ },
+ "A_current|1000": {
+  "recordings": 30,
+  "processed": 82,
+  "reference_segments": 50,
+  "excess_overlap_ms": 35640,
+  "recordings_with_excess": 11,
+  "duplicate_segments": 0,
+  "reprocessed_segments": 11,
+  "missed_speech_ms": 0,
+  "recordings_missed_speech": 0,
+  "boundary_mismatch": 56,
+  "recordings_not_equal_reference": 30,
+  "extra_events": 6,
+  "recordings_extra_events": 5,
+  "escalated": 0,
+  "repeat_induced_trigger_all": 2,
+  "errors": 0,
+  "nondeterministic": 0,
+  "p50_call_ms": 2.071,
+  "p95_call_ms": 4.07,
+  "max_call_ms": 13.07,
+  "total_s": 2.15
+ }
+}

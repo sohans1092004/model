@@ -1,0 +1,18 @@
+=== AGREEMENT_THRESHOLD against this session's 3 real validated false-trigger cases ===
+[PASS] clip_04 ch_a: real disagreement (0.000) is below AGREEMENT_THRESHOLD (0.5)
+[PASS] clip_08 mono: real disagreement (0.418) is below AGREEMENT_THRESHOLD (0.5)
+[PASS] clip_08 ch_b: real disagreement (0.280) is below AGREEMENT_THRESHOLD (0.5)
+
+3/3 checks passed so far.
+
+=== wired into UDKEngine.decide(): dual_asr_disagreement vetoes a text-only match ===
+[PASS] an exact match with dual_asr_disagreement=False fires normally
+[PASS] the SAME exact match with dual_asr_disagreement=True is vetoed to NO_ACTION
+
+5/5 checks passed so far.
+
+=== KWS independence: dual_asr_disagreement must not veto a KWS-corroborated match ===
+[PASS] STT+KWS agreement (corroborated) is not vetoed even with dual_asr_disagreement=True
+
+========================================
+6/6 TOTAL PASSED -- ALL PASSED

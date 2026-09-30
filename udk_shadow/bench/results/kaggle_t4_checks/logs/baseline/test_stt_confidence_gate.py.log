@@ -1,0 +1,22 @@
+=== is_suspect() against this session's real measured cases ===
+[PASS] clip_08 separated-channel fabrication (temperature=1.0) is flagged
+[PASS] clip_16 repeated-sentence hallucination (temperature=0.2) is flagged
+[PASS] clip_14 noisy-condition wrong transcript (temperature=1.0) is flagged
+[PASS] clip_01/09/13 genuine-correct baselines are NOT flagged
+[PASS] documented blind spot: clip_04/clip_08 'confidently wrong' cases are NOT flagged
+[PASS] a backend with no confidence metadata (e.g. MockSTT) is never flagged
+
+6/6 checks passed so far.
+
+=== wired into UDKEngine.decide(): stt_suspect vetoes a text-only match ===
+[PASS] an exact match with stt_suspect=False fires normally
+[PASS] the SAME exact match with stt_suspect=True is vetoed to NO_ACTION
+
+8/8 checks passed so far.
+
+=== KWS independence: stt_suspect must not veto a KWS-corroborated or KWS-only match ===
+[PASS] STT+KWS agreement (corroborated) is not vetoed even with stt_suspect=True
+[PASS] a KWS-only match (STT found nothing) is not vetoed by an STT-quality signal
+
+========================================
+10/10 TOTAL PASSED -- ALL PASSED

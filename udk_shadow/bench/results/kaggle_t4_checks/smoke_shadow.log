@@ -1,0 +1,11 @@
+[FAIL] whitelist ships shadow runtime only (26 files)
+       ['asr_bench/__init__.py', 'asr_bench/textnorm.py']
+[PASS] shadow OFF (default): service starts, udk_shadow not imported
+[PASS] shadow ON: loads, self-check ok, S-4 open, Phase 5 sentence-veto guard False, scream flags recorded as-is
+[PASS] shadow ON + real semantic model on GPU: isolated replay leaves the live cache untouched
+[PASS] shadow ON + udk_fusion removed: fails closed (shadow OFF), service serves
+[PASS] shadow ON + shadow dependency removed (asr_bench/textnorm.py): fails closed (shadow OFF), service serves
+[PASS] shadow ON + invalid shadow config: fails closed, service serves
+[PASS] uvicorn server with shadow ON answers /metrics and logs the self-check
+
+smoke: 7/8 passed

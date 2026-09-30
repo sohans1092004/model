@@ -1,0 +1,79 @@
+=== match_transcript falls back to the rapidfuzz stub with no semantic_matcher ===
+[PASS] no semantic_matcher given -> match_transcript runs fine without one (whichever layer wins)
+
+1/1 checks passed so far.
+
+=== match_transcript uses a real semantic_matcher when given ===
+[PASS] semantic_matcher's score is used directly, undiscounted
+[PASS] a semantic score below 0.55 doesn't produce a match
+
+3/3 checks passed so far.
+
+=== fuzzy layer's raw gate is per-matcher (Telugu/Kannada/Tamil FPR fix) ===
+[PASS] raw fuzzy ratio below the default 0.55 gate -> no match
+[PASS] a matcher declaring a stricter fuzzy_threshold (0.90) rejects a ratio that would have cleared the default 0.55
+[PASS] a matcher with no fuzzy_threshold attribute falls back to the 0.55 default (backward compat)
+
+6/6 checks passed so far.
+
+=== decide_all: every UDK said in one segment is reported, not just the best one ===
+[PASS] two different UDKs in separate sentences -> two events
+[PASS] first event is the whole-segment decision (same as decide())
+[PASS] one sentence -> exactly one event
+[PASS] ordinary sentences -> no extra events
+[PASS] short sentence made of a UDK's whole words ('Please don't!') still counts on its own
+[PASS] short sentence matching only INSIDE a word ('No.' in 'not') is ignored
+[PASS] short sentence whose words aren't a run in any UDK ('Go to.') is ignored
+[PASS] sentences of 3+ words are matched as before
+
+14/14 checks passed so far.
+
+=== a short fragment ambiguous across multiple UDKs is NOT full confidence (real bug found and fixed) ===
+[PASS] a fragment that's a substring of TWO different UDK phrases is capped below full confidence, not an unconfirmed 1.0
+[PASS] a transcript of only non-distinctive words never matches: 'please'
+[PASS] a transcript of only non-distinctive words never matches: 'Please, please.'
+[PASS] a transcript of only non-distinctive words never matches: 'Right?'
+[PASS] a transcript of only non-distinctive words never matches: "I'm"
+[PASS] a transcript of only non-distinctive words never matches: 'now'
+[PASS] a fragment that's a substring of only ONE UDK phrase still keeps full confidence (real, unambiguous evidence)
+
+21/21 checks passed so far.
+
+=== UDKEngine wires semantic_matcher through decide() ===
+[PASS] UDKEngine.decide() uses the injected semantic_matcher's score (0.75 -> TRIGGER_VERIFY range)
+[PASS] UDKEngine without a semantic_matcher still runs (falls back to the stub)
+=== fuzzy layer needs the UDK's own words in a long sentence (real YouTube false alarms) ===
+[PASS] long sentence that only starts like a UDK is not a fuzzy match: "But I'm not saying this only because of "
+[PASS] long sentence that only starts like a UDK is not a fuzzy match: 'Among the important things that come out'
+[PASS] real danger still matches UDK_08: "please someone help me he's not letting "
+[PASS] real danger still matches UDK_01: 'call the plice i need help'
+=== fragment rule: a short transcript needs one of the UDK's anchor words ===
+[PASS] short real cry still matches: 'Help!'
+[PASS] short real cry still matches: 'Police!'
+[PASS] short real cry still matches: 'Get away!'
+[PASS] short real cry still matches: 'Let go!'
+[PASS] short real cry still matches: 'Stay back!'
+[PASS] short real cry still matches: "I'm scared"
+[PASS] short real cry still matches: "Don't hurt me"
+[PASS] short real cry still matches: 'Help me'
+[PASS] short real cry still matches: "Someone's following me"
+[PASS] short real cry still matches: 'call the plice'
+[PASS] anchorless fragment isn't a exact/fuzzy match: "I don't"
+[PASS] anchorless fragment isn't a exact/fuzzy match: 'I want'
+[PASS] anchorless fragment isn't a exact/fuzzy match: "I don't know."
+[PASS] anchorless fragment isn't a exact/fuzzy match: "No, I don't know."
+[PASS] anchorless fragment isn't a exact/fuzzy match: 'Now, I want to'
+[PASS] anchorless fragment isn't a exact/fuzzy match: 'You want to be here.'
+[PASS] anchorless fragment isn't a exact/fuzzy match: 'He wants to clean.'
+[PASS] anchorless fragment isn't a exact/fuzzy match: 'F need.'
+[PASS] anchorless fragment isn't a exact/fuzzy match: 'No need of'
+[PASS] function-word fragment isn't an exact/fuzzy match: 'From my father.'
+[PASS] function-word fragment isn't an exact/fuzzy match: 'Being honest.'
+[PASS] function-word fragment isn't an exact/fuzzy match: 'For real.'
+[PASS] every standard UDK keeps at least one anchor word
+[PASS] 'don't' as a command still matches: "Please don't!"
+[PASS] 'don't' as a command still matches: "No, don't!"
+[PASS] 'You do me!' (no anchor) matches only with UDK_FRAGMENT_FUZZY=0 (now 1)
+
+========================================
+53/53 TOTAL PASSED -- ALL PASSED

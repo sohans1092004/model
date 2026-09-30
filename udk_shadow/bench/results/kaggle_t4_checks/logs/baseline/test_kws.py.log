@@ -1,0 +1,37 @@
+=== MockKWS ===
+[PASS] unregistered audio has no match
+[PASS] registered audio returns the registered match
+[PASS] a different clip still has no match
+[PASS] enroll() registers the clip as a self-match (distance 0), like the real backend would give
+[PASS] clear() removes references for that phrase_id (Section 5: re-enrollment deactivates the old phrase)
+[PASS] clear() doesn't disturb other phrases' registrations
+
+6/6 checks passed so far.
+
+=== Personal UDK enrollment also registers a KWS reference (Section 4 extended to personal UDKs) ===
+[PASS] enrollment still succeeds with kws given
+[PASS] the sample audio was registered as this UDK's KWS reference
+[PASS] enrollment without sample_pcm still succeeds (kws enrollment is best-effort, not required)
+
+9/9 checks passed so far.
+
+=== UDKEngine + KWS fusion (Section 4's Approach E) ===
+[PASS] KWS alone produces a decision when STT gets nothing (the actual point: STT outage doesn't blind the system)
+[PASS] STT alone still works unaffected when no kws_match is given
+[PASS] verify-by-default phrase via STT alone stays TRIGGER_VERIFY
+[PASS] independent STT+KWS agreement escalates a verify-by-default phrase straight to TRIGGER_ALL
+[PASS] a KWS match that clears spot()'s 0.18 threshold but not the stricter 0.15 corroboration margin doesn't force TRIGGER_ALL
+[PASS] disagreeing branches don't falsely corroborate -- the higher-confidence one (exact STT match) wins
+[PASS] an unrecognized KWS phrase_id is ignored, not treated as a match
+
+16/16 checks passed so far.
+
+=== Through the real live API: KWS survives a total STT outage ===
+[PASS] STT returned nothing for every segment, yet a detection still fired via KWS
+[PASS] the event's transcript is honestly empty (STT really did fail)
+[PASS] model_version.kws reflects the real KWS backend used, not null
+=== vectorized DTW == original cell-by-cell DTW (exact) ===
+[PASS] identical on 7 shapes incl. 1-frame edges and real sizes (max diff 0.0e+00)
+
+========================================
+20/20 TOTAL PASSED -- ALL PASSED

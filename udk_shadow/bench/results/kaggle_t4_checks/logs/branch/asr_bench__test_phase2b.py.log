@@ -1,0 +1,56 @@
+[PASS] reference: complete utterance kept in mixed script
+[PASS] reference: manifest language tags carried with their source; script measured
+[PASS] reference: only the mixed-script view exists (no romaniser, Q6)
+[PASS] a source-provided romanised copy is kept as a second, named view (no choice made)
+[PASS] ASR output: engine, version, input unit recorded
+[PASS] ASR output: token language from the provisional script method, labelled as such
+[PASS] ASR output without a config: token languages stay None (not guessed)
+[PASS] round trip to_dict / from_dict
+[PASS] tokens dropping a word are refused (complete utterance)
+[PASS] romanised text without a named romaniser is refused
+[PASS] ASR output without engine/version is refused
+[PASS] a token language without its source is refused
+[PASS] run record with an error has no representation
+[PASS] word-boundary: merge 'call karo' -> 'callkaro'
+[PASS] word-boundary: split 'policeko' -> 'police ko'
+[PASS] word-boundary: plain substitution is not a boundary error
+[PASS] negation error labelled (negator dropped)
+[PASS] name/entity error is UNAVAILABLE (no entity annotation), never guessed
+[PASS] decoding confidence not recorded by the runner -> null
+[PASS] hallucination labelled on no-speech audio
+[PASS] language switching labelled (Devanagari Hindi output as Latin)
+[PASS] evidence: toy baseline is not a frozen Phase 0 engine -> prerequisite FAIL
+[PASS] evidence: code-switch rule FAILs for the degraded candidate on hi|cs
+[PASS] evidence: Te-En slice has no data -> UNAVAILABLE, not PASS
+[PASS] evidence: keyword recall worse in some category -> FAIL
+[PASS] evidence: negation flip increase -> FAIL
+[PASS] evidence with the shipped Latin-only negator list: Devanagari negation is UNAVAILABLE, not PASS (Q7)
+[PASS] evidence: false keyword insertion worse -> FAIL
+[PASS] evidence: pocket/overlap not collected -> UNAVAILABLE
+[PASS] evidence: CPU fit unmeasured on verified hardware -> UNAVAILABLE
+[PASS] evidence: no licence record -> UNAVAILABLE
+[PASS] evidence: romanisation round-trip -> UNAVAILABLE (Q6)
+[PASS] evidence: no winner / decision made
+[PASS] evidence: identical candidate does not 'beat' the baseline (strict) -> FAIL
+[PASS] evidence: identical candidate is not worse on recall / flips / false words -> PASS
+[PASS] evidence: supplied licence record and freeze are used (PASS, marked unverified)
+[PASS] evidence: verified CPU but no RTF limit configured -> UNAVAILABLE (M-6)
+[PASS] evidence: verified CPU + limit -> judged
+[PASS] evidence refuses final_test reports (candidates compared on dev)
+[PASS] evidence refuses reports scored with different configs
+[PASS] evidence refuses a compare file of other engines
+[PASS] D_asr_errors: final_test records never included
+[PASS] D_asr_errors: one row per utterance with both engines side by side
+[PASS] D_asr_errors: usable_for_training only for train + train_ok rows
+[PASS] D_asr_errors: perfect engine has no error types
+[PASS] D_asr_errors: degraded engine errors labelled (deletion, negation, language switching)
+[PASS] D_asr_errors: condition, licence and split carried from the manifest
+[PASS] D_asr_errors: the same engine twice is refused
+[PASS] D_asr_errors: deterministic
+[PASS] every dev ASR output converts to a valid representation
+[PASS] CLI asr_errors build
+[PASS] CLI decision_evidence writes the record
+[PASS] CLI decision_evidence never overwrites
+
+========================================
+53/53 TOTAL PASSED -- ALL PASSED

@@ -1,0 +1,31 @@
+=== Full crash recovery: session_token and personal UDK now survive too (M5's fix for M4's gap) ===
+[PASS] recovery reuses the SAME session_token, not a fresh one
+[PASS] recovery reconstructs the enrolled personal UDK phrase from durable storage
+[PASS] recovered journey status matches its pre-crash status
+
+3/3 checks passed so far.
+
+=== Durable events/status survive a crash even without recovery being triggered ===
+[PASS] event detected pre-crash
+[PASS] GET /events still works via the DB, without needing recovery first
+[PASS] GET /journeys status still works via the DB
+
+6/6 checks passed so far.
+
+=== Full Section 9 decision-event schema ===
+[PASS] event has every Section 9 field
+[PASS] model_version is tracked per component
+[PASS] timestamp (audio time) predates or equals server_received_ts
+
+9/9 checks passed so far.
+
+=== Concurrent-journey load smoke test ===
+[PASS] all 20 concurrent journeys completed without exceptions
+[PASS] all 20 journeys produced exactly one event each
+[PASS] no cross-journey contamination -- each event belongs to its own journey and phrase
+[PASS] all event_ids are unique across concurrent journeys
+[PASS] event delivery success rate under load: 100% (queue empty)
+[PASS] every concurrent journey's metadata landed correctly in the DB
+
+========================================
+15/15 TOTAL PASSED -- ALL PASSED

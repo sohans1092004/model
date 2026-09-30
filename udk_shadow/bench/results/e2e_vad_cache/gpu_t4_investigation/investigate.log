@@ -1,0 +1,161 @@
+
+$ /usr/bin/python3 /kaggle/working/bundle/udk_shadow/bench/e2e_investigate.py --recordings /kaggle/working/bundle/recordings.json --device cuda --out /kaggle/working/results/investigate.json --intent-dir /kaggle/working/models/intent_mdeberta
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[0;93m2026-09-30 03:20:53.542562935 [W:onnxruntime:, transformer_memcpy.cc:111 ApplyImpl] 2 Memcpy nodes are added to the graph main_graph for CUDAExecutionProvider. It might have negative impact on performance (including unable to run CUDA graph). Set session_options.log_severity_level=1 to see the detail logs before this message.[m
+BertModel LOAD REPORT from: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED	:can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+BertModel LOAD REPORT from: sentence-transformers/LaBSE
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED	:can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/usr/local/lib/python3.12/dist-packages/torch/nn/utils/weight_norm.py:144: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+intent gate ON: /kaggle/working/models/intent_mdeberta (threshold 0.02, cuda)
+components {"whisper": "FasterWhisperSTT", "whisper_model": "faster-whisper-small.en", "whisper_device": "cuda", "parakeet": "ParakeetSTT", "parakeet_providers": ["CUDAExecutionProvider", "CPUExecutionProvider"], "semantic": "SentenceTransformerSemanticMatcher", "stt_confidence_gate": true, "beats": "BEATsDistressDetector", "scream_trigger": true, "scream_corroboration": true, "intent_gate": "IntentGate", "intent_threshold": 0.02, "kws": "off", "dual_asr": "off", "separation": "off", "language_id": "off", "device": "cuda", "processing_version": "pipeline-2026.09"}
+
+===== pos_02: OFF TRIGGER_ALL UDK_01 exact vs ON acoustic VERIFY
+-- off 26940-37920  beats={'fired': True, 'peak': 0.2375, 'class': 'Whimper', 'score': 0.36}
+   W T=0.0 lp=-0.727 sus=False match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Help! Help! Help! Help! I can't believe it! I can't believe it! Please! Please! I can't believe it!
+   W T=0.0 lp=-0.727 sus=False match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Help! Help! Help! Help! I can't believe it! I can't believe it! Please! Please! I can't believe it!
+   W T=0.0 lp=-0.727 sus=False match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Help! Help! Help! Help! I can't believe it! I can't believe it! Please! Please! I can't believe it!
+   W T=0.0 lp=-0.727 sus=False match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Help! Help! Help! Help! I can't believe it! I can't believe it! Please! Please! I can't believe it!
+   W T=0.0 lp=-0.727 sus=False match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Help! Help! Help! Help! I can't believe it! I can't believe it! Please! Please! I can't believe it!
+   P match=None :: 
+   P match=None :: 
+-- on 27060-38040  beats={'fired': True, 'peak': 0.2916, 'class': 'Whimper', 'score': 0.3992}
+   W T=1.0 lp=-1.071 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Ahhh! Help! Help! Please, don't be afraid. Don't be afraid. Don't be afraid. Please, please, please, please, please.
+   W T=0.2 lp=-0.897 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Help! Help! You are not going to be able to see me. I am not going to be able to see you. Please, please stand down. I am not going to be able to see you.
+   W T=0.4 lp=-0.914 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Help! Help! I'm going to kill you! I'm going to kill you! Please! Please! I'm going to kill you!
+   W T=1.0 lp=-1.118 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Help! Help! I'm not going to do anything with this lady! I'm not going to do anything! I'm not going to do anything! Please! Please stand up!
+   W T=0.2 lp=-0.844 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Help! Help! I'm so sorry! I'm so sorry! I'm so sorry! I'm so sorry! Please! Please stand up! I'm so sorry!
+   P match=None :: 
+   P match=None :: 
+-- off 17460-28440  beats={'fired': False, 'peak': 0.0383, 'class': 'Whimper', 'score': 0.0914}
+   W T=1.0 lp=-2.586 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: He is going crazy, he is going crazy, he is going crazy. The last time I saw him I was gonna do my best to him, but it was not Casty's fault. What's on his face ? Tyzzzzz, Tyzzzzz...
+   W T=1.0 lp=-1.472 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I'm going to find out where I'm going to put the iron. I'm going to put the iron in there. I'll be in there and I'll be in there. There it is! Whoo!
+   W T=0.6 lp=-0.952 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I hate you, but I can't believe it. I can't believe it! I can't believe it! I can't believe it! I can't believe it!
+   W T=1.0 lp=-1.635 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I don't wanna be in the whole world. I think I'm gonna be in the world again. I don't want to be in the world again. I'm the only one! I'm the only one!
+   W T=1.0 lp=-1.554 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: You'll be fine in the morning. You're a jerk! You're a jerk! You're a jerk!
+   P match=None :: 
+   P match=None :: 
+-- off 17490-28470  beats={'fired': False, 'peak': 0.0412, 'class': 'Whimper', 'score': 0.0948}
+   W T=1.0 lp=-1.273 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I'm the only one who wants to see the world. I'm the only one who's gonna get a lot of attention. I'm the only one who wants to see the world. We are going to kill them. We are going to kill them.
+   W T=1.0 lp=-1.556 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I think I'll come back to the point where the iron's going to be. It's not the only thing I have to do. I will be fine, I will be fine. Go to the point where the iron's going to be.
+   W T=1.0 lp=-1.369 sus=True match={'udk': 'UDK_06', 'layer': 'exact', 'confidence': 1.0} :: Please don't touch me! No, I will never touch you! I will never touch you, will you? Don't touch me! Don't touch me! Don't touch me!
+   W T=1.0 lp=-2.168 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: And I don't want to put my phone back on the phone. We will leave. Go get him, before he goes to the hospital. Come on, before he goes to the hospital. Come on, before you go.
+   W T=0.6 lp=-0.916 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I'm not going to be able to find it. No, I can't. I don't want to. I don't want to. I can't. I can't. I can't. I can't.
+   P match=None :: 
+   P match=None :: 
+-- on 17580-28560  beats={'fired': False, 'peak': 0.0307, 'class': 'Whimper', 'score': 0.0932}
+   W T=1.0 lp=-2.221 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I don't know why but how come he was crying? He was sitting on his foot. I know we are big and he doesn't want to Fantasy. I don't know why, but I don't know why.
+   W T=0.6 lp=-0.992 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I'm an idiot, I can't do this! I'm an idiot, I can't do this! I'm an idiot! I'm an idiot!
+   W T=1.0 lp=-1.986 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: It's not all I needed to tell him to do. It's not the only one who can do it. Just give me this. Look! Take this, please!
+   W T=1.0 lp=-2.27 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: They are not over there, they are going nuts. They killed the guy. Hey, they are we going to get lost once. They are not going to get lost. What are you doing? You are going to get lost.
+   W T=1.0 lp=-1.348 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I will take care of you. You are not alone. My mother is not alone. I will take care of you.
+   P match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Don't touch the energy. Need for anybody.
+   P match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Don't touch the energy. Need for anybody.
+   sweep start= 26700  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 26730  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 26760  whisper UDK [None, 'UDK_01']  parakeet UDK [None, None]
+   sweep start= 26790  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 26820  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 26850  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 26880  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 26910  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 26940  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 26970  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 27000  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 27030  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 27060  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 27090  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 27120  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 27150  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 27180  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 27210  whisper UDK [None, None]  parakeet UDK ['UDK_08', 'UDK_08']
+   sweep start= 27240  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 27270  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 27300  whisper UDK [None, None]  parakeet UDK ['UDK_08', 'UDK_08']
+
+===== pos_01: OFF VERIFY UDK_20 vs ON VERIFY UDK_10 (30 ms shift)
+-- off 17460-28440  beats={'fired': False, 'peak': 0.0129, 'class': 'Screaming', 'score': 0.0128}
+   W T=1.0 lp=-1.076 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: No! No! You're a noob! You're a noob! I'm a noob! No!
+   W T=1.0 lp=-2.261 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: that means a lot to me What is going on here? It's not for my family It's for me
+   W T=1.0 lp=-1.999 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I think this is the beginning. This This is the beginning. This is the beginning.
+   W T=1.0 lp=-1.292 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I'm sorry. What's going on? I'm sorry. I'm sorry. I didn't mean to. My bad. you
+   W T=1.0 lp=-2.599 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: for to to me, I'd hook and I had story what
+   P match={'udk': 'UDK_20', 'layer': 'semantic', 'confidence': 0.671} :: To my hard hook and I hard. I can get out of it.
+   P match={'udk': 'UDK_20', 'layer': 'semantic', 'confidence': 0.671} :: To my hard hook and I hard. I can get out of it.
+-- on 17490-28470  beats={'fired': False, 'peak': 0.0102, 'class': 'Screaming', 'score': 0.0154}
+   W T=1.0 lp=-2.086 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Not really.. You're in my heart. I'm in my heart! You're in my heart! You're in my heart!! Ahh!!
+   W T=1.0 lp=-1.051 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I'm sorry. I'm sorry. I'm sorry. I'm sorry.
+   W T=1.0 lp=-1.48 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Thank you for watching!
+   W T=0.4 lp=-0.785 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I'm going to die. I'm not going to die. I'm going to die. I'm going to die! I'm going to die!
+   W T=1.0 lp=-1.108 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Who can I hide? He's still there! He's still there! He's still there! Don't talk! He's still there! He's still there! It's a
+   P match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: To my yard, who can I hard? I can let out with it.
+   P match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: To my yard, who can I hard? I can let out with it.
+-- off 7980-18960  beats={'fired': False, 'peak': 0.0017, 'class': 'Whimper', 'score': 0.0007}
+   W T=1.0 lp=-1.215 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: We have met a meager heart.
+   W T=1.0 lp=-1.215 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: We have met a meager heart.
+   W T=1.0 lp=-1.215 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: We have met a meager heart.
+   W T=1.0 lp=-1.215 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: We have met a meager heart.
+   W T=0.6 lp=-0.564 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: BAM! BAM! BAM! BAM! BAM! BAM!
+   P match=None :: 
+   P match=None :: 
+-- on 8010-18990  beats={'fired': False, 'peak': 0.0021, 'class': 'Whimper', 'score': 0.0009}
+   W T=1.0 lp=-1.227 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: We have met a meager heart.
+   W T=1.0 lp=-1.227 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: We have met a meager heart.
+   W T=1.0 lp=-1.227 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: We have met a meager heart.
+   W T=1.0 lp=-1.227 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: We have met a meager heart.
+   W T=1.0 lp=-1.227 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: We have met a meager heart.
+   P match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: We have met to make it hard.
+   P match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: We have met to make it hard.
+   sweep start= 17325  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 17355  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 17385  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 17415  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 17445  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 17475  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 17505  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 17535  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 17565  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 17595  whisper UDK [None, None]  parakeet UDK [None, None]
+   sweep start= 17625  whisper UDK [None, None]  parakeet UDK [None, None]
+
+===== pos_04: same window, Whisper differs
+-- both 17580-28560  beats={'fired': False, 'peak': 0.0017, 'class': 'Whimper', 'score': 0.0022}
+   W T=1.0 lp=-1.2 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I am not sure what is happening here. Next, I will show you a new album called Jyothika. If you want to see the actress Jyothika, I will show you.
+   W T=1.0 lp=-1.203 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: This is the last time we have seen this. Next, we are going to show you how to make an airplane. If you want to make an airplane, let us know in the comments below.
+   W T=1.0 lp=-1.203 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: This is the last time we have seen this. Next, we are going to show you how to make an airplane. If you want to make an airplane, let us know in the comments below.
+   W T=1.0 lp=-1.105 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: This is the last time we have seen this. Next, we will talk about the next role in the role of Jyoti Ka. We will talk about the actor's role in the role of Jyoti Ka.
+   W T=1.0 lp=-1.203 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: This is the last time we have seen this. Next, we are going to show you how to make an airplane. If you want to make an airplane, let us know in the comments below.
+   P match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Next, we have to do this.
+   P match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Next, we have to do this.
+
+===== neg_03: same window, Whisper differs
+-- both 36450-47430  beats={'fired': False, 'peak': 0.002, 'class': 'Whimper', 'score': 0.0009}
+   W T=1.0 lp=-1.776 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: and they are selling, they don't even make money They are going to buy you a runner, they are going to be famous and they are going to be good
+   W T=1.0 lp=-1.733 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: The owner of the car was a seller. He was a man who was like a guy who was a guy who was a guy who was a famous guy. He was a good guy.
+   W T=1.0 lp=-1.137 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I think that's why we are selling it. We are not selling it. We are going to buy a new car. We are going to buy a new car. We are going to buy a new car.
+   W T=1.0 lp=-1.438 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: And I think that's the way to sell your product. You have to buy a product that you can sell for a good amount of money. And if you want to buy a new product, then you can sell it to a famous company. That's the way to sell your product.
+   W T=1.0 lp=-1.651 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I'm not going to sell this stuff, but I'm going to buy it. I'm going to buy this guy, and he'll be famous. It's a good job.
+   P match=None :: 
+   P match=None :: 
+
+===== neg_05: same window, Whisper differs
+-- both 26940-37920  beats={'fired': False, 'peak': 0.0114, 'class': 'Screaming', 'score': 0.0075}
+   W T=1.0 lp=-1.668 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I'm not gonna do that!
+   W T=1.0 lp=-1.362 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Oh my god! What the fuck?
+   W T=1.0 lp=-1.44 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: Don't forget to like and subscribe!
+   W T=1.0 lp=-1.226 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I'm sorry, I'm sorry. I'm sorry, I'm sorry.
+   W T=1.0 lp=-1.489 sus=True match={'udk': None, 'layer': 'none', 'confidence': 0.0} :: I'm sorry, I'm sorry.
+   P match=None :: 
+   P match=None :: 
+DONE /kaggle/working/results/investigate.json

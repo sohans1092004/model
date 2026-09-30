@@ -29,3 +29,32 @@
 beats_vendor/**/__pycache__
 !deploy/requirements-deploy.txt
 !deploy/prefetch_models.py
+# Phase 6 shadow mode: RUNTIME modules only, imported only when UDK_SHADOW_MODE=1 (see udk_shadow/README.md).
+# Listed file by file on purpose: tests, reports, evaluation code, fixtures, docs and the Phase 2A benchmark
+# stay out of the image. deploy/check_package.py proves this list is exactly what shadow imports.
+!udk_shadow/__init__.py
+!udk_shadow/config.py
+!udk_shadow/context.py
+!udk_shadow/evidence.py
+!udk_shadow/observation.py
+!udk_shadow/processor.py
+!udk_shadow/runner.py
+!udk_shadow/selfcheck.py
+!udk_fusion/__init__.py
+!udk_fusion/engine.py
+!udk_fusion/inputs.py
+!udk_fusion/policy.py
+!udk_fusion/configs/production_equivalent.json
+!udk_context/__init__.py
+!udk_context/context_window.py
+!udk_context/decision.py
+!udk_context/intent.py
+!udk_context/negation.py
+!udk_context/production_adapter.py
+!udk_context/scene.py
+!udk_context/configs/production_equivalent.json
+!udk_signals/__init__.py
+!udk_signals/acoustic.py
+!udk_signals/evidence.py
+!asr_bench/__init__.py
+!asr_bench/textnorm.py

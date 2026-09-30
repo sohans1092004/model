@@ -1,0 +1,7684 @@
+{
+ "summary": {
+  "C_frontier|100": {
+   "recordings": 18,
+   "processed": 121,
+   "reference_segments": 103,
+   "excess_overlap_ms": 0,
+   "recordings_with_excess": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_speech_ms": 0,
+   "recordings_missed_speech": 0,
+   "boundary_mismatch": 117,
+   "recordings_not_equal_reference": 15,
+   "extra_events": 0,
+   "recordings_extra_events": 0,
+   "escalated": 0,
+   "repeat_induced_trigger_all": 0,
+   "errors": 0,
+   "nondeterministic": 0,
+   "p50_call_ms": 3.089,
+   "p95_call_ms": 6.511,
+   "max_call_ms": 91.43,
+   "total_s": 117.42
+  },
+  "C_frontier|250": {
+   "recordings": 18,
+   "processed": 117,
+   "reference_segments": 103,
+   "excess_overlap_ms": 0,
+   "recordings_with_excess": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_speech_ms": 0,
+   "recordings_missed_speech": 0,
+   "boundary_mismatch": 113,
+   "recordings_not_equal_reference": 15,
+   "extra_events": 0,
+   "recordings_extra_events": 0,
+   "escalated": 0,
+   "repeat_induced_trigger_all": 0,
+   "errors": 0,
+   "nondeterministic": 0,
+   "p50_call_ms": 3.178,
+   "p95_call_ms": 7.022,
+   "max_call_ms": 80.12,
+   "total_s": 47.07
+  },
+  "C_frontier|500": {
+   "recordings": 18,
+   "processed": 113,
+   "reference_segments": 103,
+   "excess_overlap_ms": 0,
+   "recordings_with_excess": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_speech_ms": 0,
+   "recordings_missed_speech": 0,
+   "boundary_mismatch": 109,
+   "recordings_not_equal_reference": 15,
+   "extra_events": 0,
+   "recordings_extra_events": 0,
+   "escalated": 0,
+   "repeat_induced_trigger_all": 0,
+   "errors": 0,
+   "nondeterministic": 0,
+   "p50_call_ms": 3.143,
+   "p95_call_ms": 6.65,
+   "max_call_ms": 81.5,
+   "total_s": 23.94
+  },
+  "C_frontier|1000": {
+   "recordings": 18,
+   "processed": 110,
+   "reference_segments": 103,
+   "excess_overlap_ms": 0,
+   "recordings_with_excess": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_speech_ms": 0,
+   "recordings_missed_speech": 0,
+   "boundary_mismatch": 107,
+   "recordings_not_equal_reference": 15,
+   "extra_events": 0,
+   "recordings_extra_events": 0,
+   "escalated": 0,
+   "repeat_induced_trigger_all": 0,
+   "errors": 0,
+   "nondeterministic": 0,
+   "p50_call_ms": 3.328,
+   "p95_call_ms": 6.13,
+   "max_call_ms": 71.96,
+   "total_s": 12.36
+  }
+ },
+ "rows": [
+  {
+   "processed": 6,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 53730,
+   "speech_ms": 53700,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     53730
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ],
+    [
+     45930,
+     53730
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 539,
+   "total_s": 2.4897703749998072,
+   "p50_call_ms": 4.272081999999955,
+   "p95_call_ms": 11.109496000017316,
+   "max_call_ms": 22.525954999991882,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     53730
+    ]
+   ],
+   "file": "real_recordings/positives/Abi To Waqt Hai, Tumse Faida Uthany Ka #hibabukhari #youtubeshorts #kidnapping #foryou #shorts.mp3",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 53731,
+   "deterministic": true
+  },
+  {
+   "processed": 6,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 53730,
+   "speech_ms": 53700,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     53730
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ],
+    [
+     45930,
+     53730
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 216,
+   "total_s": 1.0062243539998121,
+   "p50_call_ms": 4.193937499991307,
+   "p95_call_ms": 10.086636999972143,
+   "max_call_ms": 11.690567000016472,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     53730
+    ]
+   ],
+   "file": "real_recordings/positives/Abi To Waqt Hai, Tumse Faida Uthany Ka #hibabukhari #youtubeshorts #kidnapping #foryou #shorts.mp3",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 53731
+  },
+  {
+   "processed": 6,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 53730,
+   "speech_ms": 53700,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     53730
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ],
+    [
+     45930,
+     53730
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 109,
+   "total_s": 0.44323383899990176,
+   "p50_call_ms": 3.9635480000015377,
+   "p95_call_ms": 7.884977000003346,
+   "max_call_ms": 8.343296999953509,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     53730
+    ]
+   ],
+   "file": "real_recordings/positives/Abi To Waqt Hai, Tumse Faida Uthany Ka #hibabukhari #youtubeshorts #kidnapping #foryou #shorts.mp3",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 53731
+  },
+  {
+   "processed": 6,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 53730,
+   "speech_ms": 53700,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     53730
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ],
+    [
+     45930,
+     53730
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 55,
+   "total_s": 0.2461928709998915,
+   "p50_call_ms": 4.305088000023716,
+   "p95_call_ms": 8.281690999979219,
+   "max_call_ms": 10.504602999958479,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     53730
+    ]
+   ],
+   "file": "real_recordings/positives/Abi To Waqt Hai, Tumse Faida Uthany Ka #hibabukhari #youtubeshorts #kidnapping #foryou #shorts.mp3",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 53731
+  },
+  {
+   "processed": 7,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 7,
+   "reference_ms": 50460,
+   "speech_ms": 50340,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     28470
+    ],
+    [
+     28470,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     50460
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9600
+    ],
+    [
+     8100,
+     19080
+    ],
+    [
+     17580,
+     28560
+    ],
+    [
+     27060,
+     38040
+    ],
+    [
+     36540,
+     47520
+    ],
+    [
+     46020,
+     50460
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 506,
+   "total_s": 2.150566497999364,
+   "p50_call_ms": 4.034559999979592,
+   "p95_call_ms": 7.869969000012134,
+   "max_call_ms": 14.429791999987174,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     28470
+    ],
+    [
+     28470,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     50460
+    ]
+   ],
+   "file": "real_recordings/positives/Nivetha Thomas Gets Abducted Vakeel Saab Malayalam Pawan Kalyan #YTShorts.mp3",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 50480,
+   "deterministic": true
+  },
+  {
+   "processed": 6,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 50460,
+   "speech_ms": 50340,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     50460
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9600
+    ],
+    [
+     8100,
+     19080
+    ],
+    [
+     17580,
+     28560
+    ],
+    [
+     27060,
+     38040
+    ],
+    [
+     36540,
+     47520
+    ],
+    [
+     46020,
+     50460
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 203,
+   "total_s": 0.7979367509997246,
+   "p50_call_ms": 3.8217059999965386,
+   "p95_call_ms": 7.484496000017771,
+   "max_call_ms": 8.304459999976643,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     50460
+    ]
+   ],
+   "file": "real_recordings/positives/Nivetha Thomas Gets Abducted Vakeel Saab Malayalam Pawan Kalyan #YTShorts.mp3",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 50480
+  },
+  {
+   "processed": 6,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 50460,
+   "speech_ms": 50340,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     50460
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9600
+    ],
+    [
+     8100,
+     19080
+    ],
+    [
+     17580,
+     28560
+    ],
+    [
+     27060,
+     38040
+    ],
+    [
+     36540,
+     47520
+    ],
+    [
+     46020,
+     50460
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 102,
+   "total_s": 0.49211848900012,
+   "p50_call_ms": 5.5625109999937195,
+   "p95_call_ms": 9.18983499997239,
+   "max_call_ms": 10.852104000036888,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     50460
+    ]
+   ],
+   "file": "real_recordings/positives/Nivetha Thomas Gets Abducted Vakeel Saab Malayalam Pawan Kalyan #YTShorts.mp3",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 50480
+  },
+  {
+   "processed": 6,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 50460,
+   "speech_ms": 50340,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     50460
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9600
+    ],
+    [
+     8100,
+     19080
+    ],
+    [
+     17580,
+     28560
+    ],
+    [
+     27060,
+     38040
+    ],
+    [
+     36540,
+     47520
+    ],
+    [
+     46020,
+     50460
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 52,
+   "total_s": 0.25274454299994886,
+   "p50_call_ms": 4.380835999995725,
+   "p95_call_ms": 9.915725999974256,
+   "max_call_ms": 10.56174499996132,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     50460
+    ]
+   ],
+   "file": "real_recordings/positives/Nivetha Thomas Gets Abducted Vakeel Saab Malayalam Pawan Kalyan #YTShorts.mp3",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 50480
+  },
+  {
+   "processed": 6,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 56310,
+   "speech_ms": 56280,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     56310
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ],
+    [
+     45930,
+     56310
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 565,
+   "total_s": 2.544094226998311,
+   "p50_call_ms": 4.28247399997872,
+   "p95_call_ms": 8.67880700002388,
+   "max_call_ms": 12.494169999968108,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     56310
+    ]
+   ],
+   "file": "real_recordings/positives/“Heroine Ko Chheda… Phir Hero Ne Kya Kiya 🔥” Angry Women #shorts.mp3",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 56331,
+   "deterministic": true
+  },
+  {
+   "processed": 6,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 56310,
+   "speech_ms": 56280,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     56310
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ],
+    [
+     45930,
+     56310
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 227,
+   "total_s": 0.9823104970006398,
+   "p50_call_ms": 4.212477999999464,
+   "p95_call_ms": 8.212709000076757,
+   "max_call_ms": 13.057265000043117,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     56310
+    ]
+   ],
+   "file": "real_recordings/positives/“Heroine Ko Chheda… Phir Hero Ne Kya Kiya 🔥” Angry Women #shorts.mp3",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 56331
+  },
+  {
+   "processed": 6,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 56310,
+   "speech_ms": 56280,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     56310
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ],
+    [
+     45930,
+     56310
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 114,
+   "total_s": 0.4882723810009111,
+   "p50_call_ms": 4.324547999999595,
+   "p95_call_ms": 8.444816999940485,
+   "max_call_ms": 9.95375000002241,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     56310
+    ]
+   ],
+   "file": "real_recordings/positives/“Heroine Ko Chheda… Phir Hero Ne Kya Kiya 🔥” Angry Women #shorts.mp3",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 56331
+  },
+  {
+   "processed": 6,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 56310,
+   "speech_ms": 56280,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     56310
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ],
+    [
+     45930,
+     56310
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 58,
+   "total_s": 0.25038877299982687,
+   "p50_call_ms": 4.2853009999817,
+   "p95_call_ms": 8.334856000033142,
+   "max_call_ms": 9.40796899999441,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     56310
+    ]
+   ],
+   "file": "real_recordings/positives/“Heroine Ko Chheda… Phir Hero Ne Kya Kiya 🔥” Angry Women #shorts.mp3",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 56331
+  },
+  {
+   "processed": 5,
+   "reference_segments": 4,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 5,
+   "reference_ms": 35130,
+   "speech_ms": 34110,
+   "designed_overlap_ms": 4410,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9510
+    ],
+    [
+     9510,
+     19080
+    ],
+    [
+     19080,
+     28560
+    ],
+    [
+     28560,
+     35130
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8100,
+     19080
+    ],
+    [
+     17580,
+     28560
+    ],
+    [
+     27060,
+     35130
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 353,
+   "total_s": 0.8920886479991168,
+   "p50_call_ms": 2.499977999946168,
+   "p95_call_ms": 5.019362999973964,
+   "max_call_ms": 5.251267999938136,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9510
+    ],
+    [
+     9510,
+     19080
+    ],
+    [
+     19080,
+     28560
+    ],
+    [
+     28560,
+     35130
+    ]
+   ],
+   "file": "real_recordings/positives/💥Heroine-ஏ Kidnap பண்ணிட்டாங்களா😲#viral #tamannah #poojahegde #jyothika #simran #janvikapoor #shorts.mp3",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 35131,
+   "deterministic": true
+  },
+  {
+   "processed": 4,
+   "reference_segments": 4,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 4,
+   "reference_ms": 35130,
+   "speech_ms": 34110,
+   "designed_overlap_ms": 4410,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     19080
+    ],
+    [
+     19080,
+     28560
+    ],
+    [
+     28560,
+     35130
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8100,
+     19080
+    ],
+    [
+     17580,
+     28560
+    ],
+    [
+     27060,
+     35130
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 142,
+   "total_s": 0.5020797210004275,
+   "p50_call_ms": 3.413515999966421,
+   "p95_call_ms": 7.002728000088609,
+   "max_call_ms": 8.133191000069928,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     19080
+    ],
+    [
+     19080,
+     28560
+    ],
+    [
+     28560,
+     35130
+    ]
+   ],
+   "file": "real_recordings/positives/💥Heroine-ஏ Kidnap பண்ணிட்டாங்களா😲#viral #tamannah #poojahegde #jyothika #simran #janvikapoor #shorts.mp3",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 35131
+  },
+  {
+   "processed": 5,
+   "reference_segments": 4,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 5,
+   "reference_ms": 35130,
+   "speech_ms": 34110,
+   "designed_overlap_ms": 4410,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     19080
+    ],
+    [
+     19080,
+     28560
+    ],
+    [
+     28560,
+     28650
+    ],
+    [
+     28650,
+     35130
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8100,
+     19080
+    ],
+    [
+     17580,
+     28560
+    ],
+    [
+     27060,
+     35130
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 72,
+   "total_s": 0.23160188200029097,
+   "p50_call_ms": 2.9542165000293608,
+   "p95_call_ms": 6.276216000060231,
+   "max_call_ms": 11.158050000062758,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     19080
+    ],
+    [
+     19080,
+     28560
+    ],
+    [
+     28560,
+     28650
+    ],
+    [
+     28650,
+     35130
+    ]
+   ],
+   "file": "real_recordings/positives/💥Heroine-ஏ Kidnap பண்ணிட்டாங்களா😲#viral #tamannah #poojahegde #jyothika #simran #janvikapoor #shorts.mp3",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 35131
+  },
+  {
+   "processed": 4,
+   "reference_segments": 4,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 4,
+   "reference_ms": 35130,
+   "speech_ms": 34110,
+   "designed_overlap_ms": 4410,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     19080
+    ],
+    [
+     19080,
+     28560
+    ],
+    [
+     28560,
+     35130
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8100,
+     19080
+    ],
+    [
+     17580,
+     28560
+    ],
+    [
+     27060,
+     35130
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 37,
+   "total_s": 0.22079795799982094,
+   "p50_call_ms": 6.323855000005096,
+   "p95_call_ms": 10.567955000055917,
+   "max_call_ms": 11.254481999912969,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     19080
+    ],
+    [
+     19080,
+     28560
+    ],
+    [
+     28560,
+     35130
+    ]
+   ],
+   "file": "real_recordings/positives/💥Heroine-ஏ Kidnap பண்ணிட்டாங்களா😲#viral #tamannah #poojahegde #jyothika #simran #janvikapoor #shorts.mp3",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 35131
+  },
+  {
+   "processed": 7,
+   "reference_segments": 7,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 7,
+   "reference_ms": 60060,
+   "speech_ms": 60030,
+   "designed_overlap_ms": 9000,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     56880
+    ],
+    [
+     56880,
+     60060
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ],
+    [
+     45930,
+     56910
+    ],
+    [
+     55410,
+     60060
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 602,
+   "total_s": 3.3594899590011664,
+   "p50_call_ms": 5.531214999962231,
+   "p95_call_ms": 10.780830000044261,
+   "max_call_ms": 29.15152200000648,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     56880
+    ],
+    [
+     56880,
+     60060
+    ]
+   ],
+   "file": "real_recordings/negatives/5 podcasts you must listen Tamil.mp3",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 60070,
+   "deterministic": true
+  },
+  {
+   "processed": 7,
+   "reference_segments": 7,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 7,
+   "reference_ms": 60060,
+   "speech_ms": 60030,
+   "designed_overlap_ms": 9000,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     56880
+    ],
+    [
+     56880,
+     60060
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ],
+    [
+     45930,
+     56910
+    ],
+    [
+     55410,
+     60060
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 242,
+   "total_s": 1.414291689000379,
+   "p50_call_ms": 5.611283000007461,
+   "p95_call_ms": 11.168097999984639,
+   "max_call_ms": 29.914543000018057,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     56880
+    ],
+    [
+     56880,
+     60060
+    ]
+   ],
+   "file": "real_recordings/negatives/5 podcasts you must listen Tamil.mp3",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 60070
+  },
+  {
+   "processed": 7,
+   "reference_segments": 7,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 7,
+   "reference_ms": 60060,
+   "speech_ms": 60030,
+   "designed_overlap_ms": 9000,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     56880
+    ],
+    [
+     56880,
+     60060
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ],
+    [
+     45930,
+     56910
+    ],
+    [
+     55410,
+     60060
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 122,
+   "total_s": 0.6598416720000841,
+   "p50_call_ms": 6.063512500020352,
+   "p95_call_ms": 9.982659000002059,
+   "max_call_ms": 10.961171999952057,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     56880
+    ],
+    [
+     56880,
+     60060
+    ]
+   ],
+   "file": "real_recordings/negatives/5 podcasts you must listen Tamil.mp3",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 60070
+  },
+  {
+   "processed": 7,
+   "reference_segments": 7,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 7,
+   "reference_ms": 60060,
+   "speech_ms": 60030,
+   "designed_overlap_ms": 9000,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     56880
+    ],
+    [
+     56880,
+     60060
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ],
+    [
+     45930,
+     56910
+    ],
+    [
+     55410,
+     60060
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 62,
+   "total_s": 0.3669361219997427,
+   "p50_call_ms": 5.0205034999635245,
+   "p95_call_ms": 14.095656999984385,
+   "max_call_ms": 19.303140999909374,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     56880
+    ],
+    [
+     56880,
+     60060
+    ]
+   ],
+   "file": "real_recordings/negatives/5 podcasts you must listen Tamil.mp3",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 60070
+  },
+  {
+   "processed": 8,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 8,
+   "reference_ms": 49950,
+   "speech_ms": 49680,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9570
+    ],
+    [
+     9570,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     28470
+    ],
+    [
+     28470,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     49950
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9540
+    ],
+    [
+     8040,
+     19020
+    ],
+    [
+     17520,
+     28500
+    ],
+    [
+     27000,
+     37980
+    ],
+    [
+     36480,
+     47460
+    ],
+    [
+     45960,
+     49950
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 501,
+   "total_s": 2.102701623998655,
+   "p50_call_ms": 4.561222999996062,
+   "p95_call_ms": 7.350599000005786,
+   "max_call_ms": 8.61248700005035,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9570
+    ],
+    [
+     9570,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     28470
+    ],
+    [
+     28470,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     49950
+    ]
+   ],
+   "file": "real_recordings/negatives/80% of people are not satisfied #ytshorts #motivation #rajshamani #podcast #india.mp3",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 49969,
+   "deterministic": true
+  },
+  {
+   "processed": 8,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 8,
+   "reference_ms": 49950,
+   "speech_ms": 49680,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9570
+    ],
+    [
+     9570,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     28530
+    ],
+    [
+     28530,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     49950
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9540
+    ],
+    [
+     8040,
+     19020
+    ],
+    [
+     17520,
+     28500
+    ],
+    [
+     27000,
+     37980
+    ],
+    [
+     36480,
+     47460
+    ],
+    [
+     45960,
+     49950
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 201,
+   "total_s": 0.8192481570006294,
+   "p50_call_ms": 3.840378000063538,
+   "p95_call_ms": 8.024213999988206,
+   "max_call_ms": 9.961843000041881,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9570
+    ],
+    [
+     9570,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     28530
+    ],
+    [
+     28530,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     49950
+    ]
+   ],
+   "file": "real_recordings/negatives/80% of people are not satisfied #ytshorts #motivation #rajshamani #podcast #india.mp3",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 49969
+  },
+  {
+   "processed": 7,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 7,
+   "reference_ms": 49950,
+   "speech_ms": 49680,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9540
+    ],
+    [
+     9540,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     49950
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9540
+    ],
+    [
+     8040,
+     19020
+    ],
+    [
+     17520,
+     28500
+    ],
+    [
+     27000,
+     37980
+    ],
+    [
+     36480,
+     47460
+    ],
+    [
+     45960,
+     49950
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 101,
+   "total_s": 0.45938456799967753,
+   "p50_call_ms": 5.561667000051784,
+   "p95_call_ms": 8.17332200006149,
+   "max_call_ms": 9.437296999976752,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9540
+    ],
+    [
+     9540,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     49950
+    ]
+   ],
+   "file": "real_recordings/negatives/80% of people are not satisfied #ytshorts #motivation #rajshamani #podcast #india.mp3",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 49969
+  },
+  {
+   "processed": 6,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 49950,
+   "speech_ms": 49680,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     49950
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9540
+    ],
+    [
+     8040,
+     19020
+    ],
+    [
+     17520,
+     28500
+    ],
+    [
+     27000,
+     37980
+    ],
+    [
+     36480,
+     47460
+    ],
+    [
+     45960,
+     49950
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 51,
+   "total_s": 0.2696306499997263,
+   "p50_call_ms": 6.257017000052656,
+   "p95_call_ms": 8.994146000077308,
+   "max_call_ms": 9.200029999988146,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     49950
+    ]
+   ],
+   "file": "real_recordings/negatives/80% of people are not satisfied #ytshorts #motivation #rajshamani #podcast #india.mp3",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 49969
+  },
+  {
+   "processed": 6,
+   "reference_segments": 5,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 47430,
+   "speech_ms": 46890,
+   "designed_overlap_ms": 6000,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     37980
+    ],
+    [
+     37980,
+     47430
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 478,
+   "total_s": 1.9324676930003761,
+   "p50_call_ms": 3.5694685000748905,
+   "p95_call_ms": 8.131697000067106,
+   "max_call_ms": 26.443665999977384,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     37980
+    ],
+    [
+     37980,
+     47430
+    ]
+   ],
+   "file": "real_recordings/negatives/Can absolute freedom become dangerous Yint Talks Telugu Podcast #osho.mp3",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 47600,
+   "deterministic": true
+  },
+  {
+   "processed": 6,
+   "reference_segments": 5,
+   "overlap_ms": 30,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 47430,
+   "speech_ms": 46890,
+   "designed_overlap_ms": 6000,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     37950
+    ],
+    [
+     37920,
+     47430
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 192,
+   "total_s": 0.7848425359993598,
+   "p50_call_ms": 3.62742050003817,
+   "p95_call_ms": 7.04046099997413,
+   "max_call_ms": 33.998623000002226,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     37950
+    ],
+    [
+     37920,
+     47430
+    ]
+   ],
+   "file": "real_recordings/negatives/Can absolute freedom become dangerous Yint Talks Telugu Podcast #osho.mp3",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 47600
+  },
+  {
+   "processed": 6,
+   "reference_segments": 5,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 47430,
+   "speech_ms": 46890,
+   "designed_overlap_ms": 6000,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     47430
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 97,
+   "total_s": 0.45138712300047246,
+   "p50_call_ms": 3.5856590000094,
+   "p95_call_ms": 12.353705999998965,
+   "max_call_ms": 16.72697399999379,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     47430
+    ]
+   ],
+   "file": "real_recordings/negatives/Can absolute freedom become dangerous Yint Talks Telugu Podcast #osho.mp3",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 47600
+  },
+  {
+   "processed": 6,
+   "reference_segments": 5,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 47430,
+   "speech_ms": 46890,
+   "designed_overlap_ms": 6000,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     47430
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 49,
+   "total_s": 0.19383601200001976,
+   "p50_call_ms": 3.8672629999609853,
+   "p95_call_ms": 6.780340000091201,
+   "max_call_ms": 7.090640999990683,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     47430
+    ]
+   ],
+   "file": "real_recordings/negatives/Can absolute freedom become dangerous Yint Talks Telugu Podcast #osho.mp3",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 47600
+  },
+  {
+   "processed": 7,
+   "reference_segments": 4,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 7,
+   "reference_ms": 31350,
+   "speech_ms": 30030,
+   "designed_overlap_ms": 4500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9540
+    ],
+    [
+     9540,
+     18960
+    ],
+    [
+     18960,
+     19020
+    ],
+    [
+     19020,
+     28440
+    ],
+    [
+     28440,
+     28500
+    ],
+    [
+     28500,
+     31350
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9540
+    ],
+    [
+     8040,
+     19020
+    ],
+    [
+     17520,
+     28500
+    ],
+    [
+     27000,
+     31350
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 315,
+   "total_s": 0.9788135510000302,
+   "p50_call_ms": 2.69670899990615,
+   "p95_call_ms": 6.515607999972417,
+   "max_call_ms": 7.1376759999566275,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9540
+    ],
+    [
+     9540,
+     18960
+    ],
+    [
+     18960,
+     19020
+    ],
+    [
+     19020,
+     28440
+    ],
+    [
+     28440,
+     28500
+    ],
+    [
+     28500,
+     31350
+    ]
+   ],
+   "file": "real_recordings/negatives/Devotion or mere Decoration True Stories Army Life Ganesha Telugu Podcast.mp3",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 31370,
+   "deterministic": true
+  },
+  {
+   "processed": 6,
+   "reference_segments": 4,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 31350,
+   "speech_ms": 30030,
+   "designed_overlap_ms": 4500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     19020
+    ],
+    [
+     19020,
+     28440
+    ],
+    [
+     28440,
+     28500
+    ],
+    [
+     28500,
+     31350
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9540
+    ],
+    [
+     8040,
+     19020
+    ],
+    [
+     17520,
+     28500
+    ],
+    [
+     27000,
+     31350
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 127,
+   "total_s": 0.29021942400095213,
+   "p50_call_ms": 2.282716000081564,
+   "p95_call_ms": 4.475203999959376,
+   "max_call_ms": 4.8850660000425705,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     19020
+    ],
+    [
+     19020,
+     28440
+    ],
+    [
+     28440,
+     28500
+    ],
+    [
+     28500,
+     31350
+    ]
+   ],
+   "file": "real_recordings/negatives/Devotion or mere Decoration True Stories Army Life Ganesha Telugu Podcast.mp3",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 31370
+  },
+  {
+   "processed": 5,
+   "reference_segments": 4,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 5,
+   "reference_ms": 31350,
+   "speech_ms": 30030,
+   "designed_overlap_ms": 4500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     28500
+    ],
+    [
+     28500,
+     31350
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9540
+    ],
+    [
+     8040,
+     19020
+    ],
+    [
+     17520,
+     28500
+    ],
+    [
+     27000,
+     31350
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 64,
+   "total_s": 0.14874003000034008,
+   "p50_call_ms": 2.3030504999610457,
+   "p95_call_ms": 4.409467000073164,
+   "max_call_ms": 4.568779999999606,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     28500
+    ],
+    [
+     28500,
+     31350
+    ]
+   ],
+   "file": "real_recordings/negatives/Devotion or mere Decoration True Stories Army Life Ganesha Telugu Podcast.mp3",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 31370
+  },
+  {
+   "processed": 5,
+   "reference_segments": 4,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 5,
+   "reference_ms": 31350,
+   "speech_ms": 30030,
+   "designed_overlap_ms": 4500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     28500
+    ],
+    [
+     28500,
+     31350
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9540
+    ],
+    [
+     8040,
+     19020
+    ],
+    [
+     17520,
+     28500
+    ],
+    [
+     27000,
+     31350
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 33,
+   "total_s": 0.0822492530001,
+   "p50_call_ms": 2.425112000082663,
+   "p95_call_ms": 4.576355999915904,
+   "max_call_ms": 4.668082999955914,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     28500
+    ],
+    [
+     28500,
+     31350
+    ]
+   ],
+   "file": "real_recordings/negatives/Devotion or mere Decoration True Stories Army Life Ganesha Telugu Podcast.mp3",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 31370
+  },
+  {
+   "processed": 6,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 5,
+   "reference_ms": 51000,
+   "speech_ms": 50670,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     51000
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     7980,
+     18960
+    ],
+    [
+     17460,
+     28440
+    ],
+    [
+     26940,
+     37920
+    ],
+    [
+     36420,
+     47400
+    ],
+    [
+     45900,
+     51000
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 512,
+   "total_s": 2.4065042910004877,
+   "p50_call_ms": 4.5663215000786295,
+   "p95_call_ms": 9.805540999991536,
+   "max_call_ms": 11.706856000046173,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     51000
+    ]
+   ],
+   "file": "real_recordings/negatives/Heroine Powerful Fight Scene #ParuParvathy Deepika Das #shorts #ytshorts #youtubeshorts.mp3",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 51014,
+   "deterministic": true
+  },
+  {
+   "processed": 6,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 5,
+   "reference_ms": 51000,
+   "speech_ms": 50670,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     51000
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     7980,
+     18960
+    ],
+    [
+     17460,
+     28440
+    ],
+    [
+     26940,
+     37920
+    ],
+    [
+     36420,
+     47400
+    ],
+    [
+     45900,
+     51000
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 206,
+   "total_s": 0.8941367690002835,
+   "p50_call_ms": 4.192523500023526,
+   "p95_call_ms": 8.080302000053052,
+   "max_call_ms": 10.916228000041883,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     51000
+    ]
+   ],
+   "file": "real_recordings/negatives/Heroine Powerful Fight Scene #ParuParvathy Deepika Das #shorts #ytshorts #youtubeshorts.mp3",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 51014
+  },
+  {
+   "processed": 6,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 5,
+   "reference_ms": 51000,
+   "speech_ms": 50670,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     51000
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     7980,
+     18960
+    ],
+    [
+     17460,
+     28440
+    ],
+    [
+     26940,
+     37920
+    ],
+    [
+     36420,
+     47400
+    ],
+    [
+     45900,
+     51000
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 104,
+   "total_s": 0.44494740299921887,
+   "p50_call_ms": 3.846745999965151,
+   "p95_call_ms": 8.001633999924707,
+   "max_call_ms": 14.922916000045916,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     51000
+    ]
+   ],
+   "file": "real_recordings/negatives/Heroine Powerful Fight Scene #ParuParvathy Deepika Das #shorts #ytshorts #youtubeshorts.mp3",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 51014
+  },
+  {
+   "processed": 6,
+   "reference_segments": 6,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 51000,
+   "speech_ms": 50670,
+   "designed_overlap_ms": 7500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9510
+    ],
+    [
+     9510,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     51000
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9480
+    ],
+    [
+     7980,
+     18960
+    ],
+    [
+     17460,
+     28440
+    ],
+    [
+     26940,
+     37920
+    ],
+    [
+     36420,
+     47400
+    ],
+    [
+     45900,
+     51000
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 53,
+   "total_s": 0.3127867809999998,
+   "p50_call_ms": 6.263816000000588,
+   "p95_call_ms": 10.893128000020624,
+   "max_call_ms": 11.385557000039626,
+   "processed_spans": [
+    [
+     0,
+     9510
+    ],
+    [
+     9510,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     47400
+    ],
+    [
+     47400,
+     51000
+    ]
+   ],
+   "file": "real_recordings/negatives/Heroine Powerful Fight Scene #ParuParvathy Deepika Das #shorts #ytshorts #youtubeshorts.mp3",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 51014
+  },
+  {
+   "processed": 2,
+   "reference_segments": 2,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 2,
+   "reference_ms": 17220,
+   "speech_ms": 16470,
+   "designed_overlap_ms": 1500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     17220
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     17220
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 174,
+   "total_s": 0.30556560100012575,
+   "p50_call_ms": 1.8437235000305918,
+   "p95_call_ms": 3.0627469999444656,
+   "max_call_ms": 3.846113999998124,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     17220
+    ]
+   ],
+   "file": "real_recordings/negatives/Mera husband sharmate h 🤪🤣 Podcast Funny Clip #podcastvibes #podcastclips #podcasts #podcasting.mp3",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 17229,
+   "deterministic": true
+  },
+  {
+   "processed": 2,
+   "reference_segments": 2,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 2,
+   "reference_ms": 17220,
+   "speech_ms": 16470,
+   "designed_overlap_ms": 1500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     17220
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     17220
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 70,
+   "total_s": 0.09594137500027955,
+   "p50_call_ms": 1.382885999987593,
+   "p95_call_ms": 2.470037999955821,
+   "max_call_ms": 2.4841760000526847,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     17220
+    ]
+   ],
+   "file": "real_recordings/negatives/Mera husband sharmate h 🤪🤣 Podcast Funny Clip #podcastvibes #podcastclips #podcasts #podcasting.mp3",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 17229
+  },
+  {
+   "processed": 2,
+   "reference_segments": 2,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 2,
+   "reference_ms": 17220,
+   "speech_ms": 16470,
+   "designed_overlap_ms": 1500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     17220
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     17220
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 36,
+   "total_s": 0.0469282149999799,
+   "p50_call_ms": 1.293195499954436,
+   "p95_call_ms": 2.4195380000264777,
+   "max_call_ms": 2.4374260000286085,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     17220
+    ]
+   ],
+   "file": "real_recordings/negatives/Mera husband sharmate h 🤪🤣 Podcast Funny Clip #podcastvibes #podcastclips #podcasts #podcasting.mp3",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 17229
+  },
+  {
+   "processed": 2,
+   "reference_segments": 2,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 2,
+   "reference_ms": 17220,
+   "speech_ms": 16470,
+   "designed_overlap_ms": 1500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     17220
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     17220
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 19,
+   "total_s": 0.027789012999960505,
+   "p50_call_ms": 1.5829149999717629,
+   "p95_call_ms": 2.575447000026543,
+   "max_call_ms": 2.8260840000484677,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     17220
+    ]
+   ],
+   "file": "real_recordings/negatives/Mera husband sharmate h 🤪🤣 Podcast Funny Clip #podcastvibes #podcastclips #podcasts #podcasting.mp3",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 17229
+  },
+  {
+   "processed": 39,
+   "reference_segments": 35,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 39,
+   "reference_ms": 325920,
+   "speech_ms": 313050,
+   "designed_overlap_ms": 50640,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9660
+    ],
+    [
+     9660,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     28620
+    ],
+    [
+     28620,
+     37920
+    ],
+    [
+     37920,
+     37980
+    ],
+    [
+     37980,
+     47430
+    ],
+    [
+     47430,
+     47520
+    ],
+    [
+     47520,
+     57120
+    ],
+    [
+     57120,
+     66600
+    ],
+    [
+     66600,
+     76080
+    ],
+    [
+     76080,
+     85560
+    ],
+    [
+     85560,
+     95040
+    ],
+    [
+     95040,
+     104520
+    ],
+    [
+     104520,
+     114000
+    ],
+    [
+     114000,
+     123480
+    ],
+    [
+     123480,
+     132960
+    ],
+    [
+     132960,
+     142440
+    ],
+    [
+     142440,
+     151920
+    ],
+    [
+     151920,
+     161400
+    ],
+    [
+     161400,
+     170880
+    ],
+    [
+     170880,
+     180510
+    ],
+    [
+     180510,
+     189990
+    ],
+    [
+     189990,
+     199470
+    ],
+    [
+     199470,
+     208950
+    ],
+    [
+     208950,
+     218430
+    ],
+    [
+     218430,
+     227910
+    ],
+    [
+     227910,
+     237390
+    ],
+    [
+     237390,
+     246870
+    ],
+    [
+     246870,
+     256350
+    ],
+    [
+     256350,
+     265830
+    ],
+    [
+     265830,
+     275310
+    ],
+    [
+     275310,
+     284790
+    ],
+    [
+     284790,
+     294270
+    ],
+    [
+     294270,
+     303750
+    ],
+    [
+     303750,
+     313230
+    ],
+    [
+     313230,
+     322710
+    ],
+    [
+     322710,
+     325920
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ],
+    [
+     46140,
+     57120
+    ],
+    [
+     55620,
+     66600
+    ],
+    [
+     65100,
+     76080
+    ],
+    [
+     74580,
+     85560
+    ],
+    [
+     84060,
+     95040
+    ],
+    [
+     93540,
+     104520
+    ],
+    [
+     103020,
+     114000
+    ],
+    [
+     112500,
+     123480
+    ],
+    [
+     121980,
+     132960
+    ],
+    [
+     131460,
+     142440
+    ],
+    [
+     140940,
+     151920
+    ],
+    [
+     150420,
+     161400
+    ],
+    [
+     159900,
+     170880
+    ],
+    [
+     169530,
+     180510
+    ],
+    [
+     179010,
+     189990
+    ],
+    [
+     188490,
+     199470
+    ],
+    [
+     197970,
+     208950
+    ],
+    [
+     207450,
+     218430
+    ],
+    [
+     216930,
+     227910
+    ],
+    [
+     226410,
+     237390
+    ],
+    [
+     235890,
+     246870
+    ],
+    [
+     245370,
+     256350
+    ],
+    [
+     254850,
+     265830
+    ],
+    [
+     264330,
+     275310
+    ],
+    [
+     273810,
+     284790
+    ],
+    [
+     283290,
+     294270
+    ],
+    [
+     292770,
+     303750
+    ],
+    [
+     302250,
+     313230
+    ],
+    [
+     311730,
+     322710
+    ],
+    [
+     321210,
+     325920
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 3261,
+   "total_s": 95.13826585000038,
+   "p50_call_ms": 28.655214999957934,
+   "p95_call_ms": 58.57867299994268,
+   "max_call_ms": 91.43178599993007,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9660
+    ],
+    [
+     9660,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     28620
+    ],
+    [
+     28620,
+     37920
+    ],
+    [
+     37920,
+     37980
+    ],
+    [
+     37980,
+     47430
+    ],
+    [
+     47430,
+     47520
+    ],
+    [
+     47520,
+     57120
+    ],
+    [
+     57120,
+     66600
+    ],
+    [
+     66600,
+     76080
+    ],
+    [
+     76080,
+     85560
+    ],
+    [
+     85560,
+     95040
+    ],
+    [
+     95040,
+     104520
+    ],
+    [
+     104520,
+     114000
+    ],
+    [
+     114000,
+     123480
+    ],
+    [
+     123480,
+     132960
+    ],
+    [
+     132960,
+     142440
+    ],
+    [
+     142440,
+     151920
+    ],
+    [
+     151920,
+     161400
+    ],
+    [
+     161400,
+     170880
+    ],
+    [
+     170880,
+     180510
+    ],
+    [
+     180510,
+     189990
+    ],
+    [
+     189990,
+     199470
+    ],
+    [
+     199470,
+     208950
+    ],
+    [
+     208950,
+     218430
+    ],
+    [
+     218430,
+     227910
+    ],
+    [
+     227910,
+     237390
+    ],
+    [
+     237390,
+     246870
+    ],
+    [
+     246870,
+     256350
+    ],
+    [
+     256350,
+     265830
+    ],
+    [
+     265830,
+     275310
+    ],
+    [
+     275310,
+     284790
+    ],
+    [
+     284790,
+     294270
+    ],
+    [
+     294270,
+     303750
+    ],
+    [
+     303750,
+     313230
+    ],
+    [
+     313230,
+     322710
+    ],
+    [
+     322710,
+     325920
+    ]
+   ],
+   "file": "real_recordings/negatives/Neil's difficult summer job in Canada 🫛  Practise your listening with Real Easy English - BBC Learning English.mp3",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 325920,
+   "deterministic": true
+  },
+  {
+   "processed": 39,
+   "reference_segments": 35,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 39,
+   "reference_ms": 325920,
+   "speech_ms": 313050,
+   "designed_overlap_ms": 50640,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9660
+    ],
+    [
+     9660,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     28530
+    ],
+    [
+     28530,
+     37920
+    ],
+    [
+     37920,
+     37980
+    ],
+    [
+     37980,
+     47430
+    ],
+    [
+     47430,
+     47490
+    ],
+    [
+     47490,
+     57120
+    ],
+    [
+     57120,
+     66600
+    ],
+    [
+     66600,
+     76080
+    ],
+    [
+     76080,
+     85560
+    ],
+    [
+     85560,
+     95040
+    ],
+    [
+     95040,
+     104520
+    ],
+    [
+     104520,
+     114000
+    ],
+    [
+     114000,
+     123480
+    ],
+    [
+     123480,
+     132960
+    ],
+    [
+     132960,
+     142440
+    ],
+    [
+     142440,
+     151920
+    ],
+    [
+     151920,
+     161400
+    ],
+    [
+     161400,
+     170880
+    ],
+    [
+     170880,
+     180510
+    ],
+    [
+     180510,
+     189990
+    ],
+    [
+     189990,
+     199470
+    ],
+    [
+     199470,
+     208950
+    ],
+    [
+     208950,
+     218430
+    ],
+    [
+     218430,
+     227910
+    ],
+    [
+     227910,
+     237390
+    ],
+    [
+     237390,
+     246870
+    ],
+    [
+     246870,
+     256350
+    ],
+    [
+     256350,
+     265830
+    ],
+    [
+     265830,
+     275310
+    ],
+    [
+     275310,
+     284790
+    ],
+    [
+     284790,
+     294270
+    ],
+    [
+     294270,
+     303750
+    ],
+    [
+     303750,
+     313230
+    ],
+    [
+     313230,
+     322710
+    ],
+    [
+     322710,
+     325920
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ],
+    [
+     46140,
+     57120
+    ],
+    [
+     55620,
+     66600
+    ],
+    [
+     65100,
+     76080
+    ],
+    [
+     74580,
+     85560
+    ],
+    [
+     84060,
+     95040
+    ],
+    [
+     93540,
+     104520
+    ],
+    [
+     103020,
+     114000
+    ],
+    [
+     112500,
+     123480
+    ],
+    [
+     121980,
+     132960
+    ],
+    [
+     131460,
+     142440
+    ],
+    [
+     140940,
+     151920
+    ],
+    [
+     150420,
+     161400
+    ],
+    [
+     159900,
+     170880
+    ],
+    [
+     169530,
+     180510
+    ],
+    [
+     179010,
+     189990
+    ],
+    [
+     188490,
+     199470
+    ],
+    [
+     197970,
+     208950
+    ],
+    [
+     207450,
+     218430
+    ],
+    [
+     216930,
+     227910
+    ],
+    [
+     226410,
+     237390
+    ],
+    [
+     235890,
+     246870
+    ],
+    [
+     245370,
+     256350
+    ],
+    [
+     254850,
+     265830
+    ],
+    [
+     264330,
+     275310
+    ],
+    [
+     273810,
+     284790
+    ],
+    [
+     283290,
+     294270
+    ],
+    [
+     292770,
+     303750
+    ],
+    [
+     302250,
+     313230
+    ],
+    [
+     311730,
+     322710
+    ],
+    [
+     321210,
+     325920
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 1305,
+   "total_s": 38.17288232199951,
+   "p50_call_ms": 28.39154600007987,
+   "p95_call_ms": 59.29200799994305,
+   "max_call_ms": 80.11899400003131,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9660
+    ],
+    [
+     9660,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     28530
+    ],
+    [
+     28530,
+     37920
+    ],
+    [
+     37920,
+     37980
+    ],
+    [
+     37980,
+     47430
+    ],
+    [
+     47430,
+     47490
+    ],
+    [
+     47490,
+     57120
+    ],
+    [
+     57120,
+     66600
+    ],
+    [
+     66600,
+     76080
+    ],
+    [
+     76080,
+     85560
+    ],
+    [
+     85560,
+     95040
+    ],
+    [
+     95040,
+     104520
+    ],
+    [
+     104520,
+     114000
+    ],
+    [
+     114000,
+     123480
+    ],
+    [
+     123480,
+     132960
+    ],
+    [
+     132960,
+     142440
+    ],
+    [
+     142440,
+     151920
+    ],
+    [
+     151920,
+     161400
+    ],
+    [
+     161400,
+     170880
+    ],
+    [
+     170880,
+     180510
+    ],
+    [
+     180510,
+     189990
+    ],
+    [
+     189990,
+     199470
+    ],
+    [
+     199470,
+     208950
+    ],
+    [
+     208950,
+     218430
+    ],
+    [
+     218430,
+     227910
+    ],
+    [
+     227910,
+     237390
+    ],
+    [
+     237390,
+     246870
+    ],
+    [
+     246870,
+     256350
+    ],
+    [
+     256350,
+     265830
+    ],
+    [
+     265830,
+     275310
+    ],
+    [
+     275310,
+     284790
+    ],
+    [
+     284790,
+     294270
+    ],
+    [
+     294270,
+     303750
+    ],
+    [
+     303750,
+     313230
+    ],
+    [
+     313230,
+     322710
+    ],
+    [
+     322710,
+     325920
+    ]
+   ],
+   "file": "real_recordings/negatives/Neil's difficult summer job in Canada 🫛  Practise your listening with Real Easy English - BBC Learning English.mp3",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 325920
+  },
+  {
+   "processed": 38,
+   "reference_segments": 35,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 38,
+   "reference_ms": 325920,
+   "speech_ms": 313050,
+   "designed_overlap_ms": 50640,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9510
+    ],
+    [
+     9510,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     37980
+    ],
+    [
+     37980,
+     47400
+    ],
+    [
+     47400,
+     47430
+    ],
+    [
+     47430,
+     57120
+    ],
+    [
+     57120,
+     66600
+    ],
+    [
+     66600,
+     76080
+    ],
+    [
+     76080,
+     85560
+    ],
+    [
+     85560,
+     95040
+    ],
+    [
+     95040,
+     104520
+    ],
+    [
+     104520,
+     114000
+    ],
+    [
+     114000,
+     123480
+    ],
+    [
+     123480,
+     132960
+    ],
+    [
+     132960,
+     142440
+    ],
+    [
+     142440,
+     151920
+    ],
+    [
+     151920,
+     161400
+    ],
+    [
+     161400,
+     170880
+    ],
+    [
+     170880,
+     180510
+    ],
+    [
+     180510,
+     189990
+    ],
+    [
+     189990,
+     199470
+    ],
+    [
+     199470,
+     208950
+    ],
+    [
+     208950,
+     218430
+    ],
+    [
+     218430,
+     227910
+    ],
+    [
+     227910,
+     237390
+    ],
+    [
+     237390,
+     246870
+    ],
+    [
+     246870,
+     256350
+    ],
+    [
+     256350,
+     265830
+    ],
+    [
+     265830,
+     275310
+    ],
+    [
+     275310,
+     284790
+    ],
+    [
+     284790,
+     294270
+    ],
+    [
+     294270,
+     303750
+    ],
+    [
+     303750,
+     313230
+    ],
+    [
+     313230,
+     322710
+    ],
+    [
+     322710,
+     325920
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ],
+    [
+     46140,
+     57120
+    ],
+    [
+     55620,
+     66600
+    ],
+    [
+     65100,
+     76080
+    ],
+    [
+     74580,
+     85560
+    ],
+    [
+     84060,
+     95040
+    ],
+    [
+     93540,
+     104520
+    ],
+    [
+     103020,
+     114000
+    ],
+    [
+     112500,
+     123480
+    ],
+    [
+     121980,
+     132960
+    ],
+    [
+     131460,
+     142440
+    ],
+    [
+     140940,
+     151920
+    ],
+    [
+     150420,
+     161400
+    ],
+    [
+     159900,
+     170880
+    ],
+    [
+     169530,
+     180510
+    ],
+    [
+     179010,
+     189990
+    ],
+    [
+     188490,
+     199470
+    ],
+    [
+     197970,
+     208950
+    ],
+    [
+     207450,
+     218430
+    ],
+    [
+     216930,
+     227910
+    ],
+    [
+     226410,
+     237390
+    ],
+    [
+     235890,
+     246870
+    ],
+    [
+     245370,
+     256350
+    ],
+    [
+     254850,
+     265830
+    ],
+    [
+     264330,
+     275310
+    ],
+    [
+     273810,
+     284790
+    ],
+    [
+     283290,
+     294270
+    ],
+    [
+     292770,
+     303750
+    ],
+    [
+     302250,
+     313230
+    ],
+    [
+     311730,
+     322710
+    ],
+    [
+     321210,
+     325920
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 653,
+   "total_s": 19.426234918000773,
+   "p50_call_ms": 29.095750000010412,
+   "p95_call_ms": 57.96845100007886,
+   "max_call_ms": 81.49538899999698,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9510
+    ],
+    [
+     9510,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     37980
+    ],
+    [
+     37980,
+     47400
+    ],
+    [
+     47400,
+     47430
+    ],
+    [
+     47430,
+     57120
+    ],
+    [
+     57120,
+     66600
+    ],
+    [
+     66600,
+     76080
+    ],
+    [
+     76080,
+     85560
+    ],
+    [
+     85560,
+     95040
+    ],
+    [
+     95040,
+     104520
+    ],
+    [
+     104520,
+     114000
+    ],
+    [
+     114000,
+     123480
+    ],
+    [
+     123480,
+     132960
+    ],
+    [
+     132960,
+     142440
+    ],
+    [
+     142440,
+     151920
+    ],
+    [
+     151920,
+     161400
+    ],
+    [
+     161400,
+     170880
+    ],
+    [
+     170880,
+     180510
+    ],
+    [
+     180510,
+     189990
+    ],
+    [
+     189990,
+     199470
+    ],
+    [
+     199470,
+     208950
+    ],
+    [
+     208950,
+     218430
+    ],
+    [
+     218430,
+     227910
+    ],
+    [
+     227910,
+     237390
+    ],
+    [
+     237390,
+     246870
+    ],
+    [
+     246870,
+     256350
+    ],
+    [
+     256350,
+     265830
+    ],
+    [
+     265830,
+     275310
+    ],
+    [
+     275310,
+     284790
+    ],
+    [
+     284790,
+     294270
+    ],
+    [
+     294270,
+     303750
+    ],
+    [
+     303750,
+     313230
+    ],
+    [
+     313230,
+     322710
+    ],
+    [
+     322710,
+     325920
+    ]
+   ],
+   "file": "real_recordings/negatives/Neil's difficult summer job in Canada 🫛  Practise your listening with Real Easy English - BBC Learning English.mp3",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 325920
+  },
+  {
+   "processed": 37,
+   "reference_segments": 35,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 37,
+   "reference_ms": 325920,
+   "speech_ms": 313050,
+   "designed_overlap_ms": 50640,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     37980
+    ],
+    [
+     37980,
+     47400
+    ],
+    [
+     47400,
+     47430
+    ],
+    [
+     47430,
+     57120
+    ],
+    [
+     57120,
+     66600
+    ],
+    [
+     66600,
+     76080
+    ],
+    [
+     76080,
+     85560
+    ],
+    [
+     85560,
+     95040
+    ],
+    [
+     95040,
+     104520
+    ],
+    [
+     104520,
+     114000
+    ],
+    [
+     114000,
+     123480
+    ],
+    [
+     123480,
+     132960
+    ],
+    [
+     132960,
+     142440
+    ],
+    [
+     142440,
+     151920
+    ],
+    [
+     151920,
+     161400
+    ],
+    [
+     161400,
+     170880
+    ],
+    [
+     170880,
+     180510
+    ],
+    [
+     180510,
+     189990
+    ],
+    [
+     189990,
+     199470
+    ],
+    [
+     199470,
+     208950
+    ],
+    [
+     208950,
+     218430
+    ],
+    [
+     218430,
+     227910
+    ],
+    [
+     227910,
+     237390
+    ],
+    [
+     237390,
+     246870
+    ],
+    [
+     246870,
+     256350
+    ],
+    [
+     256350,
+     265830
+    ],
+    [
+     265830,
+     275310
+    ],
+    [
+     275310,
+     284790
+    ],
+    [
+     284790,
+     294270
+    ],
+    [
+     294270,
+     303750
+    ],
+    [
+     303750,
+     313230
+    ],
+    [
+     313230,
+     322710
+    ],
+    [
+     322710,
+     325920
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     37950
+    ],
+    [
+     36450,
+     47430
+    ],
+    [
+     46140,
+     57120
+    ],
+    [
+     55620,
+     66600
+    ],
+    [
+     65100,
+     76080
+    ],
+    [
+     74580,
+     85560
+    ],
+    [
+     84060,
+     95040
+    ],
+    [
+     93540,
+     104520
+    ],
+    [
+     103020,
+     114000
+    ],
+    [
+     112500,
+     123480
+    ],
+    [
+     121980,
+     132960
+    ],
+    [
+     131460,
+     142440
+    ],
+    [
+     140940,
+     151920
+    ],
+    [
+     150420,
+     161400
+    ],
+    [
+     159900,
+     170880
+    ],
+    [
+     169530,
+     180510
+    ],
+    [
+     179010,
+     189990
+    ],
+    [
+     188490,
+     199470
+    ],
+    [
+     197970,
+     208950
+    ],
+    [
+     207450,
+     218430
+    ],
+    [
+     216930,
+     227910
+    ],
+    [
+     226410,
+     237390
+    ],
+    [
+     235890,
+     246870
+    ],
+    [
+     245370,
+     256350
+    ],
+    [
+     254850,
+     265830
+    ],
+    [
+     264330,
+     275310
+    ],
+    [
+     273810,
+     284790
+    ],
+    [
+     283290,
+     294270
+    ],
+    [
+     292770,
+     303750
+    ],
+    [
+     302250,
+     313230
+    ],
+    [
+     311730,
+     322710
+    ],
+    [
+     321210,
+     325920
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 327,
+   "total_s": 9.826508582999281,
+   "p50_call_ms": 29.66067300008035,
+   "p95_call_ms": 56.52232100010224,
+   "max_call_ms": 71.95575799994458,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     37920
+    ],
+    [
+     37920,
+     37980
+    ],
+    [
+     37980,
+     47400
+    ],
+    [
+     47400,
+     47430
+    ],
+    [
+     47430,
+     57120
+    ],
+    [
+     57120,
+     66600
+    ],
+    [
+     66600,
+     76080
+    ],
+    [
+     76080,
+     85560
+    ],
+    [
+     85560,
+     95040
+    ],
+    [
+     95040,
+     104520
+    ],
+    [
+     104520,
+     114000
+    ],
+    [
+     114000,
+     123480
+    ],
+    [
+     123480,
+     132960
+    ],
+    [
+     132960,
+     142440
+    ],
+    [
+     142440,
+     151920
+    ],
+    [
+     151920,
+     161400
+    ],
+    [
+     161400,
+     170880
+    ],
+    [
+     170880,
+     180510
+    ],
+    [
+     180510,
+     189990
+    ],
+    [
+     189990,
+     199470
+    ],
+    [
+     199470,
+     208950
+    ],
+    [
+     208950,
+     218430
+    ],
+    [
+     218430,
+     227910
+    ],
+    [
+     227910,
+     237390
+    ],
+    [
+     237390,
+     246870
+    ],
+    [
+     246870,
+     256350
+    ],
+    [
+     256350,
+     265830
+    ],
+    [
+     265830,
+     275310
+    ],
+    [
+     275310,
+     284790
+    ],
+    [
+     284790,
+     294270
+    ],
+    [
+     294270,
+     303750
+    ],
+    [
+     303750,
+     313230
+    ],
+    [
+     313230,
+     322710
+    ],
+    [
+     322710,
+     325920
+    ]
+   ],
+   "file": "real_recordings/negatives/Neil's difficult summer job in Canada 🫛  Practise your listening with Real Easy English - BBC Learning English.mp3",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 325920
+  },
+  {
+   "processed": 4,
+   "reference_segments": 4,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 4,
+   "reference_ms": 35070,
+   "speech_ms": 35040,
+   "designed_overlap_ms": 4500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     35070
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     35070
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 352,
+   "total_s": 1.1240395060002584,
+   "p50_call_ms": 3.467506000049525,
+   "p95_call_ms": 5.422563000024638,
+   "max_call_ms": 7.35858999996708,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     35070
+    ]
+   ],
+   "file": "real_recordings/negatives/Nithya Menon ♥️ #kannada #youtube #shortsvideo #podcast #nithyamenen #kicchasudeep #seo #instagram.mp3",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 35085,
+   "deterministic": true
+  },
+  {
+   "processed": 4,
+   "reference_segments": 4,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 4,
+   "reference_ms": 35070,
+   "speech_ms": 35040,
+   "designed_overlap_ms": 4500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     35070
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     35070
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 142,
+   "total_s": 0.39517625000007683,
+   "p50_call_ms": 2.729791000035675,
+   "p95_call_ms": 4.974678999928983,
+   "max_call_ms": 5.355369999961113,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     35070
+    ]
+   ],
+   "file": "real_recordings/negatives/Nithya Menon ♥️ #kannada #youtube #shortsvideo #podcast #nithyamenen #kicchasudeep #seo #instagram.mp3",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 35085
+  },
+  {
+   "processed": 4,
+   "reference_segments": 4,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 4,
+   "reference_ms": 35070,
+   "speech_ms": 35040,
+   "designed_overlap_ms": 4500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     35070
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     35070
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 72,
+   "total_s": 0.19219688500027132,
+   "p50_call_ms": 2.703760499969121,
+   "p95_call_ms": 4.946062000044549,
+   "max_call_ms": 5.202346999908514,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     35070
+    ]
+   ],
+   "file": "real_recordings/negatives/Nithya Menon ♥️ #kannada #youtube #shortsvideo #podcast #nithyamenen #kicchasudeep #seo #instagram.mp3",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 35085
+  },
+  {
+   "processed": 4,
+   "reference_segments": 4,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 4,
+   "reference_ms": 35070,
+   "speech_ms": 35040,
+   "designed_overlap_ms": 4500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     35070
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     28470
+    ],
+    [
+     26970,
+     35070
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 37,
+   "total_s": 0.10192096799960382,
+   "p50_call_ms": 2.7881900000465976,
+   "p95_call_ms": 5.104677999952401,
+   "max_call_ms": 5.263544999934311,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     35070
+    ]
+   ],
+   "file": "real_recordings/negatives/Nithya Menon ♥️ #kannada #youtube #shortsvideo #podcast #nithyamenen #kicchasudeep #seo #instagram.mp3",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 35085
+  },
+  {
+   "processed": 7,
+   "reference_segments": 4,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 7,
+   "reference_ms": 36210,
+   "speech_ms": 35250,
+   "designed_overlap_ms": 4500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9600
+    ],
+    [
+     9600,
+     18960
+    ],
+    [
+     18960,
+     19170
+    ],
+    [
+     19170,
+     28440
+    ],
+    [
+     28440,
+     28650
+    ],
+    [
+     28650,
+     36210
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9540
+    ],
+    [
+     8040,
+     19020
+    ],
+    [
+     17520,
+     28500
+    ],
+    [
+     27000,
+     36210
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 364,
+   "total_s": 0.9932961510005498,
+   "p50_call_ms": 2.710164499944767,
+   "p95_call_ms": 5.091352000022198,
+   "max_call_ms": 7.169883999949889,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9600
+    ],
+    [
+     9600,
+     18960
+    ],
+    [
+     18960,
+     19170
+    ],
+    [
+     19170,
+     28440
+    ],
+    [
+     28440,
+     28650
+    ],
+    [
+     28650,
+     36210
+    ]
+   ],
+   "file": "real_recordings/negatives/Sai Pallavi Kannada Podcast.mp3",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 36223,
+   "deterministic": true
+  },
+  {
+   "processed": 6,
+   "reference_segments": 4,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 36210,
+   "speech_ms": 35250,
+   "designed_overlap_ms": 4500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     19080
+    ],
+    [
+     19080,
+     28440
+    ],
+    [
+     28440,
+     28650
+    ],
+    [
+     28650,
+     36210
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9540
+    ],
+    [
+     8040,
+     19020
+    ],
+    [
+     17520,
+     28500
+    ],
+    [
+     27000,
+     36210
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 146,
+   "total_s": 0.537115626999821,
+   "p50_call_ms": 2.94228050000811,
+   "p95_call_ms": 7.614076999971076,
+   "max_call_ms": 8.198383000035392,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     19080
+    ],
+    [
+     19080,
+     28440
+    ],
+    [
+     28440,
+     28650
+    ],
+    [
+     28650,
+     36210
+    ]
+   ],
+   "file": "real_recordings/negatives/Sai Pallavi Kannada Podcast.mp3",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 36223
+  },
+  {
+   "processed": 6,
+   "reference_segments": 4,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 6,
+   "reference_ms": 36210,
+   "speech_ms": 35250,
+   "designed_overlap_ms": 4500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     19080
+    ],
+    [
+     19080,
+     28440
+    ],
+    [
+     28440,
+     28650
+    ],
+    [
+     28650,
+     36210
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9540
+    ],
+    [
+     8040,
+     19020
+    ],
+    [
+     17520,
+     28500
+    ],
+    [
+     27000,
+     36210
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 74,
+   "total_s": 0.2605890720001298,
+   "p50_call_ms": 3.3322214999884636,
+   "p95_call_ms": 7.023097000001144,
+   "max_call_ms": 8.706357999926695,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     19080
+    ],
+    [
+     19080,
+     28440
+    ],
+    [
+     28440,
+     28650
+    ],
+    [
+     28650,
+     36210
+    ]
+   ],
+   "file": "real_recordings/negatives/Sai Pallavi Kannada Podcast.mp3",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 36223
+  },
+  {
+   "processed": 5,
+   "reference_segments": 4,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 5,
+   "reference_ms": 36210,
+   "speech_ms": 35250,
+   "designed_overlap_ms": 4500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     28650
+    ],
+    [
+     28650,
+     36210
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9540
+    ],
+    [
+     8040,
+     19020
+    ],
+    [
+     17520,
+     28500
+    ],
+    [
+     27000,
+     36210
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 38,
+   "total_s": 0.10658632800073065,
+   "p50_call_ms": 2.7275599999825317,
+   "p95_call_ms": 5.478676000052474,
+   "max_call_ms": 5.589142000076208,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     28440
+    ],
+    [
+     28440,
+     28650
+    ],
+    [
+     28650,
+     36210
+    ]
+   ],
+   "file": "real_recordings/negatives/Sai Pallavi Kannada Podcast.mp3",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 36223
+  },
+  {
+   "processed": 3,
+   "reference_segments": 2,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 3,
+   "reference_ms": 16470,
+   "speech_ms": 15750,
+   "designed_overlap_ms": 1500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9510
+    ],
+    [
+     9510,
+     16470
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     16470
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 166,
+   "total_s": 0.20825558000069577,
+   "p50_call_ms": 1.1972785000580188,
+   "p95_call_ms": 2.4056360000486166,
+   "max_call_ms": 3.3083949999763718,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9510
+    ],
+    [
+     9510,
+     16470
+    ]
+   ],
+   "file": "real_recordings/negatives/Shilpa Shetty Talkes About discipline English Podcast Shilpa Shetty Interview Boolywood.mp3",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 16486,
+   "deterministic": true
+  },
+  {
+   "processed": 3,
+   "reference_segments": 2,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 3,
+   "reference_ms": 16470,
+   "speech_ms": 15750,
+   "designed_overlap_ms": 1500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9510
+    ],
+    [
+     9510,
+     16470
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     16470
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 67,
+   "total_s": 0.08209174200067082,
+   "p50_call_ms": 1.1859190000222952,
+   "p95_call_ms": 2.335698000024422,
+   "max_call_ms": 2.5886070000069594,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9510
+    ],
+    [
+     9510,
+     16470
+    ]
+   ],
+   "file": "real_recordings/negatives/Shilpa Shetty Talkes About discipline English Podcast Shilpa Shetty Interview Boolywood.mp3",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 16486
+  },
+  {
+   "processed": 2,
+   "reference_segments": 2,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 2,
+   "reference_ms": 16470,
+   "speech_ms": 15750,
+   "designed_overlap_ms": 1500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     16470
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     16470
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 34,
+   "total_s": 0.04280324800026847,
+   "p50_call_ms": 1.2102284999286894,
+   "p95_call_ms": 2.3196280000092884,
+   "max_call_ms": 2.3633529999642633,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     16470
+    ]
+   ],
+   "file": "real_recordings/negatives/Shilpa Shetty Talkes About discipline English Podcast Shilpa Shetty Interview Boolywood.mp3",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 16486
+  },
+  {
+   "processed": 3,
+   "reference_segments": 2,
+   "overlap_ms": 30,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 3,
+   "reference_ms": 16470,
+   "speech_ms": 15750,
+   "designed_overlap_ms": 1500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9510
+    ],
+    [
+     9480,
+     16470
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     16470
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 18,
+   "total_s": 0.02471729499995945,
+   "p50_call_ms": 1.327241000012691,
+   "p95_call_ms": 2.3175750000064,
+   "max_call_ms": 2.3256309999624136,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9510
+    ],
+    [
+     9480,
+     16470
+    ]
+   ],
+   "file": "real_recordings/negatives/Shilpa Shetty Talkes About discipline English Podcast Shilpa Shetty Interview Boolywood.mp3",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 16486
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 8490,
+   "speech_ms": 7260,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 86,
+   "total_s": 0.05137252399993031,
+   "p50_call_ms": 0.598648499931187,
+   "p95_call_ms": 1.1238019999382232,
+   "max_call_ms": 1.2436079999815774,
+   "processed_spans": [
+    [
+     0,
+     8490
+    ]
+   ],
+   "file": "real_recordings/negatives/What is the best advice Alia Bhatt has ever received #jayshetty #podcast #aliabhatt.mp3",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 8498,
+   "deterministic": true
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 8490,
+   "speech_ms": 7260,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 35,
+   "total_s": 0.021869507000133126,
+   "p50_call_ms": 0.6054870000298251,
+   "p95_call_ms": 1.1095650000925161,
+   "max_call_ms": 1.1874849999458092,
+   "processed_spans": [
+    [
+     0,
+     8490
+    ]
+   ],
+   "file": "real_recordings/negatives/What is the best advice Alia Bhatt has ever received #jayshetty #podcast #aliabhatt.mp3",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 8498
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 8490,
+   "speech_ms": 7260,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 18,
+   "total_s": 0.012518168000042351,
+   "p50_call_ms": 0.6746595000208799,
+   "p95_call_ms": 1.1403779999454855,
+   "max_call_ms": 1.1830420000933373,
+   "processed_spans": [
+    [
+     0,
+     8490
+    ]
+   ],
+   "file": "real_recordings/negatives/What is the best advice Alia Bhatt has ever received #jayshetty #podcast #aliabhatt.mp3",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 8498
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 8490,
+   "speech_ms": 7260,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 10,
+   "total_s": 0.007225338000012016,
+   "p50_call_ms": 0.7461659999989934,
+   "p95_call_ms": 1.1072969999759152,
+   "max_call_ms": 1.1428049999722134,
+   "processed_spans": [
+    [
+     0,
+     8490
+    ]
+   ],
+   "file": "real_recordings/negatives/What is the best advice Alia Bhatt has ever received #jayshetty #podcast #aliabhatt.mp3",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 8498
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 8490,
+   "speech_ms": 7230,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 86,
+   "total_s": 0.05156952799984538,
+   "p50_call_ms": 0.6065874999876542,
+   "p95_call_ms": 1.0701239999661993,
+   "max_call_ms": 1.2928619999001967,
+   "processed_spans": [
+    [
+     0,
+     8490
+    ]
+   ],
+   "file": "real_recordings/negatives/aliabhatt_podcast_clip.wav",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 8498,
+   "deterministic": true
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 8490,
+   "speech_ms": 7230,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 35,
+   "total_s": 0.022010228999533865,
+   "p50_call_ms": 0.7001970000146684,
+   "p95_call_ms": 1.1971970000104193,
+   "max_call_ms": 1.3262180000310764,
+   "processed_spans": [
+    [
+     0,
+     8490
+    ]
+   ],
+   "file": "real_recordings/negatives/aliabhatt_podcast_clip.wav",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 8498
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 8490,
+   "speech_ms": 7230,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 18,
+   "total_s": 0.011754118999874663,
+   "p50_call_ms": 0.6560615000239522,
+   "p95_call_ms": 1.1019060000307945,
+   "max_call_ms": 1.2357379999912155,
+   "processed_spans": [
+    [
+     0,
+     8490
+    ]
+   ],
+   "file": "real_recordings/negatives/aliabhatt_podcast_clip.wav",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 8498
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 8490,
+   "speech_ms": 7230,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 10,
+   "total_s": 0.008056072000158565,
+   "p50_call_ms": 0.8030079999912232,
+   "p95_call_ms": 1.394376000007469,
+   "max_call_ms": 1.5315789999021945,
+   "processed_spans": [
+    [
+     0,
+     8490
+    ]
+   ],
+   "file": "real_recordings/negatives/aliabhatt_podcast_clip.wav",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 8498
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4890,
+   "speech_ms": 4680,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 51,
+   "total_s": 0.020581663999905686,
+   "p50_call_ms": 0.38767399996686436,
+   "p95_call_ms": 0.7035360000600122,
+   "max_call_ms": 1.5516209999759667,
+   "processed_spans": [
+    [
+     0,
+     4890
+    ]
+   ],
+   "file": "real_recordings/negatives/mix_full_overlap.wav",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 4919,
+   "deterministic": true
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4890,
+   "speech_ms": 4680,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 21,
+   "total_s": 0.008376177000059215,
+   "p50_call_ms": 0.3974969999944733,
+   "p95_call_ms": 0.6756459999905928,
+   "max_call_ms": 0.7153819999530242,
+   "processed_spans": [
+    [
+     0,
+     4890
+    ]
+   ],
+   "file": "real_recordings/negatives/mix_full_overlap.wav",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 4919
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4890,
+   "speech_ms": 4680,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 11,
+   "total_s": 0.005198667999934514,
+   "p50_call_ms": 0.5214060000753307,
+   "p95_call_ms": 0.6894409999631534,
+   "max_call_ms": 0.8280139999214953,
+   "processed_spans": [
+    [
+     0,
+     4890
+    ]
+   ],
+   "file": "real_recordings/negatives/mix_full_overlap.wav",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 4919
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4890,
+   "speech_ms": 4680,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 6,
+   "total_s": 0.0028142179999122163,
+   "p50_call_ms": 0.48427849998233796,
+   "p95_call_ms": 0.6979009999668051,
+   "max_call_ms": 0.7290620000048875,
+   "processed_spans": [
+    [
+     0,
+     4890
+    ]
+   ],
+   "file": "real_recordings/negatives/mix_full_overlap.wav",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 4919
+  },
+  {
+   "processed": 5,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 5,
+   "reference_ms": 27090,
+   "speech_ms": 26340,
+   "designed_overlap_ms": 3000,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9510
+    ],
+    [
+     9510,
+     18960
+    ],
+    [
+     18960,
+     18990
+    ],
+    [
+     18990,
+     27090
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     27090
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 272,
+   "total_s": 0.6663516619995562,
+   "p50_call_ms": 2.005962999987787,
+   "p95_call_ms": 6.506811000008383,
+   "max_call_ms": 7.604013999980452,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9510
+    ],
+    [
+     9510,
+     18960
+    ],
+    [
+     18960,
+     18990
+    ],
+    [
+     18990,
+     27090
+    ]
+   ],
+   "file": "real_recordings/negatives/ఆయన నా లైఫ్ లో మిరాకిల్ #udayabhanu #podcast #ntvtelugu.mp3",
+   "chunk_ms": 100,
+   "candidate": "C_frontier",
+   "audio_ms": 27097,
+   "deterministic": true
+  },
+  {
+   "processed": 5,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 5,
+   "reference_ms": 27090,
+   "speech_ms": 26340,
+   "designed_overlap_ms": 3000,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9510
+    ],
+    [
+     9510,
+     18960
+    ],
+    [
+     18960,
+     18990
+    ],
+    [
+     18990,
+     27090
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     27090
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 110,
+   "total_s": 0.24730414099906284,
+   "p50_call_ms": 2.0314409999855343,
+   "p95_call_ms": 5.726948999949855,
+   "max_call_ms": 6.272838999962005,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     9510
+    ],
+    [
+     9510,
+     18960
+    ],
+    [
+     18960,
+     18990
+    ],
+    [
+     18990,
+     27090
+    ]
+   ],
+   "file": "real_recordings/negatives/ఆయన నా లైఫ్ లో మిరాకిల్ #udayabhanu #podcast #ntvtelugu.mp3",
+   "chunk_ms": 250,
+   "candidate": "C_frontier",
+   "audio_ms": 27097
+  },
+  {
+   "processed": 4,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 4,
+   "reference_ms": 27090,
+   "speech_ms": 26340,
+   "designed_overlap_ms": 3000,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     18990
+    ],
+    [
+     18990,
+     27090
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     27090
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 56,
+   "total_s": 0.12400182100043367,
+   "p50_call_ms": 2.0101439999962167,
+   "p95_call_ms": 3.8742140000067593,
+   "max_call_ms": 5.5407050000439995,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     18990
+    ],
+    [
+     18990,
+     27090
+    ]
+   ],
+   "file": "real_recordings/negatives/ఆయన నా లైఫ్ లో మిరాకిల్ #udayabhanu #podcast #ntvtelugu.mp3",
+   "chunk_ms": 500,
+   "candidate": "C_frontier",
+   "audio_ms": 27097
+  },
+  {
+   "processed": 4,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 4,
+   "reference_ms": 27090,
+   "speech_ms": 26340,
+   "designed_overlap_ms": 3000,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     18990
+    ],
+    [
+     18990,
+     27090
+    ]
+   ],
+   "reference_not_processed": [
+    [
+     0,
+     9510
+    ],
+    [
+     8010,
+     18990
+    ],
+    [
+     17490,
+     27090
+    ]
+   ],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": false,
+   "error": null,
+   "calls": 29,
+   "total_s": 0.0627397309999651,
+   "p50_call_ms": 2.300450000007004,
+   "p95_call_ms": 3.795592999949804,
+   "max_call_ms": 3.962188000059541,
+   "processed_spans": [
+    [
+     0,
+     9480
+    ],
+    [
+     9480,
+     18960
+    ],
+    [
+     18960,
+     18990
+    ],
+    [
+     18990,
+     27090
+    ]
+   ],
+   "file": "real_recordings/negatives/ఆయన నా లైఫ్ లో మిరాకిల్ #udayabhanu #podcast #ntvtelugu.mp3",
+   "chunk_ms": 1000,
+   "candidate": "C_frontier",
+   "audio_ms": 27097
+  }
+ ]
+}

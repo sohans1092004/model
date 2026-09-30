@@ -1,0 +1,9 @@
+{
+ "format": "udk_signals.config/1",
+ "_note": "TEST FIXTURE configuration for the toy signals in fixtures.py. Thresholds are illustrative, chosen on toy audio only; never production values (S-5).",
+ "acoustic_alone": {"enabled": true, "sources": ["fixture-acoustic (TEST ONLY)"]},
+ "corroboration": {"enabled": true, "sources": ["fixture-acoustic (TEST ONLY)"]},
+ "condition": {"min_duration_s": 0.2, "quiet_dbfs": -26, "low_snr_db": 12, "clipping_ratio": 0.05, "muffled_hf_ratio": 0.002},
+ "target_speaker": {"accept": 0.8, "reject": 0.3, "min_duration_s": 0.25},
+ "attribution": {"same_speaker": 0.8}
+}

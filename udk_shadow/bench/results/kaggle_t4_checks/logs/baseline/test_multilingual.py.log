@@ -1,0 +1,61 @@
+=== _normalize() preserves Unicode combining marks (real bug, fixed) ===
+[PASS] Hindi combining marks survive normalization
+[PASS] Telugu combining marks survive normalization
+[PASS] Kannada combining marks survive normalization
+[PASS] Tamil combining marks survive normalization
+[PASS] English punctuation stripping unchanged
+[PASS] English contractions unchanged (apostrophe still stripped)
+
+6/6 checks passed so far.
+
+=== Exact-match layer works correctly for every supported language ===
+[PASS] all 20 UDKs exact-self-match correctly in 'en'
+[PASS] all 20 UDKs exact-self-match correctly in 'hi'
+[PASS] all 20 UDKs exact-self-match correctly in 'te'
+[PASS] all 20 UDKs exact-self-match correctly in 'kn'
+[PASS] all 20 UDKs exact-self-match correctly in 'ta'
+
+11/11 checks passed so far.
+
+=== Live API: no client-declared language -- journeys start pending detection ===
+[PASS] a journey starts successfully with no language field at all (200)
+[PASS] journey.language is None (pending real detection, not client-declared)
+[PASS] journey runs on English defaults until detection resolves it
+
+14/14 checks passed so far.
+
+=== Automatic language detection (language_id.py), fake detectors -- no real model load ===
+[PASS] fast detector resolves a brand-new (pending) journey's language on the first available audio
+[PASS] resolving the language also rebuilds the engine with that language's UDKs
+[PASS] after real audio-based detection resolves Hindi, a real Hindi UDK phrase (UDK_08 equivalent) still triggers correctly
+[PASS] with no detector configured (feature not enabled), a pending journey falls back to English rather than staying undetected forever
+
+18/18 checks passed so far.
+
+=== Periodic recheck: 3 consecutive agreeing detections required before switching ===
+(real-world audio testing found 2 wasn't enough -- see LID_SWITCH_CONFIRMATIONS's docstring in api.py:
+ real background music/noise made VoxLingua107 confidently wrong for 2 consecutive real 6s windows,
+ which used to wrongly flip a real all-English clip's journey onto the Kannada STT backend mid-stream)
+[PASS] a single disagreeing recheck does NOT switch the language yet (avoids flip-flopping on one noisy signal)
+[PASS] the disagreement is recorded as a pending candidate
+[PASS] a SECOND consecutive agreeing recheck alone no longer switches -- this is the real bug fix (was: switched here)
+[PASS] a THIRD consecutive agreeing recheck DOES switch (real signal sustained across 3 independent windows, not a 2-window noise burst)
+[PASS] the pending candidate/streak reset after a confirmed switch
+[PASS] a disagreement NOT confirmed by the next recheck resets cleanly, no spurious switch
+[PASS] real-world regression: 2 consecutive wrong agreements followed by a correct one never switches at all (matches the real negatives_6 clip's actual score sequence)
+
+25/25 checks passed so far.
+
+=== create_or_get selects the right STT backend per language (fake backends, no real model load) ===
+[PASS] a language with a real entry in stt_by_language gets that backend, not the default
+[PASS] a language with NO entry in stt_by_language falls back to the default stt backend
+[PASS] stt_by_language omitted entirely (backward compat) -- default constructor value is used, not an error
+
+28/28 checks passed so far.
+
+=== create_or_get selects the right KWS backend per language (fake backends, no real model load) ===
+[PASS] a language with a real entry in kws_by_language gets that backend, not the default (None)
+[PASS] a language with NO entry in kws_by_language falls back to the default (None -- KWS off)
+
+========================================
+30/30 TOTAL PASSED -- ALL PASSED

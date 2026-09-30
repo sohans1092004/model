@@ -1,0 +1,42 @@
+[
+ {
+  "check": "whitelist ships shadow runtime only (26 files)",
+  "ok": false,
+  "detail": "['asr_bench/__init__.py', 'asr_bench/textnorm.py']"
+ },
+ {
+  "check": "shadow OFF (default): service starts, udk_shadow not imported",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "check": "shadow ON: loads, self-check ok, S-4 open, Phase 5 sentence-veto guard False, scream flags recorded as-is",
+  "ok": true,
+  "detail": "shadow mode ON (udk_shadow, self-check ok): sample=1.0 queue=256 records=1000 sink=off\nEFF open False None None\n"
+ },
+ {
+  "check": "shadow ON + real semantic model on GPU: isolated replay leaves the live cache untouched",
+  "ok": true,
+  "detail": "hts:  98%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258a| 195/199 [00:00<00:00, 1079.15it/s, Materializing param=encoder.layer.11.output.LayerNorm.weight]\nLoading weights:  98%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258a| 196/199 [00:00<00:00, 1079.15it/s, Materializing param=encoder.layer.11.output.dense.bias]      \nLoading weights:  98%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258a| 196/199 [00:00<00:00, 1079.15it/s, Materializing param=encoder.layer.11.output.dense.bias]\nLoading weights:  99%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2589| 197/199 [00:00<00:00, 1079.15it/s, Materializing param=encoder.layer.11.output.dense.weight]\nLoading weights:  99%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2589| 197/199 [00:00<00:00, 1079.15it/s, Materializing param=encoder.layer.11.output.dense.weight]\nLoading weights:  99%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2589| 198/199 [00:00<00:00, 1079.15it/s, Materializing param=pooler.dense.bias]                   \nLoading weights:  99%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2589| 198/199 [00:00<00:00, 1079.15it/s, Materializing param=pooler.dense.bias]\nLoading weights: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 199/199 [00:00<00:00, 1079.15it/s, Materializing param=pooler.dense.weight]\nLoading weights: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 199/199 [00:00<00:00, 1079.15it/s, Materializing param=pooler.dense.weight]\nLoading weights: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 199/199 [00:00<00:00, 1493.34it/s, Materializing param=pooler.dense.weight]\nBertModel LOAD REPORT from: sentence-transformers/LaBSE\nKey                     | Status     |  | \n------------------------+------------+--+-\nembeddings.position_ids | UNEXPECTED |  | \n\nNotes:\n- UNEXPECTED\t:can be ignored when loading from different task/architecture; not ok if you expect identical arch.\n"
+ },
+ {
+  "check": "shadow ON + udk_fusion removed: fails closed (shadow OFF), service serves",
+  "ok": true,
+  "detail": "/tmp/tmp8riv1r81/udk_shadow/runner.py:158: UserWarning: shadow mode requested but failed to start (ModuleNotFoundError: No module named 'udk_fusion') -- shadow OFF, live unaffected\n  warnings.warn(f\"shadow mode requested but failed to start ({type(e).__name__}: {e}) -- shadow OFF, live unaffected\")\n"
+ },
+ {
+  "check": "shadow ON + shadow dependency removed (asr_bench/textnorm.py): fails closed (shadow OFF), service serves",
+  "ok": true,
+  "detail": "/tmp/tmpgx1_g_y7/udk_shadow/runner.py:158: UserWarning: shadow mode requested but failed to start (ModuleNotFoundError: No module named 'asr_bench.textnorm') -- shadow OFF, live unaffected\n  warnings.warn(f\"shadow mode requested but failed to start ({type(e).__name__}: {e}) -- shadow OFF, live unaffected\")\n"
+ },
+ {
+  "check": "shadow ON + invalid shadow config: fails closed, service serves",
+  "ok": true,
+  "detail": "/tmp/tmpian5nc7r/udk_shadow/runner.py:158: UserWarning: shadow mode requested but failed to start (ShadowConfigError: queue_max must be >= 1 (shadow state is always bounded)) -- shadow OFF, live unaffected\n  warnings.warn(f\"shadow mode requested but failed to start ({type(e).__name__}: {e}) -- shadow OFF, live unaffected\")\n"
+ },
+ {
+  "check": "uvicorn server with shadow ON answers /metrics and logs the self-check",
+  "ok": true,
+  "detail": "shadow mode ON (udk_shadow, self-check ok): sample=1.0 queue=256 records=1000 sink=off\nINFO:     Started server process [13720]\nINFO:     Waiting for application startup.\nINFO:     Application startup complete.\nINFO:     Uvicorn running on http://127.0.0.1:8765 (Press CTRL+C to quit)\nINFO:     127.0.0.1:32826 - \"GET /metrics HTTP/1.1\" 200 OK\nINFO:     Shutting down\nINFO:     Waiting for application shutdown.\nINFO:     Application shutdown complete.\nINFO:     Finished server process [13720]\n"
+ }
+]

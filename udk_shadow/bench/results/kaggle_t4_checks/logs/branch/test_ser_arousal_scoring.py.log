@@ -1,0 +1,38 @@
+Loading BEATs (comparison) + SER...
+Extracting real scream (correctly-windowed 2s peak)...
+  SER dims on real scream: arousal/dominance/valence = (0.6633753776550293, 0.5483665466308594, 0.24909847974777222)
+Downloading RAVDESS fear/angry (strong) + calm/happy (normal)...
+
+==========================================================================================
+SER arousal vs BEATs score() -- same RAVDESS clips
+==========================================================================================
+
+--- RAVDESS fear (strong) ---
+  BEATs                        n= 32 min=0.0096 mean=0.0516 max=0.1882
+  SER arousal                  n= 32 min=0.7087 mean=0.8489 max=0.9863
+
+--- RAVDESS angry (strong) ---
+  BEATs                        n= 32 min=0.0049 mean=0.0835 max=0.2321
+  SER arousal                  n= 32 min=0.7300 mean=0.9174 max=1.0128
+
+--- RAVDESS calm ---
+  BEATs                        n= 32 min=0.0017 mean=0.0036 max=0.0125
+  SER arousal                  n= 32 min=0.3056 mean=0.3935 max=0.4958
+
+--- RAVDESS happy ---
+  BEATs                        n= 32 min=0.0020 mean=0.0074 max=0.0352
+  SER arousal                  n= 32 min=0.4352 mean=0.5583 max=0.6959
+
+==========================================================================================
+FALSE-POSITIVE CHECK: SER arousal on the full real negatives corpus (n=163 segments,
+same corpus used for BEATs' own threshold work this session)
+==========================================================================================
+  n=119 real negative segments
+  arousal: min=0.2958 mean=0.5757 median=0.5886 max=0.8709
+  fraction >= 0.5: 63.9%
+  fraction >= 0.6: 47.1%
+  fraction >= 0.7: 23.5%
+  fraction >= 0.8: 3.4%
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/usr/local/lib/python3.12/dist-packages/torch/nn/utils/weight_norm.py:144: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)

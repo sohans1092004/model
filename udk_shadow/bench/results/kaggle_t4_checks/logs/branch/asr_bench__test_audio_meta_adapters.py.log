@@ -1,0 +1,77 @@
+[PASS] 16 kHz mono 8000 frames: rate/channels/frames/duration exact
+[PASS] WAV is read from the header (no decoding)
+[PASS] 44.1 kHz stereo: original rate and channels kept (no 16 kHz mono conversion)
+[PASS] 8-bit 8 kHz: duration 0.25 s
+[PASS] IEEE-float WAV: 1200 frames at 24 kHz = 0.05 s
+[PASS] WAVE_FORMAT_EXTENSIBLE 24-bit stereo: 480 frames at 48 kHz
+[PASS] odd-sized chunk before data (word padding) is skipped correctly
+[PASS] zero-frame WAV is reported as it is (0.0 s), not padded
+[PASS] audio_sha256 equals hashlib.sha256 of the file's bytes
+[PASS] audio_sha256 is reproducible (same file read twice)
+[PASS] byte-identical copy has the same audio_sha256
+[PASS] one changed sample byte changes audio_sha256
+[PASS] audio_sha256 is NOT the hash of the decoded PCM
+[PASS] same samples, different header: same duration, DIFFERENT audio_sha256 (file-byte semantics)
+[PASS] multi-block file hashes correctly
+[PASS] missing file -> AudioFileMissing
+[PASS] directory -> AudioMetadataError
+[PASS] empty file -> CorruptAudio
+[PASS] data chunk longer than the file -> CorruptAudio
+[PASS] data not a whole number of frames -> CorruptAudio
+[PASS] WAVE without fmt chunk -> CorruptAudio
+[PASS] RF64 -> UnsupportedAudioFormat (not guessed)
+[PASS] non-audio bytes with PyAV disabled -> UnsupportedAudioFormat
+[PASS] non-audio bytes -> AudioMetadataError either way (with or without PyAV)
+[PASS] compressed codec inside WAV is not counted from the header (needs a decoder)
+[PASS] FLAC mono 22.05 kHz via PyAV: 2205 frames = 0.1 s
+[PASS] FLAC stereo 48 kHz via PyAV
+[PASS] FLAC with PyAV disabled -> UnsupportedAudioFormat
+[PASS] FLAC audio_sha256 is still the file bytes
+[PASS] SourceUtterance has no defaults: omitting a field is a TypeError
+[PASS] DatasetAdapter cannot be instantiated without source/utterances
+[PASS] build_row returns every §3 field, in schema order
+[PASS] utt_id = '<source_dataset>:<source_utt_id>'
+[PASS] audio metadata is MEASURED from the file
+[PASS] audio_path is written as the adapter gave it
+[PASS] source licence/use_restriction are carried onto the row
+[PASS] split comes from the caller
+[PASS] absolute audio_path needs no audio_root
+[PASS] relative audio_path without audio_root -> AdapterContractError
+[PASS] missing audio -> AudioFileMissing (not a row with invented metadata)
+[PASS] zero-frame audio -> ManifestRowError (duration_s must be > 0)
+[PASS] an invalid enum from the adapter -> ManifestRowError
+[PASS] ManifestRowError carries the schema issues
+[PASS] empty source_utt_id -> AdapterContractError
+[PASS] bad SourceInfo SourceInfo(source_dataset='', source_version='0', licence='x', use_restriction='train_ok') -> AdapterContractError
+[PASS] bad SourceInfo SourceInfo(source_dataset='toy', source_version='0', licence='', use_restriction='train_ok') -> AdapterContractError
+[PASS] bad SourceInfo SourceInfo(source_dataset='toy', source_version='0', licence='x', use_restriction='research') -> AdapterContractError
+[PASS] bad SourceInfo SourceInfo(source_dataset='to:y', source_version='0', licence='x', use_restriction='train_ok') -> AdapterContractError
+[PASS] speaker_id='spk01' is not namespaced for source 'toy' -> AdapterContractError
+[PASS] speaker_id='other:spk01' is not namespaced for source 'toy' -> AdapterContractError
+[PASS] speaker_id='toy:' is not namespaced for source 'toy' -> AdapterContractError
+[PASS] session_id='sess01' is not namespaced for source 'toy' -> AdapterContractError
+[PASS] recording_id='rec1' is not namespaced for source 'toy' -> AdapterContractError
+[PASS] namespaced 'toy:spk01' / 'toy:sess01' / 'toy:rec1' are accepted
+[PASS] the namespace check does not rewrite IDs (no universal transformation)
+[PASS] a source-local ID containing ':' is fine once prefixed
+[PASS] null speaker_id is allowed by the adapter contract ...
+[PASS] ... but the schema still rejects it in a speaker-disjoint split
+[PASS] blocked source builds an inventory row (split eval_only)
+[PASS] blocked source row in dev -> ManifestRowError
+[PASS] an utterance cannot lift a blocked source's restriction
+[PASS] per-utterance licence override is recorded on the row
+[PASS] blocked inventory row from an adapter is never eligible
+[PASS] P-S2-3: eval_only source + train_ok utterance (relaxing) -> AdapterContractError
+[PASS] P-S2-3: eval_only source + eval_only utterance (equal) is accepted
+[PASS] P-S2-3: eval_only source + blocked utterance (stricter) is accepted as inventory
+[PASS] P-S2-3: train_ok source + blocked utterance -> blocked row
+[PASS] P-S2-3: blocked source + blocked utterance stays blocked
+[PASS] P-S2-3: blocked source + eval_only utterance (relaxing) -> AdapterContractError
+[PASS] P-S2-3: unknown utterance use_restriction -> AdapterContractError
+[PASS] build_rows: good utterances become rows
+[PASS] build_rows: failures are collected with their cause, not fatal
+[PASS] manifest compatibility: adapter rows written to JSONL pass the S1 validator
+[PASS] manifest compatibility: eligibility sees them per split
+
+========================================
+74/74 TOTAL PASSED -- ALL PASSED

@@ -1,0 +1,9 @@
+pvporcupine.create signature: (access_key: str, library_path: Optional[str] = None, model_path: Optional[str] = None, device: Optional[str] = None, keyword_paths: Optional[Sequence[str]] = None, keywords: Optional[Sequence[str]] = None, sensitivities: Optional[Sequence[float]] = None) -> pvporcupine._porcupine.Porcupine
+Confirmed: access_key is required -- no offline/local mode.
+
+Built-in keywords (n=19): ['alexa', 'americano', 'blueberry', 'bumblebee', 'computer', 'grapefruit', 'grasshopper', 'hey barista', 'hey google', 'hey siri', 'jarvis', 'ok google', 'pico clock', 'picovoice', 'porcupine', 'smart mirror', 'snowboy', 'terminator', 'view glass']
+Confirmed: all built-in keywords are <= 2 words -- short wake-word shape.
+
+UDK phrase word counts: [6, 3, 4, 4, 5, 3, 3, 3, 4, 4, 5, 6, 4, 5, 4, 3, 4, 6, 4, 7]
+UDK phrase mean word count: 4.3
+Confirmed: every UDK phrase is longer than any built-in Porcupine keyword -- architectural mismatch.

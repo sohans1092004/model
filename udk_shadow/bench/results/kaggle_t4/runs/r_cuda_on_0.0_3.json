@@ -1,0 +1,81 @@
+{
+ "mode": "on",
+ "device": "cuda",
+ "gpu": {
+  "name": "Tesla T4",
+  "util_pct": {
+   "mean": 35.10909090909091,
+   "p95": 42.0,
+   "max": 57.0,
+   "samples": 55
+  },
+  "mem_used_mb": {
+   "mean": 1718.6,
+   "p95": 1719.0,
+   "max": 1719.0,
+   "samples": 55
+  },
+  "torch_peak_allocated_mb": 1548.1611328125,
+  "sampler": "nvidia-smi"
+ },
+ "stt_delay_s": 0.0,
+ "segments": 192,
+ "torch_threads": 2,
+ "torch_version": "2.10.0+cu128",
+ "cuda_available": true,
+ "cpu_count": 4,
+ "live_latency_s": {
+  "p50": 0.061813519999986966,
+  "p95": 0.1557041239998398,
+  "max": 0.36898778399995535,
+  "mean": 0.0675675191197899
+ },
+ "time_to_alert_s": {
+  "p50": 0.0642892700000175,
+  "p95": 0.1646055300000171,
+  "max": 0.3689328689999911,
+  "n": 192
+ },
+ "live_semantic_s": {
+  "total": 3.853520735998245,
+  "calls": 7884,
+  "per_call_ms": 0.48877736377451103
+ },
+ "live_intent_s": {
+  "total": 8.802726980001808,
+  "calls": 180,
+  "per_call_ms": 48.90403877778782
+ },
+ "shadow_intent_s": {
+  "total": 8.75433542800215,
+  "calls": 192
+ },
+ "live_wall_s": 12.973507289000054,
+ "drain_after_last_segment_s": 0.3341743510000015,
+ "cpu_s": 22.099999999999998,
+ "wall_s": 13.307694666000089,
+ "cpu_cores_used": 1.6606933473205863,
+ "peak_rss_mb": 2158.671875,
+ "rss_after_model_load_mb_floor": 989.375,
+ "live_events": 192,
+ "shadow": {
+  "records": 192,
+  "statuses": {
+   "status:ok": 180,
+   "status:skipped_live_no_text": 12
+  },
+  "dropped_queue_full": 0,
+  "capture_errors": 0,
+  "processing_s": {
+   "p50": 0.061432,
+   "p95": 0.158349,
+   "max": 0.280708
+  },
+  "queue_wait_s": {
+   "p50": 0.369916,
+   "p95": 0.555629,
+   "max": 0.639412
+  },
+  "phase5_vs_live_match": 180
+ }
+}

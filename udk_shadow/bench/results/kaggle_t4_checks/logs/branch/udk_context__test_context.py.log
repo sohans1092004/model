@@ -1,0 +1,65 @@
+[PASS] toy fixture: 26 valid Phase 1 §15 scenes
+[PASS] unknown label rejected
+[PASS] role without speaker attribution rejected
+[PASS] custom-UDK scene without its phrase rejected
+[PASS] non-Phase-1 role rejected
+[PASS] multi-speaker window keeps every speaker's turn separate, oldest first
+[PASS] rendered context marks speaker, role and relation per turn (never one merged string)
+[PASS] max_turns keeps only the most recent turns
+[PASS] window_s drops turns ending too long before the target
+[PASS] preceding only: nothing at or after the target
+[PASS] a turn overlapping the target is 'concurrent', not context
+[PASS] no speaker attribution -> attribution_complete false
+[PASS] same speaker relation
+[PASS] context_after is never read (not even stored in the fixture)
+[PASS] window size is required configuration
+[PASS] config: an enabled feature needs a threshold
+[PASS] config: hard rule H3 cannot be configured away
+[PASS] config: missing section -> error (no defaults)
+[PASS] config: context veto needs a sentence ceiling
+[PASS] production-equivalent config: final decision == UDK path on every scene (sentence scorer never < 0.02 here)
+[PASS] production-equivalent: sentence veto fires exactly as intent_gate (p < 0.02, both STTs agree)
+[PASS] production-equivalent: no veto when the other STT did not hear the same words (H2)
+[PASS] PERSONAL alert never vetoed, even with p = 0.001 (H1)
+[PASS] context scorer must actually use context
+[PASS] same target text ('Help me, please', en): SAFE context silent, DANGER context alerts
+[PASS] same target text ("Don't touch me", en): SAFE context silent, DANGER context alerts
+[PASS] same target text ('help me please', hi+en): SAFE context silent, DANGER context alerts
+[PASS] same target text ('help me please vaadu nannu vadalatledu', te+en): SAFE context silent, DANGER context alerts
+[PASS] attacker -> victim: other-speaker context blocks any context veto (H3)
+[PASS] victim -> attacker (no UDK): raised as TRIGGER_VERIFY
+[PASS] story/movie narration silenced only through same-speaker context
+[PASS] news report of strong danger words is NOT silenced (sentence ceiling) -- a known false alarm
+[PASS] genuine danger despite misleading same-speaker 'game' context stays an alert
+[PASS] negation-but-danger stays an alert; negation recorded as evidence only (H5)
+[PASS] negated request ('I don't need help') raises nothing
+[PASS] mixed Hindi/English danger without UDK -> TRIGGER_VERIFY; same words in a game -> nothing
+[PASS] danger without UDK never TRIGGER_ALL from a classifier (H6)
+[PASS] multi-speaker danger alerts
+[PASS] argument between two speakers: context cannot silence it (H3) -- a known false alarm
+[PASS] overlap, attributed and unattributed: alerts kept; context veto blocked (H4)
+[PASS] media voice saying a UDK still alerts (Phase 0 product rule vs Phase 1 SAFE label: C-2)
+[PASS] custom-UDK SAFE mention still alerts (H1) -- a known false alarm
+[PASS] without heard_by_both, danger-without-UDK is not raised
+[PASS] negator inside the UDK phrase is not negation ('Don't touch me')
+[PASS] negator scoping the UDK phrase detected
+[PASS] scene splits: every speaker (attacker and victim alike) in exactly one split
+[PASS] scene splits: scene with no target speaker -> eval_only
+[PASS] scene splits deterministic
+[PASS] metrics reported per problem type, never pooled
+[PASS] toy A: DANGER recall 10/10 with and without context
+[PASS] toy A: SAFE false alarms 7/8 production-equivalent -> 3/8 with fixture context
+[PASS] toy C: danger without UDK 0/3 -> 3/3; SAFE C 0/2 both
+[PASS] pair separation: 4 of 5 A pairs with context, 0 of 5 without
+[PASS] role-conditioned recall and turn-order reported
+[PASS] overlap recall split by level and attribution
+[PASS] speaker-attribution accuracy UNAVAILABLE (no runtime attribution)
+[PASS] failure listing names the known false alarms
+[PASS] recall-first: fixture context loses no DANGER scene vs production-equivalent
+[PASS] recall-first check catches a lost danger
+[PASS] final_test: totals only, no per-scene failures
+[PASS] production matcher + production-equivalent config: decision unchanged on every scene
+[PASS] vetoes identical to the live intent_gate.IntentGate.veto on every alerting scene
+
+========================================
+62/62 TOTAL PASSED -- ALL PASSED

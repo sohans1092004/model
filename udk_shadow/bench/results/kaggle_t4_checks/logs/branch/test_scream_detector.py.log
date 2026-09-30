@@ -1,0 +1,26 @@
+=== ScreamDetector's DSP features behave as claimed (synthetic, deterministic) ===
+[PASS] an envelope amplitude-modulated inside the roughness band scores higher than a smooth tone at the same pitch
+[PASS] a pitch well above normal conversational range scores higher than one inside it
+[PASS] silence scores exactly 0.0 (no divide-by-zero, no spurious signal)
+[PASS] empty PCM scores exactly 0.0 (no crash on a zero-length segment)
+
+4/4 checks passed so far.
+
+=== decide() never fires on scream_score alone -- corroboration-only, by design ===
+[PASS] a maxed-out scream_score (1.0) with NO text/KWS match at all still produces NO_ACTION
+
+5/5 checks passed so far.
+
+=== decide() DOES use scream_score to corroborate an already-partial match ===
+[PASS] a verify-by-default phrase with no corroboration stays at TRIGGER_VERIFY
+[PASS] a scream_score BELOW threshold does not corroborate -- still TRIGGER_VERIFY
+[PASS] a scream_score AT/ABOVE threshold corroborates a verify-by-default match into TRIGGER_ALL
+
+8/8 checks passed so far.
+
+=== an ordinary (non-verify-by-default) match strictly between the two thresholds also gets the escalation ===
+[PASS] sanity: a controlled 0.70 confidence lands at TRIGGER_VERIFY (between thresholds), not TRIGGER_ALL
+[PASS] the same 0.70-confidence match escalates to TRIGGER_ALL once a strong scream_score corroborates it
+
+========================================
+10/10 TOTAL PASSED -- ALL PASSED

@@ -1,0 +1,85 @@
+Downloading/collecting real audio for each requested class...
+
+================================================================================
+CLASS-SPECIFIC SCORING (BEATs)
+================================================================================
+
+--- single scream (real, correctly-windowed peak) (n=1) ---
+  Screaming            mean=0.0136  max=0.0136
+  Shout                mean=0.0003  max=0.0003
+  Yell                 mean=0.0002  max=0.0002
+  Crying, sobbing      mean=0.0248  max=0.0248
+  Groan                mean=0.0147  max=0.0147
+  Speech               mean=0.5140  max=0.5140
+  Conversation         mean=0.0007  max=0.0007
+  Laughter             mean=0.0281  max=0.0281
+  Chuckle, chortle     mean=0.0146  max=0.0146
+  Giggle               mean=0.0087  max=0.0087
+  Battle cry           mean=0.0000  max=0.0000
+
+--- crying/distress speech (RAVDESS fear, strong) (n=32) ---
+  Screaming            mean=0.0059  max=0.0779
+  Shout                mean=0.0017  max=0.0089
+  Yell                 mean=0.0052  max=0.0441
+  Crying, sobbing      mean=0.0011  max=0.0049
+  Groan                mean=0.0516  max=0.1882
+  Speech               mean=0.5785  max=0.7504
+  Conversation         mean=0.0030  max=0.0081
+  Laughter             mean=0.0016  max=0.0058
+  Chuckle, chortle     mean=0.0013  max=0.0054
+  Giggle               mean=0.0016  max=0.0084
+  Battle cry           mean=0.0001  max=0.0009
+
+--- aggressive shouting (RAVDESS angry, strong) (n=32) ---
+  Screaming            mean=0.0069  max=0.0609
+  Shout                mean=0.0026  max=0.0073
+  Yell                 mean=0.0107  max=0.0453
+  Crying, sobbing      mean=0.0004  max=0.0011
+  Groan                mean=0.0835  max=0.2321
+  Speech               mean=0.5824  max=0.6428
+  Conversation         mean=0.0110  max=0.0635
+  Laughter             mean=0.0006  max=0.0014
+  Chuckle, chortle     mean=0.0007  max=0.0015
+  Giggle               mean=0.0006  max=0.0027
+  Battle cry           mean=0.0002  max=0.0010
+
+--- laughing/excited (RAVDESS happy -- IMPERFECT PROXY, see note) (n=32) ---
+  Screaming            mean=0.0008  max=0.0028
+  Shout                mean=0.0008  max=0.0021
+  Yell                 mean=0.0007  max=0.0023
+  Crying, sobbing      mean=0.0009  max=0.0050
+  Groan                mean=0.0074  max=0.0352
+  Speech               mean=0.6098  max=0.6631
+  Conversation         mean=0.0198  max=0.0595
+  Laughter             mean=0.0013  max=0.0036
+  Chuckle, chortle     mean=0.0015  max=0.0040
+  Giggle               mean=0.0013  max=0.0055
+  Battle cry           mean=0.0000  max=0.0001
+
+--- talking on phone (real negatives -- IMPERFECT PROXY, see note) (n=15) ---
+  Screaming            mean=0.0002  max=0.0007
+  Shout                mean=0.0004  max=0.0008
+  Yell                 mean=0.0003  max=0.0009
+  Crying, sobbing      mean=0.0001  max=0.0008
+  Groan                mean=0.0010  max=0.0043
+  Speech               mean=0.5230  max=0.8653
+  Conversation         mean=0.0058  max=0.0291
+  Laughter             mean=0.0005  max=0.0027
+  Chuckle, chortle     mean=0.0007  max=0.0047
+  Giggle               mean=0.0002  max=0.0013
+  Battle cry           mean=0.0000  max=0.0001
+
+================================================================================
+GAPS: no test audio available for these requested classes
+================================================================================
+  'repeated screams' (vs. a single scream) -- this project's only real scream
+    clip has one identifiable peak window, not a clean repeated-scream region;
+    would need dedicated sourcing (SFX library or new real recording) to test properly.
+  'laughing/screaming in excitement' as a genuinely acoustically screamed/shouted
+    excitement (not RAVDESS's calm read-aloud 'happy') -- RAVDESS happy above is the
+    closest available real proxy, but it's normal-register happy speech, not excited
+    screaming/shouting, so it likely UNDERSTATES how close this class sits to real
+    'Screaming'/'Shout' scores -- flagged, not silently substituted as equivalent.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/usr/local/lib/python3.12/dist-packages/torch/nn/utils/weight_norm.py:144: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)

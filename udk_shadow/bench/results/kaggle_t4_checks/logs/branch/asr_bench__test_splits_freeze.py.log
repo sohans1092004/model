@@ -1,0 +1,108 @@
+[PASS] example config: approved toy ratios 0.70/0.10/0.10/0.10 and salt udk-phase2a-v1
+[PASS] invalid config rejected: missing format
+[PASS] invalid config rejected: empty salt
+[PASS] invalid config rejected: no sources (no defaults)
+[PASS] invalid config rejected: unknown top-level key
+[PASS] invalid config rejected: policy 'given' not implemented (D-S3-8)
+[PASS] invalid config rejected: unknown policy
+[PASS] invalid config rejected: ratios missing final_test
+[PASS] invalid config rejected: negative ratio
+[PASS] invalid config rejected: ratios not summing to 1
+[PASS] invalid config rejected: boolean ratio
+[PASS] invalid config rejected: fixed to an unknown split
+[PASS] invalid config rejected: extra key in a policy
+[PASS] config digest changes with the salt
+[PASS] plan on the toy corpus has no errors
+[PASS] same input + config -> identical assignment and report
+[PASS] shuffled input -> identical assignment
+[PASS] different salt -> different split
+[PASS] salt and config digest are recorded in the report
+[PASS] hash position is in [0,1) and reproducible
+[PASS] all four executed splits receive groups on 80 speakers
+[PASS] every row assigned exactly once
+[PASS] both utterances of a speaker land in the same split
+[PASS] transitive grouping: speaker A-s1-B-r1-C is one group, D alone
+[PASS] group key = smallest speaker_id
+[PASS] a grouped chain lands in one split
+[PASS] namespaced a:spk1 and b:spk1 are separate groups
+[PASS] session key used when a group has no speaker
+[PASS] recording key used when only a recording exists
+[PASS] no identifiers -> no key is invented
+[PASS] a session ID never links to an identical speaker ID string (typed IDs)
+[PASS] audio_sha256 never groups rows
+[PASS] null-speaker rows and their whole group go to eval_only
+[PASS] the limitation is reported (no identifiers / null speaker)
+[PASS] missing-ID counts are reported
+[PASS] assigned manifest passes S1 (no speaker/session/recording in two splits)
+[PASS] leakage report on the assigned manifest has no errors
+[PASS] planted speaker in two splits -> error
+[PASS] planted session in two splits -> error
+[PASS] planted recording in two splits -> error
+[PASS] same audio in two different groups (same split) -> error (D-S3-5)
+[PASS] same audio across splits -> error
+[PASS] same audio within one group and split -> warning only
+[PASS] exact duplicate transcript across splits -> warning, not error (D-S3-9)
+[PASS] group with any blocked row -> whole group eval_only (D-S3-4)
+[PASS] blocked reason reported
+[PASS] blocked rows are never eligible
+[PASS] group with an eval_only row never enters train (D-S3-3)
+[PASS] constrained placement: position inside the train bucket mapped onto permitted splits (no rehashing)
+[PASS] constrained assignment is reported with hashed and assigned split
+[PASS] eval_only group already outside train is not moved or reported
+[PASS] eval_only row with a train-only source -> plan error
+[PASS] eval_only row in a source fixed to train -> plan error
+[PASS] fixed policy: every row of the held-out source goes to test
+[PASS] source-disjoint report: held-out source listed, the hashed source (also in train/dev) is not
+[PASS] source missing from the config -> plan error (no defaults)
+[PASS] empty input -> empty plan, no errors
+[PASS] one speaker -> one group in one split; other splits reported empty (not forced)
+[PASS] duplicate utt_id in the input -> plan error
+[PASS] group spanning two sources (un-namespaced IDs) -> plan error
+[PASS] a plan with errors cannot be used
+[PASS] freeze covers exactly the final_test rows
+[PASS] freeze records config digest and salt
+[PASS] freeze holds IDs and hashes only (no transcript text, no audio path)
+[PASS] byte-identical freeze on re-creation and on shuffled rows
+[PASS] verify: unchanged manifest -> no issues
+[PASS] changing audio_path only -> freeze still verifies (P-S2-2)
+[PASS] ... and the re-created freeze is identical
+[PASS] changed audio -> AUDIO CHANGED
+[PASS] changed duration with same audio -> metadata-only audio change reported
+[PASS] changed transcript -> REFERENCE CHANGED
+[PASS] changed metadata (environment) -> METADATA CHANGED
+[PASS] changed licence -> METADATA CHANGED
+[PASS] added carry-over field (pair_id) -> METADATA CHANGED
+[PASS] row moved into final_test -> ADDED
+[PASS] row moved out of final_test -> MOVED
+[PASS] row deleted -> REMOVED
+[PASS] config digest mismatch -> error
+[PASS] edited freeze artifact is detected (freeze_sha256 mismatch)
+[PASS] re-assignment with the freeze and the same config -> ok
+[PASS] re-assignment with a different config -> error
+[PASS] dropping a frozen final_test row -> error
+[PASS] new data that would join the frozen final_test -> error
+[PASS] schema-invalid manifest -> freeze refused
+[PASS] leaky manifest -> freeze refused
+[PASS] manifest with no final_test rows -> freeze refused
+[PASS] freeze written and re-loaded intact
+[PASS] an existing freeze is never overwritten
+[PASS] loading an edited freeze file fails
+[PASS] adapter -> split plan -> build_rows: all rows built
+[PASS] ... rows carry the planned splits
+[PASS] ... and pass S1 validation + leakage report
+[PASS] ... the eval_only-restricted speaker is not in train
+[PASS] on-disk audio verification with a source->root mapping
+[PASS] files moved to a new root: freeze and on-disk check still pass
+[PASS] changed file bytes on disk -> detected
+[PASS] no root for a source -> error
+[PASS] CLI splits assign: exit 0, manifest + report written
+[PASS] CLI splits assign refuses to overwrite
+[PASS] CLI splits report on the result: exit 0
+[PASS] CLI freeze create: exit 0
+[PASS] CLI freeze verify: VERIFIED
+[PASS] CLI freeze verify on an edited manifest: MISMATCH, exit 1
+[PASS] CLI freeze create refuses to overwrite an existing freeze
+[PASS] row field order is untouched by apply_plan
+
+========================================
+105/105 TOTAL PASSED -- ALL PASSED

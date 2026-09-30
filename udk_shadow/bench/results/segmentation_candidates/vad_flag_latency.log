@@ -1,0 +1,47 @@
+A_current  real_recordings/mixed/clip_01_clean.mp3     20ms calls=  1501 p50=1.770 p95=4.166 max=11.53 last10%=4.12 total=2.89s
+D_cached   real_recordings/mixed/clip_01_clean.mp3     20ms calls=  1501 p50=0.364 p95=0.558 max=1.29 last10%=0.59 total=0.48s
+D_vad_flag real_recordings/mixed/clip_01_clean.mp3     20ms calls=  1501 p50=0.184 p95=0.411 max=0.90 last10%=0.40 total=0.30s
+A_current  real_recordings/mixed/clip_01_clean.mp3    100ms calls=   301 p50=1.677 p95=3.670 max=4.65 last10%=3.48 total=0.57s
+D_cached   real_recordings/mixed/clip_01_clean.mp3    100ms calls=   301 p50=0.259 p95=0.911 max=2.48 last10%=0.81 total=0.10s
+D_vad_flag real_recordings/mixed/clip_01_clean.mp3    100ms calls=   301 p50=0.339 p95=0.679 max=0.93 last10%=0.68 total=0.10s
+A_current  real_recordings/mixed/clip_01_clean.mp3    250ms calls=   121 p50=1.585 p95=3.591 max=4.05 last10%=3.54 total=0.22s
+D_cached   real_recordings/mixed/clip_01_clean.mp3    250ms calls=   121 p50=0.290 p95=0.707 max=1.00 last10%=0.56 total=0.04s
+D_vad_flag real_recordings/mixed/clip_01_clean.mp3    250ms calls=   121 p50=0.255 p95=0.467 max=0.63 last10%=0.47 total=0.03s
+A_current  real_recordings/mixed/clip_01_clean.mp3   1000ms calls=    31 p50=1.663 p95=3.679 max=3.80 last10%=3.55 total=0.06s
+D_cached   real_recordings/mixed/clip_01_clean.mp3   1000ms calls=    31 p50=0.415 p95=0.699 max=1.15 last10%=0.65 total=0.01s
+D_vad_flag real_recordings/mixed/clip_01_clean.mp3   1000ms calls=    31 p50=0.358 p95=0.593 max=1.02 last10%=0.53 total=0.01s
+A_current  eal_recordings/mixed/clip_19_muffled.mp3    20ms calls=  1501 p50=1.609 p95=2.912 max=7.76 last10%=3.08 total=2.42s
+D_cached   eal_recordings/mixed/clip_19_muffled.mp3    20ms calls=  1501 p50=0.269 p95=0.527 max=1.18 last10%=0.51 total=0.41s
+D_vad_flag eal_recordings/mixed/clip_19_muffled.mp3    20ms calls=  1501 p50=0.208 p95=0.418 max=2.42 last10%=0.40 total=0.33s
+A_current  eal_recordings/mixed/clip_19_muffled.mp3   100ms calls=   301 p50=1.555 p95=4.250 max=4.79 last10%=3.70 total=0.49s
+D_cached   eal_recordings/mixed/clip_19_muffled.mp3   100ms calls=   301 p50=0.471 p95=0.751 max=0.94 last10%=0.54 total=0.13s
+D_vad_flag eal_recordings/mixed/clip_19_muffled.mp3   100ms calls=   301 p50=0.220 p95=0.408 max=1.04 last10%=0.39 total=0.07s
+A_current  eal_recordings/mixed/clip_19_muffled.mp3   250ms calls=   121 p50=1.554 p95=3.775 max=6.73 last10%=3.54 total=0.21s
+D_cached   eal_recordings/mixed/clip_19_muffled.mp3   250ms calls=   121 p50=0.313 p95=0.580 max=1.08 last10%=0.56 total=0.04s
+D_vad_flag eal_recordings/mixed/clip_19_muffled.mp3   250ms calls=   121 p50=0.243 p95=0.454 max=0.68 last10%=0.43 total=0.03s
+A_current  eal_recordings/mixed/clip_19_muffled.mp3  1000ms calls=    31 p50=1.606 p95=3.032 max=4.50 last10%=2.97 total=0.05s
+D_cached   eal_recordings/mixed/clip_19_muffled.mp3  1000ms calls=    31 p50=0.400 p95=0.845 max=0.90 last10%=0.82 total=0.01s
+D_vad_flag eal_recordings/mixed/clip_19_muffled.mp3  1000ms calls=    31 p50=0.313 p95=0.502 max=0.53 last10%=0.50 total=0.01s
+A_current  ves/5 podcasts you must listen Tamil.mp3   100ms calls=   602 p50=4.284 p95=10.598 max=16.96 last10%=10.34 total=2.95s
+D_cached   ves/5 podcasts you must listen Tamil.mp3   100ms calls=   602 p50=0.892 p95=2.761 max=4.99 last10%=2.02 total=0.66s
+D_vad_flag ves/5 podcasts you must listen Tamil.mp3   100ms calls=   602 p50=0.553 p95=2.995 max=7.65 last10%=3.22 total=0.48s
+A_current  ves/5 podcasts you must listen Tamil.mp3   250ms calls=   242 p50=5.542 p95=13.031 max=15.22 last10%=11.33 total=1.33s
+D_cached   ves/5 podcasts you must listen Tamil.mp3   250ms calls=   242 p50=0.813 p95=1.694 max=2.28 last10%=1.62 total=0.20s
+D_vad_flag ves/5 podcasts you must listen Tamil.mp3   250ms calls=   242 p50=0.728 p95=1.682 max=4.48 last10%=2.00 total=0.18s
+A_current  ves/5 podcasts you must listen Tamil.mp3  1000ms calls=    62 p50=4.567 p95=9.209 max=9.81 last10%=9.28 total=0.29s
+D_cached   ves/5 podcasts you must listen Tamil.mp3  1000ms calls=    62 p50=0.899 p95=1.657 max=1.83 last10%=1.66 total=0.06s
+D_vad_flag ves/5 podcasts you must listen Tamil.mp3  1000ms calls=    62 p50=0.785 p95=1.544 max=1.91 last10%=1.54 total=0.05s
+A_current   Easy English - BBC Learning English.mp3   100ms calls=  3261 p50=27.495 p95=52.874 max=87.61 last10%=53.56 total=90.44s
+D_cached    Easy English - BBC Learning English.mp3   100ms calls=  3261 p50=6.812 p95=15.605 max=27.55 last10%=15.36 total=24.16s
+D_vad_flag  Easy English - BBC Learning English.mp3   100ms calls=  3261 p50=5.689 p95=12.671 max=21.23 last10%=12.56 total=20.02s
+A_current   Easy English - BBC Learning English.mp3   250ms calls=  1305 p50=27.300 p95=52.804 max=83.47 last10%=52.35 total=36.35s
+D_cached    Easy English - BBC Learning English.mp3   250ms calls=  1305 p50=6.857 p95=21.646 max=35.74 last10%=15.40 total=10.50s
+D_vad_flag  Easy English - BBC Learning English.mp3   250ms calls=  1305 p50=5.286 p95=16.812 max=26.97 last10%=12.18 total=8.52s
+A_current   Easy English - BBC Learning English.mp3  1000ms calls=   327 p50=26.437 p95=52.394 max=68.15 last10%=52.06 total=8.98s
+D_cached    Easy English - BBC Learning English.mp3  1000ms calls=   327 p50=7.412 p95=15.509 max=26.46 last10%=14.70 total=2.47s
+D_vad_flag  Easy English - BBC Learning English.mp3  1000ms calls=   327 p50=5.815 p95=13.702 max=19.37 last10%=13.42 total=2.14s
+determinism {'file': 'real_recordings/mixed/clip_19_muffled.mp3', 'chunk_ms': 20, 'runs': 3, 'identical_spans': True, 'identical_classifications': True, 'classifications_equal_single_pass': True, 'identical_alerts': True, 'frames': 1000}
+determinism {'file': 'real_recordings/mixed/clip_19_muffled.mp3', 'chunk_ms': 250, 'runs': 3, 'identical_spans': True, 'identical_classifications': True, 'classifications_equal_single_pass': True, 'identical_alerts': True, 'frames': 1000}
+determinism {'file': 'real_recordings/mixed/clip_28_overlapping.mp3', 'chunk_ms': 20, 'runs': 3, 'identical_spans': True, 'identical_classifications': True, 'classifications_equal_single_pass': True, 'identical_alerts': True, 'frames': 1000}
+determinism {'file': 'real_recordings/mixed/clip_28_overlapping.mp3', 'chunk_ms': 250, 'runs': 3, 'identical_spans': True, 'identical_classifications': True, 'classifications_equal_single_pass': True, 'identical_alerts': True, 'frames': 1000}
+determinism {'file': 'real_recordings/negatives/Heroine Powerful Fight Scene #ParuParvathy Deepika Das #shorts #ytshorts #youtubeshorts.mp3', 'chunk_ms': 100, 'runs': 3, 'identical_spans': True, 'identical_classifications': True, 'classifications_equal_single_pass': True, 'identical_alerts': None, 'frames': 1700}

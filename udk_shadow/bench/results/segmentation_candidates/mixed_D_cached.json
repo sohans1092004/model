@@ -1,0 +1,8801 @@
+{
+ "summary": {
+  "D_cached|20": {
+   "recordings": 30,
+   "processed": 50,
+   "reference_segments": 50,
+   "excess_overlap_ms": 0,
+   "recordings_with_excess": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 1,
+   "missed_speech_ms": 0,
+   "recordings_missed_speech": 0,
+   "boundary_mismatch": 0,
+   "recordings_not_equal_reference": 0,
+   "extra_events": 0,
+   "recordings_extra_events": 0,
+   "escalated": 0,
+   "repeat_induced_trigger_all": 0,
+   "errors": 0,
+   "nondeterministic": 0,
+   "p50_call_ms": 0.298,
+   "p95_call_ms": 0.701,
+   "max_call_ms": 23.28,
+   "total_s": 15.33
+  },
+  "D_cached|100": {
+   "recordings": 30,
+   "processed": 50,
+   "reference_segments": 50,
+   "excess_overlap_ms": 0,
+   "recordings_with_excess": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 1,
+   "missed_speech_ms": 0,
+   "recordings_missed_speech": 0,
+   "boundary_mismatch": 0,
+   "recordings_not_equal_reference": 0,
+   "extra_events": 0,
+   "recordings_extra_events": 0,
+   "escalated": 0,
+   "repeat_induced_trigger_all": 0,
+   "errors": 0,
+   "nondeterministic": 0,
+   "p50_call_ms": 0.314,
+   "p95_call_ms": 0.724,
+   "max_call_ms": 4.73,
+   "total_s": 3.22
+  },
+  "D_cached|250": {
+   "recordings": 30,
+   "processed": 50,
+   "reference_segments": 50,
+   "excess_overlap_ms": 0,
+   "recordings_with_excess": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 1,
+   "missed_speech_ms": 0,
+   "recordings_missed_speech": 0,
+   "boundary_mismatch": 0,
+   "recordings_not_equal_reference": 0,
+   "extra_events": 0,
+   "recordings_extra_events": 0,
+   "escalated": 0,
+   "repeat_induced_trigger_all": 0,
+   "errors": 0,
+   "nondeterministic": 0,
+   "p50_call_ms": 0.328,
+   "p95_call_ms": 0.686,
+   "max_call_ms": 6.28,
+   "total_s": 1.44
+  },
+  "D_cached|500": {
+   "recordings": 30,
+   "processed": 50,
+   "reference_segments": 50,
+   "excess_overlap_ms": 0,
+   "recordings_with_excess": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 1,
+   "missed_speech_ms": 0,
+   "recordings_missed_speech": 0,
+   "boundary_mismatch": 0,
+   "recordings_not_equal_reference": 0,
+   "extra_events": 0,
+   "recordings_extra_events": 0,
+   "escalated": 0,
+   "repeat_induced_trigger_all": 0,
+   "errors": 0,
+   "nondeterministic": 0,
+   "p50_call_ms": 0.361,
+   "p95_call_ms": 0.674,
+   "max_call_ms": 9.3,
+   "total_s": 0.83
+  },
+  "D_cached|1000": {
+   "recordings": 30,
+   "processed": 50,
+   "reference_segments": 50,
+   "excess_overlap_ms": 0,
+   "recordings_with_excess": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 1,
+   "missed_speech_ms": 0,
+   "recordings_missed_speech": 0,
+   "boundary_mismatch": 0,
+   "recordings_not_equal_reference": 0,
+   "extra_events": 0,
+   "recordings_extra_events": 0,
+   "escalated": 0,
+   "repeat_induced_trigger_all": 0,
+   "errors": 0,
+   "nondeterministic": 0,
+   "p50_call_ms": 0.439,
+   "p95_call_ms": 0.735,
+   "max_call_ms": 22.62,
+   "total_s": 0.49
+  }
+ },
+ "rows": [
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4380,
+   "speech_ms": 1380,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.5398367130001986,
+   "p50_call_ms": 0.24519699999814293,
+   "p95_call_ms": 1.0570239999765363,
+   "max_call_ms": 7.918268999986822,
+   "processed_spans": [
+    [
+     19050,
+     23430
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_01_clean.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Get away from me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_03"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_03"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4380,
+   "speech_ms": 1380,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.09783338099998673,
+   "p50_call_ms": 0.2675959999862698,
+   "p95_call_ms": 0.937161999985392,
+   "max_call_ms": 1.9428089999848908,
+   "processed_spans": [
+    [
+     19050,
+     23430
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_01_clean.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "Get away from me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_03"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_03"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4380,
+   "speech_ms": 1380,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.05418146199997409,
+   "p50_call_ms": 0.409308000001829,
+   "p95_call_ms": 1.0152959999913946,
+   "max_call_ms": 2.984577999995963,
+   "processed_spans": [
+    [
+     19050,
+     23430
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_01_clean.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Get away from me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_03"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_03"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4380,
+   "speech_ms": 1380,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.027044944000067517,
+   "p50_call_ms": 0.3722129999914614,
+   "p95_call_ms": 1.178344999999581,
+   "max_call_ms": 1.4893329999949856,
+   "processed_spans": [
+    [
+     19050,
+     23430
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_01_clean.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Get away from me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_03"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_03"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4380,
+   "speech_ms": 1380,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.017087267999954747,
+   "p50_call_ms": 0.5113370000060513,
+   "p95_call_ms": 1.1657780000007278,
+   "max_call_ms": 1.3206300000092597,
+   "processed_spans": [
+    [
+     19050,
+     23430
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_01_clean.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Get away from me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_03"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_03"
+    ]
+   ]
+  },
+  {
+   "processed": 5,
+   "reference_segments": 5,
+   "overlap_ms": 2520,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 1,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 28020,
+   "speech_ms": 11700,
+   "designed_overlap_ms": 2520,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.6328190600004007,
+   "p50_call_ms": 0.34947699998610915,
+   "p95_call_ms": 0.9365500000058091,
+   "max_call_ms": 5.752956000009135,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     3240,
+     7740
+    ],
+    [
+     8100,
+     19080
+    ],
+    [
+     17880,
+     28860
+    ],
+    [
+     27540,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_02_noisy.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Someone is following me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ]
+   ]
+  },
+  {
+   "processed": 5,
+   "reference_segments": 5,
+   "overlap_ms": 2520,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 1,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 28020,
+   "speech_ms": 11700,
+   "designed_overlap_ms": 2520,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.10247872100023869,
+   "p50_call_ms": 0.32784499998683714,
+   "p95_call_ms": 0.6574170000135382,
+   "max_call_ms": 1.584350999991102,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     3240,
+     7740
+    ],
+    [
+     8100,
+     19080
+    ],
+    [
+     17880,
+     28860
+    ],
+    [
+     27540,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_02_noisy.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "Someone is following me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ]
+   ]
+  },
+  {
+   "processed": 5,
+   "reference_segments": 5,
+   "overlap_ms": 2520,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 1,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 28020,
+   "speech_ms": 11700,
+   "designed_overlap_ms": 2520,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.05916533899988963,
+   "p50_call_ms": 0.39147199998978977,
+   "p95_call_ms": 1.055927000010115,
+   "max_call_ms": 1.7276920000028895,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     3240,
+     7740
+    ],
+    [
+     8100,
+     19080
+    ],
+    [
+     17880,
+     28860
+    ],
+    [
+     27540,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_02_noisy.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Someone is following me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ]
+   ]
+  },
+  {
+   "processed": 5,
+   "reference_segments": 5,
+   "overlap_ms": 2520,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 1,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 28020,
+   "speech_ms": 11700,
+   "designed_overlap_ms": 2520,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.043448936000032745,
+   "p50_call_ms": 0.6263900000078593,
+   "p95_call_ms": 1.2494430000060675,
+   "max_call_ms": 5.369911000002503,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     3240,
+     7740
+    ],
+    [
+     8100,
+     19080
+    ],
+    [
+     17880,
+     28860
+    ],
+    [
+     27540,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_02_noisy.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Someone is following me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ]
+   ]
+  },
+  {
+   "processed": 5,
+   "reference_segments": 5,
+   "overlap_ms": 2520,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 1,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 28020,
+   "speech_ms": 11700,
+   "designed_overlap_ms": 2520,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.02303778999984729,
+   "p50_call_ms": 0.5406949999837707,
+   "p95_call_ms": 1.0860860000150296,
+   "max_call_ms": 5.767277999979115,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     3240,
+     7740
+    ],
+    [
+     8100,
+     19080
+    ],
+    [
+     17880,
+     28860
+    ],
+    [
+     27540,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_02_noisy.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Someone is following me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_04"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4590,
+   "speech_ms": 1590,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.4947403779993067,
+   "p50_call_ms": 0.29732600000897946,
+   "p95_call_ms": 0.7571350000148414,
+   "max_call_ms": 0.8874069999933454,
+   "processed_spans": [
+    [
+     1770,
+     6360
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_03_muffled.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I need help right now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_05"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_05"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4590,
+   "speech_ms": 1590,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.08884548199975484,
+   "p50_call_ms": 0.2900899999929152,
+   "p95_call_ms": 0.5667029999756323,
+   "max_call_ms": 0.7851350000009916,
+   "processed_spans": [
+    [
+     1770,
+     6360
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_03_muffled.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "I need help right now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_05"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_05"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4590,
+   "speech_ms": 1590,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.06357015199986904,
+   "p50_call_ms": 0.532775000010588,
+   "p95_call_ms": 0.923633000013524,
+   "max_call_ms": 0.9569759999976668,
+   "processed_spans": [
+    [
+     1770,
+     6360
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_03_muffled.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I need help right now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_05"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_05"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4590,
+   "speech_ms": 1590,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.021597016999834295,
+   "p50_call_ms": 0.3513159999783966,
+   "p95_call_ms": 0.5925399999853198,
+   "max_call_ms": 0.664925999984689,
+   "processed_spans": [
+    [
+     1770,
+     6360
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_03_muffled.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I need help right now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_05"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_05"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4590,
+   "speech_ms": 1590,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.013180546000086224,
+   "p50_call_ms": 0.4197949999991124,
+   "p95_call_ms": 0.6471110000063618,
+   "max_call_ms": 0.6939399999907891,
+   "processed_spans": [
+    [
+     1770,
+     6360
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_03_muffled.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I need help right now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_05"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_05"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4590,
+   "speech_ms": 2070,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.47757564499991645,
+   "p50_call_ms": 0.28350700000601137,
+   "p95_call_ms": 0.5791830000134723,
+   "max_call_ms": 7.612167999980102,
+   "processed_spans": [
+    [
+     0,
+     4590
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_04_overlapping.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Don't touch me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_06"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_06"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4590,
+   "speech_ms": 2070,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.14894464200000357,
+   "p50_call_ms": 0.49960200001919475,
+   "p95_call_ms": 0.9130210000023453,
+   "max_call_ms": 1.070084999980736,
+   "processed_spans": [
+    [
+     0,
+     4590
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_04_overlapping.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "Don't touch me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_06"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_06"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4590,
+   "speech_ms": 2070,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.0539540559998386,
+   "p50_call_ms": 0.377496999988125,
+   "p95_call_ms": 0.9676919999890288,
+   "max_call_ms": 1.3014889999851675,
+   "processed_spans": [
+    [
+     0,
+     4590
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_04_overlapping.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Don't touch me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_06"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_06"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4590,
+   "speech_ms": 2070,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.021538243000065904,
+   "p50_call_ms": 0.35387099998729354,
+   "p95_call_ms": 0.5707180000058543,
+   "max_call_ms": 0.7561760000101003,
+   "processed_spans": [
+    [
+     0,
+     4590
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_04_overlapping.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Don't touch me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_06"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_06"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4590,
+   "speech_ms": 2070,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.014356442000064362,
+   "p50_call_ms": 0.4684379999844168,
+   "p95_call_ms": 0.7218140000020412,
+   "max_call_ms": 0.9438280000040322,
+   "processed_spans": [
+    [
+     0,
+     4590
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_04_overlapping.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Don't touch me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_06"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_06"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4230,
+   "speech_ms": 1230,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.5486268639992602,
+   "p50_call_ms": 0.3632030000062514,
+   "p95_call_ms": 0.6601039999907243,
+   "max_call_ms": 4.055799000013849,
+   "processed_spans": [
+    [
+     5340,
+     9570
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_05_clean.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm being followed",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_07"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_07"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4230,
+   "speech_ms": 1230,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.12109056999960899,
+   "p50_call_ms": 0.4011860000048273,
+   "p95_call_ms": 0.8917659999951866,
+   "max_call_ms": 1.1092849999840837,
+   "processed_spans": [
+    [
+     5340,
+     9570
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_05_clean.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "I'm being followed",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_07"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_07"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4230,
+   "speech_ms": 1230,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.06098991699997214,
+   "p50_call_ms": 0.5319249999899966,
+   "p95_call_ms": 0.8640160000084052,
+   "max_call_ms": 1.054643999992777,
+   "processed_spans": [
+    [
+     5340,
+     9570
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_05_clean.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm being followed",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_07"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_07"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4230,
+   "speech_ms": 1230,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.021364811999916355,
+   "p50_call_ms": 0.3504469999882076,
+   "p95_call_ms": 0.6215609999742355,
+   "max_call_ms": 0.7621869999923092,
+   "processed_spans": [
+    [
+     5340,
+     9570
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_05_clean.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm being followed",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_07"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_07"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4230,
+   "speech_ms": 1230,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.013542061999970656,
+   "p50_call_ms": 0.4285550000133753,
+   "p95_call_ms": 0.6813809999925979,
+   "max_call_ms": 0.8894279999935861,
+   "processed_spans": [
+    [
+     5340,
+     9570
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_05_clean.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm being followed",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_07"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_07"
+    ]
+   ]
+  },
+  {
+   "processed": 3,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 13620,
+   "speech_ms": 4980,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.5160662460003493,
+   "p50_call_ms": 0.2840810000179772,
+   "p95_call_ms": 0.6878949999986617,
+   "max_call_ms": 6.022709999996323,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     17730,
+     22320
+    ],
+    [
+     22590,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_06_noisy.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Help me, please",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ]
+  },
+  {
+   "processed": 3,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 13620,
+   "speech_ms": 4980,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.1096784789998253,
+   "p50_call_ms": 0.3581729999950767,
+   "p95_call_ms": 0.6413589999851865,
+   "max_call_ms": 2.3244330000125046,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     17730,
+     22320
+    ],
+    [
+     22590,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_06_noisy.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "Help me, please",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ]
+  },
+  {
+   "processed": 3,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 13620,
+   "speech_ms": 4980,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.04196957699991799,
+   "p50_call_ms": 0.30319800001166186,
+   "p95_call_ms": 0.6627719999983128,
+   "max_call_ms": 1.057977999977311,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     17730,
+     22320
+    ],
+    [
+     22590,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_06_noisy.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Help me, please",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ]
+  },
+  {
+   "processed": 3,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 13620,
+   "speech_ms": 4980,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.022683174000036388,
+   "p50_call_ms": 0.3416179999931046,
+   "p95_call_ms": 0.6759219999992183,
+   "max_call_ms": 0.6930080000131511,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     17730,
+     22320
+    ],
+    [
+     22590,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_06_noisy.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Help me, please",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ]
+  },
+  {
+   "processed": 3,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 13620,
+   "speech_ms": 4980,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.013777234000002636,
+   "p50_call_ms": 0.41762600000083694,
+   "p95_call_ms": 0.7239609999771801,
+   "max_call_ms": 0.9025759999872207,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     17730,
+     22320
+    ],
+    [
+     22590,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_06_noisy.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Help me, please",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4860,
+   "speech_ms": 1860,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.571738239999604,
+   "p50_call_ms": 0.31595799998740404,
+   "p95_call_ms": 0.8208609999940109,
+   "max_call_ms": 1.2962350000123024,
+   "processed_spans": [
+    [
+     24300,
+     29160
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_07_muffled.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm scared, stay back",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_09"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_09"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4860,
+   "speech_ms": 1860,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.08510914200050479,
+   "p50_call_ms": 0.26211800002329255,
+   "p95_call_ms": 0.5771069999980227,
+   "max_call_ms": 1.7846089999977721,
+   "processed_spans": [
+    [
+     24300,
+     29160
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_07_muffled.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "I'm scared, stay back",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_09"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_09"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4860,
+   "speech_ms": 1860,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.04224006399996938,
+   "p50_call_ms": 0.32797900001924063,
+   "p95_call_ms": 0.9527360000163299,
+   "max_call_ms": 1.1390540000206784,
+   "processed_spans": [
+    [
+     24300,
+     29160
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_07_muffled.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm scared, stay back",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_09"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_09"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4860,
+   "speech_ms": 1860,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.0266079650000961,
+   "p50_call_ms": 0.47632199999725344,
+   "p95_call_ms": 0.705210000006673,
+   "max_call_ms": 1.0721390000014708,
+   "processed_spans": [
+    [
+     24300,
+     29160
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_07_muffled.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm scared, stay back",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_09"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_09"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4860,
+   "speech_ms": 1860,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.013875334999909228,
+   "p50_call_ms": 0.4213729999946736,
+   "p95_call_ms": 0.8096029999933307,
+   "max_call_ms": 1.1436549999928047,
+   "processed_spans": [
+    [
+     24300,
+     29160
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_07_muffled.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm scared, stay back",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_09"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_09"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5100,
+   "speech_ms": 2100,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.5607319239998958,
+   "p50_call_ms": 0.4150130000084573,
+   "p95_call_ms": 0.5981599999813625,
+   "max_call_ms": 5.073153000012098,
+   "processed_spans": [
+    [
+     1050,
+     6150
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_08_overlapping.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Let go of me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_10"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_10"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5100,
+   "speech_ms": 2100,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.14424022900016098,
+   "p50_call_ms": 0.4860800000017207,
+   "p95_call_ms": 0.8735050000154843,
+   "max_call_ms": 1.638541000005489,
+   "processed_spans": [
+    [
+     1050,
+     6150
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_08_overlapping.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "Let go of me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_10"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_10"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5100,
+   "speech_ms": 2100,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.03775265999985322,
+   "p50_call_ms": 0.3188589999751912,
+   "p95_call_ms": 0.555798999982926,
+   "max_call_ms": 0.6988060000026053,
+   "processed_spans": [
+    [
+     1050,
+     6150
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_08_overlapping.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Let go of me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_10"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_10"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5100,
+   "speech_ms": 2100,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.021521118999913824,
+   "p50_call_ms": 0.33603600002152234,
+   "p95_call_ms": 0.6058240000186288,
+   "max_call_ms": 0.7949489999816706,
+   "processed_spans": [
+    [
+     1050,
+     6150
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_08_overlapping.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Let go of me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_10"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_10"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5100,
+   "speech_ms": 2100,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.013610994000003984,
+   "p50_call_ms": 0.485523000008925,
+   "p95_call_ms": 0.6493930000033288,
+   "max_call_ms": 0.7131499999957214,
+   "processed_spans": [
+    [
+     1050,
+     6150
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_08_overlapping.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Let go of me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_10"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_10"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4650,
+   "speech_ms": 1650,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.37078356200029816,
+   "p50_call_ms": 0.2383309999913763,
+   "p95_call_ms": 0.5040679999979147,
+   "max_call_ms": 0.712659000015492,
+   "processed_spans": [
+    [
+     24900,
+     29550
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_09_clean.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I need the police here",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_11"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_11"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4650,
+   "speech_ms": 1650,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.09162829099983583,
+   "p50_call_ms": 0.29056799999693794,
+   "p95_call_ms": 0.6370670000137579,
+   "max_call_ms": 1.4435809999895355,
+   "processed_spans": [
+    [
+     24900,
+     29550
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_09_clean.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "I need the police here",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_11"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_11"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4650,
+   "speech_ms": 1650,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.03364458199996534,
+   "p50_call_ms": 0.26538299999856463,
+   "p95_call_ms": 0.538530000000037,
+   "max_call_ms": 0.6243939999990289,
+   "processed_spans": [
+    [
+     24900,
+     29550
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_09_clean.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I need the police here",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_11"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_11"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4650,
+   "speech_ms": 1650,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.02409017699997662,
+   "p50_call_ms": 0.3829800000119121,
+   "p95_call_ms": 0.8853229999772338,
+   "max_call_ms": 1.1033060000045225,
+   "processed_spans": [
+    [
+     24900,
+     29550
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_09_clean.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I need the police here",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_11"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_11"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4650,
+   "speech_ms": 1650,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.013238135000023021,
+   "p50_call_ms": 0.3811519999885604,
+   "p95_call_ms": 0.7465730000149051,
+   "max_call_ms": 0.9692449999931796,
+   "processed_spans": [
+    [
+     24900,
+     29550
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_09_clean.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I need the police here",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_11"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_11"
+    ]
+   ]
+  },
+  {
+   "processed": 3,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 10380,
+   "speech_ms": 3990,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.46426017699997146,
+   "p50_call_ms": 0.2988929999787615,
+   "p95_call_ms": 0.6055690000152936,
+   "max_call_ms": 8.82597099999316,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     21000,
+     25890
+    ],
+    [
+     26130,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_10_noisy.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Someone is trying to hurt me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ]
+   ]
+  },
+  {
+   "processed": 3,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 10380,
+   "speech_ms": 3990,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.08875375199991709,
+   "p50_call_ms": 0.28164100001504266,
+   "p95_call_ms": 0.5916899999931502,
+   "max_call_ms": 0.6820419999939986,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     21000,
+     25890
+    ],
+    [
+     26130,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_10_noisy.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "Someone is trying to hurt me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ]
+   ]
+  },
+  {
+   "processed": 3,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 10380,
+   "speech_ms": 3990,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.0398256400000605,
+   "p50_call_ms": 0.3113770000027216,
+   "p95_call_ms": 0.6397209999988718,
+   "max_call_ms": 0.7806999999786512,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     21000,
+     25890
+    ],
+    [
+     26130,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_10_noisy.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Someone is trying to hurt me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ]
+   ]
+  },
+  {
+   "processed": 3,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 10380,
+   "speech_ms": 3990,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.02234330300007059,
+   "p50_call_ms": 0.3451240000060807,
+   "p95_call_ms": 0.7012149999923167,
+   "max_call_ms": 0.7359259999759615,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     21000,
+     25890
+    ],
+    [
+     26130,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_10_noisy.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Someone is trying to hurt me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ]
+   ]
+  },
+  {
+   "processed": 3,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 10380,
+   "speech_ms": 3990,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.01445972900006609,
+   "p50_call_ms": 0.4554470000073252,
+   "p95_call_ms": 0.7984979999946518,
+   "max_call_ms": 0.841557000001103,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     21000,
+     25890
+    ],
+    [
+     26130,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_10_noisy.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Someone is trying to hurt me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_12"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4440,
+   "speech_ms": 1440,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.4007725869996648,
+   "p50_call_ms": 0.25329699997200805,
+   "p95_call_ms": 0.538473000005979,
+   "max_call_ms": 1.2819799999874704,
+   "processed_spans": [
+    [
+     18060,
+     22500
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_11_muffled.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Please don't hurt me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_13"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_13"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4440,
+   "speech_ms": 1440,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.09257756899992842,
+   "p50_call_ms": 0.2645940000149949,
+   "p95_call_ms": 0.8997089999809305,
+   "max_call_ms": 2.6572589999886986,
+   "processed_spans": [
+    [
+     18060,
+     22500
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_11_muffled.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "Please don't hurt me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_13"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_13"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4440,
+   "speech_ms": 1440,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.035547501000024795,
+   "p50_call_ms": 0.270439000018996,
+   "p95_call_ms": 0.5939669999861508,
+   "max_call_ms": 1.1558349999916118,
+   "processed_spans": [
+    [
+     18060,
+     22500
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_11_muffled.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Please don't hurt me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_13"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_13"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4440,
+   "speech_ms": 1440,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.02008836600015229,
+   "p50_call_ms": 0.3083170000195423,
+   "p95_call_ms": 0.6156179999834421,
+   "max_call_ms": 0.6532740000011472,
+   "processed_spans": [
+    [
+     18060,
+     22500
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_11_muffled.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Please don't hurt me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_13"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_13"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4440,
+   "speech_ms": 1440,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.013102161999995587,
+   "p50_call_ms": 0.34127700001818084,
+   "p95_call_ms": 0.7756990000018504,
+   "max_call_ms": 0.8702810000045247,
+   "processed_spans": [
+    [
+     18060,
+     22500
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_11_muffled.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Please don't hurt me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_13"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_13"
+    ]
+   ]
+  },
+  {
+   "processed": 3,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 9630,
+   "speech_ms": 3510,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.48279814999978043,
+   "p50_call_ms": 0.27650299998072114,
+   "p95_call_ms": 0.7294810000075813,
+   "max_call_ms": 5.76251300000763,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     21630,
+     26460
+    ],
+    [
+     26820,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_12_noisy.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I don't feel safe here",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ]
+   ]
+  },
+  {
+   "processed": 3,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 9630,
+   "speech_ms": 3510,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.10101065900016692,
+   "p50_call_ms": 0.2822099999946204,
+   "p95_call_ms": 0.7744760000036877,
+   "max_call_ms": 1.4915129999906185,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     21630,
+     26460
+    ],
+    [
+     26820,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_12_noisy.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "I don't feel safe here",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ]
+   ]
+  },
+  {
+   "processed": 3,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 9630,
+   "speech_ms": 3510,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.039272315000033586,
+   "p50_call_ms": 0.31022699999994074,
+   "p95_call_ms": 0.6236319999857187,
+   "max_call_ms": 0.7362199999931818,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     21630,
+     26460
+    ],
+    [
+     26820,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_12_noisy.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I don't feel safe here",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ]
+   ]
+  },
+  {
+   "processed": 3,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 9630,
+   "speech_ms": 3510,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.024474540999960936,
+   "p50_call_ms": 0.3568430000200351,
+   "p95_call_ms": 0.7323629999973491,
+   "max_call_ms": 0.9041430000138462,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     21630,
+     26460
+    ],
+    [
+     26820,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_12_noisy.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I don't feel safe here",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ]
+   ]
+  },
+  {
+   "processed": 3,
+   "reference_segments": 3,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 9630,
+   "speech_ms": 3510,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.015603601999970351,
+   "p50_call_ms": 0.4192240000122638,
+   "p95_call_ms": 0.8571779999897444,
+   "max_call_ms": 1.1997919999942042,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     21630,
+     26460
+    ],
+    [
+     26820,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_12_noisy.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I don't feel safe here",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_14"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4350,
+   "speech_ms": 1350,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.5683921699997825,
+   "p50_call_ms": 0.3245910000089225,
+   "p95_call_ms": 0.8590569999853415,
+   "max_call_ms": 2.2121209999852454,
+   "processed_spans": [
+    [
+     11490,
+     15840
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_13_clean.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Stay away from me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_15"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_15"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4350,
+   "speech_ms": 1350,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.0844166910003139,
+   "p50_call_ms": 0.29053700001213656,
+   "p95_call_ms": 0.5287909999935891,
+   "max_call_ms": 0.7896159999916108,
+   "processed_spans": [
+    [
+     11490,
+     15840
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_13_clean.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "Stay away from me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_15"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_15"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4350,
+   "speech_ms": 1350,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.03863430800009837,
+   "p50_call_ms": 0.31596699997749056,
+   "p95_call_ms": 0.5820089999986067,
+   "max_call_ms": 1.6655160000027536,
+   "processed_spans": [
+    [
+     11490,
+     15840
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_13_clean.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Stay away from me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_15"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_15"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4350,
+   "speech_ms": 1350,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.04656976600003304,
+   "p50_call_ms": 0.8247460000063711,
+   "p95_call_ms": 1.3282589999903394,
+   "max_call_ms": 1.3967670000170074,
+   "processed_spans": [
+    [
+     11490,
+     15840
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_13_clean.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Stay away from me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_15"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_15"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4350,
+   "speech_ms": 1350,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.013983980000006113,
+   "p50_call_ms": 0.47322399998961373,
+   "p95_call_ms": 0.7133400000043366,
+   "max_call_ms": 0.7312859999899501,
+   "processed_spans": [
+    [
+     11490,
+     15840
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_13_clean.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Stay away from me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_15"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_15"
+    ]
+   ]
+  },
+  {
+   "processed": 4,
+   "reference_segments": 4,
+   "overlap_ms": 1410,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 22050,
+   "speech_ms": 9720,
+   "designed_overlap_ms": 1410,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.5160372239995752,
+   "p50_call_ms": 0.3149640000117415,
+   "p95_call_ms": 0.7646310000097856,
+   "max_call_ms": 1.7652660000067044,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     9030,
+     12990
+    ],
+    [
+     13530,
+     24510
+    ],
+    [
+     23100,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_14_noisy.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm in danger",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ]
+   ]
+  },
+  {
+   "processed": 4,
+   "reference_segments": 4,
+   "overlap_ms": 1410,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 22050,
+   "speech_ms": 9720,
+   "designed_overlap_ms": 1410,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.10709283899993238,
+   "p50_call_ms": 0.3406310000002577,
+   "p95_call_ms": 0.7229519999896183,
+   "max_call_ms": 0.8449270000028264,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     9030,
+     12990
+    ],
+    [
+     13530,
+     24510
+    ],
+    [
+     23100,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_14_noisy.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "I'm in danger",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ]
+   ]
+  },
+  {
+   "processed": 4,
+   "reference_segments": 4,
+   "overlap_ms": 1410,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 22050,
+   "speech_ms": 9720,
+   "designed_overlap_ms": 1410,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.06637116200008109,
+   "p50_call_ms": 0.36536800001840675,
+   "p95_call_ms": 2.3270450000154597,
+   "max_call_ms": 6.284912000012355,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     9030,
+     12990
+    ],
+    [
+     13530,
+     24510
+    ],
+    [
+     23100,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_14_noisy.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm in danger",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ]
+   ]
+  },
+  {
+   "processed": 4,
+   "reference_segments": 4,
+   "overlap_ms": 1410,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 22050,
+   "speech_ms": 9720,
+   "designed_overlap_ms": 1410,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.0394991310000421,
+   "p50_call_ms": 0.613455999996404,
+   "p95_call_ms": 1.2191210000196406,
+   "max_call_ms": 1.4313159999801428,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     9030,
+     12990
+    ],
+    [
+     13530,
+     24510
+    ],
+    [
+     23100,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_14_noisy.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm in danger",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ]
+   ]
+  },
+  {
+   "processed": 4,
+   "reference_segments": 4,
+   "overlap_ms": 1410,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 22050,
+   "speech_ms": 9720,
+   "designed_overlap_ms": 1410,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.024368214000048738,
+   "p50_call_ms": 0.7716959999868322,
+   "p95_call_ms": 1.227411000002121,
+   "max_call_ms": 1.4198810000038975,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     9030,
+     12990
+    ],
+    [
+     13530,
+     24510
+    ],
+    [
+     23100,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_14_noisy.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm in danger",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_16"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4890,
+   "speech_ms": 1890,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.5449823940001011,
+   "p50_call_ms": 0.34736100002419334,
+   "p95_call_ms": 0.6927290000078301,
+   "max_call_ms": 2.106005000001687,
+   "processed_spans": [
+    [
+     13320,
+     18210
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_15_muffled.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Somebody help me now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_17"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_17"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4890,
+   "speech_ms": 1890,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.11042793400034157,
+   "p50_call_ms": 0.2914669999825037,
+   "p95_call_ms": 0.7999899999902027,
+   "max_call_ms": 1.3387110000167013,
+   "processed_spans": [
+    [
+     13320,
+     18210
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_15_muffled.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "Somebody help me now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_17"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_17"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4890,
+   "speech_ms": 1890,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.05384246599993503,
+   "p50_call_ms": 0.42518399999380563,
+   "p95_call_ms": 0.854303000011214,
+   "max_call_ms": 0.9902220000128636,
+   "processed_spans": [
+    [
+     13320,
+     18210
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_15_muffled.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Somebody help me now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_17"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_17"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4890,
+   "speech_ms": 1890,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.03851212600002896,
+   "p50_call_ms": 0.4755289999991419,
+   "p95_call_ms": 0.9997230000067248,
+   "max_call_ms": 7.961295000001201,
+   "processed_spans": [
+    [
+     13320,
+     18210
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_15_muffled.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Somebody help me now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_17"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_17"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4890,
+   "speech_ms": 1890,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.019120326999853887,
+   "p50_call_ms": 0.5425629999820103,
+   "p95_call_ms": 1.0760869999728584,
+   "max_call_ms": 1.1867110000025605,
+   "processed_spans": [
+    [
+     13320,
+     18210
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_15_muffled.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Somebody help me now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_17"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_17"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5280,
+   "speech_ms": 2520,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.6002353290001281,
+   "p50_call_ms": 0.31824500001675915,
+   "p95_call_ms": 0.8518250000122407,
+   "max_call_ms": 3.8588530000254195,
+   "processed_spans": [
+    [
+     24720,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_16_overlapping.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I want to go home now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_18"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_18"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5280,
+   "speech_ms": 2520,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.14685219499986601,
+   "p50_call_ms": 0.46120700000074066,
+   "p95_call_ms": 0.9429889999807983,
+   "max_call_ms": 3.3255360000055134,
+   "processed_spans": [
+    [
+     24720,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_16_overlapping.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "I want to go home now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_18"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_18"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5280,
+   "speech_ms": 2520,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.06290137499991033,
+   "p50_call_ms": 0.467372000002797,
+   "p95_call_ms": 1.0289600000135124,
+   "max_call_ms": 4.183252000018456,
+   "processed_spans": [
+    [
+     24720,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_16_overlapping.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I want to go home now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_18"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_18"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5280,
+   "speech_ms": 2520,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.04404571199995644,
+   "p50_call_ms": 0.5063619999816638,
+   "p95_call_ms": 1.345834999995077,
+   "max_call_ms": 9.295739000009462,
+   "processed_spans": [
+    [
+     24720,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_16_overlapping.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I want to go home now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_18"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_18"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5280,
+   "speech_ms": 2520,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.019915818999947987,
+   "p50_call_ms": 0.6464909999976953,
+   "p95_call_ms": 1.0345320000055835,
+   "max_call_ms": 1.2484960000165302,
+   "processed_spans": [
+    [
+     24720,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_16_overlapping.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I want to go home now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_18"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_18"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4500,
+   "speech_ms": 1500,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.4968556410002236,
+   "p50_call_ms": 0.29272300000116047,
+   "p95_call_ms": 0.7755540000005112,
+   "max_call_ms": 3.0254119999995055,
+   "processed_spans": [
+    [
+     1260,
+     5760
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_17_muffled.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Please call for help",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_19"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_19"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4500,
+   "speech_ms": 1500,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.10753672199970765,
+   "p50_call_ms": 0.3498480000132531,
+   "p95_call_ms": 0.7503379999889148,
+   "max_call_ms": 3.648163999997678,
+   "processed_spans": [
+    [
+     1260,
+     5760
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_17_muffled.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "Please call for help",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_19"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_19"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4500,
+   "speech_ms": 1500,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.040276584999872966,
+   "p50_call_ms": 0.33114800001499134,
+   "p95_call_ms": 0.8046880000165402,
+   "max_call_ms": 0.9022160000142776,
+   "processed_spans": [
+    [
+     1260,
+     5760
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_17_muffled.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Please call for help",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_19"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_19"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4500,
+   "speech_ms": 1500,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.03592506200010348,
+   "p50_call_ms": 0.6056230000126561,
+   "p95_call_ms": 0.9866550000197094,
+   "max_call_ms": 1.0535279999999148,
+   "processed_spans": [
+    [
+     1260,
+     5760
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_17_muffled.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Please call for help",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_19"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_19"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4500,
+   "speech_ms": 1500,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.021814769000030765,
+   "p50_call_ms": 0.7053040000073452,
+   "p95_call_ms": 1.102212000006375,
+   "max_call_ms": 1.309430000020484,
+   "processed_spans": [
+    [
+     1260,
+     5760
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_17_muffled.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Please call for help",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_19"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_19"
+    ]
+   ]
+  },
+  {
+   "processed": 4,
+   "reference_segments": 4,
+   "overlap_ms": 1500,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 26370,
+   "speech_ms": 12300,
+   "designed_overlap_ms": 1500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.5110705190003273,
+   "p50_call_ms": 0.31441999999515247,
+   "p95_call_ms": 0.7128889999989951,
+   "max_call_ms": 1.4743569999779993,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     5040,
+     9720
+    ],
+    [
+     9930,
+     20910
+    ],
+    [
+     19410,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_18_noisy.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I need to get out of here",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ]
+   ]
+  },
+  {
+   "processed": 4,
+   "reference_segments": 4,
+   "overlap_ms": 1500,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 26370,
+   "speech_ms": 12300,
+   "designed_overlap_ms": 1500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.11270136499979344,
+   "p50_call_ms": 0.3306429999838656,
+   "p95_call_ms": 0.9732839999969656,
+   "max_call_ms": 1.8285660000003645,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     5040,
+     9720
+    ],
+    [
+     9930,
+     20910
+    ],
+    [
+     19410,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_18_noisy.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "I need to get out of here",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ]
+   ]
+  },
+  {
+   "processed": 4,
+   "reference_segments": 4,
+   "overlap_ms": 1500,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 26370,
+   "speech_ms": 12300,
+   "designed_overlap_ms": 1500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.047569271000014623,
+   "p50_call_ms": 0.35562499999741704,
+   "p95_call_ms": 0.7663889999776075,
+   "max_call_ms": 2.129426000010426,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     5040,
+     9720
+    ],
+    [
+     9930,
+     20910
+    ],
+    [
+     19410,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_18_noisy.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I need to get out of here",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ]
+   ]
+  },
+  {
+   "processed": 4,
+   "reference_segments": 4,
+   "overlap_ms": 1500,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 26370,
+   "speech_ms": 12300,
+   "designed_overlap_ms": 1500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.044143132000016294,
+   "p50_call_ms": 0.6552749999855223,
+   "p95_call_ms": 1.705925000010211,
+   "max_call_ms": 2.3997209999890856,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     5040,
+     9720
+    ],
+    [
+     9930,
+     20910
+    ],
+    [
+     19410,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_18_noisy.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I need to get out of here",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ]
+   ]
+  },
+  {
+   "processed": 4,
+   "reference_segments": 4,
+   "overlap_ms": 1500,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 26370,
+   "speech_ms": 12300,
+   "designed_overlap_ms": 1500,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.01767078099999253,
+   "p50_call_ms": 0.5143180000004577,
+   "p95_call_ms": 1.0620820000042386,
+   "max_call_ms": 1.3386029999935545,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     5040,
+     9720
+    ],
+    [
+     9930,
+     20910
+    ],
+    [
+     19410,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_18_noisy.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I need to get out of here",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_20"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4470,
+   "speech_ms": 1470,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.5347799350002731,
+   "p50_call_ms": 0.28062499998782187,
+   "p95_call_ms": 0.7508099999995466,
+   "max_call_ms": 23.280690000007098,
+   "processed_spans": [
+    [
+     6510,
+     10980
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_19_muffled.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Please leave me alone",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4470,
+   "speech_ms": 1470,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.09476381699971625,
+   "p50_call_ms": 0.3546240000105172,
+   "p95_call_ms": 0.576050999995914,
+   "max_call_ms": 0.8746860000030665,
+   "processed_spans": [
+    [
+     6510,
+     10980
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_19_muffled.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "Please leave me alone",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4470,
+   "speech_ms": 1470,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.04050742200007562,
+   "p50_call_ms": 0.3374610000150824,
+   "p95_call_ms": 0.5511079999962476,
+   "max_call_ms": 0.7772860000159199,
+   "processed_spans": [
+    [
+     6510,
+     10980
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_19_muffled.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Please leave me alone",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4470,
+   "speech_ms": 1470,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.02234777499998586,
+   "p50_call_ms": 0.3605079999999816,
+   "p95_call_ms": 0.671274000012545,
+   "max_call_ms": 1.9062199999950735,
+   "processed_spans": [
+    [
+     6510,
+     10980
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_19_muffled.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Please leave me alone",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4470,
+   "speech_ms": 1470,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.013181569999971998,
+   "p50_call_ms": 0.45194400001946633,
+   "p95_call_ms": 0.6456160000141153,
+   "max_call_ms": 0.7801600000050257,
+   "processed_spans": [
+    [
+     6510,
+     10980
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_19_muffled.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Please leave me alone",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4560,
+   "speech_ms": 1560,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.4781534360001558,
+   "p50_call_ms": 0.24769299997728922,
+   "p95_call_ms": 0.9389579999776743,
+   "max_call_ms": 3.538265999992518,
+   "processed_spans": [
+    [
+     23010,
+     27570
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_20_muffled.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I think I'm being watched",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4560,
+   "speech_ms": 1560,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.09273012899990363,
+   "p50_call_ms": 0.2947690000212333,
+   "p95_call_ms": 0.5612519999829146,
+   "max_call_ms": 1.206010999993623,
+   "processed_spans": [
+    [
+     23010,
+     27570
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_20_muffled.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "I think I'm being watched",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4560,
+   "speech_ms": 1560,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.037476706000035165,
+   "p50_call_ms": 0.3136199999858036,
+   "p95_call_ms": 0.6309009999938553,
+   "max_call_ms": 0.935367000010956,
+   "processed_spans": [
+    [
+     23010,
+     27570
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_20_muffled.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I think I'm being watched",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4560,
+   "speech_ms": 1560,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.02053036400005226,
+   "p50_call_ms": 0.3126379999969231,
+   "p95_call_ms": 0.61959600000705,
+   "max_call_ms": 1.0603700000046956,
+   "processed_spans": [
+    [
+     23010,
+     27570
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_20_muffled.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I think I'm being watched",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4560,
+   "speech_ms": 1560,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.012219724000004817,
+   "p50_call_ms": 0.3875350000157596,
+   "p95_call_ms": 0.6988190000072336,
+   "max_call_ms": 0.8205070000144588,
+   "processed_spans": [
+    [
+     23010,
+     27570
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_20_muffled.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I think I'm being watched",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4620,
+   "speech_ms": 1620,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.4211841499997604,
+   "p50_call_ms": 0.26848799998901995,
+   "p95_call_ms": 0.5600350000065646,
+   "max_call_ms": 1.321517999997468,
+   "processed_spans": [
+    [
+     12900,
+     17520
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_21_clean.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Call the police now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_01"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_01"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4620,
+   "speech_ms": 1620,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.11402962900012881,
+   "p50_call_ms": 0.4229679999809832,
+   "p95_call_ms": 0.6495350000079725,
+   "max_call_ms": 1.2556130000120902,
+   "processed_spans": [
+    [
+     12900,
+     17520
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_21_clean.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "Call the police now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_01"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_01"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4620,
+   "speech_ms": 1620,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.03723177800000599,
+   "p50_call_ms": 0.3198029999964547,
+   "p95_call_ms": 0.5848750000154723,
+   "max_call_ms": 0.8011209999949642,
+   "processed_spans": [
+    [
+     12900,
+     17520
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_21_clean.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Call the police now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_01"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_01"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4620,
+   "speech_ms": 1620,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.021215367999928958,
+   "p50_call_ms": 0.348008999992544,
+   "p95_call_ms": 0.6291489999910027,
+   "max_call_ms": 0.6907790000241221,
+   "processed_spans": [
+    [
+     12900,
+     17520
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_21_clean.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Call the police now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_01"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_01"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4620,
+   "speech_ms": 1620,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.012391318999988243,
+   "p50_call_ms": 0.38925499998754276,
+   "p95_call_ms": 0.6585659999984728,
+   "max_call_ms": 0.7869700000071589,
+   "processed_spans": [
+    [
+     12900,
+     17520
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_21_clean.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Call the police now",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_01"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_01"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4320,
+   "speech_ms": 1320,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.41644894799995313,
+   "p50_call_ms": 0.24861999997938256,
+   "p95_call_ms": 0.5366610000123728,
+   "max_call_ms": 8.639547999990782,
+   "processed_spans": [
+    [
+     16080,
+     20400
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_22_clean.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "This isn't safe",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_02"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_02"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4320,
+   "speech_ms": 1320,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.121937750000086,
+   "p50_call_ms": 0.43689400001767353,
+   "p95_call_ms": 0.789190999995526,
+   "max_call_ms": 4.666461999988769,
+   "processed_spans": [
+    [
+     16080,
+     20400
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_22_clean.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "This isn't safe",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_02"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_02"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4320,
+   "speech_ms": 1320,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.03880335199988849,
+   "p50_call_ms": 0.29173199999377175,
+   "p95_call_ms": 0.5532490000064172,
+   "max_call_ms": 2.8409500000066146,
+   "processed_spans": [
+    [
+     16080,
+     20400
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_22_clean.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "This isn't safe",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_02"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_02"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4320,
+   "speech_ms": 1320,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.020935312999995404,
+   "p50_call_ms": 0.3050699999960216,
+   "p95_call_ms": 0.6247660000155975,
+   "max_call_ms": 1.4059760000009192,
+   "processed_spans": [
+    [
+     16080,
+     20400
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_22_clean.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "This isn't safe",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_02"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_02"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4320,
+   "speech_ms": 1320,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.012488731999894753,
+   "p50_call_ms": 0.41193199999156604,
+   "p95_call_ms": 0.68004999999971,
+   "max_call_ms": 0.6994809999980589,
+   "processed_spans": [
+    [
+     16080,
+     20400
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_22_clean.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "This isn't safe",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_02"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_02"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5310,
+   "speech_ms": 2310,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.4972740130005775,
+   "p50_call_ms": 0.3007180000054177,
+   "p95_call_ms": 0.6257999999945696,
+   "max_call_ms": 5.509630000005927,
+   "processed_spans": [
+    [
+     9270,
+     14580
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_23_muffled.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I need someone to come get me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5310,
+   "speech_ms": 2310,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.09415441200002306,
+   "p50_call_ms": 0.2970550000043204,
+   "p95_call_ms": 0.5949480000140284,
+   "max_call_ms": 1.899438000009468,
+   "processed_spans": [
+    [
+     9270,
+     14580
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_23_muffled.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "I need someone to come get me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5310,
+   "speech_ms": 2310,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.055711685000204625,
+   "p50_call_ms": 0.5133809999904315,
+   "p95_call_ms": 0.7684720000042944,
+   "max_call_ms": 1.2409969999964687,
+   "processed_spans": [
+    [
+     9270,
+     14580
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_23_muffled.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I need someone to come get me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5310,
+   "speech_ms": 2310,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.020808413000054315,
+   "p50_call_ms": 0.3611390000060055,
+   "p95_call_ms": 0.6189919999997073,
+   "max_call_ms": 0.6786489999797141,
+   "processed_spans": [
+    [
+     9270,
+     14580
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_23_muffled.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I need someone to come get me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5310,
+   "speech_ms": 2310,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.012679985999966448,
+   "p50_call_ms": 0.45164200000158417,
+   "p95_call_ms": 0.6592400000045018,
+   "max_call_ms": 0.7189880000169069,
+   "processed_spans": [
+    [
+     9270,
+     14580
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_23_muffled.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I need someone to come get me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_20"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5940,
+   "speech_ms": 2940,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.5666358389996446,
+   "p50_call_ms": 0.39747299999248753,
+   "p95_call_ms": 0.6565029999876515,
+   "max_call_ms": 7.482755000012276,
+   "processed_spans": [
+    [
+     5010,
+     10950
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_24_overlapping.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "He/she won't leave me alone",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5940,
+   "speech_ms": 2940,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.11552700499990465,
+   "p50_call_ms": 0.3792779999969298,
+   "p95_call_ms": 0.6078809999792156,
+   "max_call_ms": 4.124934000003577,
+   "processed_spans": [
+    [
+     5010,
+     10950
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_24_overlapping.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "He/she won't leave me alone",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5940,
+   "speech_ms": 2940,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.0429875969997795,
+   "p50_call_ms": 0.32004099998061974,
+   "p95_call_ms": 0.7098050000138301,
+   "max_call_ms": 1.8277019999857202,
+   "processed_spans": [
+    [
+     5010,
+     10950
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_24_overlapping.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "He/she won't leave me alone",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5940,
+   "speech_ms": 2940,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.029945124999954942,
+   "p50_call_ms": 0.4164959999855,
+   "p95_call_ms": 0.8323239999867837,
+   "max_call_ms": 2.7716909999924155,
+   "processed_spans": [
+    [
+     5010,
+     10950
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_24_overlapping.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "He/she won't leave me alone",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5940,
+   "speech_ms": 2940,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.013036217000149009,
+   "p50_call_ms": 0.42790699998818127,
+   "p95_call_ms": 0.6531710000103885,
+   "max_call_ms": 0.7952089999889722,
+   "processed_spans": [
+    [
+     5010,
+     10950
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_24_overlapping.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "He/she won't leave me alone",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4380,
+   "speech_ms": 1380,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.4879090260005512,
+   "p50_call_ms": 0.28592699999308024,
+   "p95_call_ms": 0.7100579999814727,
+   "max_call_ms": 5.245062000000189,
+   "processed_spans": [
+    [
+     7230,
+     11610
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_25_clean.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm being threatened",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4380,
+   "speech_ms": 1380,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.13295213900042313,
+   "p50_call_ms": 0.42803799999546754,
+   "p95_call_ms": 0.8159269999907792,
+   "max_call_ms": 2.6642249999895284,
+   "processed_spans": [
+    [
+     7230,
+     11610
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_25_clean.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "I'm being threatened",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4380,
+   "speech_ms": 1380,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.08509597699986671,
+   "p50_call_ms": 0.7366670000124032,
+   "p95_call_ms": 1.2966719999951692,
+   "max_call_ms": 2.5421690000086983,
+   "processed_spans": [
+    [
+     7230,
+     11610
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_25_clean.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm being threatened",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4380,
+   "speech_ms": 1380,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.021450955000034355,
+   "p50_call_ms": 0.3641220000076828,
+   "p95_call_ms": 0.5984569999952782,
+   "max_call_ms": 0.9656009999901016,
+   "processed_spans": [
+    [
+     7230,
+     11610
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_25_clean.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm being threatened",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4380,
+   "speech_ms": 1380,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.013791292000036037,
+   "p50_call_ms": 0.4224560000238853,
+   "p95_call_ms": 0.6874039999900106,
+   "max_call_ms": 1.4529010000217113,
+   "processed_spans": [
+    [
+     7230,
+     11610
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_25_clean.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm being threatened",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4710,
+   "speech_ms": 1710,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.46832730499923514,
+   "p50_call_ms": 0.3839940000034403,
+   "p95_call_ms": 0.6084959999839157,
+   "max_call_ms": 1.1392389999969055,
+   "processed_spans": [
+    [
+     19410,
+     24120
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_26_clean.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Can you stay on the line with me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4710,
+   "speech_ms": 1710,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.11103804100022785,
+   "p50_call_ms": 0.290060999986963,
+   "p95_call_ms": 0.8021529999950872,
+   "max_call_ms": 3.7028400000167494,
+   "processed_spans": [
+    [
+     19410,
+     24120
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_26_clean.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "Can you stay on the line with me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4710,
+   "speech_ms": 1710,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.03606432800003745,
+   "p50_call_ms": 0.27836999998953615,
+   "p95_call_ms": 0.5901540000081695,
+   "max_call_ms": 1.1014969999791902,
+   "processed_spans": [
+    [
+     19410,
+     24120
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_26_clean.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Can you stay on the line with me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4710,
+   "speech_ms": 1710,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.019674739000038244,
+   "p50_call_ms": 0.3115460000060466,
+   "p95_call_ms": 0.6004980000113846,
+   "max_call_ms": 0.6664670000020578,
+   "processed_spans": [
+    [
+     19410,
+     24120
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_26_clean.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Can you stay on the line with me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4710,
+   "speech_ms": 1710,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.012365720999952146,
+   "p50_call_ms": 0.3519939999989674,
+   "p95_call_ms": 0.7223510000073929,
+   "max_call_ms": 0.7423589999859814,
+   "processed_spans": [
+    [
+     19410,
+     24120
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_26_clean.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Can you stay on the line with me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [],
+   "oneshot_events": []
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4950,
+   "speech_ms": 1950,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.46898498800001676,
+   "p50_call_ms": 0.24619999999231368,
+   "p95_call_ms": 0.6271719999801917,
+   "max_call_ms": 7.124583999996048,
+   "processed_spans": [
+    [
+     21270,
+     26220
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_27_muffled.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm not safe walking alone",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_02"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_02"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4950,
+   "speech_ms": 1950,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.08927602400029855,
+   "p50_call_ms": 0.2743489999943449,
+   "p95_call_ms": 0.5806810000024143,
+   "max_call_ms": 1.812841000003118,
+   "processed_spans": [
+    [
+     21270,
+     26220
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_27_muffled.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "I'm not safe walking alone",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_02"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_02"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4950,
+   "speech_ms": 1950,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.039298418000186075,
+   "p50_call_ms": 0.28645599999777005,
+   "p95_call_ms": 0.5823900000052618,
+   "max_call_ms": 2.831348000000844,
+   "processed_spans": [
+    [
+     21270,
+     26220
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_27_muffled.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm not safe walking alone",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_02"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_02"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4950,
+   "speech_ms": 1950,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.02076700500006723,
+   "p50_call_ms": 0.3467430000227978,
+   "p95_call_ms": 0.6527580000010857,
+   "max_call_ms": 0.9447089999810032,
+   "processed_spans": [
+    [
+     21270,
+     26220
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_27_muffled.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm not safe walking alone",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_02"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_02"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 4950,
+   "speech_ms": 1950,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.036436988999838604,
+   "p50_call_ms": 0.3932770000005803,
+   "p95_call_ms": 0.9394119999797113,
+   "max_call_ms": 22.621724999993376,
+   "processed_spans": [
+    [
+     21270,
+     26220
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_27_muffled.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm not safe walking alone",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_02"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_ALL",
+     "UDK_02"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5610,
+   "speech_ms": 2610,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.5151160999999149,
+   "p50_call_ms": 0.2997039999854678,
+   "p95_call_ms": 0.9444290000146793,
+   "max_call_ms": 3.909027999981163,
+   "processed_spans": [
+    [
+     8220,
+     13830
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_28_overlapping.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Someone grabbed me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_04"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_04"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5610,
+   "speech_ms": 2610,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.09622167699993156,
+   "p50_call_ms": 0.28388599997697384,
+   "p95_call_ms": 0.7257099999833372,
+   "max_call_ms": 1.8495980000068357,
+   "processed_spans": [
+    [
+     8220,
+     13830
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_28_overlapping.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "Someone grabbed me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_04"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_04"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5610,
+   "speech_ms": 2610,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.03761368599990078,
+   "p50_call_ms": 0.32883299999753035,
+   "p95_call_ms": 0.5572110000002795,
+   "max_call_ms": 0.7921940000130689,
+   "processed_spans": [
+    [
+     8220,
+     13830
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_28_overlapping.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Someone grabbed me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_04"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_04"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5610,
+   "speech_ms": 2610,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.021228927999999314,
+   "p50_call_ms": 0.37250500000141074,
+   "p95_call_ms": 0.6086820000064108,
+   "max_call_ms": 0.6620549999922787,
+   "processed_spans": [
+    [
+     8220,
+     13830
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_28_overlapping.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Someone grabbed me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_04"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_04"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5610,
+   "speech_ms": 2610,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.01273765600009824,
+   "p50_call_ms": 0.42328800000746014,
+   "p95_call_ms": 0.6609799999921506,
+   "max_call_ms": 0.7366309999952136,
+   "processed_spans": [
+    [
+     8220,
+     13830
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_28_overlapping.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Someone grabbed me",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_04"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_04"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5070,
+   "speech_ms": 2070,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.4180849999999623,
+   "p50_call_ms": 0.2817620000143961,
+   "p95_call_ms": 0.5337389999908737,
+   "max_call_ms": 0.7415450000110013,
+   "processed_spans": [
+    [
+     2340,
+     7410
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_29_clean.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm locked out and scared",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_09"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_09"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5070,
+   "speech_ms": 2070,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.10355321899987757,
+   "p50_call_ms": 0.29946399999403184,
+   "p95_call_ms": 0.5647950000025048,
+   "max_call_ms": 4.727096999999958,
+   "processed_spans": [
+    [
+     2340,
+     7410
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_29_clean.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "I'm locked out and scared",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_09"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_09"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5070,
+   "speech_ms": 2070,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.03824670099999139,
+   "p50_call_ms": 0.30966500000317865,
+   "p95_call_ms": 0.5771740000000136,
+   "max_call_ms": 1.0397759999989376,
+   "processed_spans": [
+    [
+     2340,
+     7410
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_29_clean.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm locked out and scared",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_09"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_09"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5070,
+   "speech_ms": 2070,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.021747589000085554,
+   "p50_call_ms": 0.35878900001762304,
+   "p95_call_ms": 0.5784410000160278,
+   "max_call_ms": 0.7307940000202962,
+   "processed_spans": [
+    [
+     2340,
+     7410
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_29_clean.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm locked out and scared",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_09"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_09"
+    ]
+   ]
+  },
+  {
+   "processed": 1,
+   "reference_segments": 1,
+   "overlap_ms": 0,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 5070,
+   "speech_ms": 2070,
+   "designed_overlap_ms": 0,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.030445371000070054,
+   "p50_call_ms": 0.49003600003061365,
+   "p95_call_ms": 4.547792999971989,
+   "max_call_ms": 4.862824000042565,
+   "processed_spans": [
+    [
+     2340,
+     7410
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_29_clean.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "I'm locked out and scared",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_09"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_09"
+    ]
+   ]
+  },
+  {
+   "processed": 5,
+   "reference_segments": 5,
+   "overlap_ms": 2820,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 29520,
+   "speech_ms": 13020,
+   "designed_overlap_ms": 2820,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 1501,
+   "total_s": 0.7589050939994877,
+   "p50_call_ms": 0.33646700001099816,
+   "p95_call_ms": 0.9419360000038068,
+   "max_call_ms": 13.432926999996653,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     1620,
+     5880
+    ],
+    [
+     6360,
+     17340
+    ],
+    [
+     15960,
+     26940
+    ],
+    [
+     25500,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_30_noisy.mp3",
+   "chunk_ms": 20,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Please send help immediately",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ]
+  },
+  {
+   "processed": 5,
+   "reference_segments": 5,
+   "overlap_ms": 2820,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 29520,
+   "speech_ms": 13020,
+   "designed_overlap_ms": 2820,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 301,
+   "total_s": 0.1114392730006557,
+   "p50_call_ms": 0.3342600000451057,
+   "p95_call_ms": 0.7701589999555836,
+   "max_call_ms": 1.6857569999615407,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     1620,
+     5880
+    ],
+    [
+     6360,
+     17340
+    ],
+    [
+     15960,
+     26940
+    ],
+    [
+     25500,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_30_noisy.mp3",
+   "chunk_ms": 100,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "deterministic": true,
+   "phrase": "Please send help immediately",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ]
+  },
+  {
+   "processed": 5,
+   "reference_segments": 5,
+   "overlap_ms": 2820,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 29520,
+   "speech_ms": 13020,
+   "designed_overlap_ms": 2820,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 121,
+   "total_s": 0.07779954000022826,
+   "p50_call_ms": 0.5496069999821884,
+   "p95_call_ms": 1.282314000036422,
+   "max_call_ms": 4.199566000011146,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     1620,
+     5880
+    ],
+    [
+     6360,
+     17340
+    ],
+    [
+     15960,
+     26940
+    ],
+    [
+     25500,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_30_noisy.mp3",
+   "chunk_ms": 250,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Please send help immediately",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ]
+  },
+  {
+   "processed": 5,
+   "reference_segments": 5,
+   "overlap_ms": 2820,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 29520,
+   "speech_ms": 13020,
+   "designed_overlap_ms": 2820,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 61,
+   "total_s": 0.04045979400018496,
+   "p50_call_ms": 0.46254199997974865,
+   "p95_call_ms": 1.3681300000030205,
+   "max_call_ms": 4.880746000026193,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     1620,
+     5880
+    ],
+    [
+     6360,
+     17340
+    ],
+    [
+     15960,
+     26940
+    ],
+    [
+     25500,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_30_noisy.mp3",
+   "chunk_ms": 500,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Please send help immediately",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ]
+  },
+  {
+   "processed": 5,
+   "reference_segments": 5,
+   "overlap_ms": 2820,
+   "duplicate_segments": 0,
+   "reprocessed_segments": 0,
+   "missed_ref_ms": 0,
+   "missed_speech_ms": 0,
+   "boundary_mismatch": 0,
+   "reference_ms": 29520,
+   "speech_ms": 13020,
+   "designed_overlap_ms": 2820,
+   "excess_overlap_ms": 0,
+   "not_in_reference": [],
+   "reference_not_processed": [],
+   "inv_no_reprocessing": true,
+   "inv_no_skipped_speech": true,
+   "inv_boundaries_equal_reference": true,
+   "error": null,
+   "calls": 31,
+   "total_s": 0.01678365800012216,
+   "p50_call_ms": 0.4501050000271789,
+   "p95_call_ms": 1.19439700000612,
+   "max_call_ms": 1.2418709999906241,
+   "processed_spans": [
+    [
+     0,
+     1620
+    ],
+    [
+     1620,
+     5880
+    ],
+    [
+     6360,
+     17340
+    ],
+    [
+     15960,
+     26940
+    ],
+    [
+     25500,
+     30000
+    ]
+   ],
+   "file": "real_recordings/mixed/clip_30_noisy.mp3",
+   "chunk_ms": 1000,
+   "candidate": "D_cached",
+   "audio_ms": 30000,
+   "phrase": "Please send help immediately",
+   "extra_events": 0,
+   "escalated": false,
+   "repeat_induced_trigger_all": 0,
+   "stream_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ],
+   "oneshot_events": [
+    [
+     "TRIGGER_VERIFY",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ],
+    [
+     "TRIGGER_ALL",
+     "UDK_08"
+    ]
+   ]
+  }
+ ]
+}

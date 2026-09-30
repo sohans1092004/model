@@ -1,0 +1,52 @@
+=== REST lifecycle + idempotency ===
+[PASS] start returns 200
+[PASS] start returns session_token + stream_endpoint
+[PASS] retried start with same journey_id is idempotent
+[PASS] GET journey status -> ACTIVE
+[PASS] start with an invalid personal UDK phrase is rejected
+
+5/5 checks passed so far.
+
+=== WebSocket auth ===
+[PASS] wrong session_token is rejected at connect
+
+6/6 checks passed so far.
+
+=== WS protocol: sequencing, acks, tail-exclusion live detection, heartbeat ===
+[PASS] frame 0 acked, no event yet (tail excluded)
+[PASS] frame 1 acked, still no event (block A had no transcript)
+[PASS] frame 2 acked
+[PASS] detection event for block B arrives once it's no longer the tail
+[PASS] heartbeat is answered
+[PASS] emitted event is visible via GET /events
+[PASS] stop returns FINALIZING
+[PASS] journey is COMPLETE after stop
+[PASS] stop is idempotent (no re-processing, no error)
+
+15/15 checks passed so far.
+
+=== Out-of-order frame buffering (Section 3) ===
+[PASS] out-of-order frame (seq=2) doesn't advance the buffer yet
+[PASS] filling seq=0 advances past it but not past the still-missing seq=1
+[PASS] filling the gap (seq=1) catches the buffer up through the pending seq=2
+
+18/18 checks passed so far.
+
+=== Fix: a lone/last segment finalizes once proven closed, not stuck forever ===
+[PASS] a one-shot utterance (still the buffer's tail) isn't finalized yet
+[PASS] once more audio proves it's done growing, it finalizes live -- no stop() needed
+
+20/20 checks passed so far.
+
+=== Server-side journey timeout (Section 3) ===
+[PASS] journey with no heartbeat past the grace window is auto-timed-out
+
+21/21 checks passed so far.
+
+=== Going dark AFTER a trigger gets a tighter, more urgent timeout ===
+[PASS] still within the ordinary grace window
+[PASS] a post-trigger journey times out sooner than an ordinary one would
+[PASS] the SAME gap does NOT time out a journey that never had a trigger
+
+========================================
+24/24 TOTAL PASSED -- ALL PASSED

@@ -9,8 +9,12 @@ which is what webrtcvad requires.
 
 from __future__ import annotations
 
+import logging
+
 import webrtcvad
 from dataclasses import dataclass
+
+log = logging.getLogger(__name__)
 
 SAMPLE_RATE = 16_000
 FRAME_MS = 30
@@ -31,6 +35,7 @@ class VAD:
         pre_roll_ms: int = 1500,
         post_roll_ms: int = 1500,
         max_segment_ms: int = 8000,
+        cache_classifications: bool = False,
     ):
         """
         aggressiveness: 0 (most permissive / most likely to call things
@@ -57,11 +62,31 @@ class VAD:
         worst-case detection latency), not yet swept against real data
         the way e.g. kws.py's threshold was -- a real next step, not a
         finished calibration.
+
+        cache_classifications: OFF by default, and nothing enables it yet (PROTOTYPE, see
+        udk_shadow/bench/results/segmentation_candidates/SEGMENTATION_CANDIDATES.md, candidate D).
+        OFF: every segment_speech call re-classifies every frame with the one persistent
+        webrtcvad.Vad, exactly as before. Because webrtcvad adapts its state across calls, re-scanning
+        a growing buffer can classify the same frame differently from one call to the next, so a
+        finalized segment's end can move and api.py hands that audio to STT again.
+        ON: each complete 30 ms frame is classified exactly once, in order, by the same persistent
+        webrtcvad.Vad, and its flag is kept. Later re-scans reuse the kept flags and classify only
+        new frames. The segmentation below is unchanged (pre/post-roll, the max-length cut and the
+        overlap after it). Frame identity is the frame index from the start of the pcm passed in,
+        which is valid only for an append-only buffer (api.py's journey buffer is append-only and
+        never trimmed). There are no absolute offsets, so trimming is NOT supported: a buffer that
+        shrinks, or whose last kept frame changed, discards the kept flags and re-classifies (logged,
+        counted in cache_resets). Memory: 1 byte per frame (about 120 kB per hour of audio).
         """
         self._vad = webrtcvad.Vad(aggressiveness)
         self.pre_roll_frames = max(1, pre_roll_ms // FRAME_MS)
         self.post_roll_frames = max(1, post_roll_ms // FRAME_MS)
         self.max_segment_frames = max(1, max_segment_ms // FRAME_MS)
+        # ON-mode state only; OFF mode never reads or writes it.
+        self.cache_classifications = cache_classifications
+        self._flag_cache = bytearray()  # flag of frame k at index k (1 = speech)
+        self._flag_cache_last_frame = b""  # copy of the last kept frame, to detect a changed buffer
+        self.cache_resets = 0
 
     def _frames(self, pcm: bytes):
         for i in range(0, len(pcm) - FRAME_BYTES + 1, FRAME_BYTES):
@@ -75,6 +100,29 @@ class VAD:
         without needing to know FRAME_MS/FRAME_BYTES themselves."""
         return (len(pcm) // FRAME_BYTES) * FRAME_MS
 
+    def reset_classification_cache(self) -> None:
+        """Forget kept flags (ON mode). A new journey gets a new VAD, so live code never needs this."""
+        self._flag_cache = bytearray()
+        self._flag_cache_last_frame = b""
+
+    def _classify(self, frames: list[bytes]):
+        if not self.cache_classifications:
+            return [self._vad.is_speech(f, SAMPLE_RATE) for f in frames]
+        cache = self._flag_cache
+        k = len(cache)
+        if k and (len(frames) < k or frames[k - 1] != self._flag_cache_last_frame):
+            # The pcm is not an extension of what was classified before (shrunk, trimmed, or
+            # rewritten). Kept flags would describe different audio, so they are discarded.
+            log.warning("VAD classification cache invalidated (frames %d -> %d); re-classifying", k, len(frames))
+            self.cache_resets += 1
+            self.reset_classification_cache()
+            cache, k = self._flag_cache, 0
+        for f in frames[k:]:  # new complete frames only, in order
+            cache.append(1 if self._vad.is_speech(f, SAMPLE_RATE) else 0)
+        if len(frames) > k:
+            self._flag_cache_last_frame = frames[-1]
+        return cache
+
     def segment_speech(self, pcm: bytes) -> list[SpeechSegment]:
         """
         Split raw 16kHz mono PCM into speech segments, each padded with
@@ -82,7 +130,7 @@ class VAD:
         boundary, or a detection loses the context around it).
         """
         frames = list(self._frames(pcm))
-        flags = [self._vad.is_speech(f, SAMPLE_RATE) for f in frames]
+        flags = self._classify(frames)
 
         segments: list[SpeechSegment] = []
         i = 0

@@ -1,0 +1,24 @@
+=== Normal case: a speech run well under the cap behaves exactly as before ===
+[PASS] a short, naturally-ending speech run produces exactly one segment
+
+1/1 checks passed so far.
+
+=== The real bug: continuous speech-classified audio with NO pause, longer than the cap ===
+[PASS] a continuous run longer than the cap is split into multiple bounded segments, not one giant one
+[PASS] the FIRST segment ends at (approximately) the cap, not at the end of the whole buffer
+[PASS] the first segment's end is strictly before the total buffered duration -- the real finalization proof api.py needs
+[PASS] segments tile the whole continuous run with no gap (nothing silently dropped)
+
+5/5 checks passed so far.
+
+=== Pre-roll/post-roll still applied normally around forced cuts ===
+[PASS] post-roll padding is still added at each forced cut (segment end extends past the raw cap)
+[PASS] pre-roll padding is still added at the start of the next segment after a forced cut
+=== Natural pauses: the next segment must not reach back into the previous one ===
+[PASS] two bursts after a natural pause give non-overlapping segments
+[PASS] no audio dropped between them (the second starts exactly where the first ended)
+=== A pause shorter than the post-roll keeps one utterance in one segment ===
+[PASS] two bursts 600 ms apart give ONE segment covering both
+
+========================================
+10/10 TOTAL PASSED -- ALL PASSED

@@ -1,0 +1,43 @@
+
+$ /usr/bin/python3 /kaggle/working/bundle/test_vad_classification_cache.py
+-- defaults / integration boundary
+[PASS] the frozen reference is byte-for-byte the 96ea038 vad.py (sha256 checked on load)
+[PASS] default is OFF: VAD().cache_classifications is False
+[PASS] api.py is not wired to the flag (JourneyState still uses the default VAD; flag never enabled)
+[PASS] the VAD integration surface is unchanged (segment_speech, total_ms; SpeechSegment fields)
+-- OFF mode == original implementation (static)
+[PASS] segment_speech is AST-identical to the original except the single flags line (segmentation loop untouched)
+[PASS] the OFF branch of _classify is exactly the original expression, reached by `if not self.cache_classifications`
+[PASS] _frames and total_ms are AST-identical to the original
+[PASS] constructor: original parameters keep their order and defaults; the only new one is keyword cache_classifications=False, last
+[PASS] constructor keeps the original statements first, unchanged; the added ones only assign ON-mode state
+[PASS] module constants unchanged (SAMPLE_RATE, FRAME_MS, FRAME_BYTES)
+[PASS] a default VAD() constructs its webrtcvad classifier exactly as before (same type, aggressiveness path)
+-- OFF mode == original implementation (behaviour)
+[PASS] 300 random flag patterns x roll/cap settings: identical segments and identical classifier calls
+[PASS] live loop, state-carrying classifier, 8 scenarios x 7 chunks: OFF gives the original's every-call segments and STT spans (the current defect included) and never touches the cache
+[PASS] OFF mode keeps no per-frame state and never resets (shrinking buffer handled exactly as before)
+[PASS] OFF: per-frame flags are the original list[bool] (ON-mode bytearray never reaches OFF segmentation)
+[PASS] OFF: classifier returning non-bool truthy/falsy values across re-scans -> identical to the original
+-- ON mode == candidate D == one-shot segmentation
+[PASS] ON == experiment candidate D: identical every-call segments and STT spans in all boundary cases
+[PASS] ON: no re-processing, no skipped speech, boundaries == one-shot, in all boundary cases (drifting classifier)
+[PASS] ON keeps the designed 8 s-cut overlap exactly (3000 ms, > 0) at every chunk size
+-- ON mode: cache lifecycle
+[PASS] each complete frame classified exactly once, in order, across hundreds of re-scans
+[PASS] partial tail frames are never classified early (cache holds complete frames only)
+[PASS] re-scanning an unchanged buffer classifies nothing and returns identical segments
+[PASS] memory: one byte per complete frame (bytearray), nothing per call
+[PASS] kept flags == a single fresh pass over the whole buffer
+[PASS] buffer shrink (trimming is NOT supported): kept flags discarded, re-classified, logged, counted -- no crash
+[PASS] in-place rewrite of the last kept frame detected: flags rebuilt, result == fresh segmentation of the new buffer
+[PASS] explicit reset_classification_cache(): next scan classifies every frame again
+[PASS] no cross-instance (cross-journey) sharing of kept flags
+[PASS] empty and sub-frame buffers: no frames, no classification, no segments
+-- ON mode: determinism
+[PASS] identical input -> identical every-call segments, STT spans and kept flags (3 runs)
+-- real audio (webrtcvad + PyAV, else SKIP)
+[SKIP] real-audio OFF/ON checks (needs webrtcvad + PyAV + real_recordings/mixed clips)
+
+========================================
+30/30 TOTAL PASSED, 1 SKIPPED -- ALL PASSED

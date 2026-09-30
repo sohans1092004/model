@@ -1,0 +1,36 @@
+=== Idempotent frame ingestion (duplicate/retried frames) ===
+[PASS] two distinct frames -> buffer has both
+[PASS] retrying an already-consumed frame is a no-op on the buffer
+[PASS] retry produces no new events
+[PASS] retry doesn't duplicate the segment on disk
+[PASS] same seq + different content raises (not a silent overwrite)
+
+5/5 checks passed so far.
+
+=== Simulated crash + restart (in-memory state wiped, disk survives) ===
+[PASS] pre-crash: phrase buffered but not yet detected (still growing)
+[PASS] recovery creates a fresh journey object (old one is gone)
+[PASS] recovered buffer matches what was durably stored pre-crash
+[PASS] recovered next_expected_seq picks up where the crash left off
+[PASS] backlog detection resumes after recovery -- no data lost across the crash
+
+10/10 checks passed so far.
+
+=== Outbound event delivery: durable queue survives a downstream failure ===
+[PASS] detection happened despite downstream being unreachable
+[PASS] undelivered event stays durably queued, not dropped
+[PASS] recovery: draining the queue delivers the backlog
+[PASS] no duplicate delivery of the same event
+[PASS] queue is empty after a successful drain
+[PASS] draining an empty queue is a safe no-op
+
+16/16 checks passed so far.
+
+=== Full network loss: WS drops mid-journey, client reconnects and resumes ===
+[PASS] frame 0 acked before the drop
+[PASS] journey survives the drop (state isn't tied to the socket)
+[PASS] reconnect resumes on the same journey, no duplicate audio
+[PASS] exactly 2 segments stored across the disconnect/reconnect, not 3
+
+========================================
+20/20 TOTAL PASSED -- ALL PASSED

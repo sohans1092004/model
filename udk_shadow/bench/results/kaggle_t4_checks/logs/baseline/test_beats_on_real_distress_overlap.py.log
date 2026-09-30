@@ -1,0 +1,24 @@
+Downloading RAVDESS fear (strong intensity, real human actors)...
+  got 32 fear clips
+Downloading RAVDESS angry (strong intensity, secondary check)...
+  got 32 angry clips
+
+Synthesizing 20 negative clips (same pool as evaluate_pipeline_corpus.py)...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/usr/local/lib/python3.12/dist-packages/torch/nn/utils/weight_norm.py:144: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+Traceback (most recent call last):
+  File "/kaggle/working/udk_checks/baseline/test_beats_on_real_distress_overlap.py", line 112, in <module>
+    main()
+  File "/kaggle/working/udk_checks/baseline/test_beats_on_real_distress_overlap.py", line 53, in main
+    _synthesize_wav(text, voice, wav_path)
+  File "/kaggle/working/udk_checks/baseline/evaluate_pipeline_corpus.py", line 92, in _synthesize_wav
+    subprocess.run(["powershell", "-NoProfile", "-Command", script], check=True, capture_output=True)
+  File "/usr/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'powershell'

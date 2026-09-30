@@ -1,0 +1,8 @@
+{
+ "format": "udk_fusion.config/1",
+ "_note": "TEST FIXTURE policy: toy acoustic source ids alongside the BEATs ids, sentence-veto guard ON so both guard paths are exercised. Not a production proposal.",
+ "s4_status": "open",
+ "acoustic_alone": {"enabled": true, "sources": ["beats_4class_scream_trigger", "fixture-acoustic (TEST ONLY)"]},
+ "corroboration": {"enabled": true, "sources": ["beats_9class_corroboration", "fixture-acoustic (TEST ONLY)"]},
+ "veto_guard": {"sentence_veto_requires_clean_overlap": true}
+}

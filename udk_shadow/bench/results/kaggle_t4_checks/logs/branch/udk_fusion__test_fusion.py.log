@@ -1,0 +1,96 @@
+-- input contract (R0)
+[PASS] live scream alert passed as linguistic evidence -> ContractError (double counting)
+[PASS] vetoed PERSONAL alert -> ContractError (Phase 3 H1)
+[PASS] vetoed KWS alert -> ContractError (H1)
+[PASS] classifier-only TRIGGER_ALL -> ContractError (H6)
+[PASS] Phase 3 changing a decision without a recorded rule -> ContractError
+[PASS] unknown Phase 3 source -> ContractError
+[PASS] udk_decision mismatch between UdkEvidence and FinalDecision -> ContractError
+[PASS] non-Evidence signal -> ContractError
+[PASS] origins classified
+-- policy
+[PASS] production-equivalent policy loads; S-4 open
+[PASS] production-equivalent mirrors live flags (acoustic-alone 4-class, corroboration 9-class, veto guard off)
+[PASS] production-equivalent acoustic sections equal the Phase 4 production-equivalent config
+[PASS] policy rejects allow_acoustic_trigger_all (hard rule)
+[PASS] policy rejects allow_classifier_trigger_all (hard rule)
+[PASS] policy rejects allow_lowering (hard rule)
+[PASS] policy rejects allow_signal_veto (hard rule)
+[PASS] policy rejects a closed S-4
+[PASS] policy rejects missing veto_guard (no defaults)
+[PASS] policy rejects enabled acoustic role with no sources
+[PASS] policy rejects unknown keys in an acoustic role (e.g. a threshold smuggled in)
+[PASS] S-4 options A-D expressible; C == production-equivalent flags
+[PASS] S-4 helper rejects unknown option
+-- scenarios
+[PASS] UDK VERIFY + acoustic corroboration POSITIVE -> TRIGGER_ALL, basis fused, R5
+[PASS] UDK VERIFY + acoustic UNCERTAIN -> unchanged VERIFY, both listed as ignored
+[PASS] UDK ALL + acoustic UNAVAILABLE -> TRIGGER_ALL kept; 'absence is not safety' annotated
+[PASS] UDK VERIFY + acoustic NEGATIVE -> unchanged (NEGATIVE never lowers)
+[PASS] UDK + speaker attribution UNCERTAIN / target UNAVAILABLE -> alert kept
+[PASS] UDK + 'not the enrolled user' -> alert kept (any voice saying a UDK alerts)
+[PASS] UDK + overlap POSITIVE -> alert kept, no masking annotation needed
+[PASS] no UDK + overlap POSITIVE -> NO_ALERT with 'UDK may be masked' (overlap never a clean negative)
+[PASS] no UDK + overlap UNCERTAIN -> masking annotation too
+[PASS] danger-without-UDK + acoustic POSITIVE -> TRIGGER_VERIFY only (classifier + acoustic never ALL)
+[PASS] danger-without-UDK + clean context evidence -> TRIGGER_VERIFY (classifier-only never ALL)
+[PASS] safe phrase / no UDK + scream trigger POSITIVE -> TRIGGER_VERIFY, basis acoustic, R6
+[PASS] no UDK + 9-class POSITIVE only -> NO_ALERT (corroboration never creates an alert)
+[PASS] acoustic source not named in policy -> ignored, recorded
+[PASS] sentence-vetoed UDK + scream -> TRIGGER_VERIFY acoustic (live order: scream fires when no alert is left)
+[PASS] context veto with NO speaker/overlap evidence -> reinstated TRIGGER_ALL (missing attribution never suppresses)
+[PASS] context veto + attribution POSITIVE + overlap NEGATIVE -> veto stands (NO_ALERT)
+[PASS] context veto + one attribution UNCERTAIN -> reinstated
+[PASS] conflicting overlap (NEGATIVE + POSITIVE) -> not clean -> veto reinstated; conflict annotated
+[PASS] degraded audio: overlap NEGATIVE reported UNCERTAIN -> context veto reinstated (G5)
+[PASS] reinstated VERIFY + corroboration -> TRIGGER_ALL (fused)
+[PASS] sentence-veto guard ON + overlap POSITIVE -> reinstated
+[PASS] sentence-veto guard ON + overlap clean NEGATIVE -> veto stands
+[PASS] production-equivalent (guard off): live sentence veto unchanged even with overlap
+[PASS] personal_verify: kept under every adverse signal (Phase 3 H1 protections intact)
+[PASS] personal_all: kept under every adverse signal (Phase 3 H1 protections intact)
+[PASS] kws_verify: kept under every adverse signal (Phase 3 H1 protections intact)
+[PASS] custom UDK VERIFY + corroboration -> TRIGGER_ALL (UDK path, as live)
+[PASS] Phase 3 context escalation (VERIFY->ALL on a UDK) passes through unchanged
+[PASS] evidence outside the utterance span -> ignored
+[PASS] out-of-span scream does not raise an alert
+[PASS] conflicting acoustic (POSITIVE + NEGATIVE) -> POSITIVE kept, conflict annotated
+[PASS] no evidence at all -> NO_ALERT, evidence_status partial
+[PASS] provenance record is JSON-serialisable and complete
+[PASS] negation alone never suppresses (through real Phase 3 decide)
+-- exhaustive grid (invariants)
+[PASS] grid covered 230400 decisions (12 linguistic cases x 3840 signal combinations x 5 policies)
+[PASS] invariant I1_acoustic_only_all: 0 violations
+[PASS] invariant I1_all_without_udk: 0 violations
+[PASS] invariant I2_lowered: 0 violations
+[PASS] invariant I3_classifier_all: 0 violations
+[PASS] invariant I4_protected_suppressed: 0 violations
+[PASS] invariant attr_missing_suppresses: 0 violations
+[PASS] invariant overlap_as_clean_negative: 0 violations
+[PASS] invariant uncertain_changes_decision: 0 violations
+[PASS] invariant phase4_conformance: 0 violations
+[PASS] invariant nondeterministic: 0 violations
+[PASS] invariant negative_lowers: 0 violations
+[PASS] S-4 A: scream-alone VERIFY yes, corroboration no
+[PASS] S-4 B: scream-alone no, corroboration yes
+[PASS] S-4 C: both (live)
+[PASS] S-4 D: neither; linguistic alerts untouched
+-- Phase 3 toy scenes -> Phase 5 (TOY)
+[PASS] all 26 Phase 3 toy scenes pass the Phase 5 input contract
+[PASS] no Phase 3 DANGER alert is lowered by Phase 5
+[PASS] Phase 3 context vetoes with no Phase 4 evidence are all reinstated (R3)
+[PASS] with annotation evidence, context vetoes stand only where attribution is complete and no overlap
+[PASS] attacker/victim scenes (a0x_danger with attacker context) keep their alert
+[PASS] TOY report (no signals): danger alert 15/15, safe alert 8/11, reinstated 4 -- TOY, not performance
+[PASS] TOY report (annotation signals): danger alert 15/15, safe alert 4/11, reinstated 0 -- TOY
+-- evaluation interface
+[PASS] evaluate requires provenance; final_test is refused
+[PASS] real_dev provenance allows claims, synthetic does not
+[PASS] bad label refused
+[PASS] compare() reports S-4 options side by side without selecting one
+-- isolation
+[PASS] no production module imports udk_fusion
+[PASS] Phase 3 / Phase 4 packages do not import udk_fusion
+
+========================================
+86/86 TOTAL PASSED -- ALL PASSED

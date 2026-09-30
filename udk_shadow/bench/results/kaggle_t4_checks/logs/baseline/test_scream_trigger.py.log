@@ -1,0 +1,12 @@
+[PASS] fires on 2 consecutive windows >= 0.10 
+[PASS] does NOT fire on a single window 
+[PASS] does NOT fire below threshold 
+[PASS] reports peak score and class 
+[PASS] a strong Wail/moan-only sound does NOT fire (dropped class) 
+[PASS] live rule = Screaming, Crying, Whimper, Children shouting 
+[PASS] scream + no words, trigger ON -> one TRIGGER_VERIFY (acoustic) 
+[PASS] flag OFF -> the same scream raises nothing 
+[PASS] a UDK alert on the segment takes precedence (no extra acoustic event) 
+
+========================================
+9/9 TOTAL PASSED -- ALL PASSED

@@ -1,0 +1,66 @@
+=== Threat: impersonate the existing app to start fake journeys ===
+[PASS] missing service token is rejected
+[PASS] wrong service token is rejected
+[PASS] correct service token is accepted
+
+3/3 checks passed so far.
+
+=== Threat: flood/exhaust the pipeline (DoS) ===
+[PASS] requests within the limit succeed
+[PASS] requests past the limit are rejected with 429
+
+5/5 checks passed so far.
+
+=== Threat: steal personal UDK phrase / session token (encryption at rest) ===
+[PASS] session_token is not stored in plaintext
+[PASS] personal UDK phrase is not stored in plaintext
+[PASS] JourneyDB.load_journey still returns the real values (round-trips correctly)
+[PASS] event transcript is not stored in plaintext
+[PASS] JourneyDB.load_events decrypts the transcript back correctly
+[PASS] audio segment is not stored in plaintext on disk
+[PASS] AudioStore still returns the real plaintext audio (round-trips correctly)
+
+12/12 checks passed so far.
+
+=== Threat: access another user's stored audio ===
+[PASS] a non-owner (wrong session_token) is denied a signed URL
+[PASS] a caller who merely knows/guesses user_id but not the real session_token is still denied (real bug found and fixed: this used to trust user_id alone)
+[PASS] no service token at all is rejected even with the correct session_token
+[PASS] the real owner, with the correct session_token, is granted a signed URL
+[PASS] a valid signed URL returns the real audio
+[PASS] a tampered token is rejected
+[PASS] an expired token is rejected
+[PASS] every audio access attempt is audited
+[PASS] audit entries never contain the audio content itself
+
+21/21 checks passed so far.
+
+=== Threat: unauthenticated access to journey status/events/stop/metrics (real bug found and fixed) ===
+[PASS] journey status is rejected with no service token
+[PASS] journey status succeeds with the real service token
+[PASS] journey events is rejected with no service token
+[PASS] journey events succeeds with the real service token
+[PASS] metrics is rejected with no service token
+[PASS] metrics succeeds with the real service token
+[PASS] stop is rejected with no service token
+
+28/28 checks passed so far.
+
+=== Threat: generate fake UDK events / access nonexistent journey ===
+[PASS] requesting audio for a nonexistent journey 404s, not a silent empty grant
+[PASS] there is no endpoint that accepts a raw event for injection
+[PASS] the only event-producing path is internal (_run_incremental_detection), not a public POST
+
+31/31 checks passed so far.
+
+=== Section 7 retention sweep ===
+[PASS] flagged journey has a recorded event
+[PASS] the unflagged journey is deleted once past its (shorter) window
+[PASS] the flagged journey survives past the unflagged window (not yet past its own)
+[PASS] deleted journey's audio is actually gone from disk
+[PASS] deleted journey's DB row is actually gone
+[PASS] flagged journey's audio and DB row are untouched
+[PASS] the flagged journey is deleted once past its own (longer) window too
+
+========================================
+38/38 TOTAL PASSED -- ALL PASSED

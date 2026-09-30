@@ -1,0 +1,10 @@
+{
+ "format": "udk_context.config/1",
+ "_note": "TEST FIXTURE configuration: every context feature ON with illustrative thresholds, to exercise the logic with the fixture scorer. Not a proposal for production values (C-6).",
+ "window": {"window_s": 20.0, "max_turns": 6},
+ "sentence_veto": {"enabled": true, "threshold": 0.02, "require_heard_by_both": true},
+ "context_veto": {"enabled": true, "threshold": 0.02, "sentence_ceiling": 0.9},
+ "context_escalation": {"enabled": true, "threshold": 0.95},
+ "danger_without_udk": {"enabled": true, "threshold": 0.95, "require_heard_by_both": true},
+ "negation": {"negators": ["not", "dont", "nahi", "mat", "ledu", "vaddu"], "scope_tokens": 3}
+}

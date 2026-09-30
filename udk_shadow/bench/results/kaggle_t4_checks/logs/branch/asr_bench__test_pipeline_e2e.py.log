@@ -1,0 +1,51 @@
+[PASS] ingest refuses the toy source against the bundled registry (not registered/authorised)
+[PASS] ingest: every utterance became a row
+[PASS] ingest: manifest valid + leakage-clean
+[PASS] ingest: noise rows (no speaker) are eval_only inventory
+[PASS] ingest: toy rows spread over all executed splits
+[PASS] freeze covers the final_test rows
+[PASS] unknown engine name is refused
+[PASS] engine that fails to load is an error (no MockSTT fallback)
+[PASS] a mock backend is never benchmarked
+[PASS] input unit is required (Q4 open)
+[PASS] runner: exactly the eligible dev rows were run
+[PASS] runner: RTF and processing time recorded per utterance
+[PASS] runner is resumable (second pass adds nothing)
+[PASS] run metadata: engine, input unit, manifest hash, hardware (declared, unverified), peak RSS
+[PASS] VAD input unit runs through a VAD object (frozen vad.VAD in real runs)
+[PASS] CLI runner: final_test without a freeze is refused
+[PASS] CLI runner: final_test with a verified freeze runs
+[PASS] final_test run records the freeze hash; hardware class declared but not verified
+[PASS] CLI runner: final_test on a manifest that no longer matches the freeze is refused
+[PASS] perfect engine: WER 0 in every slice, no failures
+[PASS] report: slices are separate (no pooled language score)
+[PASS] report: provisional configuration and open decisions are stated
+[PASS] report: romanised metrics explicitly unavailable (Q6)
+[PASS] report: nothing missing for eligible dev rows
+[PASS] degraded engine: Hindi rendered in Latin -> language-switch errors > 0
+[PASS] degraded engine: speaker-bootstrap CI reported with item/speaker counts
+[PASS] failure listing names safety failures (missed keyword, negation, integrity)
+[PASS] hallucination on no-speech audio measured per hour
+[PASS] false danger-word insertion on harmless audio measured per hour
+[PASS] paired comparison: degraded - perfect WER > 0 on the same utterances
+[PASS] final_test report: totals per slice only, no per-utterance failures
+[PASS] final_test is never used for candidate comparison
+[PASS] CLI report score writes JSON + failures + markdown
+[PASS] CLI report never overwrites (final-test totals are produced once)
+[PASS] slice minimums: toy slices reported UNAVAILABLE with the reason
+[PASS] every recipe gives a schema-valid synthetic row with recipe + integer seed
+[PASS] derived rows keep speaker/session and split (augmented copies stay in one group)
+[PASS] robustness subsets land where §4 puts them
+[PASS] clipping ratio is measured on the output
+[PASS] overlap: target -6 dB under the other voice -> overlap_rel_db +6
+[PASS] noise input's stricter restriction propagates (eval_only noise -> eval_only row)
+[PASS] synthesis is deterministic: same seed, byte-identical audio and row
+[PASS] an existing derived file is never overwritten
+[PASS] other speaker from a different split is refused (speaker leakage)
+[PASS] train row + eval_only noise -> refused (derived row would be eval_only data in train)
+[PASS] synthetic rows are never augmented again
+[PASS] manifest with synthetic rows stays valid and leakage-clean
+[PASS] report keeps synthetic results separate from real (never pooled)
+
+========================================
+48/48 TOTAL PASSED -- ALL PASSED

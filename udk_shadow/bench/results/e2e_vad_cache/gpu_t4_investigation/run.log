@@ -1,0 +1,29 @@
+
+$ /usr/bin/python3 -m pip install -q -r /kaggle/working/bundle/deploy/requirements-deploy.txt av
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.0/4.0 MB 77.5 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.0/35.0 MB 55.7 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.2/3.2 MB 69.1 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 82.9/82.9 kB 4.3 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.1/1.1 MB 43.4 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.1/1.1 MB 38.2 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.2/5.2 MB 93.1 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 39.6/39.6 MB 48.8 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 23.6/23.6 MB 70.3 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 215.5/215.5 kB 11.6 MB/s eta 0:00:00
+
+$ /usr/bin/python3 -m pip uninstall -y onnxruntime onnxruntime-gpu
+Found existing installation: onnxruntime 1.30.0
+Uninstalling onnxruntime-1.30.0:
+  Successfully uninstalled onnxruntime-1.30.0
+WARNING: Skipping onnxruntime-gpu as it is not installed.
+
+$ /usr/bin/python3 -m pip install -q --no-deps onnxruntime-gpu>=1.22,<1.27,!=1.24.1,!=1.25.*,!=1.26.0
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 252.8/252.8 MB 7.0 MB/s eta 0:00:00
+
+$ /usr/bin/python3 -c import os, sys; from huggingface_hub import snapshot_download; snapshot_download(sys.argv[1], revision=sys.argv[2] or None, local_dir=sys.argv[3], token=os.environ.get('HF_TOKEN') or None) sohans1092004/udk-intent-mdeberta 6131acc0f5c583d3ef24b7da1f293d207f26a08b /kaggle/working/models/intent_mdeberta
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files:  40%|████      | 2/5 [00:00<00:00, 12.00it/s]Fetching 5 files:  80%|████████  | 4/5 [00:07<00:02,  2.09s/it]Fetching 5 files: 100%|██████████| 5/5 [00:07<00:00,  1.43s/it]
+
+intent model: downloaded to /kaggle/working/models/intent_mdeberta
+
+$ /usr/bin/python3 -c import torch, platform, json; print(json.dumps({'torch': torch.__version__, 'cuda': torch.cuda.is_available(), 'gpu': torch.cuda.get_device_name(0) if torch.cuda.is_available() else None, 'python': platform.python_version()}))
+{"torch": "2.10.0+cu128", "cuda": true, "gpu": "Tesla T4", "python": "3.12.13"}

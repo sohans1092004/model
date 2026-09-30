@@ -1,0 +1,58 @@
+[PASS] evidence: unknown state rejected
+[PASS] evidence: measured state needs a source
+[PASS] evidence: uncertain/unavailable are not informative
+[PASS] single speaker, enrolled user: target POSITIVE
+[PASS] attacker voice: target NEGATIVE (not the user)
+[PASS] no embedder: UNAVAILABLE (not negative)
+[PASS] no enrollment: UNAVAILABLE (not negative)
+[PASS] too short: UNCERTAIN
+[PASS] thresholds are configuration: reject must be below accept
+[PASS] attacker/victim scene: two distinct labels, consistent per speaker
+[PASS] no embedder: every segment UNAVAILABLE
+[PASS] simultaneous male+female at 0 dB: overlap POSITIVE, 2 voices, level ~0 dB
+[PASS] overlapped 0 dB: target speaker UNCERTAIN (one embedding over two voices is not attribution)
+[PASS] simultaneous male+female at -6 dB: overlap POSITIVE, 2 voices, level ~-6 dB
+[PASS] overlapped -6 dB: target speaker UNCERTAIN (one embedding over two voices is not attribution)
+[PASS] simultaneous male+female at -12 dB: overlap POSITIVE, 2 voices, level ~-12 dB
+[PASS] overlapped -12 dB: target speaker UNCERTAIN (one embedding over two voices is not attribution)
+[PASS] overlapped segment gets NO single speaker label (never merged)
+[PASS] overlap from annotation is evaluation-only ground truth
+[PASS] silence: overlap UNAVAILABLE
+[PASS] scream (non-voice sound): overlap UNCERTAIN, not a speaker count
+[PASS] condition flags: clean none, pocket muffled, far-field quiet, traffic/crowd low SNR, clipping
+[PASS] condition: too short -> UNAVAILABLE
+[PASS] condition config has no defaults
+[PASS] target user still identified under pocket (toy)
+[PASS] target user still identified under far_field (toy)
+[PASS] target user still identified under traffic (toy)
+[PASS] scream: acoustic POSITIVE
+[PASS] crying: acoustic POSITIVE
+[PASS] ordinary loud speech: acoustic NEGATIVE (fixture), not distress
+[PASS] silence: acoustic UNAVAILABLE
+[PASS] live BEATs wrapper without a loaded detector: UNAVAILABLE
+[PASS] BEATs 4-class fired -> POSITIVE, marked unverified with known false-alarm sources
+[PASS] BEATs 9-class >= 0.30 -> corroboration POSITIVE
+[PASS] BEATs not fired / low score -> UNCERTAIN, never NEGATIVE (misses real distress)
+[PASS] audio outside VAD segments -> UNAVAILABLE
+[PASS] acoustic distress without UDK -> TRIGGER_VERIFY only (G2)
+[PASS] crying without UDK -> TRIGGER_VERIFY only
+[PASS] UDK danger with acoustic evidence absent (NEGATIVE / UNCERTAIN / UNAVAILABLE) stays TRIGGER_ALL (G1)
+[PASS] UDK TRIGGER_VERIFY + acoustic distress -> TRIGGER_ALL (UDK-path corroboration, G3)
+[PASS] classifier-only VERIFY + acoustic distress stays VERIFY (G3)
+[PASS] UDK spoken by a non-user voice is never lowered (G1, product rule)
+[PASS] ordinary loud speech, no UDK: nothing raised
+[PASS] degraded (pocket) audio: NEGATIVE target evidence reported as UNCERTAIN (G5)
+[PASS] overlap with no alert: annotation only, no alert (G6)
+[PASS] unavailable evidence has no effect and is reported (G4)
+[PASS] acoustic-only TRIGGER_ALL cannot be configured
+[PASS] config has no defaults
+[PASS] fixture acoustic source is ignored by the production-equivalent config
+[PASS] production-equivalent mirrors live: scream-alone VERIFY, 9-class corroboration lifts a UDK alert
+[PASS] Phase 3 decision + missing acoustic/speaker evidence -> unchanged TRIGGER_ALL
+[PASS] toy target-speaker: 15/15 decided items correct, overlapped items UNCERTAIN (not scored negative)
+[PASS] toy attribution: 4/4 single-speaker segments correct; 0 merged overlaps
+[PASS] toy overlap: precision 3/3, recall 3/3
+[PASS] toy acoustic: distress recall 2/2, hard-negative false positives 0/3
+
+========================================
+55/55 TOTAL PASSED -- ALL PASSED

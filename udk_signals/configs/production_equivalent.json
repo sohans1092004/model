@@ -1,0 +1,9 @@
+{
+ "format": "udk_signals.config/1",
+ "_note": "Mirrors the LIVE 96ea038 acoustic behaviour: scream-alone TRIGGER_VERIFY from the 4-class BEATs trigger (UDK_ENABLE_SCREAM_TRIGGER=1) and 9-class >= 0.30 corroboration of an existing alert (UDK_ENABLE_SCREAM_DETECTION=1). These use the UNVERIFIED BEATs signals exactly as production does today (S-4). No speaker embedder or overlap detector is live, so target_speaker / attribution thresholds are null. Condition thresholds are provisional (S-5) and only label evidence.",
+ "acoustic_alone": {"enabled": true, "sources": ["beats_4class_scream_trigger"]},
+ "corroboration": {"enabled": true, "sources": ["beats_9class_corroboration"]},
+ "condition": {"min_duration_s": 0.2, "quiet_dbfs": -26, "low_snr_db": 12, "clipping_ratio": 0.05, "muffled_hf_ratio": 0.002},
+ "target_speaker": {"accept": null, "reject": null, "min_duration_s": null},
+ "attribution": {"same_speaker": null}
+}

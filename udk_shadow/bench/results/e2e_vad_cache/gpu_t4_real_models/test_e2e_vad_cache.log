@@ -1,0 +1,47 @@
+
+$ /usr/bin/python3 /kaggle/working/bundle/udk_shadow/test_e2e_vad_cache.py
+-- configuration
+[PASS] production env = the detection keys of deploy/.env.example (STT small.en, Parakeet, semantic, confidence gate, BEATs corroboration + scream trigger ON; KWS OFF; intent threshold 0.02)
+[PASS] only the device and intent-model path are set per machine; secrets/storage keys are never taken
+[PASS] no intent model -> gate left unset and recorded UNAVAILABLE (not 'negative')
+[PASS] with an intent model directory the gate path is set; threshold unchanged
+[PASS] deploy/.env.example is read, never modified
+-- comparison / classification (synthetic runs)
+[PASS] an OFF segment re-covering already-processed audio -> 'expected_vad_correction' with its overlap
+[PASS] the OFF-only repeat-escalated TRIGGER_ALL is reported as repeat-induced for OFF, none for ON
+[PASS] duplicate alerts: same UDK from overlapping segments reported (OFF 1, ON 0)
+[PASS] events only in OFF listed; ON == one-shot boundaries
+[PASS] events are paired by utterance: the same alert on a one-frame-drifted OFF segment is NOT reported missing/new
+[PASS] ON overlapping same-UDK alerts from the designed 8 s-cut overlap are marked designed (existing intentional behaviour)
+[PASS] same utterance + UDK at a different tier is a TIER CHANGE (OFF ALL -> ON VERIFY), not a missing + a new alert
+[PASS] per-utterance delay: OFF decided/alerted on the first utterance 21.6 s after ON; the later one at the same time
+[PASS] OFF-only shapes named: spurious (not speech in single pass) and drifted boundary; an alerting one needs review
+[PASS] an ON segment that is NOT a one-shot segment -> 'genuine_regression' (never silently accepted)
+[PASS] same segment, different Whisper text, and OFF differs from its own repeat -> 'stt_nondeterminism'; text kept for review
+[PASS] same segment, different STT text, both modes stable on repeat -> 'unable_to_determine' (flagged, not discarded)
+[PASS] same boundaries but different audio -> 'environment_tooling'
+[PASS] identical inputs but different decision AFTER an OFF-only alerting re-process -> 'expected_vad_correction' (engine history)
+[PASS] different decision on identical inputs with no earlier difference -> 'unable_to_determine'
+[PASS] persisted runs carry transcript digests only (no text)
+[PASS] percentiles: p50/p95/max/total
+[PASS] virtual clock: monotonic() is the audio clock; other time functions are real
+-- real api live path with fake models (real clip, webrtcvad + PyAV)
+[PASS] describe_components reports what ACTUALLY loaded (fakes by class name; nothing claimed that is not there)
+[PASS] no run errored
+[PASS] every journey ends COMPLETE (per-frame heartbeat as the WebSocket handler sends it; no timeout skips the final flush)
+[PASS] control: with per-frame heartbeats a run far longer than the grace still ends COMPLETE and keeps its final flush
+[PASS] control: WITHOUT heartbeats the same run times out, so stop_journey skips the final flush (the dry-run artefact); the harness now records the status and flags any non-COMPLETE journey as environment_tooling
+[PASS] the ONLY per-mode difference is the journey's VAD flag (OFF False, ON True)
+[PASS] the stubbed-in backends were really used through the live path (every processed segment has both STT outputs)
+[PASS] capture: BEATs trigger evidence, corroboration score, decisions, intent calls and per-component timings recorded
+[PASS] decisions are stamped with the virtual audio clock (monotone, within the audio duration)
+[PASS] ON == one-shot segmentation through the real service path; OFF is not (the defect, at 20 ms chunks)
+[PASS] OFF re-processing is detected and classified as expected VAD correction; no unexplained difference
+[PASS] determinism with deterministic models: OFF == OFF repeat, ON == ON repeat (segments and events)
+[PASS] ON has no duplicate alerts and no repeat-induced TRIGGER_ALL
+       (fake-model run, virtual clock: OFF events 1 / ON 1; OFF repeat-induced ALL 0; OFF duplicates 0)
+[PASS] measured defect: a noisy clip's opening utterance is decided >15 s late with the cache OFF (the persistent classifier re-reads it as non-speech until later speech shifts its state); ON decides it on time
+[PASS] api.py on disk is untouched by the harness (patches are in-process only)
+
+========================================
+38/38 TOTAL PASSED -- ALL PASSED

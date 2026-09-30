@@ -1,0 +1,10 @@
+{
+ "format": "udk_context.config/1",
+ "_note": "Reproduces the live 96ea038 behaviour: only the existing sentence veto (intent_gate THRESHOLD 0.02, both STTs must agree). Every context feature is OFF. The window values are recorded but unused here (C-5).",
+ "window": {"window_s": 20.0, "max_turns": 6},
+ "sentence_veto": {"enabled": true, "threshold": 0.02, "require_heard_by_both": true},
+ "context_veto": {"enabled": false, "threshold": null, "sentence_ceiling": null},
+ "context_escalation": {"enabled": false, "threshold": null},
+ "danger_without_udk": {"enabled": false, "threshold": null, "require_heard_by_both": true},
+ "negation": {"negators": ["not", "dont", "nahi", "mat", "ledu", "vaddu"], "scope_tokens": 3}
+}

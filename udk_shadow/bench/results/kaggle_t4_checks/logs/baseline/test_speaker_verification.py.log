@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/kaggle/working/udk_checks/baseline/test_speaker_verification.py", line 130, in <module>
+    main()
+  File "/kaggle/working/udk_checks/baseline/test_speaker_verification.py", line 52, in main
+    from speechbrain.inference.speaker import SpeakerRecognition
+ModuleNotFoundError: No module named 'speechbrain'

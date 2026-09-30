@@ -1,0 +1,42 @@
+=== retry_with_separation recovers a match one of the streams contains ===
+[PASS] a stream containing the UDK is found and returned
+
+1/1 checks passed so far.
+
+=== retry_with_separation returns None when no stream recovers anything ===
+[PASS] no stream matches -> caller keeps its own NO_ACTION
+
+2/2 checks passed so far.
+
+=== retry_with_separation prefers TRIGGER_ALL over TRIGGER_VERIFY across streams ===
+[PASS] TRIGGER_ALL wins over TRIGGER_VERIFY even when found second
+
+3/3 checks passed so far.
+
+=== a NO_ACTION-only retry never pollutes the engine's repetition window ===
+[PASS] engine state untouched by the failed retry (this is the first real occurrence, not treated as a repeat)
+=== two separated streams independently matching DIFFERENT UDKs never spuriously escalate (real bug found and fixed) ===
+[PASS] two simultaneous stream guesses on different UDKs don't force TRIGGER_ALL via spurious distinct-UDK escalation
+[PASS] the returned decision's own confidence is one real candidate's score, not inflated by escalation
+
+6/6 checks passed so far.
+
+=== WeSepTargetSeparator: only a self-verified extraction reaches the retry ===
+[PASS] extraction scoring above threshold is returned as the single stream
+[PASS] extraction scoring below threshold is discarded (user absent / failed extraction)
+[PASS] accepted extraction flows through retry_with_separation to a real detection
+[PASS] rejected extraction leaves the caller's NO_ACTION alone
+=== recheck_verify_with_separation: a weak wrong-UDK VERIFY yields to the user's exact UDK, counted once ===
+[PASS] setup: primary is a semantic VERIFY on UDK_Y
+[PASS] replaced by the exact UDK_X from the extracted voice
+[PASS] the replaced guess is NOT counted: engine saw one UDK for this segment, no distinct-UDK escalation
+[PASS] same UDK from extraction -> original decision kept
+[PASS] non-exact extraction -> original decision kept (never a veto)
+=== separated_extra_event: WeSep still runs when a sentence already fired, never double-counts ===
+[PASS] setup: whole segment NO_ACTION, a sentence fired UDK_X
+[PASS] different exact UDK from the user's voice is added
+[PASS] same UDK already fired in this segment -> not added (no double count)
+[PASS] rejected extraction (user absent) -> nothing added
+
+========================================
+19/19 TOTAL PASSED -- ALL PASSED

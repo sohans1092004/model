@@ -1,0 +1,19 @@
+prepped clips=0  real-negative segments=119
+/usr/local/lib/python3.12/dist-packages/torch/nn/utils/weight_norm.py:144: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+Traceback (most recent call last):
+  File "/kaggle/working/udk_checks/branch/test_emotion_distress.py", line 170, in <module>
+    main()
+  File "/kaggle/working/udk_checks/branch/test_emotion_distress.py", line 134, in main
+    outcomes = prepped_outcomes()
+               ^^^^^^^^^^^^^^^^^^
+  File "/kaggle/working/udk_checks/branch/test_emotion_distress.py", line 108, in prepped_outcomes
+    for line in log.read_text(encoding="utf-8", errors="replace").splitlines():
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1027, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/kaggle/working/udk_checks/branch/prepped_data_eval_output_sentences_small.en.log'

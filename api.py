@@ -477,6 +477,11 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
         # skipping early here would silently defeat the entire point of
         # running KWS in parallel (Section 4's Approach E).
         if not transcript.text and kws_match is None and not second_text and not scream_fired:
+            if _shadow is not None:  # Phase 6 shadow (udk_shadow/): read-only, never blocks
+                try:
+                    _shadow.observe(journey, seg, locals(), skipped=True)
+                except Exception:  # defence in depth: observe() already catches everything
+                    pass
             continue
         scream_score = _scream_detector.score(seg.pcm) if _scream_detector is not None and _scream_corroboration_enabled else None
 
@@ -517,6 +522,7 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
             dual_asr_disagreement=dual_asr_disagreement,
         )
         decisions = _either_stt_decisions(journey.engine, primary, pre_state, second_text, now_s, kws_match, scream_score)
+        _shadow_pre_veto = decisions  # reference only, read by the Phase 6 shadow observer below
         if _intent_gate is not None and second_text:
             decisions = _intent_veto(decisions, second_text if decisions is primary else transcript.text)
         decision, extras = decisions[0], decisions[1:]
@@ -546,6 +552,11 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
                                     repeated=False, reason=f"sustained {scream_class} (BEATs {scream_peak:.2f}), no UDK words")]
         for d in alerts:
             new_events.append(_emit_event(journey, d, seg))
+        if _shadow is not None:  # Phase 6 shadow: AFTER this segment's live alerts were emitted; read-only
+            try:
+                _shadow.observe(journey, seg, locals(), skipped=False, n_alerts=len(alerts), new_events=new_events)
+            except Exception:  # defence in depth: observe() already catches everything
+                pass
     return new_events
 
 
@@ -1136,6 +1147,33 @@ _stt_confidence_gate_enabled = os.environ.get("UDK_ENABLE_STT_CONFIDENCE_GATE") 
 _dual_asr_guard = _load_dual_asr_guard()
 # None unless UDK_INTENT_GATE=<model dir> -- see intent_gate.py (veto-agree on text alerts).
 _intent_gate = intent_gate.from_env(_device())
+
+
+def _load_shadow():
+    """Phase 6 shadow mode (udk_shadow/, PHASE6_INTEGRATION_CONTRACT.md). None -- and nothing imported --
+    unless UDK_SHADOW_MODE=1. A read-only observer: it never changes, delays or suppresses a live alert, never
+    mutates live state, and any failure (here or later) leaves the live path exactly as before."""
+    if os.environ.get("UDK_SHADOW_MODE") != "1":
+        return None
+    try:
+        import sys
+
+        from udk_shadow.runner import load
+
+        components = {"stt": getattr(_stt_backend, "model_version", None), "parakeet_loaded": _parakeet_stt is not None,
+                      "kws_loaded": _kws_backend is not None, "semantic_loaded": _semantic_matcher is not None,
+                      "separator_loaded": _separator is not None, "dual_asr_loaded": _dual_asr_guard is not None,
+                      "scream_detector_loaded": _scream_detector is not None, "intent_gate_loaded": _intent_gate is not None,
+                      "scream_trigger_enabled": _scream_trigger_enabled, "scream_corroboration_enabled": _scream_corroboration_enabled,
+                      "stt_confidence_gate_enabled": _stt_confidence_gate_enabled, "processing_version": PROCESSING_VERSION}
+        return load(sys.modules[__name__], _either_stt_decisions, _intent_gate, components)
+    except Exception as e:
+        print(f"shadow mode requested but not started ({type(e).__name__}: {e}); live path unaffected", flush=True)
+        return None
+
+
+# None unless UDK_SHADOW_MODE=1 -- see _load_shadow.
+_shadow = _load_shadow()
 
 app = FastAPI()
 

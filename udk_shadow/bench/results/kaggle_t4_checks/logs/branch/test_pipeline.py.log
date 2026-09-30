@@ -1,0 +1,40 @@
+=== Single-transcript cases ===
+[PASS] "Help me, please"
+       expected=TRIGGER_ALL got=TRIGGER_ALL (udk=UDK_08, layer=exact, confidence=1.00)
+       note: exact match, rare/specific phrase | reason: confidence >= TRIGGER_ALL threshold
+[PASS] "call the plice right now"
+       expected=TRIGGER_VERIFY got=TRIGGER_VERIFY (udk=UDK_01, layer=fuzzy, confidence=0.75)
+       note: ASR-noise fuzzy match on UDK_01, single occurrence | reason: confidence between TRIGGER_VERIFY and TRIGGER_ALL thresholds
+[PASS] "he's going to hurt me, someone is trying to hurt me"
+       expected=TRIGGER_ALL got=TRIGGER_ALL (udk=UDK_12, layer=exact, confidence=1.00)
+       note: near-exact substring match | reason: confidence >= TRIGGER_ALL threshold
+[PASS] "what a lovely day for a walk"
+       expected=NO_ACTION got=NO_ACTION (udk=None, layer=none, confidence=0.00)
+       note: ordinary conversation, no UDK | reason: below TRIGGER_VERIFY threshold
+[PASS] "can you please stop talking so loud"
+       expected=NO_ACTION got=NO_ACTION (udk=UDK_08, layer=semantic, confidence=0.54)
+       note: contains 'stop'-adjacent words but no UDK phrase | reason: below TRIGGER_VERIFY threshold
+[PASS] "I don't feel safe here"
+       expected=TRIGGER_VERIFY got=TRIGGER_VERIFY (udk=UDK_14, layer=exact, confidence=1.00)
+       note: verify-by-default phrase, single occurrence | reason: phrase is common-in-ordinary-conversation, verify by default (Section 16)
+[PASS] "I want to go home now"
+       expected=TRIGGER_VERIFY got=TRIGGER_VERIFY (udk=UDK_18, layer=exact, confidence=1.00)
+       note: verify-by-default phrase, single occurrence | reason: phrase is common-in-ordinary-conversation, verify by default (Section 16)
+
+7/7 single-transcript cases passed.
+
+=== Repetition-escalation case ===
+[t=0s]  "I don't feel safe here" -> TRIGGER_VERIFY (single instance is TRIGGER_VERIFY)
+[t=5s]  "I don't feel safe here" -> TRIGGER_ALL (same verify-by-default phrase said again within the window -> escalates to TRIGGER_ALL)
+[PASS] repetition escalation
+
+=== Distinct-UDK escalation case ===
+[t=0s]  "I don't feel safe here" -> TRIGGER_VERIFY (single occurrence, common-in-conversation)
+[t=1s]  "somebody help me now" -> TRIGGER_ALL (a different UDK within the window -> escalates to TRIGGER_ALL even though neither repeated)
+[PASS] distinct-UDK escalation
+
+=== Personal UDK case ===
+[PASS] "the weather in denver is lovely today" -> TRIGGER_ALL (udk_type=PERSONAL)
+
+========================================
+ALL TESTS PASSED

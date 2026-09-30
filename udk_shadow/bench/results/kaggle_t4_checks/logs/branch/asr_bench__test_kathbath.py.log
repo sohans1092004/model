@@ -1,0 +1,28 @@
+[PASS] the shipped template is refused (nothing inspected yet)
+[PASS] a filled layout is accepted
+[PASS] speaker_regex without a (?P<speaker>) group is refused
+[PASS] unknown transcript format is refused
+[PASS] split config: kathbath uses the hash policy with the provisional 0.70/0.10/0.10/0.10 ratios
+[PASS] the real registry refuses Kathbath today (acquisition not authorised)
+[PASS] the real registry still says acquisition_authorised = false
+[PASS] the adapter's licence + use_restriction agree with the real registry entry (only the flag differs)
+[PASS] one utterance per audio file with transcript + language + speaker
+[PASS] original .m4a is the audio path (relative to the Kathbath root)
+[PASS] speaker namespaced kathbath:<speaker from file name>; no invented session/recording
+[PASS] language from the folder; script measured from the transcript
+[PASS] only documented/measured metadata: read, unknown environment/device/English script, no tokens/CMI/safety
+[PASS] missing transcript recorded as a problem, not filled
+[PASS] unmapped language folder recorded as a problem
+[PASS] file name without a speaker recorded as a problem
+[PASS] non-.m4a files are not picked up by the documented audio format
+[PASS] ingest with the REAL registry is refused
+[PASS] ingest (authorised copy): all 16 rows built
+[PASS] audio_sha256 = exact .m4a bytes
+[PASS] duration from decoded samples at the original rate (16000 samples -> ~1.0 s, AAC frame padding included)
+[PASS] licence + restriction copied from the registry
+[PASS] each speaker's utterances in one split; leakage-clean
+[PASS] slice readiness reports the fixture's tiny slices as UNAVAILABLE with reasons
+[PASS] CLI ingest with the real registry is refused and writes nothing
+
+========================================
+25/25 TOTAL PASSED -- ALL PASSED

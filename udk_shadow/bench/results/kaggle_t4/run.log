@@ -1,0 +1,28 @@
+[15:11:49] bundle root: /kaggle/working/udk_bench
+[15:11:53] installed rapidfuzz (bundled wheel)
+[15:12:26] dependency ok: sentence_transformers
+[15:12:26] dependency ok: transformers
+[15:12:26] environment: {'python': '3.12.13', 'torch': '2.10.0+cu128', 'cuda': True, 'gpu': 'Tesla T4', 'cpu_count': 4}
+[15:12:27] shadow tests: 79/79 TOTAL PASSED -- ALL PASSED (rc=0)
+[15:12:27] building proxy models (random weights, production shapes; ~2 GB on disk)...
+[15:12:52] proxy build rc=0 
+[15:12:52] matrix: 18 runs (192 segments each)
+[15:13:13] [1/18] cuda mode=off stt=0.0s rep=1: ok (21s elapsed)
+[15:13:41] [2/18] cuda mode=on stt=0.0s rep=1: ok (49s elapsed)
+[15:14:02] [3/18] cuda mode=on_lite stt=0.0s rep=1: ok (70s elapsed)
+[15:15:59] [4/18] cuda mode=off stt=0.5s rep=1: ok (187s elapsed)
+[15:17:56] [5/18] cuda mode=on stt=0.5s rep=1: ok (304s elapsed)
+[15:19:53] [6/18] cuda mode=on_lite stt=0.5s rep=1: ok (421s elapsed)
+[15:20:13] [7/18] cuda mode=off stt=0.0s rep=2: ok (441s elapsed)
+[15:20:40] [8/18] cuda mode=on stt=0.0s rep=2: ok (468s elapsed)
+[15:21:01] [9/18] cuda mode=on_lite stt=0.0s rep=2: ok (489s elapsed)
+[15:22:57] [10/18] cuda mode=off stt=0.5s rep=2: ok (605s elapsed)
+[15:24:54] [11/18] cuda mode=on stt=0.5s rep=2: ok (722s elapsed)
+[15:26:51] [12/18] cuda mode=on_lite stt=0.5s rep=2: ok (839s elapsed)
+[15:27:11] [13/18] cuda mode=off stt=0.0s rep=3: ok (859s elapsed)
+[15:27:38] [14/18] cuda mode=on stt=0.0s rep=3: ok (886s elapsed)
+[15:27:59] [15/18] cuda mode=on_lite stt=0.0s rep=3: ok (907s elapsed)
+[15:29:56] [16/18] cuda mode=off stt=0.5s rep=3: ok (1024s elapsed)
+[15:31:53] [17/18] cuda mode=on stt=0.5s rep=3: ok (1140s elapsed)
+[15:33:49] [18/18] cuda mode=on_lite stt=0.5s rep=3: ok (1257s elapsed)
+[15:33:49] RESULTS.md written

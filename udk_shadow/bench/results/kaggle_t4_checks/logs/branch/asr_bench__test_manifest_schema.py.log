@@ -1,0 +1,136 @@
+[PASS] toy base row is valid, with no warnings
+[PASS] schema has every §3 field once
+[PASS] null utt_id is an error
+[PASS] null audio_path is an error
+[PASS] null audio_sha256 is an error
+[PASS] null source_dataset is an error
+[PASS] null source_version is an error
+[PASS] null sample_rate_hz is an error
+[PASS] null duration_s is an error
+[PASS] null channels is an error
+[PASS] null language_primary is an error
+[PASS] null languages_present is an error
+[PASS] null is_code_switched is an error
+[PASS] null transcript_ref is an error
+[PASS] null script is an error
+[PASS] null provenance is an error
+[PASS] null environment is an error
+[PASS] null condition_device is an error
+[PASS] null condition_real_or_synthetic is an error
+[PASS] null overlap is an error
+[PASS] null split is an error
+[PASS] null licence is an error
+[PASS] null use_restriction is an error
+[PASS] null session_id is allowed
+[PASS] null recording_id is allowed
+[PASS] null transcript_romanised is allowed
+[PASS] null snr_db is allowed
+[PASS] null clipping_ratio is allowed
+[PASS] tokens null -> cmi may be null
+[PASS] safety_tags null -> keyword_spans may be null
+[PASS] absent key is an error (must be present as null)
+[PASS] unknown key is a warning, not an error (Phase 1 §15 carry-over)
+[PASS] non-object row is an error
+[PASS] empty transcript_ref allowed (no-speech segment, §5 hallucination)
+[PASS] provenance='scripted' is rejected
+[PASS] environment='market' is rejected
+[PASS] condition_device='hand' is rejected
+[PASS] condition_real_or_synthetic='augmented' is rejected
+[PASS] english_word_script='roman' is rejected
+[PASS] split='validation' is rejected
+[PASS] use_restriction='research_only' is rejected
+[PASS] unknown safety tag is rejected
+[PASS] real_incident (Phase 1 §15 only) is rejected by the Phase 2A §3 enum -- open conflict D-PROV-1
+[PASS] 'unknown' is a valid value where §3 lists it
+[PASS] utt_id without '<source>:' is rejected
+[PASS] utt_id ':0001' is rejected
+[PASS] upper-case sha256 is rejected
+[PASS] short sha256 is rejected
+[PASS] float sample_rate_hz is rejected
+[PASS] boolean channels is rejected
+[PASS] zero duration is rejected
+[PASS] NaN duration is rejected
+[PASS] original 44.1 kHz stereo is allowed
+[PASS] empty audio_path is rejected
+[PASS] clipping_ratio 1.5 is rejected
+[PASS] en-IN is a valid language tag
+[PASS] 'Hindi' is not a BCP-47 tag
+[PASS] empty languages_present is rejected
+[PASS] duplicate languages_present is rejected
+[PASS] primary language missing from languages_present -> warning
+[PASS] is_code_switched true with one language -> warning
+[PASS] fully tagged tokens without cmi is an error (§3: number if tags exist)
+[PASS] cmi on a 0-1 scale is accepted as given (no scale assumed)
+[PASS] cmi on a 0-100 scale is accepted as given (no scale assumed)
+[PASS] cmi as a string is rejected (must be numeric)
+[PASS] cmi NaN is rejected
+[PASS] partly tagged tokens: cmi may be null
+[PASS] token missing a key is an error
+[PASS] empty tokens list is rejected (use null)
+[PASS] no Indic grouping configured: null english_word_script is allowed (no hidden language list)
+[PASS] Indic grouping {hi, te} configured: Hindi row with null english_word_script is an error
+[PASS] Indic grouping configured: English-only row may leave english_word_script null
+[PASS] Indic grouping {te} configured: Hindi row is not affected
+[PASS] script 'devanagari' is rejected (ISO 15924: Deva)
+[PASS] script 'mixed' is allowed
+[PASS] synthetic row without aug_recipe/seed is rejected
+[PASS] synthetic row with aug_recipe + integer seed is valid
+[PASS] synthetic seed must be an integer, not a bool
+[PASS] real row carrying a seed is rejected
+[PASS] overlap true without spans or level is rejected
+[PASS] overlap true with spans and level is valid
+[PASS] overlap false with a level is rejected
+[PASS] safety_tags set, keyword_spans null is rejected
+[PASS] safety_tags set, keyword_spans [] is allowed
+[PASS] keyword span with start after end is rejected
+[PASS] keyword span without times is rejected
+[PASS] keyword span past duration_s -> warning
+[PASS] empty licence is rejected
+[PASS] blocked row in executed split train is rejected
+[PASS] blocked row in executed split dev is rejected
+[PASS] blocked row in executed split test is rejected
+[PASS] blocked row in executed split final_test is rejected
+[PASS] blocked row kept as inventory (split eval_only) is a valid manifest row
+[PASS] eval_only data in train is rejected
+[PASS] eval_only data in dev / test / eval_only is allowed
+[PASS] null speaker_id in train is rejected
+[PASS] null speaker_id in dev is rejected
+[PASS] null speaker_id in test is rejected
+[PASS] null speaker_id in final_test is rejected
+[PASS] null speaker_id in eval_only is allowed
+[PASS] two clean rows validate
+[PASS] same speaker in the same split is fine
+[PASS] duplicate utt_id is rejected
+[PASS] same speaker in two splits is rejected
+[PASS] same speaker in eval_only and train is rejected
+[PASS] same session in two splits is rejected
+[PASS] same recording in two splits is rejected
+[PASS] same audio hash in two splits is rejected
+[PASS] same audio hash twice in one split -> warning only
+[PASS] null speakers in eval_only never collide with each other
+[PASS] contract: bare 'spk1' from two sources is read as ONE speaker leaking across splits
+[PASS] contract: adapter-namespaced 'toyA:spk1' / 'toyB:spk1' are two speakers, no leakage
+[PASS] no prefix format is required: an un-namespaced speaker_id is still a valid row
+[PASS] (b) train_ok and eval_only rows are legally usable, blocked is not
+[PASS] (c) valid dev row is eligible for dev
+[PASS] (c) dev row is not eligible for test
+[PASS] (c) blocked inventory row is not eligible even for its own split eval_only
+[PASS] (c) blocked row is not eligible for any split
+[PASS] (c) eval_only-restricted row is never eligible for train
+[PASS] (c) eval_only-restricted row in test is eligible for test
+[PASS] select_eligible returns the usable row and reports the blocked one with its reason
+[PASS] blocked inventory rows still take part in leakage checks (speaker also in train)
+[PASS] unparseable line is reported with its line number
+[PASS] CLI: valid manifest exits 0
+[PASS] CLI: invalid manifest exits 1
+[PASS] CLI: unreadable file exits 2
+[PASS] CLI: --json output parses
+[PASS] CLI: without --indic-languages a null english_word_script passes
+[PASS] CLI: --indic-languages hi,te makes it an error
+[PASS] CLI: blocked inventory row is valid and counted as blocked
+[PASS] CLI --json: blocked_rows = 1
+[PASS] CLI (-m): examples/toy_manifest_valid.jsonl exits 0
+[PASS] CLI (-m): examples/toy_manifest_invalid.jsonl exits 1
+
+========================================
+133/133 TOTAL PASSED -- ALL PASSED

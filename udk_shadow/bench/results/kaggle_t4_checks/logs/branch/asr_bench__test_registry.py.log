@@ -1,0 +1,54 @@
+[PASS] bundled registry loads, version 2 (R-4 split, FSD50K per-clip)
+[PASS] old combined ID phase0_sets is gone
+[PASS] every Phase 2A source is registered
+[PASS] acquisition_authorised is false for every source
+[PASS] gated sources with unread gate terms are blocked
+[PASS] collected sources (not collected, consent under review) are blocked
+[PASS] no unresolved / permission-required / unread-gate licence is train_ok
+[PASS] documented statuses kept verbatim
+[PASS] all four Phase 0 sets are eval_only, family phase0 (never train, Phase 1 §18)
+[PASS] Phase 0 sets keep distinct licence status (YouTube: video licences unknown; Telugu: own)
+[PASS] FSD50K requires per-clip licence + use_restriction
+[PASS] only FSD50K is per-item (no other source changed)
+[PASS] R-5 left unresolved: Vaani Noise Event keeps its own family
+[PASS] IndicVoices and its Te-En slice share a family
+[PASS] readiness: no source may run an adapter today
+[PASS] readiness: documented blockers are carried
+[PASS] readiness report is deterministic
+[PASS] invalid registry rejected: wrong format
+[PASS] invalid registry rejected: boolean version
+[PASS] invalid registry rejected: no sources
+[PASS] invalid registry rejected: id with ':'
+[PASS] invalid registry rejected: missing field
+[PASS] invalid registry rejected: empty licence
+[PASS] invalid registry rejected: unknown use_restriction
+[PASS] invalid registry rejected: non-boolean authorisation
+[PASS] invalid registry rejected: blockers not a list
+[PASS] invalid registry rejected: non-boolean per_item_restriction_required
+[PASS] registry digest changes with content
+[PASS] gate_status: authorised + blocked cannot run an adapter
+[PASS] registered + authorised + matching SourceInfo passes the gate
+[PASS] unregistered source -> rejected
+[PASS] registered but not authorised -> rejected
+[PASS] licence disagreeing with the registry -> rejected
+[PASS] use_restriction disagreeing with the registry (relaxing) -> rejected
+[PASS] use_restriction disagreeing with the registry (tightening) -> rejected too (must match exactly)
+[PASS] default (bundled) registry: a real source is refused (not authorised)
+[PASS] default registry: a toy source is refused (unregistered)
+[PASS] build_row with an authorised registered source builds a row
+[PASS] build_row refuses an unauthorised source before reading any audio
+[PASS] build_row without a registry argument uses the bundled one (toy refused)
+[PASS] monotone P-S2-3 rule still applies with the registry (utterance relaxing eval_only -> rejected)
+[PASS] per-item source: clip without its own licence/use_restriction -> rejected (source train_ok is only a ceiling)
+[PASS] per-item source: clip with licence but no use_restriction -> rejected
+[PASS] per-item source: NC clip recorded as eval_only
+[PASS] per-item source: explicit train_ok clip allowed (within the ceiling)
+[PASS] per-item source: eval_only clip still cannot be placed in train (schema)
+[PASS] non-per-item sources are unaffected (utterance values stay optional)
+[PASS] build_rows refuses an unauthorised source outright (not one failure per utterance)
+[PASS] CLI report: exit 0, lists every source
+[PASS] CLI report --json parses
+[PASS] CLI report on an invalid registry exits 2
+
+========================================
+51/51 TOTAL PASSED -- ALL PASSED

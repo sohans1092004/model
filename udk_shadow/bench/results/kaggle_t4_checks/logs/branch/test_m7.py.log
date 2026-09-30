@@ -1,0 +1,32 @@
+=== Metrics reflect real activity, not just request/response health ===
+[PASS] journeys_started counted
+[PASS] journeys_completed counted
+[PASS] chunks_received counted
+[PASS] detection recorded by decision type
+[PASS] detection latency p50 is a real number
+[PASS] event delivery success rate is 1.0 (no failures yet)
+
+6/6 checks passed so far.
+
+=== Journey eviction fixes the in-memory-growth leak ===
+[PASS] finished journey is still in memory before eviction
+[PASS] evict_finished removes it
+[PASS] GET /journeys still works after eviction (via the DB, Section 9)
+
+9/9 checks passed so far.
+
+=== Accelerated soak-shaped run: many journeys, memory bounded, SLOs hold ===
+[PASS] in-memory journey count stays bounded after 200 journeys (eviction keeps it small)
+[PASS] all 200+ journeys detected their phrase
+[PASS] event delivery success rate held at 100% across the soak run
+[PASS] detection latency SLO holds across the soak run (p50 <= 1.5s)
+[PASS] detection latency SLO holds across the soak run (p95 <= 4s)
+
+14/14 checks passed so far.
+
+=== Concurrency bump: 60 concurrent journeys (3x M5's load test) ===
+[PASS] all 60 concurrent journeys completed without exceptions
+[PASS] all 60 journeys produced exactly one correct event
+
+========================================
+16/16 TOTAL PASSED -- ALL PASSED

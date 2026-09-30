@@ -1,0 +1,426 @@
+{
+ "checks": {
+  "off: service serves, shadow not loaded": true,
+  "on: shadow loaded, every observed segment processed without errors, effective config recorded": true,
+  "on: replay records carry the counterfactual label": true,
+  "stage_error: phase5 errors recorded, live unaffected": true,
+  "queue_full: drops counted, live unaffected": true,
+  "missing_pkg: shadow stays OFF, service serves": true,
+  "off: live events identical to shadow OFF": true,
+  "on: live events identical to shadow OFF": true,
+  "stage_error: live events identical to shadow OFF": true,
+  "queue_full: live events identical to shadow OFF": true,
+  "missing_pkg: live events identical to shadow OFF": true
+ },
+ "results": {
+  "off": {
+   "scenario": "off",
+   "shadow_loaded": false,
+   "live_events": [
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_08",
+     "layer": "exact",
+     "segment": "0-3200"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "PUDK_U1001",
+     "layer": "fuzzy",
+     "segment": "6400-9600"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_14",
+     "layer": "exact",
+     "segment": "9600-12800"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_10",
+     "layer": "exact",
+     "segment": "12800-16000"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_13",
+     "layer": "exact",
+     "segment": "12800-16000"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_01",
+     "layer": "exact",
+     "segment": "16000-19200"
+    }
+   ],
+   "service_alive_after": true
+  },
+  "on": {
+   "scenario": "on",
+   "shadow_loaded": true,
+   "live_events": [
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_08",
+     "layer": "exact",
+     "segment": "0-3200"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "PUDK_U1001",
+     "layer": "fuzzy",
+     "segment": "6400-9600"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_14",
+     "layer": "exact",
+     "segment": "9600-12800"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_10",
+     "layer": "exact",
+     "segment": "12800-16000"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_13",
+     "layer": "exact",
+     "segment": "12800-16000"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_01",
+     "layer": "exact",
+     "segment": "16000-19200"
+    }
+   ],
+   "service_alive_after": true,
+   "stats": {
+    "observed": 9,
+    "status:ok": 6,
+    "status:skipped_live_no_text": 3
+   },
+   "records": 9,
+   "statuses": [
+    "ok",
+    "skipped_live_no_text"
+   ],
+   "error_stages": [],
+   "effective": {
+    "UDK_SHADOW_MODE": {
+     "env": "1",
+     "effective_enabled": true
+    },
+    "UDK_ENABLE_SCREAM_TRIGGER": {
+     "env": null,
+     "live_flag": false,
+     "detector_loaded": false,
+     "effective": false
+    },
+    "UDK_ENABLE_SCREAM_DETECTION": {
+     "env": null,
+     "live_flag": false,
+     "detector_loaded": false,
+     "effective": false
+    },
+    "sentence_veto": {
+     "live": {
+      "UDK_INTENT_GATE": null,
+      "UDK_INTENT_THRESHOLD": null,
+      "intent_gate_loaded": false,
+      "effective_threshold": null,
+      "second_stt_loaded": false,
+      "effective": false
+     },
+     "shadow_phase3": {
+      "enabled": true,
+      "threshold": 0.02,
+      "require_heard_by_both": true,
+      "scored": false
+     },
+     "phase5_sentence_veto_guard": false
+    },
+    "s4_status": "open",
+    "acoustic_policy": {
+     "acoustic_alone": {
+      "enabled": true,
+      "sources": [
+       "beats_4class_scream_trigger"
+      ]
+     },
+     "corroboration": {
+      "enabled": true,
+      "sources": [
+       "beats_9class_corroboration"
+      ]
+     }
+    }
+   },
+   "phase5_matches_live": 6,
+   "replay_semantics_labelled": true
+  },
+  "stage_error": {
+   "scenario": "stage_error",
+   "shadow_loaded": true,
+   "live_events": [
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_08",
+     "layer": "exact",
+     "segment": "0-3200"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "PUDK_U1001",
+     "layer": "fuzzy",
+     "segment": "6400-9600"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_14",
+     "layer": "exact",
+     "segment": "9600-12800"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_10",
+     "layer": "exact",
+     "segment": "12800-16000"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_13",
+     "layer": "exact",
+     "segment": "12800-16000"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_01",
+     "layer": "exact",
+     "segment": "16000-19200"
+    }
+   ],
+   "service_alive_after": true,
+   "stats": {
+    "observed": 9,
+    "status:partial": 6,
+    "status:skipped_live_no_text": 3
+   },
+   "records": 9,
+   "statuses": [
+    "partial",
+    "skipped_live_no_text"
+   ],
+   "error_stages": [
+    "phase5"
+   ],
+   "effective": {
+    "UDK_SHADOW_MODE": {
+     "env": "1",
+     "effective_enabled": true
+    },
+    "UDK_ENABLE_SCREAM_TRIGGER": {
+     "env": null,
+     "live_flag": false,
+     "detector_loaded": false,
+     "effective": false
+    },
+    "UDK_ENABLE_SCREAM_DETECTION": {
+     "env": null,
+     "live_flag": false,
+     "detector_loaded": false,
+     "effective": false
+    },
+    "sentence_veto": {
+     "live": {
+      "UDK_INTENT_GATE": null,
+      "UDK_INTENT_THRESHOLD": null,
+      "intent_gate_loaded": false,
+      "effective_threshold": null,
+      "second_stt_loaded": false,
+      "effective": false
+     },
+     "shadow_phase3": {
+      "enabled": true,
+      "threshold": 0.02,
+      "require_heard_by_both": true,
+      "scored": false
+     },
+     "phase5_sentence_veto_guard": false
+    },
+    "s4_status": "open",
+    "acoustic_policy": {
+     "acoustic_alone": {
+      "enabled": true,
+      "sources": [
+       "beats_4class_scream_trigger"
+      ]
+     },
+     "corroboration": {
+      "enabled": true,
+      "sources": [
+       "beats_9class_corroboration"
+      ]
+     }
+    }
+   },
+   "phase5_matches_live": 0,
+   "replay_semantics_labelled": true
+  },
+  "queue_full": {
+   "scenario": "queue_full",
+   "shadow_loaded": true,
+   "live_events": [
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_08",
+     "layer": "exact",
+     "segment": "0-3200"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "PUDK_U1001",
+     "layer": "fuzzy",
+     "segment": "6400-9600"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_14",
+     "layer": "exact",
+     "segment": "9600-12800"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_10",
+     "layer": "exact",
+     "segment": "12800-16000"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_13",
+     "layer": "exact",
+     "segment": "12800-16000"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_01",
+     "layer": "exact",
+     "segment": "16000-19200"
+    }
+   ],
+   "service_alive_after": true,
+   "stats": {
+    "observed": 9,
+    "status:ok": 5,
+    "status:skipped_live_no_text": 2,
+    "dropped_queue_full": 2
+   },
+   "records": 7,
+   "statuses": [
+    "ok",
+    "skipped_live_no_text"
+   ],
+   "error_stages": [],
+   "effective": {
+    "UDK_SHADOW_MODE": {
+     "env": "1",
+     "effective_enabled": true
+    },
+    "UDK_ENABLE_SCREAM_TRIGGER": {
+     "env": null,
+     "live_flag": false,
+     "detector_loaded": false,
+     "effective": false
+    },
+    "UDK_ENABLE_SCREAM_DETECTION": {
+     "env": null,
+     "live_flag": false,
+     "detector_loaded": false,
+     "effective": false
+    },
+    "sentence_veto": {
+     "live": {
+      "UDK_INTENT_GATE": null,
+      "UDK_INTENT_THRESHOLD": null,
+      "intent_gate_loaded": false,
+      "effective_threshold": null,
+      "second_stt_loaded": false,
+      "effective": false
+     },
+     "shadow_phase3": {
+      "enabled": true,
+      "threshold": 0.02,
+      "require_heard_by_both": true,
+      "scored": false
+     },
+     "phase5_sentence_veto_guard": false
+    },
+    "s4_status": "open",
+    "acoustic_policy": {
+     "acoustic_alone": {
+      "enabled": true,
+      "sources": [
+       "beats_4class_scream_trigger"
+      ]
+     },
+     "corroboration": {
+      "enabled": true,
+      "sources": [
+       "beats_9class_corroboration"
+      ]
+     }
+    }
+   },
+   "phase5_matches_live": 5,
+   "replay_semantics_labelled": true
+  },
+  "missing_pkg": {
+   "scenario": "missing_pkg",
+   "shadow_loaded": false,
+   "live_events": [
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_08",
+     "layer": "exact",
+     "segment": "0-3200"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "PUDK_U1001",
+     "layer": "fuzzy",
+     "segment": "6400-9600"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_14",
+     "layer": "exact",
+     "segment": "9600-12800"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_10",
+     "layer": "exact",
+     "segment": "12800-16000"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_13",
+     "layer": "exact",
+     "segment": "12800-16000"
+    },
+    {
+     "decision": "TRIGGER_ALL",
+     "udk_id": "UDK_01",
+     "layer": "exact",
+     "segment": "16000-19200"
+    }
+   ],
+   "service_alive_after": true
+  }
+ }
+}
+
+live-service smoke: 11/11 checks passed
