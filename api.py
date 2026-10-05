@@ -1136,14 +1136,12 @@ _audio_key_manager = KeyManager(_tmp / "udk_audio.key")
 _db_key_manager = KeyManager(_tmp / "udk_db.key")
 _audio_store = _load_audio_store(_audio_key_manager, _tmp / "udk_journey_audio")
 _event_queue = EventDeliveryQueue(_tmp / "udk_event_queue")
-_db = _load_db(_db_key_manager, _tmp / "udk_journeys.sqlite3")
 _audit_log = AuditLog(_tmp / "udk_audit_log.sqlite3")
 # Per service token; the website's one server token covers ALL its users' start/stop/status calls.
 _rate_limiter = RateLimiter(max_requests=int(os.environ.get("UDK_RATE_LIMIT_PER_MIN", "10")), window_s=60)
 _signing_secret = _load_or_create_signing_secret(_tmp / "udk_signing_secret.bin")
 _metrics = Metrics()
 _downstream_deliver: Callable[[dict], bool] = _load_downstream_deliver()
-_store = JourneyStore(db=_db)
 # None unless enroll_kws_references.py has been run -- see _load_kws_backend.
 _kws_backend: KWSBackend | None = _load_kws_backend(Path(__file__).parent / "kws_references.npz")
 # None unless UDK_ENABLE_SEMANTIC=1 -- see _load_semantic_matcher.
@@ -1174,6 +1172,11 @@ _dual_asr_guard = _load_dual_asr_guard()
 _intent_gate = intent_gate.from_env(_device())
 # None unless UDK_PHRASE_DB_URL is set -- see _load_custom_udk_stt / custom_udk.py.
 _custom_udk_stt: STTBackend | None = _load_custom_udk_stt()
+# Last, after every model: opening the DB migrates it (journeys.personal_udk_* are dropped), and the previous image
+# cannot start journeys on a migrated DB. A release whose models fail to load never gets here, so the deploy's
+# rollback (deploy/remote_deploy.sh) lands on a DB it can still use.
+_db = _load_db(_db_key_manager, _tmp / "udk_journeys.sqlite3")
+_store = JourneyStore(db=_db)
 
 app = FastAPI()
 
