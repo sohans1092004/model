@@ -27,5 +27,8 @@
 !kws_references.npz
 !beats_vendor/
 beats_vendor/**/__pycache__
+!safety_router/
+safety_router/**/__pycache__
+safety_router/test_router.py
 !deploy/requirements-deploy.txt
 !deploy/prefetch_models.py
