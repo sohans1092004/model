@@ -38,19 +38,21 @@ Then stream one prepped_data clip through it (colab_api_check.py does this in-pr
 and confirm the alert arrives at the webhook.
 
 ## Custom UDK (off in `.env.example`; deploying this code changes nothing until switched on)
-**Custom UDK (each user's own phrase, `custom_udk.py`).** Off while `UDK_PHRASE_DB_URL` is unset.
-1. Put `UDK_PHRASE_DB_URL` and `UDK_PHRASE_DB_TOKEN` in the server config (SSM `/sakhi/udk/config`).
-   The endpoint must answer `GET {URL}/users/{user_id}/phrase-recordings` with
-   `{"recordings": ["<base64 audio file>", ...]}` (4-6 files; wav/m4a/mp3/ogg). If the real endpoint differs,
-   change only `custom_udk.fetch_recordings()`.
-2. The app calls `POST /v1/users/{user_id}/custom-udk/refresh` (service token) once after the user records,
-   and shows `reason` when `accepted` is false.
-3. Speed: the gate runs its own Whisper on every segment before anything else. Measured per segment:
-   medium.en on a T4 adds ~0.6-1.5 s; on CPU, medium takes ~11-13 s and small.en ~4 s (laptop CPU).
-   On the CPU host set `UDK_CUSTOM_UDK_STT_MODEL=small.en` (already in the image), or move to a GPU host first.
-   Changing the model means every user must be refreshed again (each profile records its `stt`).
-4. medium.en is not baked into the image: the first start with the feature on downloads ~1.5 GB
-   (again after each redeploy, since the cache is inside the container).
+**Custom UDK (each user's own phrase, `custom_udk.py`).** Off while `UDK_CUSTOM_UDK_STT_MODEL` is unset.
+1. Put `UDK_CUSTOM_UDK_STT_MODEL` in the server config (SSM `/sakhi/udk/config`, not `.env.example`: it is per
+   host): `small.en` on the CPU host, where it is the general model's own Whisper (shared, already in the image);
+   `medium.en` on a GPU host (not in the image: the first start downloads ~1.5 GB, again after each redeploy).
+2. The app calls `POST /v1/users/{user_id}/custom-udk/refresh` (service token) with
+   `{"recordings": ["<base64 audio file>", ...]}` (4-6 files; wav/webm/m4a/mp3/ogg) after the user records, and
+   shows `reason` when `accepted` is false. `DELETE /v1/users/{user_id}/custom-udk` forgets a user's phrase.
+3. Speed: the gate transcribes every segment of an enrolled user before anything else; with the same model as the
+   general one, a miss reuses those transcripts. Measured per segment: medium.en on a T4 adds ~0.6-1.5 s; on CPU
+   medium takes ~11-13 s and small.en ~4 s (laptop CPU).
+4. Changing the model: each profile records its `stt`, journey start then answers `custom_udk: false` for older
+   ones and the app asks those users to record again.
+5. Rollback: this code drops `journeys.personal_udk_*` on its first start, and earlier images cannot start journeys
+   on that DB. The automatic rollback is safe (the DB opens only after every model loads); a manual rollback to an
+   earlier release needs the `/data` backup from before this one.
 
 ## Rules for running it
 - **One worker, one container per GPU.** Live sessions are held in memory; two workers

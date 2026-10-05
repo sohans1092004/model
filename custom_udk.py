@@ -1,5 +1,6 @@
 """Per-user custom UDK, as in custom_udk_enrol_detect_v2.ipynb (MODE="text"): each user records their own phrase
-4-6 times during app setup; the service transcribes the recordings once (refresh), stores the profile per user,
+4-6 times during app setup and the app sends the recordings in one refresh call; the service transcribes them
+once, stores the profile per user (not the audio),
 and checks it first on every segment: the phrase in the gate's own Whisper (medium.en, as in
 the notebook) or Parakeet transcript -> TRIGGER_ALL straight away (no intent veto); otherwise the general model
 decides, unchanged.
@@ -16,10 +17,7 @@ from __future__ import annotations
 
 import base64
 import io
-import json
-import os
 import re
-import urllib.request
 
 from rapidfuzz import fuzz
 
@@ -55,15 +53,10 @@ def detect(texts: list[str], profile: dict) -> bool:
     return any(f" {v} " in t for t in padded for v in profile.get("variants", []))
 
 
-def fetch_recordings(user_id: str) -> list[bytes]:
-    """The user's setup recordings from the app's database endpoint, as 16 kHz mono int16 PCM.
-    ponytail: assumed response shape {"recordings": ["<base64 audio file>", ...]} (any format PyAV decodes: wav,
-    m4a, mp3, ...); change only this function once the real endpoint's format is known."""
-    url = f"{os.environ['UDK_PHRASE_DB_URL'].rstrip('/')}/users/{user_id}/phrase-recordings"
-    req = urllib.request.Request(url, headers={"Authorization": f"Bearer {os.environ.get('UDK_PHRASE_DB_TOKEN', '')}"})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        files = json.load(r)["recordings"]
-    return [_to_pcm16k(base64.b64decode(f)) for f in files]
+def decode_recordings(files: list[str]) -> list[bytes]:
+    """The setup recordings the app sends to refresh, base64 audio files (anything PyAV decodes: wav, webm, m4a, mp3,
+    ogg), as 16 kHz mono int16 PCM. Raises on a file that is not decodable audio."""
+    return [_to_pcm16k(base64.b64decode(f, validate=True)) for f in files]
 
 
 def _to_pcm16k(audio_file: bytes) -> bytes:

@@ -177,6 +177,11 @@ class JourneyDB:
             row = self._conn.execute("SELECT profile FROM custom_udk_profiles WHERE user_id = ?", (user_id,)).fetchone()
         return json.loads(self._dec(row["profile"])) if row else None
 
+    def delete_custom_udk(self, user_id: str) -> None:
+        with self._lock:
+            self._conn.execute("DELETE FROM custom_udk_profiles WHERE user_id = ?", (user_id,))
+            self._conn.commit()
+
     def save_event(self, event: dict) -> None:
         """Idempotent: event_id is the primary key, so a retried save
         (Section 9's deterministic event_id) is a no-op, not a duplicate

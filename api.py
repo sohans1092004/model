@@ -51,10 +51,10 @@ import time
 import uuid
 from dataclasses import dataclass, field, replace
 from pathlib import Path
-from typing import Callable, Literal
+from typing import Annotated, Callable, Literal
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Response, WebSocket, WebSocketDisconnect
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from audit import AuditLog
 from crypto import KeyManager
@@ -1036,13 +1036,13 @@ def _load_language_detectors() -> tuple[object | None, object | None]:
 
 
 def _load_custom_udk_stt() -> STTBackend | None:
-    """Whisper for the custom-UDK gate and its setup: medium.en, the notebook's model (UDK_CUSTOM_UDK_STT_MODEL
-    overrides). When it is the general model's own Whisper (UDK_STT_MODEL), that one instance serves both, so the box
-    holds it once and a segment the gate misses is not transcribed twice. Only when the feature is configured
-    (UDK_PHRASE_DB_URL); else loaded like _load_stt_backend (GPU if usable, else CPU)."""
-    if not os.environ.get("UDK_PHRASE_DB_URL"):
+    """Whisper for the custom-UDK gate and its setup. Off unless UDK_CUSTOM_UDK_STT_MODEL is set, with no default:
+    medium.en (the notebook's model) on a GPU, small.en on the CPU host, where medium takes 11-13 s a segment. When it
+    is the general model's own Whisper (UDK_STT_MODEL), that one instance serves both, so the box holds it once and a
+    segment the gate misses is not transcribed twice. Else loaded like _load_stt_backend (GPU if usable, else CPU)."""
+    model = os.environ.get("UDK_CUSTOM_UDK_STT_MODEL")
+    if not model:
         return None
-    model = os.environ.get("UDK_CUSTOM_UDK_STT_MODEL", "medium.en")
     if _stt_backend.model_version == f"faster-whisper-{model}":
         return _stt_backend
     from stt import FasterWhisperSTT
@@ -1173,7 +1173,7 @@ _stt_confidence_gate_enabled = os.environ.get("UDK_ENABLE_STT_CONFIDENCE_GATE") 
 _dual_asr_guard = _load_dual_asr_guard()
 # None unless UDK_INTENT_GATE=<model dir> -- see intent_gate.py (veto-agree on text alerts).
 _intent_gate = intent_gate.from_env(_device())
-# None unless UDK_PHRASE_DB_URL is set -- see _load_custom_udk_stt / custom_udk.py.
+# None unless UDK_CUSTOM_UDK_STT_MODEL is set -- see _load_custom_udk_stt / custom_udk.py.
 _custom_udk_stt: STTBackend | None = _load_custom_udk_stt()
 # Last, after every model: opening the DB migrates it (journeys.personal_udk_* are dropped), and the previous image
 # cannot start journeys on a migrated DB. A release whose models fail to load never gets here, so the deploy's
@@ -1188,11 +1188,18 @@ class StartRequest(BaseModel):
     user_id: str
     journey_id: str | None = None
     # No phrase field: a user's own phrase is the per-user custom UDK, set up once via
-    # POST /v1/users/{user_id}/custom-udk/refresh and loaded at every journey start.
+    # POST /v1/users/{user_id}/custom-udk/refresh and loaded at every journey start (an old
+    # client's personal_udk_phrase is ignored).
     # No language field: the client isn't asked and isn't trusted to know
     # the speaker's language (see language_id.py) -- it's detected from
     # the journey's own real audio instead, starting pending (None) and
     # resolved by _maybe_update_language on the first real segment.
+
+
+class RefreshRequest(BaseModel):
+    # The user's setup recordings, base64 audio files of a few seconds each; 2M chars (~1.5 MB) holds 8 s of 48 kHz
+    # stereo WAV, the largest the app has reason to send.
+    recordings: list[Annotated[str, Field(max_length=2_000_000)]]
 
 
 class StopRequest(BaseModel):
@@ -1229,25 +1236,30 @@ def start_journey(body: StartRequest):
         "session_token": journey.session_token,
         "stream_endpoint": f"/v1/journeys/{journey.journey_id}/stream",
         "heartbeat_interval_s": HEARTBEAT_INTERVAL_S,
+        # Whether this journey listens for the user's own phrase. None: the feature is off on this server. False: no
+        # profile, or one another Whisper model built (its variants are that model's spellings), so the app asks the
+        # user to record the phrase again.
+        "custom_udk": None if _custom_udk_stt is None else
+        bool(journey.custom_udk) and journey.custom_udk.get("stt") == _custom_udk_stt.model_version,
     }
 
 
 @app.post("/v1/users/{user_id}/custom-udk/refresh", dependencies=[Depends(require_service_token)])
-def refresh_custom_udk(user_id: str):
-    """Called by the app once after the user records their own phrase (and again if they re-record): fetches the
-    recordings from the app's database endpoint (UDK_PHRASE_DB_URL), transcribes them with the gate's Whisper
-    (medium.en), and stores the profile. A rejected phrase is reported, not stored, so a working older profile
-    stays in use."""
+def refresh_custom_udk(user_id: str, body: RefreshRequest):
+    """Called by the app after the user records their own phrase (and again if they re-record), with the recordings:
+    transcribes them with the gate's Whisper and stores the profile, never the audio. A rejected phrase is reported,
+    not stored, so a working older profile stays in use."""
     if _custom_udk_stt is None:
-        raise HTTPException(503, "custom UDK is not configured (UDK_PHRASE_DB_URL)")
+        raise HTTPException(503, "custom UDK is not configured (UDK_CUSTOM_UDK_STT_MODEL)")
+    if not custom_udk.MIN_CLIPS <= len(body.recordings) <= custom_udk.MAX_CLIPS:
+        return {"accepted": False, "reason": f"need {custom_udk.MIN_CLIPS}-{custom_udk.MAX_CLIPS} recordings, got {len(body.recordings)}"}
     try:
-        recordings = custom_udk.fetch_recordings(user_id)
-    except Exception as e:
-        raise HTTPException(502, f"could not fetch the user's recordings: {e}")
-    if not custom_udk.MIN_CLIPS <= len(recordings) <= custom_udk.MAX_CLIPS:
-        return {"accepted": False, "reason": f"need {custom_udk.MIN_CLIPS}-{custom_udk.MAX_CLIPS} recordings, got {len(recordings)}"}
+        recordings = custom_udk.decode_recordings(body.recordings)
+    except Exception:  # not base64, not audio, no audio stream: the user's file, so ask again rather than fail
+        return {"accepted": False, "reason": "a recording could not be read; record again"}
     profile = custom_udk.build_profile([_custom_udk_stt.transcribe(pcm).text for pcm in recordings])
-    # The variants are this model's spellings: after changing UDK_CUSTOM_UDK_STT_MODEL, refresh every user again.
+    # The variants are this model's spellings: after changing UDK_CUSTOM_UDK_STT_MODEL, journey start reports
+    # custom_udk false for older profiles and the app asks those users to record again.
     profile["stt"] = _custom_udk_stt.model_version
     if profile["ok"]:
         _db.save_custom_udk(user_id, profile)
@@ -1256,6 +1268,17 @@ def refresh_custom_udk(user_id: str):
                 j.custom_udk = profile
     return {"accepted": profile["ok"], "phrase": profile.get("phrase"), "stability": profile.get("stability"),
             "reason": profile.get("reason"), "stt": profile["stt"]}
+
+
+@app.delete("/v1/users/{user_id}/custom-udk", dependencies=[Depends(require_service_token)])
+def delete_custom_udk(user_id: str):
+    """The user removed their phrase or their account: the profile is deleted and running journeys stop listening
+    for it. Works with the feature off too, so a deletion never waits on configuration."""
+    _db.delete_custom_udk(user_id)
+    for j in list(_store._journeys.values()):
+        if j.user_id == user_id:
+            j.custom_udk = None
+    return {"deleted": True}
 
 
 @app.post("/v1/journeys/{journey_id}/stop", dependencies=[Depends(require_service_token)])

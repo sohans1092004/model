@@ -1,16 +1,13 @@
-"""Per-user custom UDK (custom_udk.py + api.py): refresh from the app's DB endpoint, per-user profiles, detection on
-every segment, alert without the intent veto. No models load: a local HTTP server plays the app's DB endpoint and
-MockSTT plays Whisper. python test_custom_udk.py"""
+"""Per-user custom UDK (custom_udk.py + api.py): refresh with the app's recordings, per-user profiles, detection on
+every segment, alert without the intent veto, delete. No models load: MockSTT plays Whisper.
+python test_custom_udk.py"""
 from __future__ import annotations
 
 import base64
 import io
-import json
 import os
 import tempfile
-import threading
 import wave
-from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
 import numpy as np
@@ -31,6 +28,7 @@ api._db = JourneyDB(_tmp / "journeys.sqlite3")
 api._store = api.JourneyStore(db=api._db)
 api._parakeet_stt = None
 api._downstream_deliver = lambda event: True
+api._rate_limiter = api.RateLimiter(max_requests=1000, window_s=60)
 
 passed = failed = 0
 
@@ -61,7 +59,7 @@ check("inconsistent recordings -> rejected, asks to record again",
       "record again" in custom_udk.build_profile(["the cat sat here", "a bat ran far away", "dog is here now", "sun was hot today"])["reason"])
 
 
-# ---- the app's DB endpoint (assumed shape: {"recordings": [base64 audio file, ...]}) ----
+# ---- refresh: the app sends the recordings ----
 def wav_file(tag: int) -> bytes:
     buf = io.BytesIO()
     with wave.open(buf, "wb") as w:
@@ -72,30 +70,25 @@ def wav_file(tag: int) -> bytes:
 
 RECORDINGS = {"U_alice": [wav_file(i) for i in range(5)], "U_bob": [wav_file(10 + i) for i in range(5)],
               "U_short": [wav_file(20 + i) for i in range(2)]}
-SEEN_AUTH = []
-
-
-class FakeAppDB(BaseHTTPRequestHandler):
-    def do_GET(self):
-        SEEN_AUTH.append(self.headers.get("Authorization"))
-        user = self.path.split("/")[-2]
-        body = json.dumps({"recordings": [base64.b64encode(f).decode() for f in RECORDINGS.get(user, [])]}).encode()
-        self.send_response(200), self.send_header("Content-Type", "application/json"), self.end_headers()
-        self.wfile.write(body)
-
-    def log_message(self, *a):
-        pass
-
-
-server = HTTPServer(("127.0.0.1", 0), FakeAppDB)
-threading.Thread(target=server.serve_forever, daemon=True).start()
 client = TestClient(api.app, headers={"X-Service-Token": api.DEV_SERVICE_TOKEN})
 
-os.environ.pop("UDK_PHRASE_DB_URL", None)
-check("not configured (no gate Whisper) -> 503, nothing stored", client.post("/v1/users/U_alice/custom-udk/refresh").status_code == 503)
-os.environ["UDK_PHRASE_DB_URL"] = f"http://127.0.0.1:{server.server_port}/api"
-os.environ["UDK_PHRASE_DB_TOKEN"] = "app-db-secret"
 
+def b64(files):
+    return [base64.b64encode(f).decode() for f in files]
+
+
+def refresh(user, files=None, body=None):
+    return client.post(f"/v1/users/{user}/custom-udk/refresh", json=body or {"recordings": b64(files)})
+
+
+def start(user):
+    return client.post("/v1/journeys/start", json={"user_id": user}).json()["custom_udk"]
+
+
+os.environ.pop("UDK_CUSTOM_UDK_STT_MODEL", None)
+check("off unless UDK_CUSTOM_UDK_STT_MODEL is set (no default model)", api._load_custom_udk_stt() is None)
+check("off -> refresh 503", refresh("U_alice", RECORDINGS["U_alice"]).status_code == 503)
+check("off -> journey start says custom_udk None", start("U_alice") is None)
 general = MockSTT()
 general.model_version = "faster-whisper-small.en"
 saved_general, api._stt_backend = api._stt_backend, general
@@ -104,25 +97,34 @@ check("same model as the general Whisper -> that instance, not a second one", ap
 api._stt_backend = saved_general
 os.environ.pop("UDK_CUSTOM_UDK_STT_MODEL")
 
-pcms = [custom_udk._to_pcm16k(f) for f in RECORDINGS["U_alice"]]
-check("fetch decodes the files to 16 kHz int16 PCM", custom_udk.fetch_recordings("U_alice") == pcms and len(pcms[0]) == 32000)
-check("fetch sends the configured token", SEEN_AUTH[-1] == "Bearer app-db-secret", str(SEEN_AUTH[-1:]))
+pcms = custom_udk.decode_recordings(b64(RECORDINGS["U_alice"]))
+check("recordings decode to 16 kHz int16 PCM", len(pcms) == 5 and len(pcms[0]) == 32000)
 
-api._custom_udk_stt = MockSTT()  # plays the gate's own Whisper (medium.en) on setup recordings and segments
+api._custom_udk_stt = MockSTT()  # plays the gate's own Whisper on setup recordings and segments
 for p in pcms:
     api._custom_udk_stt.register(p, "The blue bird sings at night")
 for i, f in enumerate(RECORDINGS["U_bob"]):
     api._custom_udk_stt.register(custom_udk._to_pcm16k(f), ["pineapple on the rooftop", "my train is late again", "call me when you land", "blue moon tonight here", "stop the car near home"][i])
 
-r = client.post("/v1/users/U_alice/custom-udk/refresh").json()
+r = refresh("U_alice", RECORDINGS["U_alice"]).json()
 check("refresh: alice's recordings -> accepted", r["accepted"] and r["phrase"] == "the blue bird sings at night", str(r))
 check("profile stored for alice", api._db.load_custom_udk("U_alice")["variants"] == ["the blue bird sings at night"])
-r = client.post("/v1/users/U_bob/custom-udk/refresh").json()
+r = refresh("U_bob", RECORDINGS["U_bob"]).json()
 check("refresh: bob's inconsistent recordings -> rejected with a reason, nothing stored",
       not r["accepted"] and "record again" in r["reason"] and api._db.load_custom_udk("U_bob") is None, str(r))
-r = client.post("/v1/users/U_short/custom-udk/refresh").json()
+r = refresh("U_short", RECORDINGS["U_short"]).json()
 check("refresh: only 2 recordings -> rejected", not r["accepted"] and "4-6" in r["reason"], str(r))
-check("refresh needs the service token", TestClient(api.app).post("/v1/users/U_alice/custom-udk/refresh").status_code == 422)
+for what, files in (("not audio", [base64.b64encode(b"not audio").decode()] * 4), ("not base64", ["%%%"] * 4)):
+    r = refresh("U_bad", body={"recordings": files}).json()
+    check(f"refresh: {what} -> rejected, asks to record again", not r["accepted"] and "record again" in r["reason"], str(r))
+check("refresh: an oversized recording -> 422", refresh("U_bad", body={"recordings": ["A" * 2_000_001] * 4}).status_code == 422)
+check("refresh needs the service token",
+      TestClient(api.app).post("/v1/users/U_alice/custom-udk/refresh", json={"recordings": []}).status_code == 422)
+
+check("journey start: alice's phrase is active", start("U_alice") is True)
+check("journey start: bob has none", start("U_bob") is False)
+api._db.save_custom_udk("U_old", {**api._db.load_custom_udk("U_alice"), "stt": "faster-whisper-medium.en"})
+check("journey start: a profile another model built -> False (the app asks to record again)", start("U_old") is False)
 
 
 # ---- live loop ----
@@ -196,16 +198,18 @@ check("gate miss on a shared Whisper: each model transcribes the segment once, t
 (api._stt_backend, api._custom_udk_stt), api._parakeet_stt = saved, None
 
 j_carol, _ = api._store.create_or_get("J_carol", "U_carol", MockSTT())
-RECORDINGS["U_carol"] = RECORDINGS["U_alice"]
-client.post("/v1/users/U_carol/custom-udk/refresh")
+refresh("U_carol", RECORDINGS["U_alice"])
 check("a running journey picks up a profile refreshed mid-journey", j_carol.custom_udk is not None and j_carol.custom_udk["phrase"] == "the blue bird sings at night")
 
 api._store._journeys.pop("J_alice")
 j_rec, created = api._store.create_or_get("J_alice", "U_alice", MockSTT())
 check("after a restart the journey reloads alice's profile from the DB", created and j_rec.custom_udk["phrase"] == "the blue bird sings at night")
 
-server.shutdown()
-os.environ.pop("UDK_PHRASE_DB_URL", None)
+r = client.delete("/v1/users/U_alice/custom-udk")
+check("delete: profile gone, running journeys stop listening",
+      r.status_code == 200 and api._db.load_custom_udk("U_alice") is None and j_rec.custom_udk is None, r.text)
+check("journey start after delete: False", start("U_alice") is False)
+check("delete needs the service token", TestClient(api.app).delete("/v1/users/U_alice/custom-udk").status_code == 422)
 print(f"\n{'=' * 40}\n{passed}/{passed + failed} TOTAL PASSED" + (" -- ALL PASSED" if failed == 0 else f", {failed} FAILED"))
 if failed:
     raise SystemExit(1)

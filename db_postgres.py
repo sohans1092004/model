@@ -3,7 +3,7 @@ M5's real Postgres swap, per db.py's own promise: "swapping the driver
 for a real Postgres connection later is a connection-string change, not
 a redesign." Same interface as db.py's JourneyDB (save_journey,
 load_journey, save_event, load_events, list_journeys, delete_journey,
-save_custom_udk, load_custom_udk) --
+save_custom_udk, load_custom_udk, delete_custom_udk) --
 api.py picks between them based on whether UDK_DATABASE_URL is set, not
 on any code-shape difference.
 
@@ -123,6 +123,10 @@ class PostgresJourneyDB:
         with self._lock:
             row = self._conn.execute("SELECT profile FROM custom_udk_profiles WHERE user_id = %s", (user_id,)).fetchone()
         return json.loads(self._dec(row["profile"])) if row else None
+
+    def delete_custom_udk(self, user_id: str) -> None:
+        with self._lock:
+            self._conn.execute("DELETE FROM custom_udk_profiles WHERE user_id = %s", (user_id,))
 
     def save_event(self, event: dict) -> None:
         """Same field-level transcript encryption as db.py -- see that
