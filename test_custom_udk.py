@@ -107,11 +107,13 @@ for i, f in enumerate(RECORDINGS["U_bob"]):
     api._custom_udk_stt.register(custom_udk._to_pcm16k(f), ["pineapple on the rooftop", "my train is late again", "call me when you land", "blue moon tonight here", "stop the car near home"][i])
 
 r = refresh("U_alice", RECORDINGS["U_alice"]).json()
-check("refresh: alice's recordings -> accepted", r["accepted"] and r["phrase"] == "the blue bird sings at night", str(r))
+check("refresh: alice's recordings -> accepted, with what each one was heard as",
+      r["accepted"] and r["phrase"] == "the blue bird sings at night" and r["heard"] == ["the blue bird sings at night"] * 5, str(r))
 check("profile stored for alice", api._db.load_custom_udk("U_alice")["variants"] == ["the blue bird sings at night"])
 r = refresh("U_bob", RECORDINGS["U_bob"]).json()
 check("refresh: bob's inconsistent recordings -> rejected with a reason, nothing stored",
-      not r["accepted"] and "record again" in r["reason"] and api._db.load_custom_udk("U_bob") is None, str(r))
+      not r["accepted"] and "record again" in r["reason"] and api._db.load_custom_udk("U_bob") is None
+      and r["heard"][0] == "pineapple on the rooftop", str(r))
 r = refresh("U_short", RECORDINGS["U_short"]).json()
 check("refresh: only 2 recordings -> rejected", not r["accepted"] and "4-6" in r["reason"], str(r))
 for what, files in (("not audio", [base64.b64encode(b"not audio").decode()] * 4), ("not base64", ["%%%"] * 4)):

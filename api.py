@@ -1257,7 +1257,8 @@ def refresh_custom_udk(user_id: str, body: RefreshRequest):
         recordings = custom_udk.decode_recordings(body.recordings)
     except Exception:  # not base64, not audio, no audio stream: the user's file, so ask again rather than fail
         return {"accepted": False, "reason": "a recording could not be read; record again"}
-    profile = custom_udk.build_profile([_custom_udk_stt.transcribe(pcm).text for pcm in recordings])
+    texts = [_custom_udk_stt.transcribe(pcm).text for pcm in recordings]
+    profile = custom_udk.build_profile(texts)
     # The variants are this model's spellings: after changing UDK_CUSTOM_UDK_STT_MODEL, journey start reports
     # custom_udk false for older profiles and the app asks those users to record again.
     profile["stt"] = _custom_udk_stt.model_version
@@ -1266,8 +1267,9 @@ def refresh_custom_udk(user_id: str, body: RefreshRequest):
         for j in list(_store._journeys.values()):  # journeys already running pick it up from the next segment
             if j.user_id == user_id:
                 j.custom_udk = profile
+    # `heard`: what each recording was heard as, in order, so the app can show the user what was saved (or why not).
     return {"accepted": profile["ok"], "phrase": profile.get("phrase"), "stability": profile.get("stability"),
-            "reason": profile.get("reason"), "stt": profile["stt"]}
+            "reason": profile.get("reason"), "stt": profile["stt"], "heard": [custom_udk.norm(t) for t in texts]}
 
 
 @app.delete("/v1/users/{user_id}/custom-udk", dependencies=[Depends(require_service_token)])

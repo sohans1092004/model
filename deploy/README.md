@@ -44,7 +44,7 @@ and confirm the alert arrives at the webhook.
    `medium.en` on a GPU host (not in the image: the first start downloads ~1.5 GB, again after each redeploy).
 2. The app calls `POST /v1/users/{user_id}/custom-udk/refresh` (service token) with
    `{"recordings": ["<base64 audio file>", ...]}` (4-6 files; wav/webm/m4a/mp3/ogg) after the user records, and
-   shows `reason` when `accepted` is false. `DELETE /v1/users/{user_id}/custom-udk` forgets a user's phrase.
+   shows `reason` when `accepted` is false; `heard` lists what each recording was heard as. `DELETE /v1/users/{user_id}/custom-udk` forgets a user's phrase.
 3. Speed: the gate transcribes every segment of an enrolled user before anything else; with the same model as the
    general one, a miss reuses those transcripts. Measured per segment: medium.en on a T4 adds ~0.6-1.5 s; on CPU
    medium takes ~11-13 s and small.en ~4 s (laptop CPU).
