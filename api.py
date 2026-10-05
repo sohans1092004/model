@@ -18,7 +18,7 @@ bottleneck.
 
 M5: journey metadata + events are now durable via db.py (SQLite standing
 in for Postgres) alongside AudioStore -- a restart recovers the whole
-journey (session_token, personal UDK, status), not just its audio.
+journey (session_token, status), not just its audio.
 
 M6 (Section 10): audio and sensitive DB columns are encrypted at rest via
 crypto.py; /start requires a scoped service credential and is rate
@@ -59,7 +59,6 @@ from pydantic import BaseModel
 from audit import AuditLog
 from crypto import KeyManager
 from db import JourneyDB
-from enrollment import enroll
 from event_delivery import EventDeliveryQueue
 from kws import KWSBackend
 from language_id import DEFAULT_LANGUAGE, MIN_RECHECK_DURATION_S
@@ -72,7 +71,8 @@ import scream_trigger
 from stt_confidence_gate import is_suspect
 from storage import AudioStore
 from udk_engine import TRIGGER_VERIFY_THRESHOLD, DecisionEvent, UDKEngine, match_transcript
-from udks import SAMPLE_PERSONAL_UDK, UDK, all_udks
+import custom_udk
+from udks import UDK, general_udks
 from vad import VAD
 
 HEARTBEAT_INTERVAL_S = 7
@@ -122,7 +122,6 @@ class JourneyState:
     session_token: str
     engine: UDKEngine
     stt: STTBackend
-    personal_udk: UDK
     status: JourneyStatus = "ACTIVE"
     started_at: float = field(default_factory=time.time)
     last_heartbeat_at: float = field(default_factory=time.time)
@@ -151,6 +150,7 @@ class JourneyState:
     _lid_recheck_buffer_start_ms: int = 0
     _lid_pending_candidate: str | None = None
     _lid_pending_streak: int = 0
+    custom_udk: dict | None = None  # this user's custom-UDK profile (custom_udk.py), loaded at journey start
 
 
 class JourneyStore:
@@ -172,7 +172,6 @@ class JourneyStore:
         journey_id: str,
         user_id: str,
         stt: STTBackend,
-        personal_udk,
         audio_store: AudioStore | None = None,
         kws: KWSBackend | None = None,
         semantic_matcher: SemanticBackend | None = None,
@@ -189,8 +188,8 @@ class JourneyStore:
         If this journey isn't in memory, check durable storage before
         assuming it's brand new (a process restart -- this in-memory
         dict is wiped, disk/DB aren't):
-          - self._db has the journey's session_token, status, and
-            enrolled personal UDK -- a full recovery, not just audio
+          - self._db has the journey's session_token and status, and the
+            user's custom-UDK profile -- a full recovery, not just audio
             (this is what M5 adds over M4, which could only recover the
             audio itself).
           - audio_store rebuilds the live buffer/next_expected_seq from
@@ -206,9 +205,7 @@ class JourneyStore:
         if recovered is not None:
             # Language comes from the DB record, not this call's `language`
             # param -- a reconnecting/retried request after a crash may not
-            # (and shouldn't need to) resend it, same reasoning as
-            # personal_udk being recovered from storage rather than trusted
-            # from the caller. A journey that crashed before its first real
+            # (and shouldn't need to) resend it. A journey that crashed before its first real
             # detection ever completed (recorded language is still None)
             # simply resumes pending detection -- same as a brand-new one.
             journey_language = recovered.get("language") or None
@@ -216,19 +213,12 @@ class JourneyStore:
             matcher = semantic_matcher if resolved_language == "en" else multilingual_semantic_matcher
             journey_stt = (stt_by_language or {}).get(resolved_language, stt)
             journey_kws = (kws_by_language or {}).get(resolved_language, kws)
-            personal_udk = UDK(
-                udk_id=recovered["personal_udk_id"],
-                phrase=recovered["personal_udk_phrase"],
-                udk_type="PERSONAL",
-                verify_by_default=bool(recovered["personal_udk_verify_by_default"]),
-            )
             journey = JourneyState(
                 journey_id=journey_id,
                 user_id=recovered["user_id"],
                 session_token=recovered["session_token"],
-                engine=UDKEngine(all_udks(personal_udk, language=resolved_language), semantic_matcher=matcher),
+                engine=UDKEngine(general_udks(resolved_language), semantic_matcher=matcher),
                 stt=journey_stt,
-                personal_udk=personal_udk,
                 status=recovered["status"],
                 started_at=recovered["started_at"],
                 last_heartbeat_at=recovered["last_heartbeat_at"],
@@ -257,9 +247,8 @@ class JourneyStore:
                 journey_id=journey_id,
                 user_id=user_id,
                 session_token=secrets.token_urlsafe(24),
-                engine=UDKEngine(all_udks(personal_udk, language=resolved_language), semantic_matcher=matcher),
+                engine=UDKEngine(general_udks(resolved_language), semantic_matcher=matcher),
                 stt=journey_stt,
-                personal_udk=personal_udk,
                 kws=journey_kws,
                 language=language,  # None (pending) unless caller already knows it
                 stt_by_language=stt_by_language or {},
@@ -280,6 +269,8 @@ class JourneyStore:
 
         if self._db is not None:
             self._db.save_journey(journey)
+            # Built once at setup (refresh endpoint); a journey only reads it.
+            journey.custom_udk = self._db.load_custom_udk(journey.user_id)
 
         self._journeys[journey_id] = journey
         if recovered is None:
@@ -370,7 +361,7 @@ def _resolve_language_backends(journey: JourneyState, language: str) -> None:
     journey.stt = journey.stt_by_language.get(language, journey.stt)
     journey.kws = journey.kws_by_language.get(language, journey.kws)
     matcher = journey.semantic_matcher_en if language == "en" else journey.multilingual_semantic_matcher
-    journey.engine = UDKEngine(all_udks(journey.personal_udk, language=language), semantic_matcher=matcher)
+    journey.engine = UDKEngine(general_udks(language), semantic_matcher=matcher)
     journey.language = language
 
 
@@ -455,6 +446,14 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
         if seg.end_ms <= journey.processed_up_to_ms:
             continue
         journey.processed_up_to_ms = seg.end_ms
+        # Custom-UDK gate (custom_udk.py, as in custom_udk_enrol_detect_v2.ipynb), first on every segment, with its
+        # own STT (Whisper medium.en + Parakeet): the user's own phrase -> TRIGGER_ALL, and the general model does
+        # not run for this segment. No match -> the general model below, exactly as before.
+        if journey.custom_udk and _custom_udk_stt is not None:
+            texts = _custom_udk_texts(seg.pcm)
+            if custom_udk.detect(texts, journey.custom_udk):
+                new_events.append(_emit_event(journey, _custom_udk_event(journey, texts), seg))
+                continue
         stt_start = time.monotonic()
         transcript = journey.stt.transcribe(seg.pcm)
         _metrics.stt_latency(time.monotonic() - stt_start)
@@ -826,6 +825,22 @@ def _load_parakeet_stt() -> STTBackend | None:
         return None
 
 
+def _custom_udk_texts(pcm: bytes) -> list[str]:
+    """The gate's own transcripts of a segment: Whisper medium.en, and Parakeet when it is enabled (the notebook's
+    detection checks both; its variants come from Whisper only)."""
+    texts = [_custom_udk_stt.transcribe(pcm).text]
+    if _parakeet_stt is not None:
+        texts.append(_parakeet_stt.transcribe(pcm).text)
+    return texts
+
+
+def _custom_udk_event(journey: JourneyState, texts: list[str]) -> DecisionEvent:
+    phrase = journey.custom_udk["phrase"]
+    return DecisionEvent(decision="TRIGGER_ALL", udk=UDK("CUSTOM_UDK", phrase, "PERSONAL"), confidence=1.0,
+                         transcript=next(t for t in texts if t and custom_udk.detect([t], journey.custom_udk)),
+                         layer="custom_udk", repeated=False, reason=f"user's own phrase: '{phrase}'")
+
+
 _DECISION_RANK = {"NO_ACTION": 0, "TRIGGER_VERIFY": 1, "TRIGGER_ALL": 2}
 
 
@@ -1020,6 +1035,27 @@ def _load_language_detectors() -> tuple[object | None, object | None]:
         return None, None
 
 
+def _load_custom_udk_stt() -> STTBackend | None:
+    """Whisper for the custom-UDK gate and its setup: medium.en, the notebook's model (UDK_CUSTOM_UDK_STT_MODEL
+    overrides). Separate from the general model's Whisper, which stays as it is. Only when the feature is configured
+    (UDK_PHRASE_DB_URL); loaded like _load_stt_backend (GPU if usable, else CPU)."""
+    if not os.environ.get("UDK_PHRASE_DB_URL"):
+        return None
+    from stt import FasterWhisperSTT
+
+    model = os.environ.get("UDK_CUSTOM_UDK_STT_MODEL", "medium.en")
+    if _device() == "cuda":
+        try:
+            stt = FasterWhisperSTT(model_size=model, device="cuda", compute_type="float16")
+            stt.transcribe(b"\x00\x00" * 8000)
+            return stt
+        except Exception as e:
+            import warnings
+
+            warnings.warn(f"custom-UDK Whisper on CUDA failed ({e!r}); falling back to CPU")
+    return FasterWhisperSTT(model_size=model, device="cpu", compute_type="int8")
+
+
 def _load_db(key_manager, fallback_path):
     """Real Postgres if UDK_DATABASE_URL is set (see db_postgres.py),
     else the local SQLite stand-in (db.py) -- same opt-in-by-env-var
@@ -1136,6 +1172,8 @@ _stt_confidence_gate_enabled = os.environ.get("UDK_ENABLE_STT_CONFIDENCE_GATE") 
 _dual_asr_guard = _load_dual_asr_guard()
 # None unless UDK_INTENT_GATE=<model dir> -- see intent_gate.py (veto-agree on text alerts).
 _intent_gate = intent_gate.from_env(_device())
+# None unless UDK_PHRASE_DB_URL is set -- see _load_custom_udk_stt / custom_udk.py.
+_custom_udk_stt: STTBackend | None = _load_custom_udk_stt()
 
 app = FastAPI()
 
@@ -1143,7 +1181,8 @@ app = FastAPI()
 class StartRequest(BaseModel):
     user_id: str
     journey_id: str | None = None
-    personal_udk_phrase: str | None = None
+    # No phrase field: a user's own phrase is the per-user custom UDK, set up once via
+    # POST /v1/users/{user_id}/custom-udk/refresh and loaded at every journey start.
     # No language field: the client isn't asked and isn't trusted to know
     # the speaker's language (see language_id.py) -- it's detected from
     # the journey's own real audio instead, starting pending (None) and
@@ -1159,18 +1198,10 @@ class StopRequest(BaseModel):
 def start_journey(body: StartRequest):
     journey_id = body.journey_id or str(uuid.uuid4())
 
-    personal_udk = SAMPLE_PERSONAL_UDK
-    if body.personal_udk_phrase:
-        result = enroll(body.user_id, body.personal_udk_phrase)
-        if not result.ok:
-            raise HTTPException(400, {"errors": result.errors})
-        personal_udk = result.udk
-
     journey, created = _store.create_or_get(
         journey_id,
         body.user_id,
         _stt_backend,
-        personal_udk,
         _audio_store,
         _kws_backend,
         _semantic_matcher,
@@ -1193,6 +1224,32 @@ def start_journey(body: StartRequest):
         "stream_endpoint": f"/v1/journeys/{journey.journey_id}/stream",
         "heartbeat_interval_s": HEARTBEAT_INTERVAL_S,
     }
+
+
+@app.post("/v1/users/{user_id}/custom-udk/refresh", dependencies=[Depends(require_service_token)])
+def refresh_custom_udk(user_id: str):
+    """Called by the app once after the user records their own phrase (and again if they re-record): fetches the
+    recordings from the app's database endpoint (UDK_PHRASE_DB_URL), transcribes them with the gate's Whisper
+    (medium.en), and stores the profile. A rejected phrase is reported, not stored, so a working older profile
+    stays in use."""
+    if _custom_udk_stt is None:
+        raise HTTPException(503, "custom UDK is not configured (UDK_PHRASE_DB_URL)")
+    try:
+        recordings = custom_udk.fetch_recordings(user_id)
+    except Exception as e:
+        raise HTTPException(502, f"could not fetch the user's recordings: {e}")
+    if not custom_udk.MIN_CLIPS <= len(recordings) <= custom_udk.MAX_CLIPS:
+        return {"accepted": False, "reason": f"need {custom_udk.MIN_CLIPS}-{custom_udk.MAX_CLIPS} recordings, got {len(recordings)}"}
+    profile = custom_udk.build_profile([_custom_udk_stt.transcribe(pcm).text for pcm in recordings])
+    # The variants are this model's spellings: after changing UDK_CUSTOM_UDK_STT_MODEL, refresh every user again.
+    profile["stt"] = _custom_udk_stt.model_version
+    if profile["ok"]:
+        _db.save_custom_udk(user_id, profile)
+        for j in list(_store._journeys.values()):  # journeys already running pick it up from the next segment
+            if j.user_id == user_id:
+                j.custom_udk = profile
+    return {"accepted": profile["ok"], "phrase": profile.get("phrase"), "stability": profile.get("stability"),
+            "reason": profile.get("reason"), "stt": profile["stt"]}
 
 
 @app.post("/v1/journeys/{journey_id}/stop", dependencies=[Depends(require_service_token)])

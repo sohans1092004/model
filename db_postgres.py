@@ -2,7 +2,8 @@
 M5's real Postgres swap, per db.py's own promise: "swapping the driver
 for a real Postgres connection later is a connection-string change, not
 a redesign." Same interface as db.py's JourneyDB (save_journey,
-load_journey, save_event, load_events, list_journeys, delete_journey) --
+load_journey, save_event, load_events, list_journeys, delete_journey,
+save_custom_udk, load_custom_udk) --
 api.py picks between them based on whether UDK_DATABASE_URL is set, not
 on any code-shape difference.
 
@@ -16,6 +17,7 @@ from __future__ import annotations
 
 import json
 import threading
+import time
 
 import psycopg
 from psycopg.rows import dict_row
@@ -41,9 +43,6 @@ class PostgresJourneyDB:
                 status TEXT NOT NULL,
                 started_at DOUBLE PRECISION NOT NULL,
                 last_heartbeat_at DOUBLE PRECISION NOT NULL,
-                personal_udk_id TEXT NOT NULL,
-                personal_udk_phrase TEXT NOT NULL,
-                personal_udk_verify_by_default BOOLEAN NOT NULL,
                 had_trigger BOOLEAN NOT NULL DEFAULT FALSE,
                 language TEXT NOT NULL DEFAULT 'en'
             )"""
@@ -62,6 +61,16 @@ class PostgresJourneyDB:
         # try/except migration dance needed like SQLite's.
         self._conn.execute("ALTER TABLE journeys ADD COLUMN IF NOT EXISTS had_trigger BOOLEAN NOT NULL DEFAULT FALSE")
         self._conn.execute("ALTER TABLE journeys ADD COLUMN IF NOT EXISTS language TEXT NOT NULL DEFAULT 'en'")
+        # Per-journey personal phrase removed (see db.py); per-user custom-UDK profiles instead.
+        for col in ("personal_udk_id", "personal_udk_phrase", "personal_udk_verify_by_default"):
+            self._conn.execute(f"ALTER TABLE journeys DROP COLUMN IF EXISTS {col}")
+        self._conn.execute(
+            """CREATE TABLE IF NOT EXISTS custom_udk_profiles (
+                user_id TEXT PRIMARY KEY,
+                profile TEXT NOT NULL,
+                updated_at DOUBLE PRECISION NOT NULL
+            )"""
+        )
 
     def _enc(self, value: str) -> str:
         return self._key_manager.encrypt_str(value) if self._key_manager is not None else value
@@ -70,13 +79,11 @@ class PostgresJourneyDB:
         return self._key_manager.decrypt_str(value) if self._key_manager is not None else value
 
     def save_journey(self, journey) -> None:
-        udk = journey.personal_udk
         with self._lock:
             self._conn.execute(
                 """INSERT INTO journeys
-                     (journey_id, user_id, session_token, status, started_at, last_heartbeat_at,
-                      personal_udk_id, personal_udk_phrase, personal_udk_verify_by_default, had_trigger, language)
-                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                     (journey_id, user_id, session_token, status, started_at, last_heartbeat_at, had_trigger, language)
+                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                    ON CONFLICT (journey_id) DO UPDATE SET
                      status = excluded.status,
                      last_heartbeat_at = excluded.last_heartbeat_at,
@@ -89,9 +96,6 @@ class PostgresJourneyDB:
                     journey.status,
                     journey.started_at,
                     journey.last_heartbeat_at,
-                    udk.udk_id,
-                    self._enc(udk.phrase),
-                    udk.verify_by_default,
                     journey.had_trigger,
                     # "" (not NULL -- the column is NOT NULL) means "still
                     # pending real detection" -- see db.py's save_journey.
@@ -105,8 +109,20 @@ class PostgresJourneyDB:
         if row is None:
             return None
         row["session_token"] = self._dec(row["session_token"])
-        row["personal_udk_phrase"] = self._dec(row["personal_udk_phrase"])
         return row
+
+    def save_custom_udk(self, user_id: str, profile: dict) -> None:
+        with self._lock:
+            self._conn.execute(
+                """INSERT INTO custom_udk_profiles (user_id, profile, updated_at) VALUES (%s, %s, %s)
+                   ON CONFLICT (user_id) DO UPDATE SET profile = excluded.profile, updated_at = excluded.updated_at""",
+                (user_id, self._enc(json.dumps(profile)), time.time()),
+            )
+
+    def load_custom_udk(self, user_id: str) -> dict | None:
+        with self._lock:
+            row = self._conn.execute("SELECT profile FROM custom_udk_profiles WHERE user_id = %s", (user_id,)).fetchone()
+        return json.loads(self._dec(row["profile"])) if row else None
 
     def save_event(self, event: dict) -> None:
         """Same field-level transcript encryption as db.py -- see that

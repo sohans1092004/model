@@ -22,6 +22,7 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 
 import api
+import custom_udk
 from audit import AuditLog
 from db import JourneyDB
 from event_delivery import EventDeliveryQueue
@@ -60,6 +61,31 @@ tmp_root = Path(tempfile.mkdtemp(prefix="udk_m7_test_"))
 api._audio_store = AudioStore(tmp_root / "audio")
 api._event_queue = EventDeliveryQueue(tmp_root / "events")
 api._db = JourneyDB(tmp_root / "journeys.sqlite3")
+
+class _GateWhisper:
+    """Stands in for the custom-UDK gate's own Whisper: hears what the test registered on any MockSTT."""
+    model_version = "mock-gate-whisper"
+    heard: dict = {}
+
+    def transcribe(self, pcm):
+        from stt import Transcript
+        return Transcript(text=self.heard.get(pcm, ""), model_version=self.model_version)
+
+
+from stt import MockSTT  # noqa: E402
+
+_register = MockSTT.register
+MockSTT.register = lambda self, pcm, text: (_GateWhisper.heard.__setitem__(pcm, text), _register(self, pcm, text))[1]
+
+
+def own_phrase(user_id, phrase):
+    """Give the user a custom UDK, as POST /v1/users/{id}/custom-udk/refresh stores it; returns user_id."""
+    api._custom_udk_stt = api._custom_udk_stt or _GateWhisper()
+    profile = custom_udk.build_profile([phrase] * 4)
+    assert profile["ok"], profile
+    api._db.save_custom_udk(user_id, profile)
+    return user_id
+
 api._audit_log = AuditLog(tmp_root / "audit.sqlite3")
 api._store = api.JourneyStore(db=api._db)
 api._downstream_deliver = lambda event: True
@@ -70,7 +96,7 @@ client = TestClient(api.app, headers={"X-Service-Token": api.DEV_SERVICE_TOKEN})
 
 print("=== Metrics reflect real activity, not just request/response health ===")
 
-resp = client.post("/v1/journeys/start", json={"user_id": "U_metrics", "personal_udk_phrase": "penguin waters the orchid quietly"})
+resp = client.post("/v1/journeys/start", json={"user_id": own_phrase("U_metrics", "penguin waters the orchid quietly")})
 jid = resp.json()["journey_id"]
 journey = api._store.get(jid)
 journey.vad = SingleFixedSegmentVAD(close_at_bytes=16)
@@ -111,7 +137,7 @@ print("=== Accelerated soak-shaped run: many journeys, memory bounded, SLOs hold
 
 N_SOAK = 200
 for i in range(N_SOAK):
-    r = client.post("/v1/journeys/start", json={"user_id": f"U_soak_{i}", "personal_udk_phrase": f"soak phrase number {i} unique"})
+    r = client.post("/v1/journeys/start", json={"user_id": own_phrase(f"U_soak_{i}", f"soak phrase number {i} unique")})
     jid_i = r.json()["journey_id"]
     j = api._store.get(jid_i)
     j.vad = SingleFixedSegmentVAD(close_at_bytes=16)
@@ -163,7 +189,7 @@ def run_journey(i: int) -> None:
     try:
         c = TestClient(api.app, headers={"X-Service-Token": api.DEV_SERVICE_TOKEN})
         phrase = f"falcon reads a map upside down {i}"
-        r = c.post("/v1/journeys/start", json={"user_id": f"U_conc_{i}", "personal_udk_phrase": phrase}).json()
+        r = c.post("/v1/journeys/start", json={"user_id": own_phrase(f"U_conc_{i}", phrase)}).json()
         jid_i, token_i = r["journey_id"], r["session_token"]
         j = api._store.get(jid_i)
         j.vad = SingleFixedSegmentVAD(close_at_bytes=16)

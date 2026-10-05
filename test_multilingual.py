@@ -100,17 +100,14 @@ class FakeLanguageDetector:
 
 
 def _fake_journey(**overrides) -> "api.JourneyState":
-    from udks import SAMPLE_PERSONAL_UDK
-
     stt_by_language = {"hi": FakeSTT(), "te": FakeSTT()}
     kws_by_language = {}
     defaults = dict(
         journey_id="J_lid_test",
         user_id="U_lid_test",
         session_token="tok",
-        engine=api.UDKEngine(api.all_udks(SAMPLE_PERSONAL_UDK, language="en")),
+        engine=api.UDKEngine(api.general_udks("en")),
         stt=FakeSTT(),
-        personal_udk=SAMPLE_PERSONAL_UDK,
         language=None,
         stt_by_language=stt_by_language,
         kws_by_language=kws_by_language,
@@ -240,17 +237,17 @@ class FakeTeluguSTT:
 fake_te_stt = FakeTeluguSTT()
 default_stt = api.MockSTT()
 telugu_journey, _ = api._store.create_or_get(
-    "J_telugu_stt_test", "U_telugu_stt_test", default_stt, api.SAMPLE_PERSONAL_UDK, language="te", stt_by_language={"te": fake_te_stt}
+    "J_telugu_stt_test", "U_telugu_stt_test", default_stt, language="te", stt_by_language={"te": fake_te_stt}
 )
 check("a language with a real entry in stt_by_language gets that backend, not the default", telugu_journey.stt is fake_te_stt)
 
 kannada_journey, _ = api._store.create_or_get(
-    "J_kannada_stt_test", "U_kannada_stt_test", default_stt, api.SAMPLE_PERSONAL_UDK, language="kn", stt_by_language={"te": fake_te_stt}
+    "J_kannada_stt_test", "U_kannada_stt_test", default_stt, language="kn", stt_by_language={"te": fake_te_stt}
 )
 check("a language with NO entry in stt_by_language falls back to the default stt backend", kannada_journey.stt is default_stt)
 
 no_override_journey, _ = api._store.create_or_get(
-    "J_no_override_stt_test", "U_no_override_stt_test", default_stt, api.SAMPLE_PERSONAL_UDK, language="te"
+    "J_no_override_stt_test", "U_no_override_stt_test", default_stt, language="te"
 )
 check("stt_by_language omitted entirely (backward compat) -- default constructor value is used, not an error", no_override_journey.stt is default_stt)
 
@@ -274,12 +271,12 @@ class FakeTeluguKWS:
 
 fake_te_kws = FakeTeluguKWS()
 telugu_kws_journey, _ = api._store.create_or_get(
-    "J_telugu_kws_test", "U_telugu_kws_test", default_stt, api.SAMPLE_PERSONAL_UDK, language="te", kws_by_language={"te": fake_te_kws}
+    "J_telugu_kws_test", "U_telugu_kws_test", default_stt, language="te", kws_by_language={"te": fake_te_kws}
 )
 check("a language with a real entry in kws_by_language gets that backend, not the default (None)", telugu_kws_journey.kws is fake_te_kws)
 
 kannada_kws_journey, _ = api._store.create_or_get(
-    "J_kannada_kws_test", "U_kannada_kws_test", default_stt, api.SAMPLE_PERSONAL_UDK, language="kn", kws_by_language={"te": fake_te_kws}
+    "J_kannada_kws_test", "U_kannada_kws_test", default_stt, language="kn", kws_by_language={"te": fake_te_kws}
 )
 check("a language with NO entry in kws_by_language falls back to the default (None -- KWS off)", kannada_kws_journey.kws is None)
 

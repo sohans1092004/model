@@ -19,7 +19,6 @@ from pathlib import Path
 
 import api
 from db import JourneyDB
-from enrollment import enroll
 from event_delivery import EventDeliveryQueue
 from kws import KWSMatch, MockKWS
 from storage import AudioStore
@@ -68,24 +67,6 @@ check("enroll() registers the clip as a self-match (distance 0), like the real b
 kws.clear("UDK_02")
 check("clear() removes references for that phrase_id (Section 5: re-enrollment deactivates the old phrase)", kws.spot(ref_pcm) is None)
 check("clear() doesn't disturb other phrases' registrations", kws.spot(phrase_pcm) == KWSMatch(phrase_id="UDK_01", distance=0.15))
-
-print(f"\n{passed}/{passed + failed} checks passed so far.\n")
-
-print("=== Personal UDK enrollment also registers a KWS reference (Section 4 extended to personal UDKs) ===")
-
-enroll_kws = MockKWS()
-enroll_stt = MockSTT()
-sample_pcm = b"\x05\x06" * 40
-enroll_stt.register(sample_pcm, "iguana naps on the windowsill")
-enroll_result = enroll("U_kws_enroll", "iguana naps on the windowsill", sample_pcm=sample_pcm, stt=enroll_stt, kws=enroll_kws)
-check("enrollment still succeeds with kws given", enroll_result.ok, str(enroll_result.errors))
-check(
-    "the sample audio was registered as this UDK's KWS reference",
-    enroll_kws.spot(sample_pcm) is not None and enroll_kws.spot(sample_pcm).phrase_id == enroll_result.udk.udk_id,
-)
-
-no_sample_result = enroll("U_kws_enroll2", "walrus paints the fence orange", kws=MockKWS())
-check("enrollment without sample_pcm still succeeds (kws enrollment is best-effort, not required)", no_sample_result.ok, str(no_sample_result.errors))
 
 print(f"\n{passed}/{passed + failed} checks passed so far.\n")
 
@@ -187,19 +168,18 @@ class DeadSTT:
         return Transcript(text="", model_version=self.model_version)
 
 
-outage_udk = enroll("U_outage", "flamingo skates across the parking lot").udk
-outage_journey, _ = api._store.create_or_get("J_outage_test", "U_outage", DeadSTT(), outage_udk)
+outage_journey, _ = api._store.create_or_get("J_outage_test", "U_outage", DeadSTT())
 outage_journey.vad = SingleFixedSegmentVAD(close_at_bytes=16)
 outage_journey.kws = MockKWS()
 outage_pcm = b"F" * 16
-outage_journey.kws.register(outage_pcm, outage_udk.udk_id, distance=0.2)
+outage_journey.kws.register(outage_pcm, "UDK_01", distance=0.2)
 
 api._ingest_frame(outage_journey, 0, outage_pcm, api._audio_store)
 events_during_outage = api._ingest_frame(outage_journey, 1, b"\x00" * 4, api._audio_store)
 
 check(
     "STT returned nothing for every segment, yet a detection still fired via KWS",
-    len(events_during_outage) == 1 and events_during_outage[0]["udk_id"] == outage_udk.udk_id,
+    len(events_during_outage) == 1 and events_during_outage[0]["udk_id"] == "UDK_01",
     str(events_during_outage),
 )
 check("the event's transcript is honestly empty (STT really did fail)", events_during_outage[0]["transcript"] == "")

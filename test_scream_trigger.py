@@ -13,7 +13,6 @@ from db import JourneyDB
 from event_delivery import EventDeliveryQueue
 from storage import AudioStore
 from stt import MockSTT
-from udks import SAMPLE_PERSONAL_UDK
 from vad import SpeechSegment
 
 _tmp = Path(tempfile.mkdtemp(prefix="udk_scream_test_"))
@@ -87,7 +86,7 @@ def run(jid, trigger_on, words=""):
     api._stt_backend = MockSTT()
     api._stt_backend.register(seg_pcm, words)
     api._parakeet_stt = None
-    j, _ = api._store.create_or_get(jid, "U1", api._stt_backend, SAMPLE_PERSONAL_UDK)
+    j, _ = api._store.create_or_get(jid, "U1", api._stt_backend)
     j.vad = OneSegmentVAD()
     return api._ingest_frame(j, 0, seg_pcm + b"\x00\x00" * 100, api._audio_store)
 

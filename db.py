@@ -10,14 +10,14 @@ real Postgres connection later is a connection-string change, not a
 redesign.
 
 Closes the gap M4 left explicit: a restarted process could recover audio
-(via AudioStore) but not a journey's session_token or enrolled personal
-UDK, since neither was written anywhere durable. This makes a full crash
-recover the whole journey, not just its audio.
+(via AudioStore) but not a journey's session_token, since it wasn't written
+anywhere durable. This makes a full crash recover the whole journey, not
+just its audio.
 
-M6: an optional KeyManager encrypts session_token and personal_udk_phrase
-before they hit disk (Section 10: a personal UDK phrase "functions like a
-credential given its role in triggering emergency response" and must
-never be stored plaintext; session tokens the same). Everything else
+M6: an optional KeyManager encrypts session_token and each user's custom-UDK
+profile before they hit disk (Section 10: a personal phrase "functions like a
+credential given its role in triggering emergency response" and must never be
+stored plaintext; session tokens the same). Everything else
 (journey_id, user_id, status, timestamps) stays plaintext -- it's not
 credential-shaped, and staying queryable/indexable matters more for it.
 
@@ -36,6 +36,7 @@ from __future__ import annotations
 import json
 import sqlite3
 import threading
+import time
 from pathlib import Path
 
 
@@ -68,9 +69,6 @@ class JourneyDB:
                 status TEXT NOT NULL,
                 started_at REAL NOT NULL,
                 last_heartbeat_at REAL NOT NULL,
-                personal_udk_id TEXT NOT NULL,
-                personal_udk_phrase TEXT NOT NULL,
-                personal_udk_verify_by_default INTEGER NOT NULL,
                 had_trigger INTEGER NOT NULL DEFAULT 0,
                 language TEXT NOT NULL DEFAULT 'en'
             )"""
@@ -85,6 +83,15 @@ class JourneyDB:
             )"""
         )
         self._conn.execute("CREATE INDEX IF NOT EXISTS idx_events_journey ON events(journey_id)")
+        # One custom-UDK profile per user (custom_udk.py): built once from the user's setup recordings,
+        # loaded at every journey start. `profile` is JSON, encrypted like the other credential-shaped fields.
+        self._conn.execute(
+            """CREATE TABLE IF NOT EXISTS custom_udk_profiles (
+                user_id TEXT PRIMARY KEY,
+                profile TEXT NOT NULL,
+                updated_at REAL NOT NULL
+            )"""
+        )
         # Lazy migration for a table that already existed before had_trigger
         # was added -- CREATE TABLE IF NOT EXISTS doesn't add columns to an
         # existing table. No migration framework for a prototype; just try
@@ -97,6 +104,12 @@ class JourneyDB:
             self._conn.execute("ALTER TABLE journeys ADD COLUMN language TEXT NOT NULL DEFAULT 'en'")
         except sqlite3.OperationalError:
             pass
+        # The per-journey personal phrase was removed (a user's own phrase is now the per-user custom UDK);
+        # drop its NOT NULL columns from tables created before that, or inserts without them would fail.
+        cols = {r["name"] for r in self._conn.execute("PRAGMA table_info(journeys)")}
+        for col in ("personal_udk_id", "personal_udk_phrase", "personal_udk_verify_by_default"):
+            if col in cols:
+                self._conn.execute(f"ALTER TABLE journeys DROP COLUMN {col}")
         self._conn.commit()
 
     def _enc(self, value: str) -> str:
@@ -112,13 +125,11 @@ class JourneyDB:
         prototype/test-journey scale; a real Postgres deployment would
         likely split hot fields (heartbeat) from cold ones (enrollment)
         if write volume ever made this a bottleneck."""
-        udk = journey.personal_udk
         with self._lock:
             self._conn.execute(
                 """INSERT INTO journeys
-                     (journey_id, user_id, session_token, status, started_at, last_heartbeat_at,
-                      personal_udk_id, personal_udk_phrase, personal_udk_verify_by_default, had_trigger, language)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     (journey_id, user_id, session_token, status, started_at, last_heartbeat_at, had_trigger, language)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                    ON CONFLICT(journey_id) DO UPDATE SET
                      status = excluded.status,
                      last_heartbeat_at = excluded.last_heartbeat_at,
@@ -131,9 +142,6 @@ class JourneyDB:
                     journey.status,
                     journey.started_at,
                     journey.last_heartbeat_at,
-                    udk.udk_id,
-                    self._enc(udk.phrase),
-                    int(udk.verify_by_default),
                     int(journey.had_trigger),
                     # "" (not NULL -- the column is NOT NULL) means
                     # "still pending real detection" -- create_or_get's
@@ -152,8 +160,22 @@ class JourneyDB:
             return None
         result = dict(row)
         result["session_token"] = self._dec(result["session_token"])
-        result["personal_udk_phrase"] = self._dec(result["personal_udk_phrase"])
         return result
+
+    def save_custom_udk(self, user_id: str, profile: dict) -> None:
+        """Replaces the user's custom-UDK profile (a re-recorded phrase supersedes the old one)."""
+        with self._lock:
+            self._conn.execute(
+                """INSERT INTO custom_udk_profiles (user_id, profile, updated_at) VALUES (?, ?, ?)
+                   ON CONFLICT(user_id) DO UPDATE SET profile = excluded.profile, updated_at = excluded.updated_at""",
+                (user_id, self._enc(json.dumps(profile)), time.time()),
+            )
+            self._conn.commit()
+
+    def load_custom_udk(self, user_id: str) -> dict | None:
+        with self._lock:
+            row = self._conn.execute("SELECT profile FROM custom_udk_profiles WHERE user_id = ?", (user_id,)).fetchone()
+        return json.loads(self._dec(row["profile"])) if row else None
 
     def save_event(self, event: dict) -> None:
         """Idempotent: event_id is the primary key, so a retried save

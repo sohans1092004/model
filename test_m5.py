@@ -21,6 +21,7 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 
 import api
+import custom_udk
 from db import JourneyDB
 from event_delivery import EventDeliveryQueue
 from stt import MockSTT
@@ -60,6 +61,29 @@ tmp_root = Path(tempfile.mkdtemp(prefix="udk_m5_test_"))
 api._audio_store = AudioStore(tmp_root / "audio")
 api._event_queue = EventDeliveryQueue(tmp_root / "events")
 api._db = JourneyDB(tmp_root / "journeys.sqlite3")
+
+class _GateWhisper:
+    """Stands in for the custom-UDK gate's own Whisper: hears what the test registered on any MockSTT."""
+    model_version = "mock-gate-whisper"
+    heard: dict = {}
+
+    def transcribe(self, pcm):
+        from stt import Transcript
+        return Transcript(text=self.heard.get(pcm, ""), model_version=self.model_version)
+
+
+_register = MockSTT.register
+MockSTT.register = lambda self, pcm, text: (_GateWhisper.heard.__setitem__(pcm, text), _register(self, pcm, text))[1]
+
+
+def own_phrase(user_id, phrase):
+    """Give the user a custom UDK, as POST /v1/users/{id}/custom-udk/refresh stores it; returns user_id."""
+    api._custom_udk_stt = api._custom_udk_stt or _GateWhisper()
+    profile = custom_udk.build_profile([phrase] * 4)
+    assert profile["ok"], profile
+    api._db.save_custom_udk(user_id, profile)
+    return user_id
+
 api._store = api.JourneyStore(db=api._db)
 api._downstream_deliver = lambda event: True
 # The default rate limit (Section 10, M6) is tuned for one real client's
@@ -69,23 +93,23 @@ api._rate_limiter = api.RateLimiter(max_requests=1000, window_s=60)
 
 client = TestClient(api.app, headers={"X-Service-Token": api.DEV_SERVICE_TOKEN})
 
-print("=== Full crash recovery: session_token and personal UDK now survive too (M5's fix for M4's gap) ===")
+print("=== Full crash recovery: session_token and the user's own phrase survive too (M5's fix for M4's gap) ===")
 
-start = client.post("/v1/journeys/start", json={"user_id": "U_full_crash", "personal_udk_phrase": "tangerine kites over the harbor"}).json()
+start = client.post("/v1/journeys/start", json={"user_id": own_phrase("U_full_crash", "tangerine kites over the harbor")}).json()
 jid1, token1 = start["journey_id"], start["session_token"]
 
 api._store._journeys.pop(jid1)  # simulate a full process restart
 
-journey1, created1 = api._store.create_or_get(jid1, "U_full_crash", MockSTT(), api.SAMPLE_PERSONAL_UDK, api._audio_store)
+journey1, created1 = api._store.create_or_get(jid1, "U_full_crash", MockSTT(), api._audio_store)
 check("recovery reuses the SAME session_token, not a fresh one", journey1.session_token == token1)
-check("recovery reconstructs the enrolled personal UDK phrase from durable storage", journey1.personal_udk.phrase == "tangerine kites over the harbor")
+check("recovery reloads the user's own phrase (custom UDK) from durable storage", journey1.custom_udk["phrase"] == "tangerine kites over the harbor")
 check("recovered journey status matches its pre-crash status", journey1.status == "ACTIVE")
 
 print(f"\n{passed}/{passed + failed} checks passed so far.\n")
 
 print("=== Durable events/status survive a crash even without recovery being triggered ===")
 
-start2 = client.post("/v1/journeys/start", json={"user_id": "U_durable", "personal_udk_phrase": "octopus reads a paperback"}).json()
+start2 = client.post("/v1/journeys/start", json={"user_id": own_phrase("U_durable", "octopus reads a paperback")}).json()
 jid2, token2 = start2["journey_id"], start2["session_token"]
 journey2 = api._store.get(jid2)
 journey2.vad = SingleFixedSegmentVAD(close_at_bytes=16)
@@ -134,7 +158,7 @@ def run_journey(i: int) -> None:
     try:
         c = TestClient(api.app, headers={"X-Service-Token": api.DEV_SERVICE_TOKEN})
         phrase = f"zebra hums quietly under lamp number {i}"
-        resp = c.post("/v1/journeys/start", json={"user_id": f"U_load_{i}", "personal_udk_phrase": phrase}).json()
+        resp = c.post("/v1/journeys/start", json={"user_id": own_phrase(f"U_load_{i}", phrase)}).json()
         jid, token = resp["journey_id"], resp["session_token"]
 
         journey = api._store.get(jid)

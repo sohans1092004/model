@@ -23,11 +23,10 @@ from fastapi.testclient import TestClient
 
 import api
 from db import JourneyDB
-from enrollment import enroll
+import custom_udk
 from event_delivery import EventDeliveryQueue
 from stt import MockSTT
 from storage import AudioStore
-from udks import SAMPLE_PERSONAL_UDK
 from vad import SpeechSegment
 
 # Fresh temp-backed stores for this run -- api._db/_audio_store/_event_queue
@@ -38,6 +37,29 @@ _tmp_root = Path(tempfile.mkdtemp(prefix="udk_m3_test_"))
 api._audio_store = AudioStore(_tmp_root / "audio")
 api._event_queue = EventDeliveryQueue(_tmp_root / "events")
 api._db = JourneyDB(_tmp_root / "journeys.sqlite3")
+
+class _GateWhisper:
+    """Stands in for the custom-UDK gate's own Whisper: hears what the test registered on any MockSTT."""
+    model_version = "mock-gate-whisper"
+    heard: dict = {}
+
+    def transcribe(self, pcm):
+        from stt import Transcript
+        return Transcript(text=self.heard.get(pcm, ""), model_version=self.model_version)
+
+
+_register = MockSTT.register
+MockSTT.register = lambda self, pcm, text: (_GateWhisper.heard.__setitem__(pcm, text), _register(self, pcm, text))[1]
+
+
+def own_phrase(user_id, phrase):
+    """Give the user a custom UDK, as POST /v1/users/{id}/custom-udk/refresh stores it; returns user_id."""
+    api._custom_udk_stt = api._custom_udk_stt or _GateWhisper()
+    profile = custom_udk.build_profile([phrase] * 4)
+    assert profile["ok"], profile
+    api._db.save_custom_udk(user_id, profile)
+    return user_id
+
 api._store = api.JourneyStore(db=api._db)
 
 passed = 0
@@ -102,21 +124,19 @@ client = TestClient(api.app, headers={"X-Service-Token": api.DEV_SERVICE_TOKEN})
 
 print("=== REST lifecycle + idempotency ===")
 
-resp = client.post("/v1/journeys/start", json={"user_id": "U1", "personal_udk_phrase": "purple elephants dance at midnight"})
+resp = client.post("/v1/journeys/start", json={"user_id": own_phrase("U1", "purple elephants dance at midnight")})
 check("start returns 200", resp.status_code == 200, resp.text)
 start_body = resp.json()
 journey_id = start_body["journey_id"]
 session_token = start_body["session_token"]
 check("start returns session_token + stream_endpoint", bool(session_token) and start_body["stream_endpoint"].endswith("/stream"))
 
-resp2 = client.post("/v1/journeys/start", json={"user_id": "U1", "journey_id": journey_id, "personal_udk_phrase": "purple elephants dance at midnight"})
+resp2 = client.post("/v1/journeys/start", json={"user_id": "U1", "journey_id": journey_id})
 check("retried start with same journey_id is idempotent", resp2.json()["session_token"] == session_token)
 
 resp_status = client.get(f"/v1/journeys/{journey_id}")
 check("GET journey status -> ACTIVE", resp_status.json()["status"] == "ACTIVE")
 
-resp_bad_enroll = client.post("/v1/journeys/start", json={"user_id": "U2", "personal_udk_phrase": "hi"})
-check("start with an invalid personal UDK phrase is rejected", resp_bad_enroll.status_code == 400)
 
 print(f"\n{passed}/{passed + failed} checks passed so far.\n")
 
@@ -179,7 +199,7 @@ print(f"\n{passed}/{passed + failed} checks passed so far.\n")
 
 print("=== Out-of-order frame buffering (Section 3) ===")
 
-j2, _ = api._store.create_or_get("J_reorder", "U3", MockSTT(), SAMPLE_PERSONAL_UDK)
+j2, _ = api._store.create_or_get("J_reorder", "U3", MockSTT())
 audio_store = api._audio_store
 silence = b"\x00" * 32
 
@@ -196,9 +216,9 @@ print(f"\n{passed}/{passed + failed} checks passed so far.\n")
 
 print("=== Fix: a lone/last segment finalizes once proven closed, not stuck forever ===")
 
-oneshot_udk = enroll("U5", "purple elephants dance at midnight").udk
+own_phrase("U5", "purple elephants dance at midnight")
 oneshot_stt = MockSTT()
-j4, _ = api._store.create_or_get("J_oneshot", "U5", oneshot_stt, oneshot_udk)
+j4, _ = api._store.create_or_get("J_oneshot", "U5", oneshot_stt)
 j4.vad = SingleFixedSegmentVAD(close_at_bytes=16)
 phrase_pcm = b"P" * 16
 oneshot_stt.register(phrase_pcm, "purple elephants dance at midnight")
@@ -217,7 +237,7 @@ print(f"\n{passed}/{passed + failed} checks passed so far.\n")
 
 print("=== Server-side journey timeout (Section 3) ===")
 
-j3, _ = api._store.create_or_get("J_timeout", "U4", MockSTT(), SAMPLE_PERSONAL_UDK)
+j3, _ = api._store.create_or_get("J_timeout", "U4", MockSTT())
 j3.last_heartbeat_at = time.time() - (api.HEARTBEAT_GRACE_S + 5)
 fetched = api._store.get("J_timeout")
 check("journey with no heartbeat past the grace window is auto-timed-out", fetched.status == "TIMED_OUT")
@@ -226,7 +246,7 @@ print(f"\n{passed}/{passed + failed} checks passed so far.\n")
 
 print("=== Going dark AFTER a trigger gets a tighter, more urgent timeout ===")
 
-j4, _ = api._store.create_or_get("J_timeout_after_trigger", "U5", MockSTT(), SAMPLE_PERSONAL_UDK)
+j4, _ = api._store.create_or_get("J_timeout_after_trigger", "U5", MockSTT())
 j4.had_trigger = True
 # Within the ORDINARY grace window, but past the tighter post-trigger one --
 # proves the two thresholds are genuinely different, not just the status label.
@@ -235,7 +255,7 @@ check("still within the ordinary grace window", api.POST_TRIGGER_HEARTBEAT_GRACE
 fetched4 = api._store.get("J_timeout_after_trigger")
 check("a post-trigger journey times out sooner than an ordinary one would", fetched4.status == "TIMED_OUT_AFTER_TRIGGER")
 
-j5, _ = api._store.create_or_get("J_no_trigger_same_gap", "U6", MockSTT(), SAMPLE_PERSONAL_UDK)
+j5, _ = api._store.create_or_get("J_no_trigger_same_gap", "U6", MockSTT())
 j5.had_trigger = False
 j5.last_heartbeat_at = time.time() - (api.POST_TRIGGER_HEARTBEAT_GRACE_S + 2)
 fetched5 = api._store.get("J_no_trigger_same_gap")

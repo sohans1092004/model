@@ -37,6 +37,21 @@ curl -H "X-Service-Token: $TOKEN" http://localhost:8000/metrics
 Then stream one prepped_data clip through it (colab_api_check.py does this in-process)
 and confirm the alert arrives at the webhook.
 
+## Custom UDK (off in `.env.example`; deploying this code changes nothing until switched on)
+**Custom UDK (each user's own phrase, `custom_udk.py`).** Off while `UDK_PHRASE_DB_URL` is unset.
+1. Put `UDK_PHRASE_DB_URL` and `UDK_PHRASE_DB_TOKEN` in the server config (SSM `/sakhi/udk/config`).
+   The endpoint must answer `GET {URL}/users/{user_id}/phrase-recordings` with
+   `{"recordings": ["<base64 audio file>", ...]}` (4-6 files; wav/m4a/mp3/ogg). If the real endpoint differs,
+   change only `custom_udk.fetch_recordings()`.
+2. The app calls `POST /v1/users/{user_id}/custom-udk/refresh` (service token) once after the user records,
+   and shows `reason` when `accepted` is false.
+3. Speed: the gate runs its own Whisper on every segment before anything else. Measured per segment:
+   medium.en on a T4 adds ~0.6-1.5 s; on CPU, medium takes ~11-13 s and small.en ~4 s (laptop CPU).
+   On the CPU host set `UDK_CUSTOM_UDK_STT_MODEL=small.en` (already in the image), or move to a GPU host first.
+   Changing the model means every user must be refreshed again (each profile records its `stt`).
+4. medium.en is not baked into the image: the first start with the feature on downloads ~1.5 GB
+   (again after each redeploy, since the cache is inside the container).
+
 ## Rules for running it
 - **One worker, one container per GPU.** Live sessions are held in memory; two workers
   would split a session's audio. More users -> more containers with a load balancer that

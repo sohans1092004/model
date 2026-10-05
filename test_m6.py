@@ -20,6 +20,7 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 
 import api
+import custom_udk
 from audit import AuditLog
 from crypto import KeyManager
 from db import JourneyDB
@@ -61,6 +62,31 @@ api._db_key_manager = KeyManager(tmp_root / "db.key")
 api._audio_store = AudioStore(tmp_root / "audio", key_manager=api._audio_key_manager)
 api._event_queue = EventDeliveryQueue(tmp_root / "events")
 api._db = JourneyDB(tmp_root / "journeys.sqlite3", key_manager=api._db_key_manager)
+
+class _GateWhisper:
+    """Stands in for the custom-UDK gate's own Whisper: hears what the test registered on any MockSTT."""
+    model_version = "mock-gate-whisper"
+    heard: dict = {}
+
+    def transcribe(self, pcm):
+        from stt import Transcript
+        return Transcript(text=self.heard.get(pcm, ""), model_version=self.model_version)
+
+
+from stt import MockSTT  # noqa: E402
+
+_register = MockSTT.register
+MockSTT.register = lambda self, pcm, text: (_GateWhisper.heard.__setitem__(pcm, text), _register(self, pcm, text))[1]
+
+
+def own_phrase(user_id, phrase):
+    """Give the user a custom UDK, as POST /v1/users/{id}/custom-udk/refresh stores it; returns user_id."""
+    api._custom_udk_stt = api._custom_udk_stt or _GateWhisper()
+    profile = custom_udk.build_profile([phrase] * 4)
+    assert profile["ok"], profile
+    api._db.save_custom_udk(user_id, profile)
+    return user_id
+
 api._audit_log = AuditLog(tmp_root / "audit.sqlite3")
 api._store = api.JourneyStore(db=api._db)
 api._downstream_deliver = lambda event: True
@@ -78,7 +104,7 @@ resp_wrong_token = TestClient(api.app, headers={"X-Service-Token": "not-the-real
 )
 check("wrong service token is rejected", resp_wrong_token.status_code == 401)
 
-resp_ok = client.post("/v1/journeys/start", json={"user_id": "U1", "personal_udk_phrase": "kangaroo paints a fence blue"})
+resp_ok = client.post("/v1/journeys/start", json={"user_id": own_phrase("U1", "kangaroo paints a fence blue")})
 check("correct service token is accepted", resp_ok.status_code == 200)
 
 print(f"\n{passed}/{passed + failed} checks passed so far.\n")
@@ -93,24 +119,26 @@ api._rate_limiter = api.RateLimiter(max_requests=1000, window_s=60)  # restore f
 
 print(f"\n{passed}/{passed + failed} checks passed so far.\n")
 
-print("=== Threat: steal personal UDK phrase / session token (encryption at rest) ===")
+print("=== Threat: steal a user's own phrase / session token (encryption at rest) ===")
 
 start = resp_ok.json()
 jid, token = start["journey_id"], start["session_token"]
 
 raw_row = api._db._conn.execute(  # bypass JourneyDB's own decrypt-on-load path deliberately
-    "SELECT session_token, personal_udk_phrase FROM journeys WHERE journey_id = ?", (jid,)
+    "SELECT session_token FROM journeys WHERE journey_id = ?", (jid,)
 ).fetchone()
+raw_profile = api._db._conn.execute("SELECT profile FROM custom_udk_profiles WHERE user_id = 'U1'").fetchone()["profile"]
 check("session_token is not stored in plaintext", raw_row["session_token"] != token)
-check("personal UDK phrase is not stored in plaintext", raw_row["personal_udk_phrase"] != "kangaroo paints a fence blue")
+check("the user's own phrase (custom UDK profile) is not stored in plaintext", "kangaroo" not in raw_profile)
 
 decrypted_via_api = api._db.load_journey(jid)
-check("JourneyDB.load_journey still returns the real values (round-trips correctly)", decrypted_via_api["session_token"] == token and decrypted_via_api["personal_udk_phrase"] == "kangaroo paints a fence blue")
+check("JourneyDB.load_journey / load_custom_udk still return the real values (round-trip correctly)",
+      decrypted_via_api["session_token"] == token and api._db.load_custom_udk("U1")["phrase"] == "kangaroo paints a fence blue")
 
 # Real bug found and fixed in a 2026-09-21 audit: an event's transcript
 # (the actual spoken words of a detected distress phrase) used to be
 # stored in the events table's payload blob as plain JSON, even though
-# session_token/personal_udk_phrase above were already encrypted for the
+# session_token and the user's own phrase above were already encrypted for the
 # same "credential-shaped" reason. Verified the same way, by reading the
 # RAW stored bytes directly, not just trusting the round-trip.
 secret_transcript = "help me please someone is chasing me down the street"
@@ -241,7 +269,7 @@ print("=== Section 7 retention sweep ===")
 resp_unflagged = client.post("/v1/journeys/start", json={"user_id": "U_unflagged"})
 jid_unflagged = resp_unflagged.json()["journey_id"]
 
-resp_flagged = client.post("/v1/journeys/start", json={"user_id": "U_flagged", "personal_udk_phrase": "wombat juggles teacups nightly"})
+resp_flagged = client.post("/v1/journeys/start", json={"user_id": own_phrase("U_flagged", "wombat juggles teacups nightly")})
 jid_flagged = resp_flagged.json()["journey_id"]
 journey_flagged = api._store.get(jid_flagged)
 journey_flagged.vad = SingleFixedSegmentVAD(close_at_bytes=16)

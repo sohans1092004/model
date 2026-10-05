@@ -1,181 +1,182 @@
-"""
-Custom UDK Detection — Test on Your Project Datasets
-Extracted from custom_udk_enrol_detect_v2.ipynb
-Runs on prepped_data/, real_world/, real_recordings/ your project has
-"""
-import re, json, warnings, os, sys, glob
+"""Per-user custom UDK (custom_udk.py + api.py): refresh from the app's DB endpoint, per-user profiles, detection on
+every segment, alert without the intent veto. No models load: a local HTTP server plays the app's DB endpoint and
+MockSTT plays Whisper. python test_custom_udk.py"""
+from __future__ import annotations
+
+import base64
+import io
+import json
+import os
+import tempfile
+import threading
+import wave
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from pathlib import Path
+
 import numpy as np
-import librosa
-import soundfile as sf
-from rapidfuzz import fuzz
-from scipy.signal import butter, sosfilt
-import torch
-from faster_whisper import WhisperModel
+from fastapi.testclient import TestClient
 
-warnings.filterwarnings("ignore")
+import api
+import custom_udk
+from db import JourneyDB
+from event_delivery import EventDeliveryQueue
+from storage import AudioStore
+from stt import MockSTT
+from vad import SpeechSegment
 
-SR, MODE, WHISPER_MODEL, USE_PARAKEET, MIN_WORDS, MAX_CHARS, MARGIN = (
-    16000, "text", "small.en", True, 3, 40, 0.03
-)
+_tmp = Path(tempfile.mkdtemp(prefix="udk_custom_test_"))
+api._audio_store = AudioStore(_tmp / "audio")
+api._event_queue = EventDeliveryQueue(_tmp / "events")
+api._db = JourneyDB(_tmp / "journeys.sqlite3")
+api._store = api.JourneyStore(db=api._db)
+api._parakeet_stt = None
+api._downstream_deliver = lambda event: True
 
-def norm(t):
-    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9ఀ-౿ ]", "", t.lower())).strip()
+passed = failed = 0
 
-def load(path):
-    y, _ = librosa.load(path, sr=SR, mono=True)
-    return (y / (np.max(np.abs(y)) + 1e-9) * 0.5).astype(np.float32)
 
-def feats(y):
-    y = y / (np.max(np.abs(y)) + 1e-9)
-    m = librosa.feature.mfcc(y=y, sr=SR, n_mfcc=13, n_fft=400, hop_length=160)
-    d = librosa.feature.delta(m)
-    f = np.vstack([m[1:], d[1:]])
-    return (f - f.mean(1, keepdims=True)) / (f.std(1, keepdims=True) + 1e-9)
+def check(name, cond, detail=""):
+    global passed, failed
+    passed, failed = passed + cond, failed + (not cond)
+    print(f"[{'PASS' if cond else 'FAIL'}] {name} {'' if cond else detail}")
 
-def dtw_cost(tpl, seg):
-    D, _ = librosa.sequence.dtw(X=tpl, Y=seg, subseq=True, metric="cosine")
-    return D[-1, :].min() / tpl.shape[1]
 
-def audio_score(seg_f, tpls):
-    return float(np.median([dtw_cost(t, seg_f) for t in tpls]))
+# ---- the notebook's own transcripts (custom_udk_enrol_detect_v2.ipynb), pure functions ----
+prof = custom_udk.build_profile(["hogwarts is the best place in the world"] * 5)
+check("notebook setup clips -> accepted, 100% stable", prof["ok"] and prof["stability"] == 100.0, str(prof))
+notebook = {  # clip: (Whisper, Parakeet) -> notebook's decision
+    "81": (["yeah works is the best place in the world i think", "yaa hogwarts is the best place in the world i think"], True),
+    "82": (["hogwarts is the worst place in the world"] * 2, False),
+    "83": (["hogwarts is the best place in the universe"] * 2, False),
+    "84": (["hogwarts was the best place in the world"] * 2, False),
+    "85": (["is hogwarts the best place in the world"] * 2, False),
+    "86": (["the coffee aroma is great"] * 2, False),
+    "87": (["hogwarts is the best place in the world", "her works is the best place in the world"], True),
+    "88": (["harvard is the best place in the world", "harbour is the best place in the world"], False),
+}
+got = {k: custom_udk.detect(t, prof) for k, (t, _) in notebook.items()}
+check("same 1/0 decisions as the notebook on its 8 test clips", all(got[k] == want for k, (_, want) in notebook.items()), str(got))
+check("too short -> rejected with a reason", custom_udk.build_profile(["help me"] * 4)["reason"] == "phrase must have at least 3 words")
+check("inconsistent recordings -> rejected, asks to record again",
+      "record again" in custom_udk.build_profile(["the cat sat here", "a bat ran far away", "dog is here now", "sun was hot today"])["reason"])
 
-def init_whisper():
-    dev = "cuda" if torch.cuda.is_available() else "cpu"
-    return WhisperModel(WHISPER_MODEL, device=dev, compute_type="float16" if dev == "cuda" else "int8")
 
-_whisper, _parakeet = None, None
+# ---- the app's DB endpoint (assumed shape: {"recordings": [base64 audio file, ...]}) ----
+def wav_file(tag: int) -> bytes:
+    buf = io.BytesIO()
+    with wave.open(buf, "wb") as w:
+        w.setnchannels(1), w.setsampwidth(2), w.setframerate(16000)
+        w.writeframes(np.full(16000, 100 + tag, dtype="<i2").tobytes())  # 1 s, distinct per clip
+    return buf.getvalue()
 
-def stt_whisper(y, w):
-    segs, _ = w.transcribe(y.astype(np.float32), language="en", beam_size=5, vad_filter=False)
-    return norm(" ".join(s.text for s in segs))
 
-def stt_parakeet(y):
-    global _parakeet
-    if _parakeet is None:
-        try:
-            import nemo.collections.asr as nemo_asr
-            _parakeet = nemo_asr.models.ASRModel.from_pretrained("nvidia/parakeet-tdt-0.6b-v2")
-        except Exception as e:
-            return ""
-    import tempfile
-    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
-        sf.write(f.name, y, SR)
-    try:
-        out = _parakeet.transcribe([f.name])
-        t = out[0].text if hasattr(out[0], "text") else out[0]
-        return norm(t)
-    finally:
-        os.unlink(f.name)
+RECORDINGS = {"U_alice": [wav_file(i) for i in range(5)], "U_bob": [wav_file(10 + i) for i in range(5)],
+              "U_short": [wav_file(20 + i) for i in range(2)]}
+SEEN_AUTH = []
 
-def stt_all(y, w):
-    out = [stt_whisper(y, w)]
-    if USE_PARAKEET:
-        p = stt_parakeet(y)
-        if p: out.append(p)
-    return out
 
-def build_profile(raw, transcripts):
-    F = [feats(librosa.effects.trim(y, top_db=30)[0]) for y in raw]
-    n = len(F)
-    variants = sorted({ts[0] for ts in transcripts if ts})
-    first = [ts[0] for ts in transcripts if ts]
-    sims = [fuzz.ratio(a, b) for i, a in enumerate(first) for b in first[i+1:]]
-    stab = float(np.mean(sims)) if sims else 0.0
-    medoid = max(first, key=lambda a: sum(fuzz.ratio(a, b) for b in first)) if first else ""
-    loo = [audio_score(F[i], [F[j] for j in range(n) if j != i]) for i in range(n)]
-    return {
-        "variants": variants, "phrase": medoid, "text_stability": stab,
-        "loo_scores": loo, "audio_thr": max(loo) * (1 + MARGIN) if loo else 0,
-        "tpls": F, "ok": bool(len(medoid.split()) >= MIN_WORDS and len(medoid) <= MAX_CHARS and stab >= 80)
-    }
+class FakeAppDB(BaseHTTPRequestHandler):
+    def do_GET(self):
+        SEEN_AUTH.append(self.headers.get("Authorization"))
+        user = self.path.split("/")[-2]
+        body = json.dumps({"recordings": [base64.b64encode(f).decode() for f in RECORDINGS.get(user, [])]}).encode()
+        self.send_response(200), self.send_header("Content-Type", "application/json"), self.end_headers()
+        self.wfile.write(body)
 
-def detect_core(y, transcripts, prof):
-    tx = [norm(t) for t in transcripts if t]
-    text_hit = any(re.search(r"(?<!\w)" + re.escape(v) + r"(?!\w)", t) for t in tx for v in prof["variants"])
-    s = audio_score(feats(y), prof["tpls"])
-    audio_hit = s <= prof["audio_thr"]
-    hit = text_hit if MODE == "text" else (text_hit or audio_hit if MODE == "or" else text_hit and audio_hit)
-    return {
-        "detected": int(hit), "text_hit": int(text_hit), "audio_hit": int(audio_hit),
-        "audio_score": round(s, 3), "transcripts": tx
-    }
+    def log_message(self, *a):
+        pass
 
-def main():
-    sample_only = "--sample-only" in sys.argv
-    print("Loading Whisper model...")
-    whisper = init_whisper()
 
-    # Enrollment: look in Downloads for your custom clips (your 4-6 enrollment files)
-    enrol_dir = os.path.expanduser("~/Downloads")
-    enrol_files = sorted(glob.glob(os.path.join(enrol_dir, "Masjid Banda Road [5-9]*.m4a")))[:5]
+server = HTTPServer(("127.0.0.1", 0), FakeAppDB)
+threading.Thread(target=server.serve_forever, daemon=True).start()
+client = TestClient(api.app, headers={"X-Service-Token": api.DEV_SERVICE_TOKEN})
 
-    if not enrol_files:
-        print("ERROR: No enrollment clips found in ~/Downloads/")
-        print("  Place your 4-6 custom UDK phrase clips there (e.g., 'Masjid Banda Road 58.m4a')")
-        return
+os.environ.pop("UDK_PHRASE_DB_URL", None)
+check("not configured (no gate Whisper) -> 503, nothing stored", client.post("/v1/users/U_alice/custom-udk/refresh").status_code == 503)
+os.environ["UDK_PHRASE_DB_URL"] = f"http://127.0.0.1:{server.server_port}/api"
+os.environ["UDK_PHRASE_DB_TOKEN"] = "app-db-secret"
 
-    print(f"\nEnrollment: {len(enrol_files)} clips")
-    raw = [load(p) for p in enrol_files]
-    tr = [[stt_whisper(y, whisper)] + ([stt_parakeet(y)] if USE_PARAKEET else []) for y in raw]
-    tr = [[t for t in ts if t] for ts in tr]
-    for p, t in zip(enrol_files, tr):
-        print(f"  {os.path.basename(p)} -> {t}")
+pcms = [custom_udk._to_pcm16k(f) for f in RECORDINGS["U_alice"]]
+check("fetch decodes the files to 16 kHz int16 PCM", custom_udk.fetch_recordings("U_alice") == pcms and len(pcms[0]) == 32000)
+check("fetch sends the configured token", SEEN_AUTH[-1] == "Bearer app-db-secret", str(SEEN_AUTH[-1:]))
 
-    prof = build_profile(raw, tr)
-    print(f"\nPhrase: {prof['phrase']}")
-    print(f"Stability: {prof['text_stability']:.0f}% | ok: {prof['ok']}")
+api._custom_udk_stt = MockSTT()  # plays the gate's own Whisper (medium.en) on setup recordings and segments
+for p in pcms:
+    api._custom_udk_stt.register(p, "The blue bird sings at night")
+for i, f in enumerate(RECORDINGS["U_bob"]):
+    api._custom_udk_stt.register(custom_udk._to_pcm16k(f), ["pineapple on the rooftop", "my train is late again", "call me when you land", "blue moon tonight here", "stop the car near home"][i])
 
-    if not prof["ok"]:
-        print("REJECT: re-record enrollment clips (need ≥3 words, ≤40 chars, ≥80% stability)")
-        return
+r = client.post("/v1/users/U_alice/custom-udk/refresh").json()
+check("refresh: alice's recordings -> accepted", r["accepted"] and r["phrase"] == "the blue bird sings at night", str(r))
+check("profile stored for alice", api._db.load_custom_udk("U_alice")["variants"] == ["the blue bird sings at night"])
+r = client.post("/v1/users/U_bob/custom-udk/refresh").json()
+check("refresh: bob's inconsistent recordings -> rejected with a reason, nothing stored",
+      not r["accepted"] and "record again" in r["reason"] and api._db.load_custom_udk("U_bob") is None, str(r))
+r = client.post("/v1/users/U_short/custom-udk/refresh").json()
+check("refresh: only 2 recordings -> rejected", not r["accepted"] and "4-6" in r["reason"], str(r))
+check("refresh needs the service token", TestClient(api.app).post("/v1/users/U_alice/custom-udk/refresh").status_code == 422)
 
-    # Test: look in your project's existing datasets
-    test_sources = [
-        ("prepped_data", "Prepared test dataset"),
-        ("real_world", "Real-world recordings"),
-        ("real_recordings/mixed", "Mixed real recordings"),
-    ]
 
-    test_files, test_source = [], None
-    for src, desc in test_sources:
-        if os.path.isdir(src):
-            found = sorted(glob.glob(os.path.join(src, "*.mp3"))) + sorted(glob.glob(os.path.join(src, "*.wav")))
-            if found:
-                test_files = found[:10 if sample_only else len(found)]
-                test_source = f"{src} ({desc})"
-                break
+# ---- live loop ----
+seg_pcm = np.full(16000 * 3, 500, dtype="<i2").tobytes()
 
-    if not test_files:
-        print(f"\nWARNING: No test data in prepped_data/, real_world/, or real_recordings/mixed/")
-        print("  Skipping test phase.")
-        return
 
-    print(f"\nTesting on {len(test_files)} clips from {test_source}:")
-    results = []
-    for p in test_files:
-        try:
-            y = load(p)
-            tx = stt_all(y, whisper)
-            res = detect_core(y, tx, prof)
-            results.append({"file": os.path.basename(p), "detected": res["detected"],
-                          "transcripts": res["transcripts"], "audio_score": res["audio_score"]})
-            marker = "✓" if res["detected"] else "✗"
-            print(f"{marker} {os.path.basename(p)[:55]:55s} {res['detected']} | {res['transcripts'][:1] if res['transcripts'] else '(silence)'}")
-        except Exception as e:
-            print(f"✗ {os.path.basename(p)[:55]:55s} ERROR: {str(e)[:40]}")
+class OneSegmentVAD:
+    def segment_speech(self, pcm):
+        return [SpeechSegment(start_ms=0, end_ms=3000, pcm=pcm[: len(seg_pcm)])] if len(pcm) >= len(seg_pcm) else []
 
-    detected = sum(1 for r in results if r["detected"])
-    print(f"\nResults: {detected}/{len(results)} detected")
+    def total_ms(self, pcm):
+        return len(pcm) // 32
 
-    # Save outputs
-    with open("custom_udk_profile.json", "w") as f:
-        meta = {k: prof[k] for k in ["variants", "phrase", "text_stability", "loo_scores", "audio_thr", "ok"]}
-        json.dump(meta, f, indent=2)
-    np.savez("custom_udk_templates.npz", *prof["tpls"])
-    with open("test_results.json", "w") as f:
-        json.dump({"phrase": prof["phrase"], "test_source": test_source, "results": results}, f, indent=2)
 
-    print(f"✓ Saved: custom_udk_profile.json, test_results.json, custom_udk_templates.npz")
+class VetoEverything:
+    def veto(self, decision, other_text):
+        return 0.0  # "certainly not distress" for every text alert
 
-if __name__ == "__main__":
-    main()
+
+def run(jid, user, words, second=""):
+    stt = MockSTT()
+    stt.register(seg_pcm, words)  # the general model's Whisper
+    api._custom_udk_stt.register(seg_pcm, words)  # the gate's Whisper hears the same words
+    j, _ = api._store.create_or_get(jid, user, stt)
+    j.vad = OneSegmentVAD()
+    return j, api._ingest_frame(j, 0, seg_pcm + b"\x00\x00" * 100, api._audio_store)
+
+
+j, ev = run("J_alice", "U_alice", "okay the blue bird sings at night")
+check("alice says her phrase -> one TRIGGER_ALL, layer custom_udk", len(ev) == 1 and ev[0]["decision"] == "TRIGGER_ALL"
+      and ev[0]["layer"] == "custom_udk" and ev[0]["udk_type"] == "PERSONAL", str(ev))
+_, ev = run("J_bob", "U_bob", "okay the blue bird sings at night")
+check("bob (no profile) says alice's phrase -> no custom alert (profiles are per user)", all(e["layer"] != "custom_udk" for e in ev), str(ev))
+_, ev = run("J_alice2", "U_alice", "the blue bird sang at night yesterday")
+check("near-miss wording -> no custom alert", all(e["layer"] != "custom_udk" for e in ev), str(ev))
+
+# Gate: a hit stops there; a miss goes on to the general model
+api._db.save_custom_udk("U_dave", custom_udk.build_profile(["get away from me now please"] * 4))
+_, ev = run("J_dave_hit", "U_dave", "get away from me now please")
+check("gate hit: only the custom alert, the general model (UDK_03 'get away from me') does not run",
+      [e["layer"] for e in ev] == ["custom_udk"], str(ev))
+_, ev = run("J_dave_miss", "U_dave", "get away from me")
+check("gate miss: the general model decides (UDK_03 alert, no custom alert)",
+      len(ev) == 1 and ev[0]["udk_id"] == "UDK_03" and ev[0]["layer"] != "custom_udk", str(ev))
+
+api._intent_gate, api._parakeet_stt = VetoEverything(), MockSTT()
+api._parakeet_stt.register(seg_pcm, "please help the blue bird sings at night")
+_, ev = run("J_alice_veto", "U_alice", "okay the blue bird sings at night")
+check("intent veto never silences the user's own phrase", any(e["layer"] == "custom_udk" and e["decision"] == "TRIGGER_ALL" for e in ev), str(ev))
+api._intent_gate, api._parakeet_stt = None, None
+
+j_carol, _ = api._store.create_or_get("J_carol", "U_carol", MockSTT())
+RECORDINGS["U_carol"] = RECORDINGS["U_alice"]
+client.post("/v1/users/U_carol/custom-udk/refresh")
+check("a running journey picks up a profile refreshed mid-journey", j_carol.custom_udk is not None and j_carol.custom_udk["phrase"] == "the blue bird sings at night")
+
+api._store._journeys.pop("J_alice")
+j_rec, created = api._store.create_or_get("J_alice", "U_alice", MockSTT())
+check("after a restart the journey reloads alice's profile from the DB", created and j_rec.custom_udk["phrase"] == "the blue bird sings at night")
+
+server.shutdown()
+os.environ.pop("UDK_PHRASE_DB_URL", None)
+print(f"\n{'=' * 40}\n{passed}/{passed + failed} TOTAL PASSED" + (" -- ALL PASSED" if failed == 0 else f", {failed} FAILED"))
+if failed:
+    raise SystemExit(1)

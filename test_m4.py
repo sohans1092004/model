@@ -20,7 +20,7 @@ from fastapi.testclient import TestClient
 
 import api
 from db import JourneyDB
-from enrollment import enroll
+import custom_udk
 from event_delivery import EventDeliveryQueue
 from stt import MockSTT
 from storage import AudioStore
@@ -64,12 +64,35 @@ tmp_root = Path(tempfile.mkdtemp(prefix="udk_m4_test_"))
 api._audio_store = AudioStore(tmp_root / "audio")
 api._event_queue = EventDeliveryQueue(tmp_root / "events")
 api._db = JourneyDB(tmp_root / "journeys.sqlite3")
+
+class _GateWhisper:
+    """Stands in for the custom-UDK gate's own Whisper: hears what the test registered on any MockSTT."""
+    model_version = "mock-gate-whisper"
+    heard: dict = {}
+
+    def transcribe(self, pcm):
+        from stt import Transcript
+        return Transcript(text=self.heard.get(pcm, ""), model_version=self.model_version)
+
+
+_register = MockSTT.register
+MockSTT.register = lambda self, pcm, text: (_GateWhisper.heard.__setitem__(pcm, text), _register(self, pcm, text))[1]
+
+
+def own_phrase(user_id, phrase):
+    """Give the user a custom UDK, as POST /v1/users/{id}/custom-udk/refresh stores it; returns user_id."""
+    api._custom_udk_stt = api._custom_udk_stt or _GateWhisper()
+    profile = custom_udk.build_profile([phrase] * 4)
+    assert profile["ok"], profile
+    api._db.save_custom_udk(user_id, profile)
+    return user_id
+
 api._store = api.JourneyStore(db=api._db)
 api._downstream_deliver = lambda event: True
 
 print("=== Idempotent frame ingestion (duplicate/retried frames) ===")
 
-j1, _ = api._store.create_or_get("J_dup", "U1", MockSTT(), enroll("U1", "purple elephants dance at midnight").udk)
+j1, _ = api._store.create_or_get("J_dup", "U1", MockSTT())
 silence = b"\x00" * 32
 
 api._ingest_frame(j1, 0, silence, api._audio_store)
@@ -93,8 +116,8 @@ print(f"\n{passed}/{passed + failed} checks passed so far.\n")
 
 print("=== Simulated crash + restart (in-memory state wiped, disk survives) ===")
 
-crash_udk = enroll("U2", "purple elephants dance at midnight").udk
-j2, _ = api._store.create_or_get("J_crash", "U2", MockSTT(), crash_udk)
+own_phrase("U2", "purple elephants dance at midnight")
+j2, _ = api._store.create_or_get("J_crash", "U2", MockSTT())
 j2.vad = SingleFixedSegmentVAD(close_at_bytes=16)
 phrase_pcm = b"P" * 16
 j2.stt.register(phrase_pcm, "purple elephants dance at midnight")
@@ -108,7 +131,7 @@ api._store._journeys.pop("J_crash")
 
 recovered_stt = MockSTT()
 recovered_stt.register(phrase_pcm, "purple elephants dance at midnight")
-j2_recovered, created = api._store.create_or_get("J_crash", "U2", recovered_stt, crash_udk, api._audio_store)
+j2_recovered, created = api._store.create_or_get("J_crash", "U2", recovered_stt, api._audio_store)
 check("recovery creates a fresh journey object (old one is gone)", created)
 check("recovered buffer matches what was durably stored pre-crash", bytes(j2_recovered.audio_buffer) == phrase_pcm)
 check("recovered next_expected_seq picks up where the crash left off", j2_recovered.next_expected_seq == 1)
@@ -127,8 +150,8 @@ print("=== Outbound event delivery: durable queue survives a downstream failure 
 
 api._downstream_deliver = lambda event: False  # simulate the safety platform being unreachable
 
-j3_udk = enroll("U3", "purple elephants dance at midnight").udk
-j3, _ = api._store.create_or_get("J_deliver", "U3", MockSTT(), j3_udk)
+own_phrase("U3", "purple elephants dance at midnight")
+j3, _ = api._store.create_or_get("J_deliver", "U3", MockSTT())
 j3.vad = SingleFixedSegmentVAD(close_at_bytes=16)
 phrase_pcm2 = b"Q" * 16
 j3.stt.register(phrase_pcm2, "purple elephants dance at midnight")
@@ -155,7 +178,7 @@ print(f"\n{passed}/{passed + failed} checks passed so far.\n")
 print("=== Full network loss: WS drops mid-journey, client reconnects and resumes ===")
 
 client = TestClient(api.app, headers={"X-Service-Token": api.DEV_SERVICE_TOKEN})
-start = client.post("/v1/journeys/start", json={"user_id": "U4", "personal_udk_phrase": "purple elephants dance at midnight"}).json()
+start = client.post("/v1/journeys/start", json={"user_id": own_phrase("U4", "purple elephants dance at midnight")}).json()
 jid, token = start["journey_id"], start["session_token"]
 
 with client.websocket_connect(f"/v1/journeys/{jid}/stream?session_token={token}") as ws:

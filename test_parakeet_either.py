@@ -26,7 +26,7 @@ from event_delivery import EventDeliveryQueue
 from stt import MockSTT
 from storage import AudioStore
 from udk_engine import UDKEngine
-from udks import GENERAL_UDKS, SAMPLE_PERSONAL_UDK
+from udks import GENERAL_UDKS
 from vad import SpeechSegment
 
 _tmp_root = Path(tempfile.mkdtemp(prefix="udk_parakeet_test_"))
@@ -109,7 +109,7 @@ block_b = b"B" * BLOCK
 
 def run_journey(journey_id: str, second: MockSTT | None, stt=None) -> list[dict]:
     api._parakeet_stt = second
-    journey, _ = api._store.create_or_get(journey_id, "U1", stt or api._stt_backend, SAMPLE_PERSONAL_UDK)
+    journey, _ = api._store.create_or_get(journey_id, "U1", stt or api._stt_backend)
     journey.vad = FixedBlockVAD(BLOCK)
     events = []
     for seq, block in enumerate((b"A" * BLOCK, block_b, b"C" * BLOCK)):
