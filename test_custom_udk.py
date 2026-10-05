@@ -96,6 +96,14 @@ check("not configured (no gate Whisper) -> 503, nothing stored", client.post("/v
 os.environ["UDK_PHRASE_DB_URL"] = f"http://127.0.0.1:{server.server_port}/api"
 os.environ["UDK_PHRASE_DB_TOKEN"] = "app-db-secret"
 
+general = MockSTT()
+general.model_version = "faster-whisper-small.en"
+saved_general, api._stt_backend = api._stt_backend, general
+os.environ["UDK_CUSTOM_UDK_STT_MODEL"] = "small.en"
+check("same model as the general Whisper -> that instance, not a second one", api._load_custom_udk_stt() is general)
+api._stt_backend = saved_general
+os.environ.pop("UDK_CUSTOM_UDK_STT_MODEL")
+
 pcms = [custom_udk._to_pcm16k(f) for f in RECORDINGS["U_alice"]]
 check("fetch decodes the files to 16 kHz int16 PCM", custom_udk.fetch_recordings("U_alice") == pcms and len(pcms[0]) == 32000)
 check("fetch sends the configured token", SEEN_AUTH[-1] == "Bearer app-db-secret", str(SEEN_AUTH[-1:]))
@@ -165,6 +173,27 @@ api._parakeet_stt.register(seg_pcm, "please help the blue bird sings at night")
 _, ev = run("J_alice_veto", "U_alice", "okay the blue bird sings at night")
 check("intent veto never silences the user's own phrase", any(e["layer"] == "custom_udk" and e["decision"] == "TRIGGER_ALL" for e in ev), str(ev))
 api._intent_gate, api._parakeet_stt = None, None
+
+class CountingSTT(MockSTT):
+    calls = 0
+
+    def transcribe(self, pcm):
+        self.calls += 1
+        return super().transcribe(pcm)
+
+
+shared, parakeet = CountingSTT(), CountingSTT()
+shared.register(seg_pcm, "get away from me")
+parakeet.register(seg_pcm, "get away from me")
+saved = api._stt_backend, api._custom_udk_stt
+api._stt_backend = api._custom_udk_stt = shared
+api._parakeet_stt = parakeet
+j, _ = api._store.create_or_get("J_alice_shared", "U_alice", shared)
+j.vad = OneSegmentVAD()
+ev = api._ingest_frame(j, 0, seg_pcm + b"\x00\x00" * 100, api._audio_store)
+check("gate miss on a shared Whisper: each model transcribes the segment once, the general model still decides",
+      (shared.calls, parakeet.calls) == (1, 1) and [e["udk_id"] for e in ev] == ["UDK_03"], f"{shared.calls} {parakeet.calls} {ev}")
+(api._stt_backend, api._custom_udk_stt), api._parakeet_stt = saved, None
 
 j_carol, _ = api._store.create_or_get("J_carol", "U_carol", MockSTT())
 RECORDINGS["U_carol"] = RECORDINGS["U_alice"]

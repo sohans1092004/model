@@ -447,23 +447,32 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
             continue
         journey.processed_up_to_ms = seg.end_ms
         # Custom-UDK gate (custom_udk.py, as in custom_udk_enrol_detect_v2.ipynb), first on every segment, with its
-        # own STT (Whisper medium.en + Parakeet): the user's own phrase -> TRIGGER_ALL, and the general model does
-        # not run for this segment. No match -> the general model below, exactly as before.
+        # own STT (Whisper + Parakeet): the user's own phrase -> TRIGGER_ALL, and the general model does not run for
+        # this segment. No match -> the general model below, exactly as before, except that it takes the gate's
+        # transcripts where it would run the same model on the same audio rather than transcribing it twice.
+        gate_whisper = gate_parakeet = None
         if journey.custom_udk and _custom_udk_stt is not None:
-            texts = _custom_udk_texts(seg.pcm)
+            stt_start = time.monotonic()
+            gate_whisper = _custom_udk_stt.transcribe(seg.pcm)
+            _metrics.stt_latency(time.monotonic() - stt_start)
+            gate_parakeet = _parakeet_stt.transcribe(seg.pcm).text if _parakeet_stt is not None else None
+            texts = [gate_whisper.text] + ([gate_parakeet] if gate_parakeet is not None else [])
             if custom_udk.detect(texts, journey.custom_udk):
                 new_events.append(_emit_event(journey, _custom_udk_event(journey, texts), seg))
                 continue
-        stt_start = time.monotonic()
-        transcript = journey.stt.transcribe(seg.pcm)
-        _metrics.stt_latency(time.monotonic() - stt_start)
+        if gate_whisper is not None and _custom_udk_stt is journey.stt:
+            transcript = gate_whisper
+        else:
+            stt_start = time.monotonic()
+            transcript = journey.stt.transcribe(seg.pcm)
+            _metrics.stt_latency(time.monotonic() - stt_start)
         # Second English STT (UDK_ENABLE_PARAKEET=1), only while the journey is on
         # the English backend (Parakeet is English-only). Transcribed BEFORE the
         # empty-transcript skip below: a segment Whisper heard nothing in is
         # exactly where the second opinion can rescue a detection.
         second_text = ""
         if _parakeet_stt is not None and journey.stt is _stt_backend:
-            second_text = _parakeet_stt.transcribe(seg.pcm).text
+            second_text = gate_parakeet if gate_parakeet is not None else _parakeet_stt.transcribe(seg.pcm).text
         kws_match = journey.kws.spot(seg.pcm) if journey.kws is not None else None
         # Scream-alone (UDK_ENABLE_SCREAM_TRIGGER=1, scream_trigger.py): checked
         # BEFORE the empty-transcript skip below -- a scream with no words at all
@@ -825,15 +834,6 @@ def _load_parakeet_stt() -> STTBackend | None:
         return None
 
 
-def _custom_udk_texts(pcm: bytes) -> list[str]:
-    """The gate's own transcripts of a segment: Whisper medium.en, and Parakeet when it is enabled (the notebook's
-    detection checks both; its variants come from Whisper only)."""
-    texts = [_custom_udk_stt.transcribe(pcm).text]
-    if _parakeet_stt is not None:
-        texts.append(_parakeet_stt.transcribe(pcm).text)
-    return texts
-
-
 def _custom_udk_event(journey: JourneyState, texts: list[str]) -> DecisionEvent:
     phrase = journey.custom_udk["phrase"]
     return DecisionEvent(decision="TRIGGER_ALL", udk=UDK("CUSTOM_UDK", phrase, "PERSONAL"), confidence=1.0,
@@ -1037,13 +1037,16 @@ def _load_language_detectors() -> tuple[object | None, object | None]:
 
 def _load_custom_udk_stt() -> STTBackend | None:
     """Whisper for the custom-UDK gate and its setup: medium.en, the notebook's model (UDK_CUSTOM_UDK_STT_MODEL
-    overrides). Separate from the general model's Whisper, which stays as it is. Only when the feature is configured
-    (UDK_PHRASE_DB_URL); loaded like _load_stt_backend (GPU if usable, else CPU)."""
+    overrides). When it is the general model's own Whisper (UDK_STT_MODEL), that one instance serves both, so the box
+    holds it once and a segment the gate misses is not transcribed twice. Only when the feature is configured
+    (UDK_PHRASE_DB_URL); else loaded like _load_stt_backend (GPU if usable, else CPU)."""
     if not os.environ.get("UDK_PHRASE_DB_URL"):
         return None
+    model = os.environ.get("UDK_CUSTOM_UDK_STT_MODEL", "medium.en")
+    if _stt_backend.model_version == f"faster-whisper-{model}":
+        return _stt_backend
     from stt import FasterWhisperSTT
 
-    model = os.environ.get("UDK_CUSTOM_UDK_STT_MODEL", "medium.en")
     if _device() == "cuda":
         try:
             stt = FasterWhisperSTT(model_size=model, device="cuda", compute_type="float16")
