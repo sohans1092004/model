@@ -42,6 +42,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 import json
+import logging
 import os
 import secrets
 import struct
@@ -49,6 +50,7 @@ import tempfile
 import threading
 import time
 import uuid
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Annotated, Callable, Literal
@@ -150,6 +152,7 @@ class JourneyState:
     _lid_recheck_buffer_start_ms: int = 0
     _lid_pending_candidate: str | None = None
     _lid_pending_streak: int = 0
+    hindi_stream: object | None = None  # safety_router.hindi.HindiStream (30 s context), only with UDK_ENABLE_HINDI=1
     custom_udk: dict | None = None  # this user's custom-UDK profile (custom_udk.py), loaded at journey start
 
 
@@ -446,115 +449,252 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
         if seg.end_ms <= journey.processed_up_to_ms:
             continue
         journey.processed_up_to_ms = seg.end_ms
-        # Custom-UDK gate (custom_udk.py, as in custom_udk_enrol_detect_v2.ipynb), first on every segment, with its
-        # own STT (Whisper + Parakeet): the user's own phrase -> TRIGGER_ALL, and the general model does not run for
-        # this segment. No match -> the general model below, exactly as before, except that it takes the gate's
-        # transcripts where it would run the same model on the same audio rather than transcribing it twice.
-        gate_whisper = gate_parakeet = None
-        if journey.custom_udk and _custom_udk_stt is not None:
-            stt_start = time.monotonic()
-            gate_whisper = _custom_udk_stt.transcribe(seg.pcm)
-            _metrics.stt_latency(time.monotonic() - stt_start)
-            gate_parakeet = _parakeet_stt.transcribe(seg.pcm).text if _parakeet_stt is not None else None
-            texts = [gate_whisper.text] + ([gate_parakeet] if gate_parakeet is not None else [])
-            if custom_udk.detect(texts, journey.custom_udk):
-                new_events.append(_emit_event(journey, _custom_udk_event(journey, texts), seg))
-                continue
-        if gate_whisper is not None and _custom_udk_stt is journey.stt:
-            transcript = gate_whisper
-        else:
-            stt_start = time.monotonic()
-            transcript = journey.stt.transcribe(seg.pcm)
-            _metrics.stt_latency(time.monotonic() - stt_start)
-        # Second English STT (UDK_ENABLE_PARAKEET=1), only while the journey is on
-        # the English backend (Parakeet is English-only). Transcribed BEFORE the
-        # empty-transcript skip below: a segment Whisper heard nothing in is
-        # exactly where the second opinion can rescue a detection.
-        second_text = ""
-        if _parakeet_stt is not None and journey.stt is _stt_backend:
-            second_text = gate_parakeet if gate_parakeet is not None else _parakeet_stt.transcribe(seg.pcm).text
-        kws_match = journey.kws.spot(seg.pcm) if journey.kws is not None else None
-        # Scream-alone (UDK_ENABLE_SCREAM_TRIGGER=1, scream_trigger.py): checked
-        # BEFORE the empty-transcript skip below -- a scream with no words at all
-        # is exactly the case it exists for.
+        # Scream-alone (UDK_ENABLE_SCREAM_TRIGGER=1, scream_trigger.py): on every
+        # segment, whatever language route it takes -- a scream with no words at
+        # all is exactly the case it exists for.
         scream_fired = False
         if _scream_trigger_enabled and _scream_detector is not None:
             scream_fired, scream_peak, scream_class = scream_trigger.check(_scream_detector, seg.pcm)
-        # Deciding even on an empty transcript is what lets KWS fire on
-        # its own when STT gets nothing (Section 3's STT-outage row) --
-        # skipping early here would silently defeat the entire point of
-        # running KWS in parallel (Section 4's Approach E).
-        if not transcript.text and kws_match is None and not second_text and not scream_fired:
-            continue
-        scream_score = _scream_detector.score(seg.pcm) if _scream_detector is not None and _scream_corroboration_enabled else None
-
-        # Free -- reuses transcript metadata faster-whisper already
-        # computed above, no extra model call. See stt_confidence_gate.py.
-        stt_suspect = _stt_confidence_gate_enabled and is_suspect(transcript)
-
-        # Selective, NOT run on every segment (a second full ASR pass has
-        # real latency cost -- see dual_asr_guard.py's module docstring):
-        # only when this segment would otherwise clear the text-match
-        # floor AND the primary transcript's own decoding metadata gives
-        # no other reason for suspicion (temperature==0.0 -- the specific
-        # "confidently wrong" gap stt_suspect above cannot cover). This
-        # peek re-runs match_transcript(), which stt_confidence_gate's
-        # veto skips only when KWS wins anyway -- cheap (pure string
-        # comparison against 20 phrases, no model), so calling it twice
-        # (once here, once inside decide()) trades a negligible amount of
-        # duplicate work for keeping decide() a pure function of already-
-        # computed signals, same shape as scream_score/kws_match above.
-        dual_asr_disagreement = False
-        if _dual_asr_guard is not None and transcript.temperature == 0.0 and transcript.text:
-            peek = match_transcript(transcript.text, journey.engine.udks, semantic_matcher=journey.engine.semantic_matcher)
-            if peek.udk is not None and peek.confidence >= TRIGGER_VERIFY_THRESHOLD:
-                dual_asr_disagreement = _dual_asr_guard.disagrees(transcript.text, seg.pcm)
-
-        now_s = time.monotonic()
-        pre_state = journey.engine.snapshot()
-        # decide_all = the whole-segment decision (identical to decide()) plus
-        # one extra event per SENTENCE matching a different UDK -- the
-        # per-sentence matching the evaluated best config uses (run_file), so
-        # e.g. UDK_13 isn't lost behind UDK_10 in "Let go! ... You're hurting me!".
-        primary = journey.engine.decide_all(
-            transcript.text,
-            now_s=now_s,
-            kws_match=kws_match,
-            scream_score=scream_score,
-            stt_suspect=stt_suspect,
-            dual_asr_disagreement=dual_asr_disagreement,
-        )
-        decisions = _either_stt_decisions(journey.engine, primary, pre_state, second_text, now_s, kws_match, scream_score)
-        if _intent_gate is not None and second_text:
-            decisions = _intent_veto(decisions, second_text if decisions is primary else transcript.text)
-        decision, extras = decisions[0], decisions[1:]
-        if decision.decision == "NO_ACTION" and not extras:
-            # Speech-separation fallback (separation.py): only tried once
-            # the primary pass has already missed, and only when opted in
-            # -- real measured cost (new FP path + ~4-8s CPU latency) means
-            # this must never run on every segment. See separation.py's
-            # module docstring for the real recovered-recall numbers.
-            if _separator is not None:
-                from separation import retry_with_separation
-
-                recovered = retry_with_separation(
-                    seg.pcm, journey.stt, journey.engine, _separator, time.monotonic(), kws=journey.kws
-                )
-                if recovered is not None:
-                    decision = recovered
-        # One event per alerting decision. Each sentence extra is a DIFFERENT
-        # UDK (decide_all guarantees it), so the deterministic event_id
-        # (journey, segment start, udk_id) never collides within a segment.
-        alerts = ([decision] if decision.decision != "NO_ACTION" else []) + extras
+        # Custom-UDK gate (custom_udk.py, as in custom_udk_enrol_detect_v2.ipynb) with its own STT (Whisper
+        # medium.en + Parakeet), started on its own thread IN PARALLEL with language ID and the paths below, so a
+        # segment costs the slower of the two instead of their sum. Its result is checked before anything is
+        # emitted: the user's own phrase -> TRIGGER_ALL and the other paths' result for this segment is discarded
+        # (as if they had not run). ponytail: the general model's per-journey state (repeat counts) has still seen
+        # that segment; acceptable, since the user's own phrase already alerted.
+        # Two cases: a gate on the general model's own Whisper (the CPU host, small.en) runs first and, on a miss, the
+        # general path reuses its transcripts (each model transcribes the segment once); a gate with its own model
+        # (medium.en on a GPU) runs in parallel.
+        gate_job, pre = None, None
+        if journey.custom_udk and _custom_udk_stt is not None:
+            if _custom_udk_stt is journey.stt:
+                stt_start = time.monotonic()
+                gate_whisper = _custom_udk_stt.transcribe(seg.pcm)
+                _metrics.stt_latency(time.monotonic() - stt_start)
+                gate_parakeet = _parakeet_stt.transcribe(seg.pcm).text if _parakeet_stt is not None else None
+                texts = [gate_whisper.text] + ([gate_parakeet] if gate_parakeet is not None else [])
+                if custom_udk.detect(texts, journey.custom_udk):
+                    new_events.append(_emit_event(journey, _custom_udk_event(journey, texts), seg))
+                    continue
+                pre = (gate_whisper, gate_parakeet)
+            else:
+                gate_job = _gate_pool.submit(_custom_udk_texts, seg.pcm)
+        # Per-segment language ID (UDK_ENABLE_HINDI=1 and/or UDK_ENABLE_INDIC_EXACT=te,ta,kn) picks which
+        # language paths hear the segment. All off -> run_existing stays True and no other job runs.
+        hindi_job, indic_jobs, run_existing = _start_routes(journey, seg) if _hindi_lid is not None else (None, {}, True)
+        alerts, heard = _existing_alerts(journey, seg, scream_fired, pre) if run_existing else ([], "")
+        if hindi_job is not None:
+            merged = _merge_hindi(alerts, heard, hindi_job)
+            if merged is not None:
+                alerts, heard = merged
+            elif not run_existing:  # Hindi failed on a Hindi-only segment: fall back to the existing path
+                alerts, heard = _existing_alerts(journey, seg, scream_fired, pre)
+                run_existing = True
+        for job in indic_jobs.values():
+            merged = _merge_indic(alerts, heard, job)
+            if merged is not None:
+                alerts, heard = merged
+            elif not run_existing:  # Telugu/Tamil/Kannada path failed: fall back to the existing path, once
+                alerts, heard = _existing_alerts(journey, seg, scream_fired, pre)
+                run_existing = True
+        if gate_job is not None:
+            try:
+                texts = gate_job.result()
+            except Exception:  # a failing gate must not cost the other paths' detection
+                logging.getLogger("udk.custom_udk").exception("custom-UDK gate failed on a segment; other paths only")
+                texts = None
+            if texts and custom_udk.detect(texts, journey.custom_udk):
+                new_events.append(_emit_event(journey, _custom_udk_event(journey, texts), seg))
+                continue
         if not alerts and scream_fired:
             # No UDK alert on this segment, but the audio itself is a sustained
             # scream/cry: ask "Are you safe?". udk=None -> event_id uses "none".
             alerts = [DecisionEvent(decision="TRIGGER_VERIFY", udk=None, confidence=round(scream_peak, 3),
-                                    transcript=transcript.text or second_text, layer="acoustic_scream",
+                                    transcript=heard, layer="acoustic_scream",
                                     repeated=False, reason=f"sustained {scream_class} (BEATs {scream_peak:.2f}), no UDK words")]
         for d in alerts:
             new_events.append(_emit_event(journey, d, seg))
     return new_events
+
+
+def _existing_alerts(journey: JourneyState, seg, scream_fired: bool, pre=None) -> tuple[list[DecisionEvent], str]:
+    """The per-segment path as it was before Hindi (journey.stt + Parakeet + KWS -> UDKEngine
+    -> either-STT -> intent veto -> separation retry), unchanged. Returns (alerting decisions,
+    what was heard); the scream-only VERIFY is added by the caller. `pre` = (Whisper transcript, Parakeet text) the
+    custom-UDK gate already made with the same models on this segment (057d354): reused, not transcribed again."""
+    if pre is not None:
+        transcript = pre[0]
+    else:
+        stt_start = time.monotonic()
+        transcript = journey.stt.transcribe(seg.pcm)
+        _metrics.stt_latency(time.monotonic() - stt_start)
+    # Second English STT (UDK_ENABLE_PARAKEET=1), only while the journey is on
+    # the English backend (Parakeet is English-only). Transcribed BEFORE the
+    # empty-transcript skip below: a segment Whisper heard nothing in is
+    # exactly where the second opinion can rescue a detection.
+    second_text = ""
+    if _parakeet_stt is not None and journey.stt is _stt_backend:
+        second_text = pre[1] if pre is not None and pre[1] is not None else _parakeet_stt.transcribe(seg.pcm).text
+    kws_match = journey.kws.spot(seg.pcm) if journey.kws is not None else None
+    # Deciding even on an empty transcript is what lets KWS fire on
+    # its own when STT gets nothing (Section 3's STT-outage row) --
+    # skipping early here would silently defeat the entire point of
+    # running KWS in parallel (Section 4's Approach E).
+    if not transcript.text and kws_match is None and not second_text and not scream_fired:
+        return [], ""
+    scream_score = _scream_detector.score(seg.pcm) if _scream_detector is not None and _scream_corroboration_enabled else None
+
+    # Free -- reuses transcript metadata faster-whisper already
+    # computed above, no extra model call. See stt_confidence_gate.py.
+    stt_suspect = _stt_confidence_gate_enabled and is_suspect(transcript)
+
+    # Selective, NOT run on every segment (a second full ASR pass has
+    # real latency cost -- see dual_asr_guard.py's module docstring):
+    # only when this segment would otherwise clear the text-match
+    # floor AND the primary transcript's own decoding metadata gives
+    # no other reason for suspicion (temperature==0.0 -- the specific
+    # "confidently wrong" gap stt_suspect above cannot cover). This
+    # peek re-runs match_transcript(), which stt_confidence_gate's
+    # veto skips only when KWS wins anyway -- cheap (pure string
+    # comparison against 20 phrases, no model), so calling it twice
+    # (once here, once inside decide()) trades a negligible amount of
+    # duplicate work for keeping decide() a pure function of already-
+    # computed signals, same shape as scream_score/kws_match above.
+    dual_asr_disagreement = False
+    if _dual_asr_guard is not None and transcript.temperature == 0.0 and transcript.text:
+        peek = match_transcript(transcript.text, journey.engine.udks, semantic_matcher=journey.engine.semantic_matcher)
+        if peek.udk is not None and peek.confidence >= TRIGGER_VERIFY_THRESHOLD:
+            dual_asr_disagreement = _dual_asr_guard.disagrees(transcript.text, seg.pcm)
+
+    now_s = time.monotonic()
+    pre_state = journey.engine.snapshot()
+    # decide_all = the whole-segment decision (identical to decide()) plus
+    # one extra event per SENTENCE matching a different UDK -- the
+    # per-sentence matching the evaluated best config uses (run_file), so
+    # e.g. UDK_13 isn't lost behind UDK_10 in "Let go! ... You're hurting me!".
+    primary = journey.engine.decide_all(
+        transcript.text,
+        now_s=now_s,
+        kws_match=kws_match,
+        scream_score=scream_score,
+        stt_suspect=stt_suspect,
+        dual_asr_disagreement=dual_asr_disagreement,
+    )
+    decisions = _either_stt_decisions(journey.engine, primary, pre_state, second_text, now_s, kws_match, scream_score)
+    if _intent_gate is not None and second_text:
+        decisions = _intent_veto(decisions, second_text if decisions is primary else transcript.text)
+    decision, extras = decisions[0], decisions[1:]
+    if decision.decision == "NO_ACTION" and not extras:
+        # Speech-separation fallback (separation.py): only tried once
+        # the primary pass has already missed, and only when opted in
+        # -- real measured cost (new FP path + ~4-8s CPU latency) means
+        # this must never run on every segment. See separation.py's
+        # module docstring for the real recovered-recall numbers.
+        if _separator is not None:
+            from separation import retry_with_separation
+
+            recovered = retry_with_separation(
+                seg.pcm, journey.stt, journey.engine, _separator, time.monotonic(), kws=journey.kws
+            )
+            if recovered is not None:
+                decision = recovered
+    # One event per alerting decision. Each sentence extra is a DIFFERENT
+    # UDK (decide_all guarantees it), so the deterministic event_id
+    # (journey, segment start, udk_id) never collides within a segment.
+    alerts = ([decision] if decision.decision != "NO_ACTION" else []) + extras
+    return alerts, transcript.text or second_text
+
+
+def _start_routes(journey: JourneyState, seg):
+    """Route one segment (docs/hindi_distress_system.md, measured as route(0.95)): Whisper language ID over the
+    enabled languages -> the most likely ones until they cover 95 % (cap 3); with only English + Hindi that is
+    English share >= 0.95 -> English only; <= 0.05 -> Hindi only; else both. Returns (future of a HindiResult or
+    None, {lang: future of an exact/fuzzy result}, run the existing path?). Any failure -> (None, {}, True), i.e.
+    exactly the English-only behaviour: a problem on these paths must never cost a detection."""
+    try:
+        from safety_router.router import route_with_indic
+
+        langs = route_with_indic(_hindi_lid(seg.pcm), ["en"] + (["hi"] if _hindi is not None else []) + _indic_langs)
+        hindi_job = None
+        if "hi" in langs:
+            from safety_router.hindi import HindiStream
+
+            if journey.hindi_stream is None:
+                journey.hindi_stream = HindiStream()
+            hindi_job = _hindi_pool.submit(_hindi.process, seg.pcm, seg.start_ms, journey.hindi_stream)
+        indic_jobs = {lang: _hindi_pool.submit(_indic_exact, seg.pcm, lang) for lang in langs if lang in _indic_langs}
+        return hindi_job, indic_jobs, "en" in langs
+    except Exception:
+        logging.getLogger("udk.hindi").exception("language routing failed; English path only for this segment")
+        return None, {}, True
+
+
+def _indic_exact(pcm: bytes, lang: str) -> tuple[DecisionEvent | None, str]:
+    """Telugu / Tamil / Kannada: IndicConformer in that language -> exact or fuzzy match against that language's
+    own 20 phrases only (no word-overlap fallback, no context model, no intent veto), dropped when the segment
+    has a benign-context cue (safety_router/indic_exact.py). A match only ever asks (TRIGGER_VERIFY), never alerts
+    contacts directly."""
+    from safety_router.indic_exact import MIN_PHRASE_COVERAGE, NO_SEMANTIC, benign_cue, phrase_coverage
+
+    text = _indic_stt.transcribe(pcm, language=lang).text.strip()
+    m = match_transcript(text, _indic_udks[lang], semantic_matcher=NO_SEMANTIC)
+    if (m.udk is None or m.confidence < TRIGGER_VERIFY_THRESHOLD or benign_cue(text, m.udk.phrase, lang)
+            or phrase_coverage(text, m.udk.phrase) < MIN_PHRASE_COVERAGE):
+        return None, text
+    return DecisionEvent(decision="TRIGGER_VERIFY", udk=m.udk, confidence=round(m.confidence, 3), transcript=text,
+                         layer=f"{lang}_{m.layer}", repeated=False,
+                         reason=f"{lang} {m.layer} match ({m.confidence:.2f}), ask only"), text
+
+
+def _merge_indic(alerts: list[DecisionEvent], heard: str, job) -> tuple[list[DecisionEvent], str] | None:
+    """Same rule as _merge_hindi: used only when it outranks every alert already raised on the segment (so an
+    English or Hindi ALERT is never lowered to an ask). None = the job failed."""
+    try:
+        event, text = job.result()
+    except Exception:
+        logging.getLogger("udk.hindi").exception("Telugu/Tamil/Kannada path failed on a segment; using the existing path")
+        return None
+    heard = heard or text
+    if event is None or _DECISION_RANK[event.decision] <= max((_DECISION_RANK[a.decision] for a in alerts), default=0):
+        return alerts, heard
+    return [event] + [a for a in alerts if not (a.udk and a.udk.udk_id == event.udk.udk_id)], heard
+
+
+def _custom_udk_texts(pcm: bytes) -> list[str]:
+    """The gate's own transcripts of a segment: Whisper medium.en, and Parakeet when it is enabled (the notebook's
+    detection checks both; its variants come from Whisper only)."""
+    texts = [_custom_udk_stt.transcribe(pcm).text]
+    if _parakeet_stt is not None:
+        texts.append(_parakeet_stt.transcribe(pcm).text)
+    return texts
+
+
+def _custom_udk_event(journey: JourneyState, texts: list[str]) -> DecisionEvent:
+    phrase = journey.custom_udk["phrase"]
+    return DecisionEvent(decision="TRIGGER_ALL", udk=UDK("CUSTOM_UDK", phrase, "PERSONAL"), confidence=1.0,
+                         transcript=next(t for t in texts if t and custom_udk.detect([t], journey.custom_udk)),
+                         layer="custom_udk", repeated=False, reason=f"user's own phrase: '{phrase}'")
+
+
+_HINDI_DECISION = {"ALERT": "TRIGGER_ALL", "VERIFY": "TRIGGER_VERIFY"}
+
+
+def _merge_hindi(alerts: list[DecisionEvent], heard: str, hindi_job) -> tuple[list[DecisionEvent], str] | None:
+    """The higher decision wins: the Hindi decision is used only when it outranks every alert the existing
+    path raised on this segment (then it replaces an English alert for the same UDK, so event_ids stay
+    unique). None = the Hindi job failed (the caller keeps or runs the existing path)."""
+    try:
+        r = hindi_job.result()
+    except Exception:
+        logging.getLogger("udk.hindi").exception("Hindi system failed on a segment; using the existing path")
+        return None
+    heard = heard or r.text
+    level = _HINDI_DECISION.get(r.decision)
+    if level is None or _DECISION_RANK[level] <= max((_DECISION_RANK[a.decision] for a in alerts), default=0):
+        return alerts, heard
+    udk = _hindi_udks.get(r.udk_id)
+    hindi = DecisionEvent(decision=level, udk=udk, confidence=r.b, transcript=r.text, layer="hi_frame", repeated=False,
+                          reason=f"hindi: phrase similarity {r.a}, live-danger {r.b}, frame {r.frame}")
+    return [hindi] + [a for a in alerts if not (udk and a.udk and a.udk.udk_id == udk.udk_id)], heard
 
 
 def _emit_event(journey: JourneyState, decision: DecisionEvent, seg) -> dict:
@@ -834,13 +974,6 @@ def _load_parakeet_stt() -> STTBackend | None:
         return None
 
 
-def _custom_udk_event(journey: JourneyState, texts: list[str]) -> DecisionEvent:
-    phrase = journey.custom_udk["phrase"]
-    return DecisionEvent(decision="TRIGGER_ALL", udk=UDK("CUSTOM_UDK", phrase, "PERSONAL"), confidence=1.0,
-                         transcript=next(t for t in texts if t and custom_udk.detect([t], journey.custom_udk)),
-                         layer="custom_udk", repeated=False, reason=f"user's own phrase: '{phrase}'")
-
-
 _DECISION_RANK = {"NO_ACTION": 0, "TRIGGER_VERIFY": 1, "TRIGGER_ALL": 2}
 
 
@@ -1035,6 +1168,42 @@ def _load_language_detectors() -> tuple[object | None, object | None]:
         return None, None
 
 
+def _load_hindi():
+    """(HindiSystem, Whisper language ID) if UDK_ENABLE_HINDI=1, else (None, None) and nothing is imported.
+    HindiSystem = IndicConformer -> LaBSE phrase match -> MuRIL live-danger model, weights pinned in
+    safety_router/hindi.py (private HF repo, SHA-256 checked; needs HF_TOKEN) or UDK_HINDI_WEIGHTS=<local path>.
+    Enabled but not loadable -> raises: a language that is silently not listened to is worse than failing to
+    start (same reasoning as the webhook). UDK_HINDI_DEVICE (e.g. cuda:1) puts its PyTorch models (LaBSE, MuRIL)
+    and its language-ID Whisper on another GPU: with the custom-UDK gate on, everything does not fit one 16 GB T4."""
+    if os.environ.get("UDK_ENABLE_HINDI") != "1":
+        return None, None
+    from safety_router.hindi import HindiSystem
+    from safety_router.router import WhisperLanguageID
+
+    dev = os.environ.get("UDK_HINDI_DEVICE") or _device()
+    return HindiSystem(os.environ.get("UDK_HINDI_WEIGHTS") or None, device=dev), WhisperLanguageID(dev)
+
+
+INDIC_EXACT_LANGUAGES = ("te", "ta", "kn")
+
+
+def _load_indic_exact() -> tuple[list[str], object | None]:
+    """UDK_ENABLE_INDIC_EXACT=te,ta,kn (any subset) -> those languages join per-segment routing with exact/fuzzy
+    matching only (_indic_exact). Shares the Hindi system's IndicConformer when Hindi is on; otherwise loads one.
+    Unset -> ([], None) and nothing is loaded. Enabled but not loadable -> raises, like _load_hindi."""
+    langs = [l.strip() for l in os.environ.get("UDK_ENABLE_INDIC_EXACT", "").split(",") if l.strip()]
+    unknown = [l for l in langs if l not in INDIC_EXACT_LANGUAGES]
+    if unknown:
+        raise RuntimeError(f"UDK_ENABLE_INDIC_EXACT: unsupported {unknown}; use any of {INDIC_EXACT_LANGUAGES}")
+    if not langs:
+        return [], None
+    if _hindi is not None:
+        return langs, _hindi.stt
+    from safety_router.indic_stt import IndicConformerSTT
+
+    return langs, IndicConformerSTT()
+
+
 def _load_custom_udk_stt() -> STTBackend | None:
     """Whisper for the custom-UDK gate and its setup. Off unless UDK_CUSTOM_UDK_STT_MODEL is set, with no default:
     medium.en (the notebook's model) on a GPU, small.en on the CPU host, where medium takes 11-13 s a segment. When it
@@ -1173,8 +1342,28 @@ _stt_confidence_gate_enabled = os.environ.get("UDK_ENABLE_STT_CONFIDENCE_GATE") 
 _dual_asr_guard = _load_dual_asr_guard()
 # None unless UDK_INTENT_GATE=<model dir> -- see intent_gate.py (veto-agree on text alerts).
 _intent_gate = intent_gate.from_env(_device())
+# (None, None) unless UDK_ENABLE_HINDI=1 -- see _load_hindi / _start_routes / docs/hindi_distress_system.md.
+from safety_router.router import _keep_cuda_device  # models on UDK_HINDI_DEVICE must not move this thread's GPU
+
+with _keep_cuda_device():
+    _hindi, _hindi_lid = _load_hindi()
 # None unless UDK_CUSTOM_UDK_STT_MODEL is set -- see _load_custom_udk_stt / custom_udk.py.
 _custom_udk_stt: STTBackend | None = _load_custom_udk_stt()
+_hindi_udks = {u.udk_id: u for u in general_udks("hi")}  # Hindi decision's udk_id -> UDK for the event schema
+# ([], None) unless UDK_ENABLE_INDIC_EXACT is set -- see _load_indic_exact / _indic_exact.
+with _keep_cuda_device():
+    _indic_langs, _indic_stt = _load_indic_exact()
+_indic_udks = {lang: general_udks(lang) for lang in _indic_langs}
+# Per-segment language ID (_hindi_lid): Hindi's, or a Whisper-small one when only Telugu/Tamil/Kannada are on.
+if _hindi_lid is None and _indic_langs:
+    from safety_router.router import WhisperLanguageID
+
+    _hindi_lid = WhisperLanguageID(os.environ.get("UDK_HINDI_DEVICE") or _device())
+# One worker: Hindi segments of all journeys go through one model instance, one at a time (thread safety);
+# the existing path runs concurrently with it on the request thread.
+_hindi_pool = ThreadPoolExecutor(max_workers=1)
+# The custom-UDK gate runs beside language ID + the other paths (one gate segment at a time: one medium.en instance).
+_gate_pool = ThreadPoolExecutor(max_workers=1)
 # Last, after every model: opening the DB migrates it (journeys.personal_udk_* are dropped), and the previous image
 # cannot start journeys on a migrated DB. A release whose models fail to load never gets here, so the deploy's
 # rollback (deploy/remote_deploy.sh) lands on a DB it can still use.

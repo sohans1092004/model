@@ -174,6 +174,9 @@ _UDK_TABLE: dict[str, dict[str, tuple[str, bool]]] = {
         "UDK_18": ("నాకు ఇప్పుడే ఇంటికి వెళ్లాలి", True),
         "UDK_19": ("దయచేసి సహాయం కోసం కాల్ చేయండి", False),
         "UDK_20": ("నేను ఇక్కడ నుండి బయటపడాలి", True),
+        # te/kn/ta only (owner, 2026-10-06): "anyone, please save me" -- the most common real cry, said in 1 of 13
+        # real Telugu recordings and matching none of the 20 above. English and Hindi lists stay at 20.
+        "UDK_21": ("నన్ను ఎవరైనా కాపాడండి", False),
     },
     "kn": {
         "UDK_01": ("ಪೊಲೀಸರಿಗೆ ಕರೆ ಮಾಡಿ, ನನಗೆ ಸಹಾಯ ಬೇಕು", False),
@@ -196,6 +199,7 @@ _UDK_TABLE: dict[str, dict[str, tuple[str, bool]]] = {
         "UDK_18": ("ನನಗೆ ಈಗಲೇ ಮನೆಗೆ ಹೋಗಬೇಕು", True),
         "UDK_19": ("ದಯವಿಟ್ಟು ಸಹಾಯಕ್ಕಾಗಿ ಕರೆ ಮಾಡಿ", False),
         "UDK_20": ("ನಾನು ಇಲ್ಲಿಂದ ಹೊರಬರಬೇಕು", True),
+        "UDK_21": ("ನನ್ನನ್ನು ಯಾರಾದರೂ ಕಾಪಾಡಿ", False),
     },
     "ta": {
         "UDK_01": ("போலீசை அழையுங்கள், எனக்கு உதவி வேண்டும்", False),
@@ -218,6 +222,7 @@ _UDK_TABLE: dict[str, dict[str, tuple[str, bool]]] = {
         "UDK_18": ("எனக்கு இப்போதே வீட்டிற்குப் போக வேண்டும்", True),
         "UDK_19": ("தயவுசெய்து உதவிக்கு அழையுங்கள்", False),
         "UDK_20": ("நான் இங்கிருந்து வெளியேற வேண்டும்", True),
+        "UDK_21": ("என்னை யாராவது காப்பாற்றுங்கள்", False),
     },
 }
 

@@ -37,7 +37,7 @@ curl -H "X-Service-Token: $TOKEN" http://localhost:8000/metrics
 Then stream one prepped_data clip through it (colab_api_check.py does this in-process)
 and confirm the alert arrives at the webhook.
 
-## Custom UDK (off in `.env.example`; deploying this code changes nothing until switched on)
+## Optional features (all off in `.env.example`; deploying this code changes nothing until switched on)
 **Custom UDK (each user's own phrase, `custom_udk.py`).** Off while `UDK_CUSTOM_UDK_STT_MODEL` is unset.
 1. Put `UDK_CUSTOM_UDK_STT_MODEL` in the server config (SSM `/sakhi/udk/config`, not `.env.example`: it is per
    host): `small.en` on the CPU host, where it is the general model's own Whisper (shared, already in the image);
@@ -45,14 +45,30 @@ and confirm the alert arrives at the webhook.
 2. The app calls `POST /v1/users/{user_id}/custom-udk/refresh` (service token) with
    `{"recordings": ["<base64 audio file>", ...]}` (4-6 files; wav/webm/m4a/mp3/ogg) after the user records, and
    shows `reason` when `accepted` is false; `heard` lists what each recording was heard as. `DELETE /v1/users/{user_id}/custom-udk` forgets a user's phrase.
-3. Speed: the gate transcribes every segment of an enrolled user before anything else; with the same model as the
-   general one, a miss reuses those transcripts. Measured per segment: medium.en on a T4 adds ~0.6-1.5 s; on CPU
+3. Speed: with the same model as the general one (CPU host) the gate transcribes first and a miss reuses those
+   transcripts; with its own model (medium.en on a GPU) it runs in parallel with language ID and the other paths. Measured per segment: medium.en on a T4 adds ~0.6-1.5 s; on CPU
    medium takes ~11-13 s and small.en ~4 s (laptop CPU).
 4. Changing the model: each profile records its `stt`, journey start then answers `custom_udk: false` for older
    ones and the app asks those users to record again.
 5. Rollback: this code drops `journeys.personal_udk_*` on its first start, and earlier images cannot start journeys
    on that DB. The automatic rollback is safe (the DB opens only after every model loads); a manual rollback to an
    earlier release needs the `/data` backup from before this one.
+
+**Hindi (`safety_router/`, docs/hindi_distress_system.md).** Off: `UDK_ENABLE_HINDI=0` in `.env.example`, which
+overrides SSM, so switching it on is a code change to that line.
+- Needs a GPU host: on CPU, IndicConformer alone takes ~1.7 s per segment. With the custom UDK on as well, all
+  models need more than one 16 GB T4 (measured out of memory): use a 24 GB GPU, or two GPUs with
+  `UDK_HINDI_DEVICE=cuda:1`.
+- Needs `HF_TOKEN` in the runtime config (private [B] weights, gated IndicConformer); ~3 GB downloads on first start.
+- If enabled but not loadable, the service refuses to start (and remote_deploy.sh rolls back).
+
+**Telugu / Tamil / Kannada (exact or fuzzy match only).** Off while `UDK_ENABLE_INDIC_EXACT` is unset; set e.g.
+`te,ta,kn` (any subset). They join the per-segment language ID like Hindi; a routed segment is transcribed by
+IndicConformer in that language and matched only against that language's 20 phrases (exact or fuzzy; no semantic
+matching, no context model, no intent veto). A match only ever asks "Are you safe?" (`TRIGGER_VERIFY`, layer e.g.
+`te_exact`), never a direct alert, and never lowers an English or Hindi alert on the same segment. Shares Hindi's
+IndicConformer when Hindi is on, otherwise loads it; same GPU and `HF_TOKEN` needs as Hindi. Not yet measured on
+real Telugu/Tamil/Kannada audio.
 
 ## Rules for running it
 - **One worker, one container per GPU.** Live sessions are held in memory; two workers

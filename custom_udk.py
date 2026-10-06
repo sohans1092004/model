@@ -1,9 +1,10 @@
 """Per-user custom UDK, as in custom_udk_enrol_detect_v2.ipynb (MODE="text"): each user records their own phrase
 4-6 times during app setup and the app sends the recordings in one refresh call; the service transcribes them
 once, stores the profile per user (not the audio),
-and checks it first on every segment: the phrase in the gate's own Whisper (medium.en, as in
-the notebook) or Parakeet transcript -> TRIGGER_ALL straight away (no intent veto); otherwise the general model
-decides, unchanged.
+and checks it on every segment (beside language ID and the other paths when it has its own model): the phrase in
+the gate's own Whisper (medium.en, as in
+the notebook) or Parakeet transcript -> TRIGGER_ALL straight away (no intent veto); otherwise language ID and the general
+model / Hindi / Telugu-Tamil-Kannada paths decide.
 
 Notebook numbers (one speaker, 5 setup clips): 27/30 simulated conditions caught with Whisper + Parakeet (muffled
 "pocket" audio is the weak case, 2/5); 1/17 near-miss sentences detected (that clip was heard exactly as the phrase);

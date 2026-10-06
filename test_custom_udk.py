@@ -163,14 +163,45 @@ check("bob (no profile) says alice's phrase -> no custom alert (profiles are per
 _, ev = run("J_alice2", "U_alice", "the blue bird sang at night yesterday")
 check("near-miss wording -> no custom alert", all(e["layer"] != "custom_udk" for e in ev), str(ev))
 
-# Gate: a hit stops there; a miss goes on to the general model
+# Gate with its own model (medium.en on a GPU) runs in parallel with the other paths: a hit -> only the custom alert
+# (their result for the segment is discarded); a miss -> the general model decides
 api._db.save_custom_udk("U_dave", custom_udk.build_profile(["get away from me now please"] * 4))
 _, ev = run("J_dave_hit", "U_dave", "get away from me now please")
-check("gate hit: only the custom alert, the general model (UDK_03 'get away from me') does not run",
+check("gate hit: only the custom alert, the general model's UDK_03 for the same segment is discarded",
       [e["layer"] for e in ev] == ["custom_udk"], str(ev))
 _, ev = run("J_dave_miss", "U_dave", "get away from me")
 check("gate miss: the general model decides (UDK_03 alert, no custom alert)",
       len(ev) == 1 and ev[0]["udk_id"] == "UDK_03" and ev[0]["layer"] != "custom_udk", str(ev))
+
+import time  # noqa: E402
+
+
+class SlowSTT(MockSTT):
+    def transcribe(self, pcm):
+        time.sleep(0.4)
+        return super().transcribe(pcm)
+
+
+class BrokenSTT(MockSTT):
+    def transcribe(self, pcm):
+        raise RuntimeError("gate model down")
+
+
+gate_stt, api._custom_udk_stt = api._custom_udk_stt, SlowSTT()
+slow = SlowSTT()
+slow.register(seg_pcm, "get away from me")
+api._custom_udk_stt.register(seg_pcm, "get away from me")
+j, _ = api._store.create_or_get("J_dave_par", "U_dave", slow)
+j.vad = OneSegmentVAD()
+t0 = time.time()
+ev = api._ingest_frame(j, 0, seg_pcm + b"\x00\x00" * 100, api._audio_store)
+took = time.time() - t0
+check("own-model gate and general model run at the same time (0.4 s each -> segment well under 0.8 s)",
+      took < 0.7 and [e["udk_id"] for e in ev] == ["UDK_03"], f"{took:.2f}s {ev}")
+api._custom_udk_stt = BrokenSTT()
+_, ev = run("J_dave_broken", "U_dave", "get away from me")
+check("a failing gate does not cost the general model's alert", [e["udk_id"] for e in ev] == ["UDK_03"], str(ev))
+api._custom_udk_stt = gate_stt
 
 api._intent_gate, api._parakeet_stt = VetoEverything(), MockSTT()
 api._parakeet_stt.register(seg_pcm, "please help the blue bird sings at night")
