@@ -36,9 +36,9 @@ class IndicConformerSTT:
     def __init__(self, language: str = "hi", decoding: str = "rnnt"):
         import threading
 
-        from stt import ort_cpu_threads
+        from stt import ort_session_defaults
         from transformers import AutoModel
-        with ort_cpu_threads():
+        with ort_session_defaults():
             self._model = AutoModel.from_pretrained(INDIC_CONFORMER_ID, trust_remote_code=True)
         self._language, self._decoding = language, decoding
         self.model_version = f"indic-conformer-600m-multilingual-{decoding}"

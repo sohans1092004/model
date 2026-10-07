@@ -44,6 +44,10 @@ import hmac
 import json
 import logging
 import os
+
+# PyTorch keeps freed GPU memory reserved in fixed blocks; expandable segments cut the fragmentation (memory only,
+# outputs unchanged). Must be set before torch touches CUDA; a value set on the host wins.
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 import secrets
 import struct
 import tempfile
@@ -933,6 +937,13 @@ def _device() -> str:
     return _DEVICE
 
 
+def _text_models_device() -> str:
+    """UDK_TEXT_MODELS_DEVICE (e.g. cpu): where the text models with large weights and tiny per-segment work run --
+    Hindi LaBSE + MuRIL and the mDeBERTa intent veto (~4 GB of GPU memory; on CPU 0.03-0.05 s each per Hindi
+    segment, the veto only before an alert). Unset = where the rest runs (Hindi: UDK_HINDI_DEVICE)."""
+    return os.environ.get("UDK_TEXT_MODELS_DEVICE") or _device()
+
+
 def _load_kws_backend(references_path: Path) -> KWSBackend | None:
     """KWS stays fully optional and off by default (Section 4's Approach
     E is additive, not required) -- explicit opt-in via UDK_ENABLE_KWS,
@@ -1256,7 +1267,8 @@ def _load_hindi():
     from safety_router.router import WhisperLanguageID
 
     dev = os.environ.get("UDK_HINDI_DEVICE") or _device()
-    return HindiSystem(os.environ.get("UDK_HINDI_WEIGHTS") or None, device=dev), WhisperLanguageID(dev)
+    return (HindiSystem(os.environ.get("UDK_HINDI_WEIGHTS") or None, device=os.environ.get("UDK_TEXT_MODELS_DEVICE") or dev),
+            WhisperLanguageID(dev))
 
 
 INDIC_EXACT_LANGUAGES = ("te", "ta", "kn")
@@ -1416,7 +1428,7 @@ _stt_confidence_gate_enabled = os.environ.get("UDK_ENABLE_STT_CONFIDENCE_GATE") 
 # None unless UDK_ENABLE_DUAL_ASR=1 -- see _load_dual_asr_guard.
 _dual_asr_guard = _load_dual_asr_guard()
 # None unless UDK_INTENT_GATE=<model dir> -- see intent_gate.py (veto-agree on text alerts).
-_intent_gate = intent_gate.from_env(_device())
+_intent_gate = intent_gate.from_env(_text_models_device())
 # (None, None) unless UDK_ENABLE_HINDI=1 -- see _load_hindi / _start_routes / docs/hindi_distress_system.md.
 from safety_router.router import _keep_cuda_device  # models on UDK_HINDI_DEVICE must not move this thread's GPU
 

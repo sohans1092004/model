@@ -36,22 +36,38 @@ def cpu_threads() -> int:
     return max(1, (os.cpu_count() or 2) // 2) if os.environ.get("UDK_DEVICE") == "cpu" else 0
 
 
+# ONNX Runtime's CUDA memory pool by default grows to the next power of two and never shrinks (a 2.3 GB need can
+# hold 4 GB); growing only by what is requested changes memory, never outputs.
+ORT_CUDA_OPTIONS = {"arena_extend_strategy": "kSameAsRequested"}
+
+
+def _with_cuda_options(providers, provider_options):
+    """providers / provider_options with ORT_CUDA_OPTIONS added to the CUDA provider (options already set win)."""
+    if not providers:
+        return providers, provider_options
+    if provider_options is not None:  # parallel lists form
+        provider_options = [dict(ORT_CUDA_OPTIONS, **(o or {})) if p == "CUDAExecutionProvider" else o
+                            for p, o in zip(providers, provider_options)]
+        return providers, provider_options
+    return [("CUDAExecutionProvider", dict(ORT_CUDA_OPTIONS)) if p == "CUDAExecutionProvider"
+            else ("CUDAExecutionProvider", dict(ORT_CUDA_OPTIONS, **p[1]))
+            if isinstance(p, tuple) and p[0] == "CUDAExecutionProvider" else p for p in providers], None
+
+
 @contextmanager
-def ort_cpu_threads():
+def ort_session_defaults():
     """ONNX Runtime sessions created inside this block (Parakeet via onnx-asr, IndicConformer's remote code) get the
-    UDK_CPU_THREADS budget. No budget set -> nothing changes."""
-    n = cpu_threads()
-    if not n:
-        yield
-        return
+    UDK_CPU_THREADS budget and, on CUDA, ORT_CUDA_OPTIONS. Speed / memory only: outputs are unchanged."""
     import onnxruntime as ort
+    n = cpu_threads()
     orig = ort.InferenceSession
 
-    def make(path_or_bytes, sess_options=None, *args, **kwargs):
-        if sess_options is None:
+    def make(path_or_bytes, sess_options=None, providers=None, provider_options=None, **kwargs):
+        if sess_options is None and n:
             sess_options = ort.SessionOptions()
             sess_options.intra_op_num_threads, sess_options.inter_op_num_threads = n, 1
-        return orig(path_or_bytes, sess_options, *args, **kwargs)
+        providers, provider_options = _with_cuda_options(providers, provider_options)
+        return orig(path_or_bytes, sess_options, providers, provider_options, **kwargs)
 
     ort.InferenceSession = make
     try:
@@ -178,7 +194,7 @@ class ParakeetSTT:
             except Exception:
                 pass
         providers = ["CUDAExecutionProvider", "CPUExecutionProvider"] if device == "cuda" else ["CPUExecutionProvider"]
-        with ort_cpu_threads():
+        with ort_session_defaults():
             self._model = onnx_asr.load_model("nemo-parakeet-tdt-0.6b-v2", str(model_dir), providers=providers)
         # What the encoder session really got: onnxruntime silently falls back to
         # CPU when CUDA libs fail to load (e.g. a CUDA-13 onnxruntime-gpu on a
