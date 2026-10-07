@@ -34,19 +34,37 @@ class IndicConformerSTT:
     MAX_S = 8.0
 
     def __init__(self, language: str = "hi", decoding: str = "rnnt"):
+        import threading
+
+        from stt import ort_cpu_threads
         from transformers import AutoModel
-        self._model = AutoModel.from_pretrained(INDIC_CONFORMER_ID, trust_remote_code=True)
+        with ort_cpu_threads():
+            self._model = AutoModel.from_pretrained(INDIC_CONFORMER_ID, trust_remote_code=True)
         self._language, self._decoding = language, decoding
         self.model_version = f"indic-conformer-600m-multilingual-{decoding}"
+        # Encode once, decode per language: the encoder (the heavy part) does not depend on the language, so the
+        # Hindi and Telugu / Tamil / Kannada calls on the same segment reuse one encoding. Identical text. Falls
+        # back to the model's own forward() if its remote code ever stops exposing encode() / the decoders.
+        self._split = all(hasattr(self._model, a) for a in ("encode", "_rnnt_decode", "_ctc_decode"))
+        self._cache = None  # (segment pcm, [(encoder outputs, lengths) per piece]) of the last segment
+        self._lock = threading.Lock()
 
     def transcribe(self, pcm: bytes, language: str | None = None) -> Transcript:
         """`language` overrides the default one (te, ta, kn, ...): one loaded model serves every Indic language."""
         import torch
+        lang = language or self._language
+        pieces = [p for p in _split_quiet(_audio(pcm), self.MAX_S) if p.size >= 1600]  # <0.1 s: no encoder frames
         texts = []
-        for piece in _split_quiet(_audio(pcm), self.MAX_S):
-            if piece.size < 1600:  # <0.1 s: the encoder's subsampling yields no frames
-                continue
-            with torch.no_grad():
-                texts.append(str(self._model(torch.from_numpy(piece).unsqueeze(0), language or self._language,
-                                             self._decoding)).strip())
+        with torch.no_grad():
+            if not self._split:
+                texts = [str(self._model(torch.from_numpy(p).unsqueeze(0), lang, self._decoding)).strip() for p in pieces]
+            else:
+                with self._lock:
+                    if self._cache is None or (self._cache[0] is not pcm and self._cache[0] != pcm):
+                        self._cache = (pcm, [self._model.encode(torch.from_numpy(p).unsqueeze(0)) for p in pieces])
+                    encoded = self._cache[1]
+                for enc, lens in encoded:
+                    out = (self._model._rnnt_decode(enc, lens, lang) if self._decoding == "rnnt"
+                           else self._model._ctc_decode(enc, lens, lang))
+                    texts.append(str(out).strip())
         return Transcript(text=" ".join(t for t in texts if t), model_version=self.model_version)

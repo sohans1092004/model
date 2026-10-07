@@ -16,9 +16,42 @@ VAD/matching/decision logic all run against something real-shaped.
 
 from __future__ import annotations
 
+import os
+from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
+
+
+def cpu_threads() -> int:
+    """UDK_CPU_THREADS = threads each model may use on CPU. Unset/0 = every library's own default (all cores each),
+    exactly as before. With several models running at once (custom-UDK gate thread, the general path, the
+    Hindi / te-ta-kn worker) the defaults oversubscribe the cores; a budget only changes speed, never outputs."""
+    return int(os.environ.get("UDK_CPU_THREADS", "0") or 0)
+
+
+@contextmanager
+def ort_cpu_threads():
+    """ONNX Runtime sessions created inside this block (Parakeet via onnx-asr, IndicConformer's remote code) get the
+    UDK_CPU_THREADS budget. No budget set -> nothing changes."""
+    n = cpu_threads()
+    if not n:
+        yield
+        return
+    import onnxruntime as ort
+    orig = ort.InferenceSession
+
+    def make(path_or_bytes, sess_options=None, *args, **kwargs):
+        if sess_options is None:
+            sess_options = ort.SessionOptions()
+            sess_options.intra_op_num_threads, sess_options.inter_op_num_threads = n, 1
+        return orig(path_or_bytes, sess_options, *args, **kwargs)
+
+    ort.InferenceSession = make
+    try:
+        yield
+    finally:
+        ort.InferenceSession = orig
 
 
 @dataclass
@@ -71,7 +104,8 @@ class FasterWhisperSTT:
         (CPU: 31-50 s -> 6-10 s) with identical transcripts on English speech. The general model keeps the default."""
         from faster_whisper import WhisperModel  # deferred import
 
-        self._model = WhisperModel(model_size, device=device, compute_type=compute_type)
+        self._model = WhisperModel(model_size, device=device, compute_type=compute_type,
+                                   cpu_threads=cpu_threads() if device == "cpu" else 0)
         self.model_version = f"faster-whisper-{model_size}"
         self._decode = {} if temperature_fallback else {"temperature": 0.0}
 
@@ -138,7 +172,8 @@ class ParakeetSTT:
             except Exception:
                 pass
         providers = ["CUDAExecutionProvider", "CPUExecutionProvider"] if device == "cuda" else ["CPUExecutionProvider"]
-        self._model = onnx_asr.load_model("nemo-parakeet-tdt-0.6b-v2", str(model_dir), providers=providers)
+        with ort_cpu_threads():
+            self._model = onnx_asr.load_model("nemo-parakeet-tdt-0.6b-v2", str(model_dir), providers=providers)
         # What the encoder session really got: onnxruntime silently falls back to
         # CPU when CUDA libs fail to load (e.g. a CUDA-13 onnxruntime-gpu on a
         # CUDA-12 machine), so callers can report it instead of assuming.

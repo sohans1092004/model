@@ -203,6 +203,28 @@ _, ev = run("J_dave_broken", "U_dave", "get away from me")
 check("a failing gate does not cost the general model's alert", [e["udk_id"] for e in ev] == ["UDK_03"], str(ev))
 api._custom_udk_stt = gate_stt
 
+
+class CountParakeet(MockSTT):
+    n = 0
+
+    def transcribe(self, pcm):
+        CountParakeet.n += 1
+        return super().transcribe(pcm)
+
+
+saved_parakeet, api._parakeet_stt = api._parakeet_stt, CountParakeet()
+api._parakeet_stt.register(seg_pcm, "get away from me")  # only Parakeet hears the phrase
+saved_backend, general = api._stt_backend, MockSTT()
+general.register(seg_pcm, "something else")
+api._custom_udk_stt.register(seg_pcm, "something else")
+api._stt_backend = general  # the general path reads Parakeet only on the service's own English backend
+j, _ = api._store.create_or_get("J_dave_parakeet", "U_dave", general)
+j.vad = OneSegmentVAD()
+ev = api._ingest_frame(j, 0, seg_pcm + b"\x00\x00" * 100, api._audio_store)
+check("own-model gate in parallel: Parakeet runs once per segment, shared by the gate and the general model "
+      "(its UDK_03 still alerts)", CountParakeet.n == 1 and [e["udk_id"] for e in ev] == ["UDK_03"], f"{CountParakeet.n} {ev}")
+api._parakeet_stt, api._stt_backend = saved_parakeet, saved_backend
+
 api._intent_gate, api._parakeet_stt = VetoEverything(), MockSTT()
 api._parakeet_stt.register(seg_pcm, "please help the blue bird sings at night")
 _, ev = run("J_alice_veto", "U_alice", "okay the blue bird sings at night")

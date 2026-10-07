@@ -67,7 +67,11 @@ from language_id import DEFAULT_LANGUAGE, MIN_RECHECK_DURATION_S
 from semantic import SemanticBackend
 from separation import SeparatorBackend
 from metrics import Metrics
-from stt import MockSTT, STTBackend
+from stt import MockSTT, STTBackend, cpu_threads
+
+if cpu_threads():  # UDK_CPU_THREADS: PyTorch models (BEATs, MiniLM, mDeBERTa, LaBSE, MuRIL) share the CPU budget
+    import torch as _torch
+    _torch.set_num_threads(cpu_threads())
 import intent_gate
 import scream_trigger
 from stt_confidence_gate import is_suspect
@@ -496,7 +500,7 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
         # Kannada segment), it decodes once without temperature-fallback retries, which on such speech made small.en
         # 5-10x slower and only ever produced gibberish to search for an English phrase. With its own model
         # (medium.en on a GPU) it runs in parallel, below.
-        gate_job, pre = None, None
+        gate_job, pre, parakeet_job = None, None, None
         if journey.custom_udk and _custom_udk_stt is not None:
             if _custom_udk_stt is journey.stt:
                 stt_start = time.monotonic()
@@ -510,21 +514,24 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
                 if run_existing:
                     pre = (gate_whisper, gate_parakeet)
             else:
-                gate_job = _gate_pool.submit(_custom_udk_texts, seg.pcm)
-        alerts, heard = _existing_alerts(journey, seg, scream_fired, pre) if run_existing else ([], "")
+                # Parakeet once for this segment: the gate and the general path read the same transcript.
+                if _parakeet_stt is not None:
+                    parakeet_job = _parakeet_pool.submit(_parakeet_stt.transcribe, seg.pcm)
+                gate_job = _gate_pool.submit(_custom_udk_texts, seg.pcm, parakeet_job)
+        alerts, heard = _existing_alerts(journey, seg, scream_fired, pre, parakeet_job) if run_existing else ([], "")
         if hindi_job is not None:
             merged = _merge_hindi(alerts, heard, hindi_job)
             if merged is not None:
                 alerts, heard = merged
             elif not run_existing:  # Hindi failed on a Hindi-only segment: fall back to the existing path
-                alerts, heard = _existing_alerts(journey, seg, scream_fired, pre)
+                alerts, heard = _existing_alerts(journey, seg, scream_fired, pre, parakeet_job)
                 run_existing = True
         for job in indic_jobs.values():
             merged = _merge_indic(alerts, heard, job)
             if merged is not None:
                 alerts, heard = merged
             elif not run_existing:  # Telugu/Tamil/Kannada path failed: fall back to the existing path, once
-                alerts, heard = _existing_alerts(journey, seg, scream_fired, pre)
+                alerts, heard = _existing_alerts(journey, seg, scream_fired, pre, parakeet_job)
                 run_existing = True
         if gate_job is not None:
             try:
@@ -568,7 +575,7 @@ def _advance_scan(journey: JourneyState, finalizable: list, n_frames: int) -> No
         journey.buffer_start_frame += drop
 
 
-def _existing_alerts(journey: JourneyState, seg, scream_fired: bool, pre=None) -> tuple[list[DecisionEvent], str]:
+def _existing_alerts(journey: JourneyState, seg, scream_fired: bool, pre=None, parakeet_job=None) -> tuple[list[DecisionEvent], str]:
     """The per-segment path as it was before Hindi (journey.stt + Parakeet + KWS -> UDKEngine
     -> either-STT -> intent veto -> separation retry), unchanged. Returns (alerting decisions,
     what was heard); the scream-only VERIFY is added by the caller. `pre` = (Whisper transcript, Parakeet text) the
@@ -585,7 +592,12 @@ def _existing_alerts(journey: JourneyState, seg, scream_fired: bool, pre=None) -
     # exactly where the second opinion can rescue a detection.
     second_text = ""
     if _parakeet_stt is not None and journey.stt is _stt_backend:
-        second_text = pre[1] if pre is not None and pre[1] is not None else _parakeet_stt.transcribe(seg.pcm).text
+        if pre is not None and pre[1] is not None:
+            second_text = pre[1]
+        elif parakeet_job is not None:  # the segment's shared Parakeet run (custom-UDK gate in parallel)
+            second_text = parakeet_job.result().text
+        else:
+            second_text = _parakeet_stt.transcribe(seg.pcm).text
     kws_match = journey.kws.spot(seg.pcm) if journey.kws is not None else None
     # Deciding even on an empty transcript is what lets KWS fire on
     # its own when STT gets nothing (Section 3's STT-outage row) --
@@ -720,11 +732,13 @@ def _gate_transcribe(pcm: bytes, once: bool):
     return _custom_udk_stt.transcribe(pcm)
 
 
-def _custom_udk_texts(pcm: bytes) -> list[str]:
+def _custom_udk_texts(pcm: bytes, parakeet_job=None) -> list[str]:
     """The gate's own transcripts of a segment: Whisper medium.en, and Parakeet when it is enabled (the notebook's
-    detection checks both; its variants come from Whisper only)."""
+    detection checks both; its variants come from Whisper only). parakeet_job: the segment's shared Parakeet run."""
     texts = [_custom_udk_stt.transcribe(pcm).text]
-    if _parakeet_stt is not None:
+    if parakeet_job is not None:
+        texts.append(parakeet_job.result().text)
+    elif _parakeet_stt is not None:
         texts.append(_parakeet_stt.transcribe(pcm).text)
     return texts
 
@@ -1425,6 +1439,8 @@ if _hindi_lid is None and _indic_langs:
 _hindi_pool = ThreadPoolExecutor(max_workers=1)
 # The custom-UDK gate runs beside language ID + the other paths (one gate segment at a time: one medium.en instance).
 _gate_pool = ThreadPoolExecutor(max_workers=1)
+# One Parakeet run per segment, shared by the gate and the general path (it runs beside both).
+_parakeet_pool = ThreadPoolExecutor(max_workers=1)
 # Last, after every model: opening the DB migrates it (journeys.personal_udk_* are dropped), and the previous image
 # cannot start journeys on a migrated DB. A release whose models fail to load never gets here, so the deploy's
 # rollback (deploy/remote_deploy.sh) lands on a DB it can still use.

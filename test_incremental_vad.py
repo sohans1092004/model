@@ -54,7 +54,7 @@ store = AudioStore(Path(tempfile.mkdtemp()))
 store.write_segment = lambda *a, **k: None
 api._store = api.JourneyStore(db=None)
 seen, kept = [], []
-api._existing_alerts = lambda journey, seg, scream_fired, pre=None: (seen.append((seg.start_ms, seg.end_ms, seg.pcm)), ([], ""))[1]
+api._existing_alerts = lambda journey, seg, scream_fired, pre=None, parakeet_job=None: (seen.append((seg.start_ms, seg.end_ms, seg.pcm)), ([], ""))[1]
 j, _ = api._store.create_or_get("J_inc", "U", api._stt_backend)
 t0 = time.perf_counter()
 for i in range(0, len(pcm), 6400):
