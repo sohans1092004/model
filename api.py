@@ -1218,14 +1218,14 @@ def _load_custom_udk_stt() -> STTBackend | None:
 
     if _device() == "cuda":
         try:
-            stt = FasterWhisperSTT(model_size=model, device="cuda", compute_type="float16")
+            stt = FasterWhisperSTT(model_size=model, device="cuda", compute_type="float16", temperature_fallback=False)
             stt.transcribe(b"\x00\x00" * 8000)
             return stt
         except Exception as e:
             import warnings
 
             warnings.warn(f"custom-UDK Whisper on CUDA failed ({e!r}); falling back to CPU")
-    return FasterWhisperSTT(model_size=model, device="cpu", compute_type="int8")
+    return FasterWhisperSTT(model_size=model, device="cpu", compute_type="int8", temperature_fallback=False)
 
 
 def _load_db(key_manager, fallback_path):

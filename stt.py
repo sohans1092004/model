@@ -63,17 +63,23 @@ class FasterWhisperSTT:
     egress allowlist doesn't include that host (pypi/npm/GitHub only),
     so this class is here ready to use, but untested in this session."""
 
-    def __init__(self, model_size: str = "tiny.en", device: str = "cpu", compute_type: str = "int8"):
+    def __init__(self, model_size: str = "tiny.en", device: str = "cpu", compute_type: str = "int8",
+                 temperature_fallback: bool = True):
+        """temperature_fallback=False decodes once (temperature 0) instead of re-decoding at 0.2 ... 1.0 when the
+        output looks wrong. Used only by the custom-UDK gate's own model: on Hindi / Telugu / Tamil speech an
+        English Whisper's output always looks wrong, and the retries made medium.en 5-8x slower on those segments
+        (CPU: 31-50 s -> 6-10 s) with identical transcripts on English speech. The general model keeps the default."""
         from faster_whisper import WhisperModel  # deferred import
 
         self._model = WhisperModel(model_size, device=device, compute_type=compute_type)
         self.model_version = f"faster-whisper-{model_size}"
+        self._decode = {} if temperature_fallback else {"temperature": 0.0}
 
     def transcribe(self, pcm: bytes) -> Transcript:
         import numpy as np
 
         audio = np.frombuffer(pcm, dtype="<i2").astype("float32") / 32768.0
-        segments = list(self._model.transcribe(audio, language="en")[0])
+        segments = list(self._model.transcribe(audio, language="en", **self._decode)[0])
         text = " ".join(seg.text.strip() for seg in segments).strip()
         # Aggregated across segments, same reasoning as TieredWhisperSTT's
         # existing avg_logprob averaging: mean for avg_logprob/no_speech_prob
