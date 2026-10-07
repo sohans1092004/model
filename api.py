@@ -39,6 +39,7 @@ either exists.
 
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import hmac
 import json
@@ -510,7 +511,7 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
                 stt_start = time.monotonic()
                 gate_whisper = _gate_transcribe(seg.pcm, once=not run_existing)
                 _metrics.stt_latency(time.monotonic() - stt_start)
-                gate_parakeet = _parakeet_stt.transcribe(seg.pcm).text if _parakeet_stt is not None else None
+                gate_parakeet = _parakeet_text(seg.pcm) if _parakeet_stt is not None else None
                 texts = [gate_whisper.text] + ([gate_parakeet] if gate_parakeet is not None else [])
                 if custom_udk.detect(texts, journey.custom_udk):
                     new_events.append(_emit_event(journey, _custom_udk_event(journey, texts), seg))
@@ -598,10 +599,8 @@ def _existing_alerts(journey: JourneyState, seg, scream_fired: bool, pre=None, p
     if _parakeet_stt is not None and journey.stt is _stt_backend:
         if pre is not None and pre[1] is not None:
             second_text = pre[1]
-        elif parakeet_job is not None:  # the segment's shared Parakeet run (custom-UDK gate in parallel)
-            second_text = parakeet_job.result().text
-        else:
-            second_text = _parakeet_stt.transcribe(seg.pcm).text
+        else:  # the segment's shared Parakeet run (gate in parallel), or a run of its own; "" if Parakeet failed
+            second_text = _parakeet_text(seg.pcm, parakeet_job) or ""
     kws_match = journey.kws.spot(seg.pcm) if journey.kws is not None else None
     # Deciding even on an empty transcript is what lets KWS fire on
     # its own when STT gets nothing (Section 3's STT-outage row) --
@@ -633,7 +632,9 @@ def _existing_alerts(journey: JourneyState, seg, scream_fired: bool, pre=None, p
         if peek.udk is not None and peek.confidence >= TRIGGER_VERIFY_THRESHOLD:
             dual_asr_disagreement = _dual_asr_guard.disagrees(transcript.text, seg.pcm)
 
-    now_s = time.monotonic()
+    # Audio time of this segment (its end, in the journey), not the clock: the 15 s repeat / second-phrase window
+    # must mean 15 s of speech, whatever the processing delay (a backlog used to stretch or squeeze it).
+    now_s = seg.end_ms / 1000.0
     pre_state = journey.engine.snapshot()
     # decide_all = the whole-segment decision (identical to decide()) plus
     # one extra event per SENTENCE matching a different UDK -- the
@@ -736,14 +737,32 @@ def _gate_transcribe(pcm: bytes, once: bool):
     return _custom_udk_stt.transcribe(pcm)
 
 
+PARAKEET_TIMEOUT_S = float(os.environ.get("UDK_PARAKEET_TIMEOUT_S", "30"))
+
+
+def _parakeet_text(pcm: bytes, job=None) -> str | None:
+    """Parakeet's transcript of a segment, or None when it fails or takes longer than UDK_PARAKEET_TIMEOUT_S: the
+    caller then continues on Whisper alone (before, an exception here closed the journey's WebSocket). `job` = the
+    segment's shared run when one was started; otherwise it runs on _parakeet_pool so the timeout applies too.
+    ponytail: a timed-out run keeps its worker busy until it finishes (Python cannot stop it); the next segment's
+    Parakeet waits behind it, and its own timeout covers that."""
+    try:
+        if job is None:
+            job = _parakeet_pool.submit(_parakeet_stt.transcribe, pcm)
+        return job.result(timeout=PARAKEET_TIMEOUT_S).text
+    except Exception as e:  # includes concurrent.futures.TimeoutError
+        logging.getLogger("udk.parakeet").warning("Parakeet failed on a segment (%r); continuing on Whisper alone", e)
+        return None
+
+
 def _custom_udk_texts(pcm: bytes, parakeet_job=None) -> list[str]:
     """The gate's own transcripts of a segment: Whisper medium.en, and Parakeet when it is enabled (the notebook's
     detection checks both; its variants come from Whisper only). parakeet_job: the segment's shared Parakeet run."""
     texts = [_custom_udk_stt.transcribe(pcm).text]
-    if parakeet_job is not None:
-        texts.append(parakeet_job.result().text)
-    elif _parakeet_stt is not None:
-        texts.append(_parakeet_stt.transcribe(pcm).text)
+    if _parakeet_stt is not None:
+        second = _parakeet_text(pcm, parakeet_job)
+        if second is not None:
+            texts.append(second)
     return texts
 
 
@@ -800,6 +819,15 @@ def _emit_event(journey: JourneyState, decision: DecisionEvent, seg) -> dict:
     else:
         _metrics.event_delivery_failed()
     return event
+
+
+_journey_locks: dict[str, threading.Lock] = {}
+
+
+def _ingest_frame_locked(journey: JourneyState, seq: int, pcm: bytes) -> list[dict]:
+    """_ingest_frame for the WebSocket handler's worker thread: one frame of a journey at a time."""
+    with _journey_locks.setdefault(journey.journey_id, threading.Lock()):
+        return _ingest_frame(journey, seq, pcm, _audio_store)
 
 
 def _ingest_frame(journey: JourneyState, seq: int, pcm: bytes, audio_store: AudioStore) -> list[dict]:
@@ -1680,7 +1708,10 @@ async def stream_audio(websocket: WebSocket, journey_id: str, session_token: str
                 frame = message["bytes"]
                 seq, _client_ts = FRAME_HEADER.unpack(frame[: FRAME_HEADER.size])
                 pcm = frame[FRAME_HEADER.size :]
-                new_events = _ingest_frame(journey, seq, pcm, _audio_store)
+                # On a worker thread: model inference here takes seconds (a CPU segment ~20 s) and used to block the
+                # event loop, i.e. every other journey on this worker. Frames of one connection stay in order (each
+                # is awaited); the journey lock also orders a reconnect that overlaps the old connection.
+                new_events = await asyncio.to_thread(_ingest_frame_locked, journey, seq, pcm)
                 journey.last_heartbeat_at = time.time()
                 _db.save_journey(journey)
                 await websocket.send_json(
