@@ -22,6 +22,7 @@ class SpeechSegment:
     start_ms: int
     end_ms: int
     pcm: bytes
+    cut: bool = False  # closed by the max_segment_ms cap mid-speech (the next segment's pre-roll may overlap it)
 
 
 class VAD:
@@ -67,6 +68,13 @@ class VAD:
         for i in range(0, len(pcm) - FRAME_BYTES + 1, FRAME_BYTES):
             yield pcm[i : i + FRAME_BYTES]
 
+    def frames(self, pcm: bytes) -> list[bytes]:
+        """The whole 30 ms frames of `pcm` (a trailing partial frame is left out)."""
+        return list(self._frames(pcm))
+
+    def is_speech(self, frame: bytes) -> bool:
+        return self._vad.is_speech(frame, SAMPLE_RATE)
+
     def total_ms(self, pcm: bytes) -> int:
         """Duration accounted for by whole frames in this buffer, in the
         same units as SpeechSegment.end_ms. Callers use this to tell
@@ -83,11 +91,19 @@ class VAD:
         """
         frames = list(self._frames(pcm))
         flags = [self._vad.is_speech(f, SAMPLE_RATE) for f in frames]
+        return self.segments(frames, flags)
 
+    def segments(self, frames: list[bytes], flags: list[bool], start: int = 0, prev_end: int = 0,
+                 prev_cut: bool = False) -> list[SpeechSegment]:
+        """segment_speech()'s rules on already-classified frames, scanning from frame `start` with the state the
+        scan had there (`prev_end`: end frame of the previous segment; `prev_cut`: it was closed by the length cap).
+        Lets a live journey continue from its last finished segment instead of re-scanning the whole journey:
+        from frame `start` on, the segments are the same as a scan from frame 0 that had reached `start` with
+        that state (frames before `start` are only read as a cut segment's pre-roll). Times are frame offsets
+        into `frames` (x FRAME_MS ms)."""
         segments: list[SpeechSegment] = []
-        i = 0
+        i = start
         n = len(flags)
-        prev_end, prev_cut = 0, False
         while i < n:
             if flags[i]:
                 start = max(0, i - self.pre_roll_frames)
@@ -131,6 +147,7 @@ class VAD:
                         start_ms=start * FRAME_MS,
                         end_ms=end * FRAME_MS,
                         pcm=seg_pcm,
+                        cut=prev_cut,
                     )
                 )
                 i = end

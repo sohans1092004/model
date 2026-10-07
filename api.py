@@ -75,7 +75,7 @@ from storage import AudioStore
 from udk_engine import TRIGGER_VERIFY_THRESHOLD, DecisionEvent, UDKEngine, match_transcript
 import custom_udk
 from udks import UDK, general_udks
-from vad import VAD
+from vad import FRAME_BYTES, FRAME_MS, VAD
 
 HEARTBEAT_INTERVAL_S = 7
 HEARTBEAT_GRACE_S = 20  # missed-heartbeat grace window (Section 3)
@@ -131,6 +131,14 @@ class JourneyState:
     pending_frames: dict[int, bytes] = field(default_factory=dict)
     audio_buffer: bytearray = field(default_factory=bytearray)
     processed_up_to_ms: int = 0
+    # The live loop keeps only the audio it still needs (see _run_incremental_detection): audio_buffer starts at
+    # frame buffer_start_frame of the journey; vad_flags[k] = speech flag of its k-th 30 ms frame, computed once;
+    # scan_frame / prev_end_frame / prev_cut = where the speech scan resumes and the state it had there.
+    buffer_start_frame: int = 0
+    vad_flags: list = field(default_factory=list)
+    scan_frame: int = 0
+    prev_end_frame: int = 0
+    prev_cut: bool = False
     vad: VAD = field(default_factory=VAD)
     events: list[dict] = field(default_factory=list)
     kws: KWSBackend | None = None  # Section 4's Approach E; None = KWS disabled for this journey
@@ -383,7 +391,8 @@ def _maybe_update_language(journey: JourneyState) -> None:
     pcm = bytes(journey.audio_buffer)
     if not pcm:
         return
-    duration_ms = journey.vad.total_ms(pcm)
+    # journey time, not buffer time: the loop drops audio it no longer needs (it always keeps >= 6 s, the recheck window)
+    duration_ms = journey.buffer_start_frame * FRAME_MS + journey.vad.total_ms(pcm)
 
     if journey.language is None:
         if journey.language_detector is None:
@@ -426,10 +435,26 @@ def _maybe_update_language(journey: JourneyState) -> None:
 
 def _run_incremental_detection(journey: JourneyState, final: bool = False) -> list[dict]:
     _maybe_update_language(journey)
-    pcm = bytes(journey.audio_buffer)
-    segments = journey.vad.segment_speech(pcm)
-    if not segments:
-        return []
+    # Incremental (2026-10-07): the scan resumes where the last finished segment ended, each 30 ms frame is
+    # classified once, and audio no longer needed is dropped below. It used to re-scan the WHOLE journey on every
+    # 200 ms frame, so the cost per frame grew with the journey's length (~1.5x real time by 30 min, on any
+    # hardware). Same segmentation rules (vad.VAD.segments): from where it resumes, a scan from frame 0 that had
+    # reached that point gives the same segments.
+    vad, base = journey.vad, journey.buffer_start_frame
+    incremental = hasattr(vad, "segments")  # test doubles that only implement segment_speech(): the full re-scan
+    if incremental:
+        frames = vad.frames(bytes(journey.audio_buffer))
+        journey.vad_flags.extend(vad.is_speech(f) for f in frames[len(journey.vad_flags):])
+        segments = vad.segments(frames, journey.vad_flags, start=journey.scan_frame - base,
+                                prev_end=journey.prev_end_frame - base, prev_cut=journey.prev_cut)
+        for seg in segments:
+            seg.start_ms += base * FRAME_MS
+            seg.end_ms += base * FRAME_MS
+        total = (base + len(frames)) * FRAME_MS
+    else:
+        pcm = bytes(journey.audio_buffer)
+        segments = vad.segment_speech(pcm)
+        total = vad.total_ms(pcm)
 
     if final:
         finalizable = segments
@@ -441,8 +466,9 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
         # last segment" rule, which never finalized a single continuous
         # utterance with nothing spoken after it (that segment is always
         # last) -- found while testing the real end-to-end latency path.
-        total = journey.vad.total_ms(pcm)
         finalizable = [seg for seg in segments if seg.end_ms < total]
+    if incremental:
+        _advance_scan(journey, finalizable, len(frames))
 
     new_events = []
     for seg in finalizable:
@@ -514,6 +540,28 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
         for d in alerts:
             new_events.append(_emit_event(journey, d, seg))
     return new_events
+
+
+def _advance_scan(journey: JourneyState, finalizable: list, n_frames: int) -> None:
+    """After a scan: resume next time after the last finished segment, skip silence that cannot start a segment,
+    and drop audio that no later segment can include (keeping a segment's 1.5 s pre-roll and the last 6 s that
+    the journey-level language recheck reads)."""
+    base = journey.buffer_start_frame
+    if finalizable:
+        last = finalizable[-1]
+        journey.scan_frame = journey.prev_end_frame = last.end_ms // FRAME_MS
+        journey.prev_cut = last.cut
+    flags = journey.vad_flags
+    k = journey.scan_frame - base
+    while k < len(flags) and not flags[k]:  # silence: the next segment cannot start before the next speech frame
+        k += 1
+    journey.scan_frame = base + k
+    keep = min(journey.scan_frame - journey.vad.pre_roll_frames, base + n_frames - 200)  # 200 frames = 6 s
+    drop = max(0, keep - base)
+    if drop:
+        del journey.audio_buffer[: drop * FRAME_BYTES]
+        del flags[:drop]
+        journey.buffer_start_frame += drop
 
 
 def _existing_alerts(journey: JourneyState, seg, scream_fired: bool, pre=None) -> tuple[list[DecisionEvent], str]:
