@@ -1,5 +1,9 @@
 # UDK Detection Prototype (M1)
 
+> **Current system (2026-10-08):** the multilingual live service (English + custom UDK + Hindi + Telugu / Tamil /
+> Kannada) is described end to end in **`docs/system.md`**; deploying it on one AWS GPU is in **`deploy/README.md`**
+> ("GPU host"). The rest of this file is the milestone build history.
+
 Local prototype for `Audio -> VAD -> STT -> UDK matching -> console decision`,
 per Section 14 (M1) of the review doc, built as a **v1 fast path** (Section
 4/17's "v1 decision"): pretrained components only, no dataset of our own,

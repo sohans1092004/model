@@ -1,5 +1,12 @@
 # Hindi + English distress detection — system card (2026-10-05)
 
+> **Updated 2026-10-08.** This card is the Hindi design and its history (2026-10-05). The current whole system,
+> including Telugu / Tamil / Kannada, the custom-UDK gate, the word-for-word Hindi phrase check, the routing rule
+> `route_with_indic`, measured speed / memory and the GPU deployment, is in **`docs/system.md`**; where they differ,
+> `docs/system.md` is current. Since this card: Hindi asks on a word-for-word match of one of its 20 phrases
+> (0 asks on 29 h of benign Hindi; real danger scenes 2 → 3 of 5); its models are baked into the image at build
+> (no runtime download, no runtime HF token); one 16 GB T4 fits everything with `UDK_TEXT_MODELS_DEVICE=cpu`.
+
 **Status: pilot-ready design with measured results, not production-ready.** See *Go-live checklist*.
 
 In this repo: `safety_router/` wired into `api.py` behind `UDK_ENABLE_HINDI` (off by default; see
