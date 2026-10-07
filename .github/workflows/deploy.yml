@@ -30,4 +30,7 @@ jobs:
           role-duration-seconds: 7200
 
       - name: Deploy
+        # Which live stack: sakhi-udk (CPU, default) or sakhi-udk-gpu; a repository variable, deploy/README.md.
+        env:
+          UDK_APP_STACK: ${{ vars.UDK_APP_STACK }}
         run: python3 deploy/aws_deploy.py

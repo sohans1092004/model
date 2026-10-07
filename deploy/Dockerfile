@@ -1,4 +1,4 @@
-# UDK live detection service (api.py), English, GPU.
+# UDK live detection service (api.py): English + custom UDK, and on a GPU host Hindi + Telugu/Tamil/Kannada.
 # Build from the Model folder (the file whitelist is deploy/Dockerfile.dockerignore; needs BuildKit):
 #   docker build -f deploy/Dockerfile -t udk-api .
 # CUDA 12 + cuDNN 9: what ctranslate2 (Whisper) and onnxruntime-gpu < 1.27 (Parakeet) need.
@@ -20,6 +20,11 @@ COPY . .
 # Optional fine-tuned intent model (+1.1 GB) from a private HF repo, see deploy/README.md.
 ARG UDK_INTENT_MODEL_REPO=
 ARG UDK_INTENT_MODEL_REVISION=
+# Host-dependent models (remote_deploy.sh sets them from the host's settings): the custom-UDK gate's own Whisper
+# (e.g. medium.en on a GPU) and, with 1, the multilingual models (language-ID Whisper small, IndicConformer,
+# LaBSE, MuRIL + the pinned [B] weights; ~6 GB, private / gated on Hugging Face, so they need the hf_token secret).
+ARG UDK_PREFETCH_CUSTOM_STT=
+ARG UDK_PREFETCH_MULTILINGUAL=0
 RUN --mount=type=secret,id=hf_token,required=false     if [ -f /run/secrets/hf_token ]; then export HF_TOKEN="$(cat /run/secrets/hf_token)"; fi;     python deploy/prefetch_models.py
 
 VOLUME /data

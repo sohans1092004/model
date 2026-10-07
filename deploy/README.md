@@ -56,10 +56,10 @@ and confirm the alert arrives at the webhook.
 
 **Hindi (`safety_router/`, docs/hindi_distress_system.md).** Off: `UDK_ENABLE_HINDI=0` in `.env.example`, which
 overrides SSM, so switching it on is a code change to that line.
-- Needs a GPU host: on CPU, IndicConformer alone takes ~1.7 s per segment. With the custom UDK on as well, all
-  models need more than one 16 GB T4 (measured out of memory): use a 24 GB GPU, or two GPUs with
-  `UDK_HINDI_DEVICE=cuda:1`.
-- Needs `HF_TOKEN` in the runtime config (private [B] weights, gated IndicConformer); ~3 GB downloads on first start.
+- Needs a GPU host (see "GPU host" below): on 4 vCPU the full system takes ~21 s per segment. Everything fits one
+  16 GB T4 with `UDK_TEXT_MODELS_DEVICE=cpu` (11.9 GB GPU peak measured; LaBSE, MuRIL and the intent veto on CPU).
+- Its models (private [B] weights, gated IndicConformer) are baked into the image at build with the HF token
+  (`/sakhi/udk/hf-token`); nothing downloads at start.
 - If enabled but not loadable, the service refuses to start (and remote_deploy.sh rolls back).
 
 **Telugu / Tamil / Kannada (exact or fuzzy match only).** Off while `UDK_ENABLE_INDIC_EXACT` is unset; set e.g.
@@ -107,6 +107,58 @@ a push that changes none of the image's files restarts nothing. Run the same thi
   ```
 - A failed build leaves the running container untouched; a new container that never answers is
   replaced by the previous one. Live journeys drop during a swap (about a minute) and the website reconnects.
+
+## GPU host: the full multilingual system (stack `sakhi-udk-gpu`)
+English + custom UDK (own Whisper medium.en, in parallel) + Hindi + Telugu/Tamil/Kannada on one GPU, same image,
+same pipeline as the CPU host. Measured (2026-10-07, Kaggle T4): ~1.5-1.9 s per speech segment, 0.21-0.23 s of work
+per second of speech, 11.9 GB GPU / 5.4 GB RAM peak for one journey; decisions identical to CPU.
+Which features run is a HOST setting (its SSM config); `remote_deploy.sh` never takes these from `.env.example`:
+`UDK_DEVICE`, `UDK_CUSTOM_UDK_STT_MODEL`, `UDK_ENABLE_HINDI`, `UDK_ENABLE_INDIC_EXACT`, `UDK_HINDI_DEVICE`,
+`UDK_TEXT_MODELS_DEVICE`, `UDK_CPU_THREADS`. So the CPU host (whose SSM sets none of the multilingual ones) is unchanged.
+
+1. **Quota:** Service Quotas -> EC2 -> "Running On-Demand G and VT instances" >= 4 vCPU in ap-south-1.
+2. **HF token** (already used for the intent model): `/sakhi/udk/hf-token` must read the private
+   `sohans1092004/hindi-distress-frame` and `sohans1092004/udk-intent-mdeberta`, and have accepted the
+   `ai4bharat/indic-conformer-600m-multilingual` terms. Without it a multilingual build stops with a message.
+3. **Host config** `/sakhi/udk-gpu/config` (SecureString, docker --env-file format, no comments after values):
+   ```
+   UDK_SERVICE_TOKEN=<same as the website uses>
+   UDK_WEBHOOK_URL=https://<website>/udk-alerts
+   UDK_WEBHOOK_SECRET=<shared secret>
+   UDK_DEVICE=cuda
+   UDK_CUSTOM_UDK_STT_MODEL=medium.en
+   UDK_ENABLE_HINDI=1
+   UDK_ENABLE_INDIC_EXACT=te,ta,kn
+   UDK_TEXT_MODELS_DEVICE=cpu
+   HF_HUB_OFFLINE=1
+   ```
+   `HF_HUB_OFFLINE=1`: every model is in the image, so the service never calls Hugging Face at start (a missing
+   one fails the start, and the deploy rolls back, instead of downloading). Store it without terminal history:
+   `aws ssm put-parameter --region ap-south-1 --name /sakhi/udk-gpu/config --type SecureString --value file://gpu.env --overwrite && shred -u gpu.env`
+4. **Stack** (check the AMI parameter resolves first:
+   `aws ssm get-parameter --region ap-south-1 --name /aws/service/deeplearning/ami/x86_64/base-oss-nvidia-driver-gpu-ubuntu-22.04/latest/ami-id`):
+   ```
+   aws cloudformation create-stack --region ap-south-1 --stack-name sakhi-udk-gpu \
+     --template-body file://deploy/sakhi-udk-gpu.yaml --capabilities CAPABILITY_IAM \
+     --tags Key=Application,Value=Sakhi --parameters \
+     ParameterKey=VpcId,ParameterValue=<vpc> ParameterKey=SubnetId,ParameterValue=<public subnet>
+   ```
+   Its bootstrap checks the GPU is visible inside Docker (`nvidia-smi` in a container) and writes
+   `/etc/udk/bootstrap-complete`; check that file over SSM before the first deploy.
+5. **First deploy, by hand:** `UDK_APP_STACK=sakhi-udk-gpu python deploy/aws_deploy.py` (cold build ~30-45 min,
+   ~25 GB image). Then `python deploy/smoke_test.py https://<EIP>.sslip.io <token> <an English, a Hindi and a Telugu clip>`
+   and `docker logs udk 2>&1 | grep -iE "hindi|indic|intent gate|cuda"` over SSM.
+6. **Deploy on every push to main** (switches CI from the CPU stack to this one):
+   update stack `sakhi-udk-ci` with `AppStackName=sakhi-udk-gpu`, `InstanceId=<sakhi-udk-gpu InstanceId>`,
+   `InstanceRoleName=<sakhi-udk-gpu InstanceRoleName>` (both are outputs of the GPU stack), then set the repository
+   variable `UDK_APP_STACK=sakhi-udk-gpu` (Settings -> Secrets and variables -> Actions -> Variables).
+   Unset it to go back to the CPU stack. Point the website at the GPU stack's Endpoint when the smoke test passes.
+7. **Rollback:** a new container that never answers is replaced by the previous one, as on the CPU host. The
+   multilingual switches can be turned off in `/sakhi/udk-gpu/config` and redeployed without a code change.
+
+Limits that still apply (see the review answers): one worker per container, frames of all journeys share one
+Parakeet and one gate worker, no drop policy when the GPU falls behind (one T4 keeps up with roughly 4-5 journeys
+of continuous speech); a reconnect resumes from the last acked frame.
 
 ## Not in this image
 Evaluation/test/Colab code, the distress detector (not validated yet),

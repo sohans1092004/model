@@ -1,5 +1,5 @@
 #!/bin/bash
-# Runs ON the sakhi-udk instance, from a release deploy/aws_deploy.py unpacked there over SSM:
+# Runs ON the sakhi-udk (CPU) or sakhi-udk-gpu instance, from a release deploy/aws_deploy.py unpacked there over SSM:
 #   bash deploy/remote_deploy.sh <release> <region>
 # Builds the image (skipped if this release is already built), swaps the container, and rolls
 # back to the previous one if the new one never answers. SSM keeps this output: print no secret.
@@ -20,24 +20,41 @@ umask 077
 # snap-confine the descriptor) and still exits 0, so its output always goes through a pipe.
 ssm() { aws ssm get-parameter --region "$REGION" --name "$1" --with-decryption --query Parameter.Value --output text | cat; }
 
-# Secrets and host settings (UDK_DEVICE=cpu) live in SSM.
-ssm /sakhi/udk/config > $ETC/ssm.env
-grep -q '^UDK_SERVICE_TOKEN=.' $ETC/ssm.env || { echo "/sakhi/udk/config has no UDK_SERVICE_TOKEN" >&2; exit 1; }
-# The repo's validated detection settings override SSM, except UDK_DEVICE, which is the host's.
+# Secrets and host settings live in SSM; the GPU stack's bootstrap names its own parameter in $ETC/config-param.
+CONFIG_PARAM=$(cat $ETC/config-param 2> /dev/null || echo /sakhi/udk/config)
+ssm "$CONFIG_PARAM" > $ETC/ssm.env
+grep -q '^UDK_SERVICE_TOKEN=.' $ETC/ssm.env || { echo "$CONFIG_PARAM has no UDK_SERVICE_TOKEN" >&2; exit 1; }
+# The repo's validated detection settings override SSM, except HOST settings: what this hardware runs (device,
+# the custom-UDK gate's model, the Hindi / Telugu-Tamil-Kannada branches, where the text models sit, CPU threads).
+# The CPU host's SSM sets none of the multilingual ones, so it keeps running the English + custom-UDK service.
 # Secrets are blank in .env.example, so SSM's values for them always stand.
-grep -E '^[A-Z0-9_]+=.+' deploy/.env.example | grep -v '^UDK_DEVICE=' > $ETC/repo.env
+HOST_KEYS='UDK_DEVICE|UDK_CUSTOM_UDK_STT_MODEL|UDK_ENABLE_HINDI|UDK_ENABLE_INDIC_EXACT|UDK_HINDI_DEVICE|UDK_TEXT_MODELS_DEVICE|UDK_CPU_THREADS'
+grep -E '^[A-Z0-9_]+=.+' deploy/.env.example | grep -Ev "^($HOST_KEYS)=" > $ETC/repo.env
 awk -F= '/^[A-Z0-9_]+=/ { if (!($1 in v)) k[++n] = $1; v[$1] = $0 } END { for (i = 1; i <= n; i++) print v[k[i]] }' \
   $ETC/ssm.env $ETC/repo.env > $ETC/run.env.new
 
+# Models baked into the image follow this host's settings, so the service never downloads at start:
+# the custom-UDK gate's own Whisper, and the multilingual models when Hindi or Telugu/Tamil/Kannada is on.
+setting() { grep -E "^$1=" $ETC/run.env.new | tail -1 | cut -d= -f2- || true; }
+CUSTOM_STT=$(setting UDK_CUSTOM_UDK_STT_MODEL)
+MULTILINGUAL=0
+{ [ "$(setting UDK_ENABLE_HINDI)" = 1 ] || [ -n "$(setting UDK_ENABLE_INDIC_EXACT)" ]; } && MULTILINGUAL=1
+GPU_ARGS=()
+[ "$(setting UDK_DEVICE)" = cuda ] && GPU_ARGS=(--gpus all)
+
 # The intent model is in a private HF repo: built in only once its read token is in SSM.
-BUILD_ARGS=() TAG=$REL
+BUILD_ARGS=(--build-arg "UDK_PREFETCH_CUSTOM_STT=$CUSTOM_STT" --build-arg "UDK_PREFETCH_MULTILINGUAL=$MULTILINGUAL")
+TAG=$REL${CUSTOM_STT:+-$CUSTOM_STT}
+[ "$MULTILINGUAL" = 1 ] && TAG=$TAG-ml
 if hf=$(ssm /sakhi/udk/hf-token 2>&1); then
   [[ $hf == hf_* ]] || { echo "/sakhi/udk/hf-token is not an HF token" >&2; exit 1; }
   printf '%s' "$hf" > $ETC/hf_token
-  BUILD_ARGS=(--build-arg "UDK_INTENT_MODEL_REPO=$INTENT_REPO" --build-arg "UDK_INTENT_MODEL_REVISION=$INTENT_REVISION"
-              --secret id=hf_token,src=$ETC/hf_token)
-  TAG=$REL-intent
+  BUILD_ARGS+=(--build-arg "UDK_INTENT_MODEL_REPO=$INTENT_REPO" --build-arg "UDK_INTENT_MODEL_REVISION=$INTENT_REVISION"
+               --secret id=hf_token,src=$ETC/hf_token)
+  TAG=$TAG-intent
 else
+  # The multilingual models are private / gated on Hugging Face: without the token they cannot be built in.
+  [ "$MULTILINGUAL" = 1 ] && { echo "Hindi / Telugu-Tamil-Kannada are on but /sakhi/udk/hf-token is missing" >&2; exit 1; }
   echo "no HF token ($(grep -oE 'ParameterNotFound|AccessDenied' <<< "$hf" | head -1)): building without the intent model"
 fi
 
@@ -45,7 +62,7 @@ if ! docker image inspect "udk-api:$TAG" > /dev/null 2>&1; then
   echo "building udk-api:$TAG"
   DOCKER_BUILDKIT=1 docker build --progress=plain -f deploy/Dockerfile -t "udk-api:$TAG" "${BUILD_ARGS[@]}" . \
     > $ETC/build.log 2>&1 || { rm -f $ETC/hf_token; tail -40 $ETC/build.log >&2; exit 1; }
-  grep -E 'intent model|all models cached' $ETC/build.log || true
+  grep -E 'intent model|prefetched|all models cached' $ETC/build.log || true
 fi
 rm -f $ETC/hf_token
 
@@ -60,7 +77,7 @@ fi
 
 start() {  # image, env file. Live journeys are lost here; the website reconnects with new ones.
   docker rm -f udk > /dev/null 2>&1 || true
-  docker run -d --name udk --network udk --restart unless-stopped --env-file "$2" -p 127.0.0.1:8000:8000 \
+  docker run -d --name udk --network udk --restart unless-stopped "${GPU_ARGS[@]}" --env-file "$2" -p 127.0.0.1:8000:8000 \
     -v udk-data:/data --log-opt max-size=50m --log-opt max-file=3 "$1" > /dev/null
 }
 ready() {  # a 401 to a wrong token = models loaded and serving
@@ -79,7 +96,7 @@ if ! ready; then
   exit 1
 fi
 mv $ETC/run.env.new $ETC/run.env
-docker logs udk 2>&1 | grep -E 'intent gate|fell back to CPU' || true
+docker logs udk 2>&1 | grep -E 'intent gate|fell back to CPU|failed on CUDA' || true
 
 # Keep only the running image; the layers it shares with the next build stay cached.
 docker images udk-api --format '{{.Repository}}:{{.Tag}}' | grep -vx "udk-api:$TAG" | xargs -r docker rmi > /dev/null || true

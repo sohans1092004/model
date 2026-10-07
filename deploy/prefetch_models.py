@@ -24,4 +24,19 @@ if repo:
     snapshot_download(repo, revision=os.environ.get("UDK_INTENT_MODEL_REVISION") or None, local_dir=target)
     IntentGate(str(target))  # proves it loads with this image's libraries
     print(f"intent model {repo} -> {target}")
+
+# Host-dependent models (deploy/Dockerfile ARGs, set by remote_deploy.sh from the host's settings).
+custom_stt = os.environ.get("UDK_PREFETCH_CUSTOM_STT", "")
+if custom_stt and custom_stt != "small.en":  # small.en is the general model, cached above
+    FasterWhisperSTT(model_size=custom_stt)
+    print(f"prefetched custom-UDK gate Whisper {custom_stt}")
+if os.environ.get("UDK_PREFETCH_MULTILINGUAL") == "1":
+    from safety_router.hindi import HindiSystem
+    from safety_router.indic_stt import IndicConformerSTT
+    from safety_router.router import WhisperLanguageID
+
+    WhisperLanguageID("cpu")              # language ID (Whisper small)
+    IndicConformerSTT()                   # gated ai4bharat model + its remote code
+    HindiSystem(device="cpu", stt=object())  # LaBSE, MuRIL, [B] weights at the pinned revision (SHA-checked)
+    print("prefetched multilingual models (language ID, IndicConformer, LaBSE, MuRIL, [B] weights)")
 print("all models cached")

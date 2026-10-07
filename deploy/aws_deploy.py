@@ -1,11 +1,12 @@
-"""Deploys this checkout to the live UDK service (CloudFormation stack sakhi-udk), locally
-or from .github/workflows/deploy.yml:
+"""Deploys this checkout to the live UDK service (CloudFormation stack sakhi-udk, or the GPU stack
+sakhi-udk-gpu with UDK_APP_STACK=sakhi-udk-gpu), locally or from .github/workflows/deploy.yml:
     python deploy/aws_deploy.py
 Uploads exactly the image's files (Dockerfile.dockerignore) to the sakhi-udk-ci release
 bucket; over SSM the instance fetches them and runs deploy/remote_deploy.sh, which builds,
 swaps the container and rolls back if the new one never answers. Needs only the AWS CLI."""
 import hashlib
 import json
+import os
 import subprocess
 import sys
 import tarfile
@@ -18,7 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from check_package import ROOT, whitelist  # noqa: E402
 
 ACCOUNT, REGION = "494506753059", "ap-south-1"
-APP_STACK, CI_STACK = "sakhi-udk", "sakhi-udk-ci"
+APP_STACK, CI_STACK = os.environ.get("UDK_APP_STACK") or "sakhi-udk", "sakhi-udk-ci"
 # Not in the image, but the instance needs them to build and run it.
 DEPLOY_FILES = ["deploy/Dockerfile", "deploy/Dockerfile.dockerignore", "deploy/.env.example", "deploy/remote_deploy.sh"]
 
