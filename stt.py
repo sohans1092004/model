@@ -75,11 +75,14 @@ class FasterWhisperSTT:
         self.model_version = f"faster-whisper-{model_size}"
         self._decode = {} if temperature_fallback else {"temperature": 0.0}
 
-    def transcribe(self, pcm: bytes) -> Transcript:
+    def transcribe(self, pcm: bytes, fallback: bool | None = None) -> Transcript:
+        """fallback=False: decode once for this call, whatever the instance default (the CPU host's custom-UDK gate
+        on a segment the English path will not hear: its transcript is only searched for the user's phrase)."""
         import numpy as np
 
         audio = np.frombuffer(pcm, dtype="<i2").astype("float32") / 32768.0
-        segments = list(self._model.transcribe(audio, language="en", **self._decode)[0])
+        decode = self._decode if fallback is None else ({} if fallback else {"temperature": 0.0})
+        segments = list(self._model.transcribe(audio, language="en", **decode)[0])
         text = " ".join(seg.text.strip() for seg in segments).strip()
         # Aggregated across segments, same reasoning as TieredWhisperSTT's
         # existing avg_logprob averaging: mean for avg_logprob/no_speech_prob

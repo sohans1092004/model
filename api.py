@@ -487,26 +487,30 @@ def _run_incremental_detection(journey: JourneyState, final: bool = False) -> li
         # emitted: the user's own phrase -> TRIGGER_ALL and the other paths' result for this segment is discarded
         # (as if they had not run). ponytail: the general model's per-journey state (repeat counts) has still seen
         # that segment; acceptable, since the user's own phrase already alerted.
-        # Two cases: a gate on the general model's own Whisper (the CPU host, small.en) runs first and, on a miss, the
-        # general path reuses its transcripts (each model transcribes the segment once); a gate with its own model
-        # (medium.en on a GPU) runs in parallel.
+        # Per-segment language ID (UDK_ENABLE_HINDI=1 and/or UDK_ENABLE_INDIC_EXACT=te,ta,kn) picks which
+        # language paths hear the segment; their jobs start now. All off -> run_existing stays True, no other job.
+        hindi_job, indic_jobs, run_existing = _start_routes(journey, seg) if _hindi_lid is not None else (None, {}, True)
+        # Custom-UDK gate, two cases. On the general model's own Whisper (the CPU host, small.en) it runs here, after
+        # language ID: if the English path will hear the segment, the gate decodes as the general model does and the
+        # general path reuses its transcripts (each model transcribes once); if not (a Hindi / Telugu / Tamil /
+        # Kannada segment), it decodes once without temperature-fallback retries, which on such speech made small.en
+        # 5-10x slower and only ever produced gibberish to search for an English phrase. With its own model
+        # (medium.en on a GPU) it runs in parallel, below.
         gate_job, pre = None, None
         if journey.custom_udk and _custom_udk_stt is not None:
             if _custom_udk_stt is journey.stt:
                 stt_start = time.monotonic()
-                gate_whisper = _custom_udk_stt.transcribe(seg.pcm)
+                gate_whisper = _gate_transcribe(seg.pcm, once=not run_existing)
                 _metrics.stt_latency(time.monotonic() - stt_start)
                 gate_parakeet = _parakeet_stt.transcribe(seg.pcm).text if _parakeet_stt is not None else None
                 texts = [gate_whisper.text] + ([gate_parakeet] if gate_parakeet is not None else [])
                 if custom_udk.detect(texts, journey.custom_udk):
                     new_events.append(_emit_event(journey, _custom_udk_event(journey, texts), seg))
                     continue
-                pre = (gate_whisper, gate_parakeet)
+                if run_existing:
+                    pre = (gate_whisper, gate_parakeet)
             else:
                 gate_job = _gate_pool.submit(_custom_udk_texts, seg.pcm)
-        # Per-segment language ID (UDK_ENABLE_HINDI=1 and/or UDK_ENABLE_INDIC_EXACT=te,ta,kn) picks which
-        # language paths hear the segment. All off -> run_existing stays True and no other job runs.
-        hindi_job, indic_jobs, run_existing = _start_routes(journey, seg) if _hindi_lid is not None else (None, {}, True)
         alerts, heard = _existing_alerts(journey, seg, scream_fired, pre) if run_existing else ([], "")
         if hindi_job is not None:
             merged = _merge_hindi(alerts, heard, hindi_job)
@@ -705,6 +709,15 @@ def _merge_indic(alerts: list[DecisionEvent], heard: str, job) -> tuple[list[Dec
     if event is None or _DECISION_RANK[event.decision] <= max((_DECISION_RANK[a.decision] for a in alerts), default=0):
         return alerts, heard
     return [event] + [a for a in alerts if not (a.udk and a.udk.udk_id == event.udk.udk_id)], heard
+
+
+def _gate_transcribe(pcm: bytes, once: bool):
+    """The shared gate Whisper's transcript; once=True decodes without temperature-fallback retries."""
+    from stt import FasterWhisperSTT
+
+    if once and isinstance(_custom_udk_stt, FasterWhisperSTT):
+        return _custom_udk_stt.transcribe(pcm, fallback=False)
+    return _custom_udk_stt.transcribe(pcm)
 
 
 def _custom_udk_texts(pcm: bytes) -> list[str]:

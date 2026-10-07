@@ -139,6 +139,39 @@ check("gate miss -> language ID and the Hindi-only route as before (general STT 
 h = FakeHindi("none")
 ev = run("J_gate_miss_en", h, p_en=0.99, words="get away from me", user="U_gate")
 check("gate miss on English -> the general model as before (UDK_03)", [e["udk_id"] for e in ev] == ["UDK_03"], str(ev))
+
+# CPU host: the gate shares the general Whisper. A segment the English path will not hear -> one decode, no retries;
+# an English-routed segment -> decoded as the general model does, and that transcript is reused (one call in total).
+from stt import FasterWhisperSTT  # noqa: E402
+
+
+class SharedWhisper(FasterWhisperSTT, CountingSTT):
+    def __init__(self):
+        CountingSTT.__init__(self)
+        self.fallbacks = []
+
+    def transcribe(self, pcm, fallback=None):
+        self.fallbacks.append(fallback)
+        return CountingSTT.transcribe(self, pcm)
+
+
+def run_shared(jid, p_en, words):
+    api._hindi, api._hindi_lid = FakeHindi("none"), lid(p_en, False)
+    CountingSTT.calls = 0
+    shared = SharedWhisper()
+    shared.register(seg_pcm, words)
+    api._stt_backend = api._custom_udk_stt = shared
+    j, _ = api._store.create_or_get(jid, "U_gate", shared)
+    j.vad = OneSegmentVAD()
+    return shared, api._ingest_frame(j, 0, seg_pcm + b"\x00\x00" * 100, api._audio_store)
+
+
+shared, ev = run_shared("J_shared_hi", 0.01, "something else entirely")
+check("shared gate, Hindi-only segment: one Whisper call, decoded once (fallback=False)",
+      shared.fallbacks == [False], str(shared.fallbacks))
+shared, ev = run_shared("J_shared_en", 0.99, "get away from me")
+check("shared gate, English segment: one call with the default decode, reused by the general model (UDK_03)",
+      shared.fallbacks == [None] and [e["udk_id"] for e in ev] == ["UDK_03"], f"{shared.fallbacks} {ev}")
 api._custom_udk_stt = None
 
 # Failures fall back to the existing path, never lose a detection
