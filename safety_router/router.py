@@ -86,8 +86,8 @@ class WhisperLanguageID:
     def __init__(self, device: str = "cuda", model_size: str = "small"):
         from faster_whisper import WhisperModel
         kind, _, index = device.partition(":")  # "cuda:1" -> second GPU
-        import os
-        threads = int(os.environ.get("UDK_CPU_THREADS", "0") or 0) if kind == "cpu" else 0  # see stt.cpu_threads
+        from stt import cpu_threads
+        threads = cpu_threads() if kind == "cpu" else 0
         with _keep_cuda_device():
             self.model = WhisperModel(model_size, device=kind, device_index=int(index or 0),
                                       compute_type="float16" if kind == "cuda" else "int8", cpu_threads=threads)

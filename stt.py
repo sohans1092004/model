@@ -24,10 +24,16 @@ from typing import Protocol
 
 
 def cpu_threads() -> int:
-    """UDK_CPU_THREADS = threads each model may use on CPU. Unset/0 = every library's own default (all cores each),
-    exactly as before. With several models running at once (custom-UDK gate thread, the general path, the
-    Hindi / te-ta-kn worker) the defaults oversubscribe the cores; a budget only changes speed, never outputs."""
-    return int(os.environ.get("UDK_CPU_THREADS", "0") or 0)
+    """Threads each model may use on CPU. With several models running at once (custom-UDK gate thread, the general
+    path, the Hindi / te-ta-kn worker) the libraries' defaults (all cores each) oversubscribe the cores; a budget only
+    changes speed, never outputs. UDK_CPU_THREADS=n sets it, 0 = library defaults. Unset: half the cores on a CPU
+    host (UDK_DEVICE=cpu), library defaults otherwise. Measured on a 4-core Kaggle CPU, finalised system, 10 clips:
+    default 3.42 real-time factor, 1 thread 3.93, 2 threads 2.59 (= half), decisions identical in all three.
+    ponytail: "half" is measured at 4 cores only; measure on the 8-vCPU host before relying on it there."""
+    v = os.environ.get("UDK_CPU_THREADS", "")
+    if v.strip():
+        return int(v)
+    return max(1, (os.cpu_count() or 2) // 2) if os.environ.get("UDK_DEVICE") == "cpu" else 0
 
 
 @contextmanager
