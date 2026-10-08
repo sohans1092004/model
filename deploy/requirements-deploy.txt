@@ -9,10 +9,12 @@ webrtcvad-wheels          # same `webrtcvad` module, prebuilt
 setuptools<81             # webrtcvad needs pkg_resources
 cryptography
 faster-whisper            # Whisper small.en
-transformers              # wav2vec2 (KWS)
-sentence-transformers     # MiniLM (semantic)
+# Pinned to the live CPU image's set: transformers >= 5.18 calls torch.accelerator (torch >= 2.6)
+# yet still declares torch>=2.5, so on the base image's 2.5.1 it fails at import.
+transformers==5.17.0      # wav2vec2 (KWS)
+sentence-transformers==6.1.0  # MiniLM (semantic)
 sentencepiece             # mDeBERTa tokenizer (intent gate, only with UDK_INTENT_GATE)
-huggingface_hub
+huggingface_hub==1.33.0   # transformers 5.17 needs < 2
 onnx-asr[hub]==0.12.0     # Parakeet; the Dockerfile swaps its CPU onnxruntime for onnxruntime-gpu
 psycopg[binary]           # only with UDK_DATABASE_URL (Postgres)
 boto3                     # only with UDK_S3_ENDPOINT (S3 storage)
