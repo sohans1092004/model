@@ -165,12 +165,15 @@ class HindiSystem:
 
 
 def _FrameModel(torch):
-    from transformers import AutoModel
+    from transformers import AutoConfig, AutoModel
 
     class FrameModel(torch.nn.Module):  # same layout as train_frames.FrameModel (weights load into it)
         def __init__(self):
             super().__init__()
-            self.enc = AutoModel.from_pretrained(MURIL)
+            # Architecture only: the strict load_state_dict of the [B] weights replaces every MuRIL weight, so the
+            # base checkpoint is never used -- and it is a pickle-only pytorch_model.bin that transformers refuses
+            # to torch.load on torch < 2.6 (the image's 2.5.1).
+            self.enc = AutoModel.from_config(AutoConfig.from_pretrained(MURIL))
             h = self.enc.config.hidden_size
             self.drop = torch.nn.Dropout(0.1)
             self.danger = torch.nn.Linear(h, 1)
