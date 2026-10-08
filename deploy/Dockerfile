@@ -25,7 +25,10 @@ ARG UDK_INTENT_MODEL_REVISION=
 # LaBSE, MuRIL + the pinned [B] weights; ~6 GB, private / gated on Hugging Face, so they need the hf_token secret).
 ARG UDK_PREFETCH_CUSTOM_STT=
 ARG UDK_PREFETCH_MULTILINGUAL=0
-RUN --mount=type=secret,id=hf_token,required=false     if [ -f /run/secrets/hf_token ]; then export HF_TOKEN="$(cat /run/secrets/hf_token)"; fi;     python deploy/prefetch_models.py
+# No Xet downloads: huggingface_hub 1.x keeps Xet files in a shared hub/blobs/ store but plain-git files in the
+# repo's own blobs/, and onnxruntime >= 1.24 refuses an .onnx whose external weights sit in another directory
+# (IndicConformer: .onnx via Xet, its weight files via git). Without Xet both land in the repo's blobs/.
+RUN --mount=type=secret,id=hf_token,required=false     if [ -f /run/secrets/hf_token ]; then export HF_TOKEN="$(cat /run/secrets/hf_token)"; fi;     HF_HUB_DISABLE_XET=1 python deploy/prefetch_models.py
 
 VOLUME /data
 EXPOSE 8000
