@@ -88,8 +88,9 @@ ready() {  # a 401 to a wrong token = models loaded and serving
   return 1
 }
 
-start "udk-api:$TAG" $ETC/run.env.new
-if ! ready; then
+# A container that cannot even start (e.g. --gpus on a host without the driver) rolls back too:
+# by then the old one is already removed.
+if ! start "udk-api:$TAG" $ETC/run.env.new || ! ready; then
   echo "udk-api:$TAG never became ready; its last log lines:" >&2
   docker logs --tail 30 udk >&2 2>&1 || true
   if [ -n "$current" ]; then start "$current" "$previous_env" && echo "rolled back to $current" >&2; fi
