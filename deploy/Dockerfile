@@ -30,6 +30,10 @@ ARG UDK_PREFETCH_MULTILINGUAL=0
 # (IndicConformer: .onnx via Xet, its weight files via git). Without Xet both land in the repo's blobs/.
 RUN --mount=type=secret,id=hf_token,required=false     if [ -f /run/secrets/hf_token ]; then export HF_TOKEN="$(cat /run/secrets/hf_token)"; fi;     HF_HUB_DISABLE_XET=1 python deploy/prefetch_models.py
 
+# cuBLAS / cuDNN come with torch's pip wheels (site-packages/nvidia), off the library path: torch and onnxruntime
+# find them themselves, ctranslate2 (Whisper) only through LD_LIBRARY_PATH -- without this it falls back to CPU.
+ENV LD_LIBRARY_PATH=/opt/conda/lib/python3.11/site-packages/nvidia/cublas/lib:/opt/conda/lib/python3.11/site-packages/nvidia/cudnn/lib:${LD_LIBRARY_PATH}
+
 VOLUME /data
 EXPOSE 8000
 # ONE worker: live journeys are held in this process's memory
